@@ -1,0 +1,4179 @@
+L22: // ��ʱģʽ����
+  FFFD(2): before=[ 'editor-play';
+
+// ] after=[ʱģʽ����
+const TIMED_]
+  FFFD(4): before=[tor-play';
+
+// ��ʱģʽ] after=[
+const TIMED_DURATIO]
+L23: const TIMED_DURATION = 120; // ��ʱģʽ��ʱ�����룩
+  FFFD(2): before=[_DURATION = 120; // ] after=[ʱģʽ��ʱ�����룩
+const T]
+  FFFD(2): before=[TION = 120; // ��ʱģʽ] after=[ʱ�����룩
+const TIMED_]
+  FFFD(5): before=[N = 120; // ��ʱģʽ��ʱ] after=[룩
+const TIMED_KEY = ]
+L25: const LEVELS_PER_PAGE = 20; // �ؿ�ѡ��ÿҳ��ʾ����
+  FFFD(1): before=[S_PER_PAGE = 20; // ] after=[ؿ�ѡ��ÿҳ��ʾ����
+
+// �]
+  FFFD(1): before=[PER_PAGE = 20; // �ؿ] after=[ѡ��ÿҳ��ʾ����
+
+// ���]
+  FFFD(2): before=[R_PAGE = 20; // �ؿ�ѡ] after=[ÿҳ��ʾ����
+
+// ���ش洢�]
+  FFFD(2): before=[GE = 20; // �ؿ�ѡ��ÿҳ] after=[ʾ����
+
+// ���ش洢��
+co]
+  FFFD(4): before=[= 20; // �ؿ�ѡ��ÿҳ��ʾ] after=[
+
+// ���ش洢��
+const S]
+L27: // ���ش洢��
+  FFFD(3): before=[�ؿ�ѡ��ÿҳ��ʾ����
+
+// ] after=[ش洢��
+const STORAGE_K]
+  FFFD(2): before=[�ÿҳ��ʾ����
+
+// ���ش洢] after=[
+const STORAGE_KEY =]
+L34: // ��������¼
+  FFFD(8): before=[sort-autosave';
+
+// ] after=[¼
+const RECENT_KEY =]
+L43: // PWA ��װ���������� beforeinstallprompt �¼�
+  FFFD(2): before=[: number;
+}
+
+// PWA ] after=[װ���������� beforein]
+  FFFD(10): before=[umber;
+}
+
+// PWA ��װ] after=[ beforeinstallprompt]
+  FFFD(1): before=[beforeinstallprompt ] after=[¼�
+let deferredPromp]
+  FFFD(1): before=[foreinstallprompt �¼] after=[
+let deferredPrompt:]
+L65: // PWA ��װ����״̬��
+  FFFD(2): before=[ccepted';
+}
+
+// PWA ] after=[װ����״̬��
+const PWA_]
+  FFFD(4): before=[pted';
+}
+
+// PWA ��װ] after=[״̬��
+const PWA_INSTA]
+  FFFD(2): before=[
+}
+
+// PWA ��װ����״̬] after=[
+const PWA_INSTALL_D]
+L77:   } catch (e) { /* ���� */ }
+  FFFD(4): before=[
+  } catch (e) { /* ] after=[ */ }
+}
+
+function lo]
+L84:   } catch (e) { /* ���� */ }
+  FFFD(4): before=[
+  } catch (e) { /* ] after=[ */ }
+  return null;]
+L91:   } catch (e) { /* ���� */ }
+  FFFD(4): before=[
+  } catch (e) { /* ] after=[ */ }
+}
+
+interface P]
+L103:   } catch (e) { /* ���� */ }
+  FFFD(4): before=[
+  } catch (e) { /* ] after=[ */ }
+  return { cur]
+L110:   } catch (e) { /* ���� */ }
+  FFFD(4): before=[
+  } catch (e) { /* ] after=[ */ }
+}
+
+function lo]
+L117:   } catch (e) { /* ���� */ }
+  FFFD(4): before=[
+  } catch (e) { /* ] after=[ */ }
+  return {};
+}]
+L128:   } catch (e) { /* ���� */ }
+  FFFD(4): before=[
+  } catch (e) { /* ] after=[ */ }
+}
+
+function ha]
+L140:   } catch (e) { /* ���� */ }
+  FFFD(4): before=[
+  } catch (e) { /* ] after=[ */ }
+}
+
+function lo]
+L147:   } catch (e) { /* ���� */ }
+  FFFD(4): before=[
+  } catch (e) { /* ] after=[ */ }
+  return {};
+}]
+L158:   } catch (e) { /* ���� */ }
+  FFFD(4): before=[
+  } catch (e) { /* ] after=[ */ }
+}
+
+export defa]
+L171:   const [pageLevel, setPageLevel] = useState(0); // �ؿ�ѡ��ǰҳ
+  FFFD(1): before=[] = useState(0); // ] after=[ؿ�ѡ��ǰҳ
+  const [rec]
+  FFFD(1): before=[= useState(0); // �ؿ] after=[ѡ��ǰҳ
+  const [recen]
+  FFFD(2): before=[useState(0); // �ؿ�ѡ] after=[ǰҳ
+  const [recentPl]
+L179:   // ÿ��ǩ��״̬
+  FFFD(2): before=[seState('');
+
+  // ÿ] after=[ǩ��״̬
+  const [check]
+  FFFD(2): before=[tate('');
+
+  // ÿ��ǩ] after=[״̬
+  const [checkinD]
+L186:   // ������־����״̬
+  FFFD(6): before=[HintItems());
+
+  // ] after=[־����״̬
+  const [sho]
+  FFFD(4): before=[ms());
+
+  // ������־] after=[״̬
+  const [showChan]
+L188:   // �طŲ鿴״̬���� URL ������
+  FFFD(1): before=[eState(false);
+  // ] after=[طŲ鿴״̬���� URL ������]
+  FFFD(4): before=[(false);
+  // �طŲ鿴״̬] after=[ URL ������
+  const ]
+  FFFD(6): before=[  // �طŲ鿴״̬���� URL ] after=[
+  const [viewReplay]
+L192:   // ����ϵͳ״̬
+  FFFD(4): before=[State(false);
+
+  // ] after=[ϵͳ״̬
+  const [announ]
+L196:   // �Զ���ؿ�״̬
+  FFFD(1): before=[State(false);
+
+  // ] after=[Զ���ؿ�״̬
+  const [cu]
+  FFFD(3): before=[ate(false);
+
+  // �Զ] after=[ؿ�״̬
+  const [custom]
+  FFFD(1): before=[false);
+
+  // �Զ���ؿ] after=[״̬
+  const [customLe]
+L200:   // �ط���Ƶ����״̬
+  FFFD(1): before=[ null>(null);
+
+  // ] after=[ط���Ƶ����״̬
+  const ]
+  FFFD(3): before=[ull>(null);
+
+  // �ط] after=[Ƶ����״̬
+  const [sho]
+  FFFD(4): before=[(null);
+
+  // �ط���Ƶ] after=[״̬
+  const [showRepl]
+L206:   // ������ʾ���ܣ���ȡ��ǰ��Ϸ״̬
+  FFFD(6): before=[State(false);
+
+  // ] after=[ʾ���ܣ���ȡ��ǰ��Ϸ״̬
+  ]
+  FFFD(3): before=[alse);
+
+  // ������ʾ] after=[ܣ���ȡ��ǰ��Ϸ״̬
+  cons]
+  FFFD(3): before=[);
+
+  // ������ʾ���ܣ] after=[ȡ��ǰ��Ϸ״̬
+  const cu]
+  FFFD(2): before=[  // ������ʾ���ܣ���ȡ] after=[ǰ��Ϸ״̬
+  const curre]
+  FFFD(2): before=[/ ������ʾ���ܣ���ȡ��ǰ] after=[Ϸ״̬
+  const currentT]
+L209:   // ����ʱ����Ƿ����Զ��浵
+  FFFD(4): before=[ null>(null);
+
+  // ] after=[ʱ����Ƿ����Զ��浵
+  use]
+  FFFD(4): before=[>(null);
+
+  // ����ʱ] after=[Ƿ����Զ��浵
+  useEffec]
+  FFFD(4): before=[l);
+
+  // ����ʱ����Ƿ] after=[Զ��浵
+  useEffect(() ]
+  FFFD(2): before=[  // ����ʱ����Ƿ����Զ] after=[浵
+  useEffect(() => ]
+L211:     // ÿ���״ε�¼����1����ʾ����
+  FFFD(3): before=[ect(() => {
+    // ÿ] after=[״ε�¼����1����ʾ����
+ ]
+  FFFD(1): before=[) => {
+    // ÿ���״ε] after=[¼����1����ʾ����
+    ]
+  FFFD(4): before=[=> {
+    // ÿ���״ε�¼] after=[1����ʾ����
+    const]
+  FFFD(4): before=[    // ÿ���״ε�¼����1] after=[ʾ����
+    const bonu]
+  FFFD(4): before=[/ ÿ���״ε�¼����1����ʾ] after=[
+    const bonus = c]
+L225:     } catch (e) { /* ���� */ }
+  FFFD(4): before=[   } catch (e) { /* ] after=[ */ }
+
+    // ���汾��]
+L227:     // ���汾���£���ʾ������־
+  FFFD(3): before=[* ���� */ }
+
+    // ] after=[汾���£���ʾ������־
+   ]
+  FFFD(3): before=[�� */ }
+
+    // ���汾] after=[£���ʾ������־
+    con]
+  FFFD(3): before=[/ }
+
+    // ���汾���£] after=[ʾ������־
+    const C]
+  FFFD(6): before=[
+    // ���汾���£���ʾ] after=[־
+    const CHANGELO]
+L236:     } catch (e) { /* ���� */ }
+  FFFD(4): before=[   } catch (e) { /* ] after=[ */ }
+
+    // ��� UR]
+L238:     // ��� URL �Ƿ�Я���ط�����
+  FFFD(3): before=[* ���� */ }
+
+    // ] after=[ URL �Ƿ�Я���ط�����
+ ]
+  FFFD(1): before=[/ }
+
+    // ��� URL ] after=[Ƿ�Я���ط�����
+    con]
+  FFFD(1): before=[}
+
+    // ��� URL �Ƿ] after=[Я���ط�����
+    const]
+  FFFD(3): before=[
+    // ��� URL �Ƿ�Я] after=[ط�����
+    const rep]
+  FFFD(5): before=[ // ��� URL �Ƿ�Я���ط] after=[
+    const replayDat]
+L245:     // ����δ������
+  FFFD(4): before=[rue);
+    }
+
+    // ] after=[δ������
+    const un]
+  FFFD(6): before=[
+    }
+
+    // ����δ] after=[
+    const unread = ]
+L253:   // �ӳټ�� PWA �ɰ�װ�ԣ�ҳ�����3���
+  FFFD(1): before=[  }
+  }, []);
+
+  // ] after=[ӳټ�� PWA �ɰ�װ�ԣ�ҳ���]
+  FFFD(2): before=[
+  }, []);
+
+  // �ӳټ] after=[ PWA �ɰ�װ�ԣ�ҳ�����3�]
+  FFFD(1): before=[]);
+
+  // �ӳټ�� PWA ] after=[ɰ�װ�ԣ�ҳ�����3���
+  u]
+  FFFD(1): before=[;
+
+  // �ӳټ�� PWA �ɰ] after=[װ�ԣ�ҳ�����3���
+  use]
+  FFFD(1): before=[
+  // �ӳټ�� PWA �ɰ�װ] after=[ԣ�ҳ�����3���
+  useEf]
+  FFFD(1): before=[ // �ӳټ�� PWA �ɰ�װ�ԣ] after=[ҳ�����3���
+  useEffe]
+  FFFD(5): before=[/ �ӳټ�� PWA �ɰ�װ�ԣ�ҳ] after=[3���
+  useEffect(() ]
+  FFFD(3): before=[� PWA �ɰ�װ�ԣ�ҳ�����3] after=[
+  useEffect(() => {]
+L263:   // �������¼�� PWA �ɰ�װ��
+  FFFD(7): before=[r);
+  }, []);
+
+  // ] after=[¼�� PWA �ɰ�װ��
+  use]
+  FFFD(2): before=[ []);
+
+  // �������¼] after=[ PWA �ɰ�װ��
+  useEff]
+  FFFD(1): before=[  // �������¼�� PWA ] after=[ɰ�װ��
+  useEffect(()]
+  FFFD(1): before=[// �������¼�� PWA �ɰ] after=[װ��
+  useEffect(() =]
+  FFFD(2): before=[ �������¼�� PWA �ɰ�װ] after=[
+  useEffect(() => {]
+L273:   // �Զ����浱ǰ��Ϸ״̬
+  FFFD(1): before=[PWAInstall]);
+
+  // ] after=[Զ����浱ǰ��Ϸ״̬
+  const]
+  FFFD(4): before=[AInstall]);
+
+  // �Զ] after=[浱ǰ��Ϸ״̬
+  const auto]
+  FFFD(2): before=[ll]);
+
+  // �Զ����浱ǰ] after=[Ϸ״̬
+  const autoSave]
+L279:       } catch (e) { /* ���� */ }
+  FFFD(4): before=[   } catch (e) { /* ] after=[ */ }
+    } else {
+ ]
+L281:       try { localStorage.removeItem(AUTOSAVE_KEY); } catch (e) { /* ���� */ }
+  FFFD(4): before=[); } catch (e) { /* ] after=[ */ }
+    }
+  }, [])]
+L285:   // ÿ����ս״̬
+  FFFD(4): before=[ }
+  }, []);
+
+  // ÿ] after=[ս״̬
+  const [isDaily]
+L297:   // �ɾ�ϵͳ
+  FFFD(1): before=[ailyToday());
+
+  // ] after=[ɾ�ϵͳ
+  const [newAch]
+  FFFD(1): before=[lyToday());
+
+  // �ɾ] after=[ϵͳ
+  const [newAchie]
+L302:   // ��ʾ���ܣ��ӵ�ǰ��Ϸ״̬����һ�Կɲ������Թ�
+  FFFD(2): before=[State(false);
+
+  // ] after=[ʾ���ܣ��ӵ�ǰ��Ϸ״̬����һ]
+  FFFD(3): before=[te(false);
+
+  // ��ʾ] after=[ܣ��ӵ�ǰ��Ϸ״̬����һ�Կɲ�]
+  FFFD(2): before=[alse);
+
+  // ��ʾ���ܣ] after=[ӵ�ǰ��Ϸ״̬����һ�Կɲ����]
+  FFFD(1): before=[e);
+
+  // ��ʾ���ܣ��ӵ] after=[ǰ��Ϸ״̬����һ�Կɲ������]
+  FFFD(2): before=[;
+
+  // ��ʾ���ܣ��ӵ�ǰ] after=[Ϸ״̬����һ�Կɲ������Թ�
+]
+  FFFD(4): before=[// ��ʾ���ܣ��ӵ�ǰ��Ϸ״̬] after=[һ�Կɲ������Թ�
+  const]
+  FFFD(1): before=[ʾ���ܣ��ӵ�ǰ��Ϸ״̬����һ] after=[Կɲ������Թ�
+  const h]
+  FFFD(6): before=[�ܣ��ӵ�ǰ��Ϸ״̬����һ�Կɲ] after=[Թ�
+  const handleHin]
+  FFFD(1): before=[��Ϸ״̬����һ�Կɲ������Թ] after=[
+  const handleHint ]
+L304:     // �����ʾ����
+  FFFD(5): before=[back(() => {
+    // ] after=[ʾ����
+    const curr]
+  FFFD(4): before=[) => {
+    // �����ʾ] after=[
+    const currentIt]
+L322:     // ������ͬɫ�ɺϲ���
+  FFFD(6): before=[es) return;
+
+    // ] after=[ͬɫ�ɺϲ���
+    for (le]
+  FFFD(1): before=[rn;
+
+    // ������ͬɫ] after=[ɺϲ���
+    for (let i]
+  FFFD(3): before=[
+
+    // ������ͬɫ�ɺϲ] after=[
+    for (let i = 0;]
+L338:     // ����ҵ���չܵ�
+  FFFD(4): before=[     }
+    }
+    // ] after=[ҵ���չܵ�
+    for (let]
+  FFFD(3): before=[}
+    }
+    // ����ҵ] after=[չܵ�
+    for (let i =]
+  FFFD(1): before=[ }
+    // ����ҵ���չܵ] after=[
+    for (let i = 0;]
+L365:     // �����Ǽ�����
+  FFFD(5): before=[tScores());
+
+    // ] after=[Ǽ�����
+    if (!isDa]
+  FFFD(5): before=[s());
+
+    // �����Ǽ] after=[
+    if (!isDailyMod]
+L371:     // ���ɾ�
+  FFFD(3): before=[s());
+    }
+
+    // ] after=[ɾ�
+    const newlyUn]
+  FFFD(1): before=[;
+    }
+
+    // ���ɾ] after=[
+    const newlyUnlo]
+L382:     // ��¼ͳ�ƣ������Ƿ�ʹ�ó���/��ʾ��������ʤ�ж���
+  FFFD(2): before=[ed]);
+    }
+
+    // ] after=[¼ͳ�ƣ������Ƿ�ʹ�ó���/�]
+  FFFD(1): before=[;
+    }
+
+    // ��¼ͳ] after=[ƣ������Ƿ�ʹ�ó���/��ʾ�]
+  FFFD(6): before=[    }
+
+    // ��¼ͳ�ƣ] after=[Ƿ�ʹ�ó���/��ʾ��������]
+  FFFD(1): before=[    // ��¼ͳ�ƣ������Ƿ] after=[ʹ�ó���/��ʾ��������ʤ�]
+  FFFD(1): before=[  // ��¼ͳ�ƣ������Ƿ�ʹ] after=[ó���/��ʾ��������ʤ�ж�]
+  FFFD(3): before=[// ��¼ͳ�ƣ������Ƿ�ʹ�ó] after=[/��ʾ��������ʤ�ж���
+ ]
+  FFFD(2): before=[�¼ͳ�ƣ������Ƿ�ʹ�ó���/] after=[ʾ��������ʤ�ж���
+    ]
+  FFFD(8): before=[�ƣ������Ƿ�ʹ�ó���/��ʾ] after=[ʤ�ж���
+    StatsTrac]
+  FFFD(1): before=[�ʹ�ó���/��ʾ��������ʤ] after=[ж���
+    StatsTracke]
+  FFFD(3): before=[�ó���/��ʾ��������ʤ�ж] after=[
+    StatsTracker.re]
+L385:     // �����ʤ�ɾͣ�����ͨģʽ����ʤֻ����ͨģʽ�ۻ���
+  FFFD(5): before=[ThisLevel);
+
+    // ] after=[ʤ�ɾͣ�����ͨģʽ����ʤֻ��]
+  FFFD(1): before=[vel);
+
+    // �����ʤ] after=[ɾͣ�����ͨģʽ����ʤֻ����]
+  FFFD(5): before=[);
+
+    // �����ʤ�ɾͣ] after=[ͨģʽ����ʤֻ����ͨģʽ�ۻ��]
+  FFFD(4): before=[// �����ʤ�ɾͣ�����ͨģʽ] after=[ʤֻ����ͨģʽ�ۻ���
+    i]
+  FFFD(4): before=[��ʤ�ɾͣ�����ͨģʽ����ʤֻ] after=[ͨģʽ�ۻ���
+    if (!is]
+  FFFD(1): before=[����ͨģʽ����ʤֻ����ͨģʽ] after=[ۻ���
+    if (!isDail]
+  FFFD(3): before=[��ͨģʽ����ʤֻ����ͨģʽ�ۻ] after=[
+    if (!isDailyMod]
+L392:       // ���ͨ����̱��ɾ�
+  FFFD(3): before=[);
+      }
+      // ] after=[ͨ����̱��ɾ�
+      con]
+  FFFD(4): before=[     }
+      // ���ͨ] after=[̱��ɾ�
+      const mi]
+  FFFD(2): before=[}
+      // ���ͨ����̱] after=[ɾ�
+      const miles]
+  FFFD(1): before=[     // ���ͨ����̱��ɾ] after=[
+      const milesto]
+L399:     // ��鲽����̱��ɾ�
+  FFFD(2): before=[    }
+    }
+
+    // ] after=[鲽����̱��ɾ�
+    const]
+  FFFD(4): before=[ }
+    }
+
+    // ��鲽] after=[̱��ɾ�
+    const upda]
+  FFFD(2): before=[  }
+
+    // ��鲽����̱] after=[ɾ�
+    const updated]
+  FFFD(1): before=[
+
+    // ��鲽����̱��ɾ] after=[
+    const updatedSt]
+L405:     // ����ٶȳɾͣ�����ͨģʽ������ > 0 ����ʱ > 0��
+  FFFD(4): before=[nts]);
+    }
+    // ] after=[ٶȳɾͣ�����ͨģʽ������ >]
+  FFFD(5): before=[   }
+    // ����ٶȳɾͣ] after=[ͨģʽ������ > 0 ����ʱ ]
+  FFFD(6): before=[ // ����ٶȳɾͣ�����ͨģʽ] after=[ > 0 ����ʱ > 0��
+   ]
+  FFFD(4): before=[ͣ�����ͨģʽ������ > 0 ] after=[ʱ > 0��
+    if (!isD]
+  FFFD(2): before=[������ > 0 ����ʱ > 0] after=[
+    if (!isDailyMod]
+L412:     // ������ǳɾ�
+  FFFD(6): before=[     }
+    }
+    // ] after=[ǳɾ�
+    const perfec]
+  FFFD(1): before=[   }
+    // ������ǳɾ] after=[
+    const perfectAc]
+L418:     // ʤ��ʱ����Զ��浵
+  FFFD(2): before=[s]);
+    }
+
+    // ʤ] after=[ʱ����Զ��浵
+    try { ]
+  FFFD(4): before=[;
+    }
+
+    // ʤ��ʱ] after=[Զ��浵
+    try { local]
+  FFFD(2): before=[ }
+
+    // ʤ��ʱ����Զ] after=[浵
+    try { localSto]
+L419:     try { localStorage.removeItem(AUTOSAVE_KEY); } catch (e) { /* ���� */ }
+  FFFD(4): before=[); } catch (e) { /* ] after=[ */ }
+
+    // ÿ����ս]
+L421:     // ÿ����ս��ɴ���
+  FFFD(4): before=[ ���� */ }
+
+    // ÿ] after=[ս��ɴ���
+    if (isDa]
+  FFFD(2): before=[ */ }
+
+    // ÿ����ս] after=[ɴ���
+    if (isDaily]
+  FFFD(3): before=[ }
+
+    // ÿ����ս��ɴ] after=[
+    if (isDailyMode]
+L430:     // �޾�ģʽ��ɴ���
+  FFFD(1): before=[     }
+    }
+    // ] after=[޾�ģʽ��ɴ���
+    if (i]
+  FFFD(1): before=[   }
+    }
+    // �޾] after=[ģʽ��ɴ���
+    if (isE]
+  FFFD(2): before=[}
+    }
+    // �޾�ģʽ] after=[ɴ���
+    if (isEndle]
+  FFFD(3): before=[   }
+    // �޾�ģʽ��ɴ] after=[
+    if (isEndlessMo]
+L440:     // ��ʱģʽ��ɴ���
+  FFFD(2): before=[     }
+    }
+    // ] after=[ʱģʽ��ɴ���
+    if (is]
+  FFFD(2): before=[}
+    }
+    // ��ʱģʽ] after=[ɴ���
+    if (isTimed]
+  FFFD(3): before=[   }
+    // ��ʱģʽ��ɴ] after=[
+    if (isTimedMode]
+L444:       // ������߷�
+  FFFD(6): before=[newScore);
+      // ] after=[߷�
+      try {
+     ]
+  FFFD(1): before=[e);
+      // ������߷] after=[
+      try {
+       ]
+L451:       } catch (e) { /* ���� */ }
+  FFFD(4): before=[   } catch (e) { /* ] after=[ */ }
+      const ti]
+L459:   // ʤ��ʱ����Զ��浵
+  FFFD(2): before=[imedScore]);
+
+  // ʤ] after=[ʱ����Զ��浵
+  // ��han]
+  FFFD(4): before=[dScore]);
+
+  // ʤ��ʱ] after=[Զ��浵
+  // ��handleWi]
+  FFFD(2): before=[e]);
+
+  // ʤ��ʱ����Զ] after=[浵
+  // ��handleWin �]
+L460:   // ��handleWin �������洦������������Ϸҳ��Ⱦʱ���� onWin �ص��Ѱ�����
+  FFFD(2): before=[/ ʤ��ʱ����Զ��浵
+  // ] after=[handleWin �������洦��]
+  FFFD(7): before=[�浵
+  // ��handleWin ] after=[洦������������Ϸҳ��Ⱦʱ�]
+  FFFD(12): before=[��handleWin �������洦] after=[Ϸҳ��Ⱦʱ���� onWin �ص�]
+  FFFD(2): before=[�����洦������������Ϸҳ] after=[Ⱦʱ���� onWin �ص��Ѱ��]
+  FFFD(4): before=[�洦������������Ϸҳ��Ⱦʱ] after=[ onWin �ص��Ѱ�����
+
+
+]
+  FFFD(1): before=[���Ϸҳ��Ⱦʱ���� onWin ] after=[ص��Ѱ�����
+
+
+  // ע��]
+  FFFD(2): before=[�Ϸҳ��Ⱦʱ���� onWin �ص] after=[Ѱ�����
+
+
+  // ע��: p]
+  FFFD(5): before=[��Ⱦʱ���� onWin �ص��Ѱ] after=[
+
+
+  // ע��: playTim]
+L463:   // ע��: playTimeSec �����������������ʱ���仯���»ص��ؽ�
+  FFFD(2): before=[ �ص��Ѱ�����
+
+
+  // ע] after=[: playTimeSec ������]
+  FFFD(17): before=[// ע��: playTimeSec ] after=[ʱ���仯���»ص��ؽ�
+
+  co]
+  FFFD(3): before=[c �����������������ʱ] after=[仯���»ص��ؽ�
+
+  const ]
+  FFFD(3): before=[���������������ʱ���仯] after=[»ص��ؽ�
+
+  const hand]
+  FFFD(2): before=[����������ʱ���仯���»ص] after=[ؽ�
+
+  const handleSe]
+  FFFD(1): before=[�������ʱ���仯���»ص��ؽ] after=[
+
+  const handleSele]
+L491:   // ������һ�أ�����ͨģʽ����С�ؿ�1��
+  FFFD(6): before=[(false);
+  };
+
+  // ] after=[һ�أ�����ͨģʽ����С�ؿ�1]
+  FFFD(1): before=[;
+  };
+
+  // ������һ] after=[أ�����ͨģʽ����С�ؿ�1��]
+  FFFD(5): before=[  };
+
+  // ������һ�أ] after=[ͨģʽ����С�ؿ�1��
+  con]
+  FFFD(4): before=[// ������һ�أ�����ͨģʽ] after=[С�ؿ�1��
+  const hand]
+  FFFD(1): before=[����һ�أ�����ͨģʽ����С] after=[ؿ�1��
+  const handle]
+  FFFD(1): before=[��һ�أ�����ͨģʽ����С�ؿ] after=[1��
+  const handlePr]
+  FFFD(2): before=[һ�أ�����ͨģʽ����С�ؿ�1] after=[
+  const handlePrevL]
+L508:     // ����Զ��浵
+  FFFD(4): before=[lock(false);
+    // ] after=[Զ��浵
+    try { local]
+  FFFD(2): before=[false);
+    // ����Զ] after=[浵
+    try { localSto]
+L509:     try { localStorage.removeItem(AUTOSAVE_KEY); } catch (e) { /* ���� */ }
+  FFFD(4): before=[); } catch (e) { /* ] after=[ */ }
+  };
+
+  // ��ȷ]
+L512:   // ��ȷ�ϵķ�����ҳ����ֹ���˳���
+  FFFD(2): before=[��� */ }
+  };
+
+  // ] after=[ȷ�ϵķ�����ҳ����ֹ���˳�]
+  FFFD(1): before=[ */ }
+  };
+
+  // ��ȷ] after=[ϵķ�����ҳ����ֹ���˳���]
+  FFFD(5): before=[ }
+  };
+
+  // ��ȷ�ϵķ] after=[ҳ����ֹ���˳���
+  cons]
+  FFFD(4): before=[;
+
+  // ��ȷ�ϵķ�����ҳ] after=[ֹ���˳���
+  const han]
+  FFFD(3): before=[// ��ȷ�ϵķ�����ҳ����ֹ] after=[˳���
+  const handleG]
+  FFFD(3): before=[�ȷ�ϵķ�����ҳ����ֹ���˳] after=[
+  const handleGoHom]
+L515:       if (!confirm('��ǰ�ؿ����Ƚ���ʧ��ȷ��������ҳ��')) return;
+  FFFD(2): before=[      if (!confirm('] after=[ǰ�ؿ����Ƚ���ʧ��ȷ�����]
+  FFFD(1): before=[   if (!confirm('��ǰ] after=[ؿ����Ƚ���ʧ��ȷ�������]
+  FFFD(4): before=[ if (!confirm('��ǰ�ؿ] after=[Ƚ���ʧ��ȷ��������ҳ��']
+  FFFD(3): before=[!confirm('��ǰ�ؿ����Ƚ] after=[ʧ��ȷ��������ҳ��')) r]
+  FFFD(2): before=[firm('��ǰ�ؿ����Ƚ���ʧ] after=[ȷ��������ҳ��')) retu]
+  FFFD(8): before=[m('��ǰ�ؿ����Ƚ���ʧ��ȷ] after=[ҳ��')) return;
+     ]
+  FFFD(2): before=[���Ƚ���ʧ��ȷ��������ҳ] after=[')) return;
+      St]
+L523:     setCurrentLevel(-1); // -1 ��ʾÿ����ս
+  FFFD(2): before=[entLevel(-1); // -1 ] after=[ʾÿ����ս
+    setPage(]
+  FFFD(4): before=[evel(-1); // -1 ��ʾÿ] after=[ս
+    setPage('game']
+L535:     setCurrentLevel(-2); // -2 ��ʾ�޾�ģʽ
+  FFFD(2): before=[entLevel(-2); // -2 ] after=[ʾ�޾�ģʽ
+    setPage(']
+  FFFD(1): before=[Level(-2); // -2 ��ʾ] after=[޾�ģʽ
+    setPage('ga]
+  FFFD(1): before=[vel(-2); // -2 ��ʾ�޾] after=[ģʽ
+    setPage('game]
+L547:     setCurrentLevel(-3); // -3 ��ʾ��ʱģʽ
+  FFFD(2): before=[entLevel(-3); // -3 ] after=[ʾ��ʱģʽ
+    setPage(']
+  FFFD(2): before=[Level(-3); // -3 ��ʾ] after=[ʱģʽ
+    setPage('gam]
+L558:   // ��һ�أ�ÿ����ս������ҳ���޾�ģʽ���Ѽ�������ʱģʽ������һ�أ���ͨģʽ������һ��
+  FFFD(2): before=[e);
+  }, []);
+
+  // ] after=[һ�أ�ÿ����ս������ҳ���]
+  FFFD(1): before=[
+  }, []);
+
+  // ��һ] after=[أ�ÿ����ս������ҳ���޾�]
+  FFFD(1): before=[ }, []);
+
+  // ��һ�أ] after=[ÿ����ս������ҳ���޾�ģʽ]
+  FFFD(4): before=[, []);
+
+  // ��һ�أ�ÿ] after=[ս������ҳ���޾�ģʽ���Ѽ�]
+  FFFD(6): before=[;
+
+  // ��һ�أ�ÿ����ս] after=[ҳ���޾�ģʽ���Ѽ�������ʱ]
+  FFFD(3): before=[ ��һ�أ�ÿ����ս������ҳ] after=[޾�ģʽ���Ѽ�������ʱģʽ��]
+  FFFD(1): before=[�أ�ÿ����ս������ҳ���޾] after=[ģʽ���Ѽ�������ʱģʽ����]
+  FFFD(3): before=[ÿ����ս������ҳ���޾�ģʽ] after=[Ѽ�������ʱģʽ������һ�أ]
+  FFFD(7): before=[�ս������ҳ���޾�ģʽ���Ѽ] after=[ʱģʽ������һ�أ���ͨģʽ��]
+  FFFD(6): before=[��޾�ģʽ���Ѽ�������ʱģʽ] after=[һ�أ���ͨģʽ������һ��
+ ]
+  FFFD(1): before=[��Ѽ�������ʱģʽ������һ] after=[أ���ͨģʽ������һ��
+  c]
+  FFFD(3): before=[Ѽ�������ʱģʽ������һ�أ] after=[ͨģʽ������һ��
+  const]
+  FFFD(6): before=[��ʱģʽ������һ�أ���ͨģʽ] after=[һ��
+  const handleNe]
+  FFFD(2): before=[����һ�أ���ͨģʽ������һ] after=[
+  const handleNextL]
+L563:       // �޾�ģʽ������+1��������һ�أ��Ѷȵ�����
+  FFFD(1): before=[essMode) {
+      // ] after=[޾�ģʽ������+1��������]
+  FFFD(1): before=[sMode) {
+      // �޾] after=[ģʽ������+1��������һ�]
+  FFFD(6): before=[de) {
+      // �޾�ģʽ] after=[+1��������һ�أ��Ѷȵ���]
+  FFFD(8): before=[    // �޾�ģʽ������+1] after=[һ�أ��Ѷȵ�����
+      s]
+  FFFD(1): before=[�ģʽ������+1��������һ] after=[أ��Ѷȵ�����
+      set]
+  FFFD(2): before=[ʽ������+1��������һ�أ] after=[Ѷȵ�����
+      setEnd]
+  FFFD(5): before=[���+1��������һ�أ��Ѷȵ] after=[
+      setEndlessSco]
+L565:       setCurrentLevel(l => l - 1); // ���� -2������ useEffect ����
+  FFFD(4): before=[vel(l => l - 1); // ] after=[ -2������ useEffect ]
+  FFFD(6): before=[> l - 1); // ���� -2] after=[ useEffect ����
+    ]
+  FFFD(4): before=[ -2������ useEffect ] after=[
+      setHintPair(n]
+L570:       // ��ʱģʽ��������һ��
+  FFFD(2): before=[medMode) {
+      // ] after=[ʱģʽ��������һ��
+     ]
+  FFFD(8): before=[de) {
+      // ��ʱģʽ] after=[һ��
+      setCurrent]
+  FFFD(2): before=[   // ��ʱģʽ��������һ] after=[
+      setCurrentLev]
+L571:       setCurrentLevel(l => l - 1); // ���� -3������ useEffect ����
+  FFFD(4): before=[vel(l => l - 1); // ] after=[ -3������ useEffect ]
+  FFFD(6): before=[> l - 1); // ���� -3] after=[ useEffect ����
+    ]
+  FFFD(4): before=[ -3������ useEffect ] after=[
+      setHintPair(n]
+L586:       ? `���ڡ�ɫ������ÿ����սֻ����${moves}����ɣ�����ս����Ĺؿ��ɣ�??`
+  FFFD(3): before=[vel === -1
+      ? `] after=[ڡ�ɫ������ÿ����սֻ����]
+  FFFD(1): before=[=== -1
+      ? `���ڡ] after=[ɫ������ÿ����սֻ����${]
+  FFFD(6): before=[= -1
+      ? `���ڡ�ɫ] after=[ÿ����սֻ����${moves}�]
+  FFFD(4): before=[    ? `���ڡ�ɫ������ÿ] after=[սֻ����${moves}����ɣ�]
+  FFFD(4): before=[`���ڡ�ɫ������ÿ����սֻ] after=[${moves}����ɣ�����ս�]
+  FFFD(4): before=[�ÿ����սֻ����${moves}] after=[ɣ�����ս����Ĺؿ��ɣ�??`]
+  FFFD(5): before=[�սֻ����${moves}����ɣ] after=[ս����Ĺؿ��ɣ�??`
+     ]
+  FFFD(4): before=[�${moves}����ɣ�����ս] after=[Ĺؿ��ɣ�??`
+      : le]
+  FFFD(2): before=[es}����ɣ�����ս����Ĺؿ] after=[ɣ�??`
+      : level ]
+  FFFD(1): before=[����ɣ�����ս����Ĺؿ��ɣ] after=[??`
+      : level ==]
+L588:       ? `���ڡ�ɫ�������޾�ģʽ����ͨ����${endlessScore + 1}�أ�����ս�Ұɣ�????`
+  FFFD(3): before=[vel === -2
+      ? `] after=[ڡ�ɫ�������޾�ģʽ����ͨ�]
+  FFFD(1): before=[=== -2
+      ? `���ڡ] after=[ɫ�������޾�ģʽ����ͨ���]
+  FFFD(7): before=[= -2
+      ? `���ڡ�ɫ] after=[޾�ģʽ����ͨ����${endle]
+  FFFD(1): before=[   ? `���ڡ�ɫ�������޾] after=[ģʽ����ͨ����${endless]
+  FFFD(4): before=[? `���ڡ�ɫ�������޾�ģʽ] after=[ͨ����${endlessScore ]
+  FFFD(4): before=[�ڡ�ɫ�������޾�ģʽ����ͨ] after=[${endlessScore + 1}�]
+  FFFD(1): before=[�${endlessScore + 1}] after=[أ�����ս�Ұɣ�????`
+   ]
+  FFFD(5): before=[{endlessScore + 1}�أ] after=[ս�Ұɣ�????`
+      : l]
+  FFFD(1): before=[ssScore + 1}�أ�����ս] after=[Ұɣ�????`
+      : lev]
+  FFFD(1): before=[core + 1}�أ�����ս�Ұɣ] after=[????`
+      : level ]
+L590:       ? `���ڡ�ɫ��������ʱģʽ${TIMED_DURATION}����ͨ����${timedScore + 1}�أ�����ս�Ұɣ�????`
+  FFFD(3): before=[vel === -3
+      ? `] after=[ڡ�ɫ��������ʱģʽ${TIME]
+  FFFD(1): before=[=== -3
+      ? `���ڡ] after=[ɫ��������ʱģʽ${TIMED_]
+  FFFD(8): before=[= -3
+      ? `���ڡ�ɫ] after=[ʱģʽ${TIMED_DURATION}]
+  FFFD(4): before=[ʱģʽ${TIMED_DURATION}] after=[ͨ����${timedScore + ]
+  FFFD(4): before=[TIMED_DURATION}����ͨ] after=[${timedScore + 1}�أ�]
+  FFFD(1): before=[���${timedScore + 1}] after=[أ�����ս�Ұɣ�????`
+   ]
+  FFFD(5): before=[�${timedScore + 1}�أ] after=[ս�Ұɣ�????`
+      : `]
+  FFFD(1): before=[edScore + 1}�أ�����ս] after=[Ұɣ�????`
+      : `��]
+  FFFD(1): before=[core + 1}�أ�����ս�Ұɣ] after=[????`
+      : `���ڡ�]
+L591:       : `���ڡ�ɫ�����򡹵�${level}��ֻ����${moves}����ɣ�����ս�Ұɣ�??`;
+  FFFD(3): before=[ս�Ұɣ�????`
+      : `] after=[ڡ�ɫ�����򡹵�${level}�]
+  FFFD(1): before=[�????`
+      : `���ڡ] after=[ɫ�����򡹵�${level}��ֻ]
+  FFFD(5): before=[???`
+      : `���ڡ�ɫ] after=[򡹵�${level}��ֻ����${]
+  FFFD(1): before=[    : `���ڡ�ɫ�����򡹵] after=[${level}��ֻ����${mov]
+  FFFD(2): before=[�ڡ�ɫ�����򡹵�${level}] after=[ֻ����${moves}����ɣ��]
+  FFFD(4): before=[ɫ�����򡹵�${level}��ֻ] after=[${moves}����ɣ�����ս�]
+  FFFD(4): before=[evel}��ֻ����${moves}] after=[ɣ�����ս�Ұɣ�??`;
+    ]
+  FFFD(5): before=[��ֻ����${moves}����ɣ] after=[ս�Ұɣ�??`;
+    try {
+]
+  FFFD(1): before=[�${moves}����ɣ�����ս] after=[Ұɣ�??`;
+    try {
+  ]
+  FFFD(1): before=[moves}����ɣ�����ս�Ұɣ] after=[??`;
+    try {
+     ]
+L594:         await navigator.share({ title: 'ɫ������', text });
+  FFFD(6): before=[or.share({ title: 'ɫ] after=[', text });
+      } ]
+L601:       // �û�ȡ������ʧ�ܣ��ý�������
+  FFFD(1): before=[atch (e) {
+      // ] after=[û�ȡ������ʧ�ܣ��ý�����]
+  FFFD(1): before=[ch (e) {
+      // �û] after=[ȡ������ʧ�ܣ��ý�������]
+  FFFD(6): before=[ (e) {
+      // �û�ȡ] after=[ʧ�ܣ��ý�������
+      ]
+  FFFD(1): before=[      // �û�ȡ������ʧ] after=[ܣ��ý�������
+      tr]
+  FFFD(2): before=[    // �û�ȡ������ʧ�ܣ] after=[ý�������
+      try {]
+  FFFD(7): before=[ // �û�ȡ������ʧ�ܣ��ý] after=[
+      try {
+       ]
+L606:       } catch (e2) { /* ���� */ }
+  FFFD(4): before=[  } catch (e2) { /* ] after=[ */ }
+    }
+  }, [en]
+L610:   // �طŷ��������ɻط����Ӳ����Ƶ�������
+  FFFD(1): before=[timedScore]);
+
+  // ] after=[طŷ��������ɻط����Ӳ���]
+  FFFD(8): before=[edScore]);
+
+  // �طŷ] after=[ɻط����Ӳ����Ƶ�������
+]
+  FFFD(4): before=[
+
+  // �طŷ��������ɻط] after=[Ӳ����Ƶ�������
+  cons]
+  FFFD(4): before=[/ �طŷ��������ɻط����Ӳ] after=[Ƶ�������
+  const han]
+  FFFD(7): before=[��������ɻط����Ӳ����Ƶ] after=[
+  const handleRepla]
+L617:         await navigator.share({ title: 'ɫ������ط�', text, url });
+  FFFD(6): before=[or.share({ title: 'ɫ] after=[ط�', text, url });
+ ]
+  FFFD(1): before=[e({ title: 'ɫ������ط] after=[', text, url });
+   ]
+L628:       } catch (e2) { /* ���� */ }
+  FFFD(4): before=[  } catch (e2) { /* ] after=[ */ }
+    }
+  }, [])]
+L632:   // �ط���Ƶ����
+  FFFD(1): before=[  }
+  }, []);
+
+  // ] after=[ط���Ƶ����
+  const ha]
+  FFFD(3): before=[}
+  }, []);
+
+  // �ط] after=[Ƶ����
+  const handle]
+  FFFD(4): before=[}, []);
+
+  // �ط���Ƶ] after=[
+  const handleExpor]
+L637:       // ����������ͼ
+  FFFD(10): before=[
+    try {
+      // ] after=[ͼ
+      const thumb ]
+L648:       // ������Ƶ
+  FFFD(6): before=[l(thumb);
+
+      // ] after=[Ƶ
+      const url = ]
+L659:       // ��������ʹ������ͼ
+  FFFD(8): before=[atch (e) {
+      // ] after=[ʹ������ͼ
+      const]
+  FFFD(6): before=[{
+      // ��������ʹ] after=[ͼ
+      const thumb ]
+L673:   // �رչ���
+  FFFD(1): before=[e);
+  }, []);
+
+  // ] after=[رչ���
+  const handle]
+  FFFD(3): before=[
+  }, []);
+
+  // �رչ] after=[
+  const handleDismi]
+L682:   // �����Զ���ؿ�
+  FFFD(5): before=[nts.length]);
+
+  // ] after=[Զ���ؿ�
+  const handl]
+  FFFD(3): before=[ngth]);
+
+  // �����Զ] after=[ؿ�
+  const handlePla]
+  FFFD(1): before=[]);
+
+  // �����Զ���ؿ] after=[
+  const handlePlayC]
+L689:   // ɾ���Զ���ؿ�
+  FFFD(3): before=[);
+  }, []);
+
+  // ɾ] after=[Զ���ؿ�
+  const handl]
+  FFFD(3): before=[ }, []);
+
+  // ɾ���Զ] after=[ؿ�
+  const handleDel]
+  FFFD(1): before=[[]);
+
+  // ɾ���Զ���ؿ] after=[
+  const handleDelet]
+L695:   // �����Զ���ؿ�
+  FFFD(5): before=[));
+  }, []);
+
+  // ] after=[Զ���ؿ�
+  const handl]
+  FFFD(3): before=[}, []);
+
+  // �����Զ] after=[ؿ�
+  const handleSav]
+  FFFD(1): before=[]);
+
+  // �����Զ���ؿ] after=[
+  const handleSaveC]
+L701:   // ����ؿ���
+  FFFD(4): before=[));
+  }, []);
+
+  // ] after=[ؿ���
+  const handleI]
+  FFFD(3): before=[ }, []);
+
+  // ����ؿ] after=[
+  const handleImpor]
+L717:   // ÿ��ǩ��
+  FFFD(2): before=[Seen();
+  };
+
+  // ÿ] after=[ǩ��
+  const handleCh]
+  FFFD(2): before=[n();
+  };
+
+  // ÿ��ǩ] after=[
+  const handleCheck]
+L726:       // ǩ�������е���ʾ����ʵ����Ч
+  FFFD(7): before=[ne.win();
+      // ǩ] after=[е���ʾ����ʵ����Ч
+    ]
+  FFFD(3): before=[;
+      // ǩ�������е] after=[ʾ����ʵ����Ч
+      if]
+  FFFD(4): before=[    // ǩ�������е���ʾ] after=[ʵ����Ч
+      if (res]
+  FFFD(4): before=[/ ǩ�������е���ʾ����ʵ] after=[Ч
+      if (result.r]
+L727:       if (result.rewardUnlocked && result.rewardUnlocked.includes('��ʾ����')) {
+  FFFD(2): before=[dUnlocked.includes('] after=[ʾ����')) {
+        c]
+  FFFD(4): before=[locked.includes('��ʾ] after=[')) {
+        const ]
+L734:       // ���ǩ���ɾ�
+  FFFD(3): before=[);
+      }
+      // ] after=[ǩ���ɾ�
+      const c]
+  FFFD(3): before=[     }
+      // ���ǩ] after=[ɾ�
+      const check]
+  FFFD(1): before=[ }
+      // ���ǩ���ɾ] after=[
+      const checkin]
+L742:   // ��Ⱦ��ҳ
+  FFFD(2): before=[ }
+    }
+  };
+
+  // ] after=[Ⱦ��ҳ
+  if (page === ]
+  FFFD(2): before=[    }
+  };
+
+  // ��Ⱦ] after=[ҳ
+  if (page === 'ho]
+L746:         <a href="#main-content" className="sr-only">������Ҫ����</a>
+  FFFD(6): before=[className="sr-only">] after=[Ҫ����</a>
+        <h]
+  FFFD(4): before=[me="sr-only">������Ҫ] after=[</a>
+        <header]
+L749:           <h1 className="title">ɫ������</h1>
+  FFFD(6): before=[ className="title">ɫ] after=[</h1>
+          <p c]
+L750:           <p className="subtitle">����Һ�����������Ϸ</p>
+  FFFD(4): before=[lassName="subtitle">] after=[Һ�����������Ϸ</p>
+  ]
+  FFFD(11): before=[ame="subtitle">����Һ] after=[Ϸ</p>
+          <p c]
+L751:           <p className="tagline">������ָ������ɫ�źã�</p>
+  FFFD(6): before=[className="tagline">] after=[ָ������ɫ�źã�</p>
+   ]
+  FFFD(6): before=[me="tagline">������ָ] after=[ɫ�źã�</p>
+        </]
+  FFFD(1): before=[line">������ָ������ɫ] after=[źã�</p>
+        </he]
+  FFFD(1): before=[e">������ָ������ɫ�źã] after=[</p>
+        </heade]
+L756:           {/* ÿ��ǩ����Ƭ */}
+  FFFD(2): before=[ry">
+          {/* ÿ] after=[ǩ����Ƭ */}
+         ]
+  FFFD(4): before=[>
+          {/* ÿ��ǩ] after=[Ƭ */}
+          <div]
+L761:                 <span className="checkin-title">{checkinDone ? '������ǩ��' : 'ÿ��ǩ��'}</span>
+  FFFD(6): before=[le">{checkinDone ? '] after=[ǩ��' : 'ÿ��ǩ��'}</sp]
+  FFFD(2): before=[eckinDone ? '������ǩ] after=[' : 'ÿ��ǩ��'}</span>]
+  FFFD(2): before=[e ? '������ǩ��' : 'ÿ] after=[ǩ��'}</span>
+       ]
+  FFFD(2): before=[ '������ǩ��' : 'ÿ��ǩ] after=['}</span>
+          ]
+L762:                 <span className="checkin-streak">?? ���� {checkinStreak} �� �� �ۼ� {checkinTotal} ��</span>
+  FFFD(4): before=["checkin-streak">?? ] after=[ {checkinStreak} �� ]
+  FFFD(2): before=[��� {checkinStreak} ] after=[ �� �ۼ� {checkinTota]
+  FFFD(2): before=[ {checkinStreak} �� ] after=[ �ۼ� {checkinTotal} ]
+  FFFD(1): before=[heckinStreak} �� �� ] after=[ۼ� {checkinTotal} ��]
+  FFFD(1): before=[ckinStreak} �� �� �ۼ] after=[ {checkinTotal} ��</]
+  FFFD(2): before=[ �ۼ� {checkinTotal} ] after=[</span>
+            ]
+L768:               <button className="checkin-btn" onClick={handleCheckin}>ǩ��</button>
+  FFFD(2): before=[ck={handleCheckin}>ǩ] after=[</button>
+          ]
+L771:           {/* ��һ����̱���ʾ */}
+  FFFD(2): before=[/div>
+          {/* ] after=[һ����̱���ʾ */}
+     ]
+  FFFD(4): before=[v>
+          {/* ��һ] after=[̱���ʾ */}
+          ]
+  FFFD(3): before=[        {/* ��һ����̱] after=[ʾ */}
+          {(()]
+L777:                 <span>{next.icon} ��ǩ {next.remaining} ��ɻ��: {next.reward}</span>
+  FFFD(2): before=[  <span>{next.icon} ] after=[ǩ {next.remaining} �]
+  FFFD(2): before=[�ǩ {next.remaining} ] after=[ɻ��: {next.reward}</]
+  FFFD(2): before=[{next.remaining} ��ɻ] after=[: {next.reward}</spa]
+L782:           {/* ��ʾ����չʾ */}
+  FFFD(2): before=[)()}
+
+          {/* ] after=[ʾ����չʾ */}
+        ]
+  FFFD(4): before=[}
+
+          {/* ��ʾ] after=[չʾ */}
+          <di]
+L785:             <span className="hint-items-text">��ʾ����: <strong>{hintItems}</strong> / {MAX_HINT_ITEMS}</span>
+  FFFD(2): before=[e="hint-items-text">] after=[ʾ����: <strong>{hint]
+  FFFD(4): before=[hint-items-text">��ʾ] after=[: <strong>{hintItems]
+L786:             <span className="hint-items-tip">ÿ�յ�¼ +1 �� ǩ��������ȡ</span>
+  FFFD(1): before=[e="hint-items-tip">ÿ] after=[յ�¼ +1 �� ǩ��������ȡ]
+  FFFD(1): before=["hint-items-tip">ÿ�յ] after=[¼ +1 �� ǩ��������ȡ</]
+  FFFD(2): before=[items-tip">ÿ�յ�¼ +1 ] after=[ ǩ��������ȡ</span>
+ ]
+  FFFD(8): before=[s-tip">ÿ�յ�¼ +1 �� ǩ] after=[ȡ</span>
+          <]
+L789:           {/* ������������ */}
+  FFFD(12): before=[div>
+
+          {/* ] after=[ */}
+          {rece]
+L794:                 <span className="recent-label">�����ϴ�</span>
+  FFFD(5): before=[Name="recent-label">] after=[ϴ�</span>
+          ]
+  FFFD(1): before=[recent-label">�����ϴ] after=[</span>
+            ]
+L795:                 <span className="recent-level">�� {recentPlay.level} ��</span>
+  FFFD(2): before=[Name="recent-level">] after=[ {recentPlay.level} ]
+  FFFD(2): before=[ {recentPlay.level} ] after=[</span>
+            ]
+L797:               <span className="recent-arrow">��</span>
+  FFFD(2): before=[Name="recent-arrow">] after=[</span>
+            ]
+L802:             ?? {progress.currentLevel > 1 ? `������Ϸ (��${progress.currentLevel}��)` : '��ʼ��Ϸ'}
+  FFFD(6): before=[currentLevel > 1 ? `] after=[Ϸ (��${progress.curr]
+  FFFD(2): before=[vel > 1 ? `������Ϸ (] after=[${progress.currentLe]
+  FFFD(2): before=[ogress.currentLevel}] after=[)` : '��ʼ��Ϸ'}
+     ]
+  FFFD(2): before=[urrentLevel}��)` : '] after=[ʼ��Ϸ'}
+          </b]
+  FFFD(2): before=[entLevel}��)` : '��ʼ] after=[Ϸ'}
+          </butt]
+L804:           <p className="mode-desc">100�ش���ģʽ���Ѷ�ѭ�򽥽�</p>
+  FFFD(1): before=[Name="mode-desc">100] after=[ش���ģʽ���Ѷ�ѭ�򽥽�</p>]
+  FFFD(3): before=[me="mode-desc">100�ش] after=[ģʽ���Ѷ�ѭ�򽥽�</p>
+
+  ]
+  FFFD(3): before=[ode-desc">100�ش���ģʽ] after=[Ѷ�ѭ�򽥽�</p>
+
+       ]
+  FFFD(1): before=[desc">100�ش���ģʽ���Ѷ] after=[ѭ�򽥽�</p>
+
+         ]
+  FFFD(1): before=[sc">100�ش���ģʽ���Ѷ�ѭ] after=[򽥽�</p>
+
+          {]
+  FFFD(1): before=[>100�ش���ģʽ���Ѷ�ѭ�򽥽] after=[</p>
+
+          {/* ]
+L806:           {/* ÿ����ս */}
+  FFFD(4): before=[/p>
+
+          {/* ÿ] after=[ս */}
+          <but]
+L811:             {dailyCompletedToday ? '? ������ս�����' : '?? ÿ����ս'}
+  FFFD(6): before=[CompletedToday ? '? ] after=[ս�����' : '?? ÿ����ս]
+  FFFD(5): before=[edToday ? '? ������ս] after=[' : '?? ÿ����ս'}
+   ]
+  FFFD(4): before=[�����ս�����' : '?? ÿ] after=[ս'}
+          </butt]
+L813:           <p className="mode-desc">ÿ��һ�أ�ȫ�����ͬһ��Ŀ</p>
+  FFFD(2): before=[ssName="mode-desc">ÿ] after=[һ�أ�ȫ�����ͬһ��Ŀ</p>
+]
+  FFFD(1): before=[ame="mode-desc">ÿ��һ] after=[أ�ȫ�����ͬһ��Ŀ</p>
+
+ ]
+  FFFD(1): before=[e="mode-desc">ÿ��һ�أ] after=[ȫ�����ͬһ��Ŀ</p>
+
+   ]
+  FFFD(5): before=["mode-desc">ÿ��һ�أ�ȫ] after=[ͬһ��Ŀ</p>
+
+         ]
+  FFFD(2): before=[esc">ÿ��һ�أ�ȫ�����ͬһ] after=[Ŀ</p>
+
+          {/*]
+L815:           {/* �޾�ģʽ */}
+  FFFD(1): before=[</p>
+
+          {/* ] after=[޾�ģʽ */}
+          <]
+  FFFD(1): before=[p>
+
+          {/* �޾] after=[ģʽ */}
+          <bu]
+L820:             ?? �޾�ģʽ
+  FFFD(1): before=[   >
+            ?? ] after=[޾�ģʽ
+          </but]
+  FFFD(1): before=[ >
+            ?? �޾] after=[ģʽ
+          </butto]
+L822:           <p className="mode-desc">������ɹؿ����Ѷ����޵���</p>
+  FFFD(6): before=[assName="mode-desc">] after=[ɹؿ����Ѷ����޵���</p>
+]
+  FFFD(4): before=["mode-desc">������ɹؿ] after=[Ѷ����޵���</p>
+
+     ]
+  FFFD(4): before=[-desc">������ɹؿ����Ѷ] after=[޵���</p>
+
+          ]
+  FFFD(3): before=[">������ɹؿ����Ѷ����޵] after=[</p>
+
+          {/* ]
+L824:           {/* ��ʱģʽ */}
+  FFFD(2): before=[</p>
+
+          {/* ] after=[ʱģʽ */}
+          <b]
+L829:             ?? ��ʱ��ս
+  FFFD(2): before=[   >
+            ?? ] after=[ʱ��ս
+          </but]
+  FFFD(2): before=[>
+            ?? ��ʱ] after=[ս
+          </button]
+L831:           <p className="mode-desc">120��������ͨ�أ���ս����</p>
+  FFFD(8): before=[Name="mode-desc">120] after=[ͨ�أ���ս����</p>
+
+   ]
+  FFFD(1): before=[e-desc">120��������ͨ] after=[أ���ս����</p>
+
+     ]
+  FFFD(3): before=[desc">120��������ͨ�أ] after=[ս����</p>
+
+         ]
+  FFFD(4): before=[">120��������ͨ�أ���ս] after=[</p>
+
+          {pro]
+L835:               ?? ��ͷ��ʼ
+  FFFD(2): before=[}>
+              ?? ] after=[ͷ��ʼ
+            </b]
+  FFFD(2): before=[              ?? ��ͷ] after=[ʼ
+            </butt]
+L840:           {/* �����Ƽ��ؿ� */}
+  FFFD(5): before=[div>
+
+          {/* ] after=[Ƽ��ؿ� */}
+          ]
+  FFFD(2): before=[          {/* �����Ƽ] after=[ؿ� */}
+          {((]
+  FFFD(1): before=[       {/* �����Ƽ��ؿ] after=[ */}
+          {(() ]
+L848:                   <span className="recommend-label">�Ƽ��ؿ�</span>
+  FFFD(1): before=[e="recommend-label">] after=[Ƽ��ؿ�</span>
+       ]
+  FFFD(2): before=["recommend-label">�Ƽ] after=[ؿ�</span>
+          ]
+  FFFD(1): before=[commend-label">�Ƽ��ؿ] after=[</span>
+            ]
+L849:                   <span className="recommend-detail">�� {recommend.level} �� �� {recommend.reason}</span>
+  FFFD(2): before=[="recommend-detail">] after=[ {recommend.level} �]
+  FFFD(2): before=[� {recommend.level} ] after=[ �� {recommend.reaso]
+  FFFD(2): before=[recommend.level} �� ] after=[ {recommend.reason}<]
+L851:                 <span className="recommend-arrow">��</span>
+  FFFD(2): before=[e="recommend-arrow">] after=[</span>
+            ]
+L859:               <span className="stat-label">����ɹؿ�</span>
+  FFFD(4): before=[ssName="stat-label">] after=[ɹؿ�</span>
+         ]
+  FFFD(1): before=[="stat-label">����ɹؿ] after=[</span>
+            ]
+L863:               <span className="stat-label">������</span>
+  FFFD(6): before=[ssName="stat-label">] after=[</span>
+            ]
+L867:               <span className="stat-label">��ʤ</span>
+  FFFD(2): before=[ssName="stat-label">] after=[ʤ</span>
+           ]
+L871:               <span className="stat-label">�޾����</span>
+  FFFD(1): before=[ssName="stat-label">] after=[޾����</span>
+       ]
+  FFFD(4): before=[Name="stat-label">�޾] after=[</span>
+            ]
+L875:               <span className="stat-label">��Ϸʱ��</span>
+  FFFD(2): before=[ssName="stat-label">] after=[Ϸʱ��</span>
+        ]
+  FFFD(2): before=[me="stat-label">��Ϸʱ] after=[</span>
+            ]
+L879:               <span className="stat-label">ƽ���Ǽ�</span>
+  FFFD(3): before=[sName="stat-label">ƽ] after=[Ǽ�</span>
+          ]
+  FFFD(1): before=[e="stat-label">ƽ���Ǽ] after=[</span>
+            ]
+L883:           {/* ͨ�ؽ����� */}
+  FFFD(1): before=[iv>
+
+          {/* ͨ] after=[ؽ����� */}
+         ]
+  FFFD(5): before=[>
+
+          {/* ͨ�ؽ] after=[ */}
+          <div ]
+L886:               <span>ͨ�ؽ���</span>
+  FFFD(1): before=[             <span>ͨ] after=[ؽ���</span>
+        ]
+  FFFD(3): before=[           <span>ͨ�ؽ] after=[</span>
+            ]
+L892:             {/* �Ѷȷ������� */}
+  FFFD(1): before=[iv>
+            {/* ] after=[Ѷȷ������� */}
+      ]
+  FFFD(7): before=[
+            {/* �Ѷȷ] after=[ */}
+            <di]
+L896:                   { name: '����', min: 1, max: 20, color: '#4CAF50' },
+  FFFD(4): before=[           { name: '] after=[', min: 1, max: 20, ]
+L897:                   { name: '�м�', min: 21, max: 40, color: '#2196F3' },
+  FFFD(1): before=[           { name: '] after=[м�', min: 21, max: 4]
+  FFFD(1): before=[         { name: '�м] after=[', min: 21, max: 40,]
+L898:                   { name: '�߼�', min: 41, max: 60, color: '#FF9800' },
+  FFFD(1): before=[           { name: '] after=[߼�', min: 41, max: 6]
+  FFFD(1): before=[         { name: '�߼] after=[', min: 41, max: 60,]
+L899:                   { name: 'ר��', min: 61, max: 80, color: '#f44336' },
+  FFFD(2): before=[          { name: 'ר] after=[', min: 61, max: 80,]
+L900:                   { name: '��ʦ', min: 81, max: 100, color: '#9C27B0' },
+  FFFD(2): before=[           { name: '] after=[ʦ', min: 81, max: 10]
+L922:           {/* �ؿ�ѡ�� */}
+  FFFD(1): before=[div>
+
+          {/* ] after=[ؿ�ѡ�� */}
+          ]
+  FFFD(1): before=[v>
+
+          {/* �ؿ] after=[ѡ�� */}
+          <d]
+  FFFD(2): before=[
+
+          {/* �ؿ�ѡ] after=[ */}
+          <div ]
+L925:               <h3>ѡ��ؿ�</h3>
+  FFFD(2): before=[
+              <h3>ѡ] after=[ؿ�</h3>
+            ]
+  FFFD(1): before=[            <h3>ѡ��ؿ] after=[</h3>
+              ]
+L930:                   placeholder="����ؿ���"
+  FFFD(4): before=[       placeholder="] after=[ؿ���"
+              ]
+  FFFD(3): before=[  placeholder="����ؿ] after=["
+                  ]
+L955:                 >��ת</button>
+  FFFD(2): before=[t}
+                >] after=[ת</button>
+         ]
+L963:                 <span className="page-info">�� {pageLevel + 1}/{Math.max(1, Math.ceil(Math.max(20, progress.currentLevel + 5) / LEVELS_PER_PAGE))} ҳ</span>
+  FFFD(2): before=[assName="page-info">] after=[ {pageLevel + 1}/{Ma]
+L971:             <div className="difficulty-legend" aria-label="�Ѷ���ɫͼ��">
+  FFFD(1): before=[legend" aria-label="] after=[Ѷ���ɫͼ��">
+         ]
+  FFFD(3): before=[gend" aria-label="�Ѷ] after=[ɫͼ��">
+             ]
+  FFFD(2): before=[ aria-label="�Ѷ���ɫͼ] after=[">
+              <sp]
+L972:               <span className="legend-item"><span className="legend-dot diff-easy"></span>����</span>
+  FFFD(4): before=[t diff-easy"></span>] after=[</span>
+            ]
+L973:               <span className="legend-item"><span className="legend-dot diff-normal"></span>��ͨ</span>
+  FFFD(2): before=[diff-normal"></span>] after=[ͨ</span>
+           ]
+L974:               <span className="legend-item"><span className="legend-dot diff-medium"></span>�е�</span>
+  FFFD(1): before=[diff-medium"></span>] after=[е�</span>
+          ]
+  FFFD(1): before=[ff-medium"></span>�е] after=[</span>
+            ]
+L975:               <span className="legend-item"><span className="legend-dot diff-hard"></span>����</span>
+  FFFD(4): before=[t diff-hard"></span>] after=[</span>
+            ]
+L976:               <span className="legend-item"><span className="legend-dot diff-expert"></span>ר��</span>
+  FFFD(2): before=[iff-expert"></span>ר] after=[</span>
+            ]
+L977:               <span className="legend-item"><span className="legend-dot diff-master"></span>��ʦ</span>
+  FFFD(2): before=[diff-master"></span>] after=[ʦ</span>
+           ]
+L985:                   // �Ѷ���ɫ���
+  FFFD(1): before=[                 // ] after=[Ѷ���ɫ���
+           ]
+  FFFD(3): before=[               // �Ѷ] after=[ɫ���
+               ]
+  FFFD(3): before=[           // �Ѷ���ɫ] after=[
+                  l]
+L992:                   // 91-100 ��ʦ
+  FFFD(2): before=[          // 91-100 ] after=[ʦ
+                  ]
+L999:                       aria-label={`��${lvl}��${progress.completedLevels.includes(lvl) ? `������ɣ����${best || '?'}����${stars}�ǣ�` : ''}`}
+  FFFD(2): before=[       aria-label={`] after=[${lvl}��${progress.c]
+  FFFD(2): before=[ria-label={`��${lvl}] after=[${progress.completed]
+  FFFD(6): before=[ls.includes(lvl) ? `] after=[ɣ����${best || '?'}�]
+  FFFD(4): before=[udes(lvl) ? `������ɣ] after=[${best || '?'}����${]
+  FFFD(4): before=[�ɣ����${best || '?'}] after=[${stars}�ǣ�` : ''}`}]
+  FFFD(1): before=[ || '?'}����${stars}] after=[ǣ�` : ''}`}
+        ]
+  FFFD(1): before=[| '?'}����${stars}�ǣ] after=[` : ''}`}
+          ]
+L1000:                       title={progress.completedLevels.includes(lvl) ? `��${lvl}�� | ���: ${best || '?'}�� | ${'?'.repeat(stars) || '�����'}` : `��${lvl}��`}
+  FFFD(2): before=[ls.includes(lvl) ? `] after=[${lvl}�� | ���: ${be]
+  FFFD(2): before=[des(lvl) ? `��${lvl}] after=[ | ���: ${best || '?]
+  FFFD(3): before=[vl) ? `��${lvl}�� | ] after=[: ${best || '?'}�� |]
+  FFFD(2): before=[ ���: ${best || '?'}] after=[ | ${'?'.repeat(star]
+  FFFD(5): before=['.repeat(stars) || '] after=['}` : `��${lvl}��`}
+]
+  FFFD(2): before=[rs) || '�����'}` : `] after=[${lvl}��`}
+         ]
+  FFFD(2): before=[�����'}` : `��${lvl}] after=[`}
+                 ]
+L1009:           {/* �Զ���ؿ������� */}
+  FFFD(1): before=[div>
+
+          {/* ] after=[Զ���ؿ������� */}
+   ]
+  FFFD(3): before=[v>
+
+          {/* �Զ] after=[ؿ������� */}
+       ]
+  FFFD(7): before=[          {/* �Զ���ؿ] after=[ */}
+          {cust]
+L1012:               <h3 className="custom-levels-title">??? �ҵĹؿ�</h3>
+  FFFD(1): before=[m-levels-title">??? ] after=[ҵĹؿ�</h3>
+          ]
+  FFFD(1): before=[vels-title">??? �ҵĹؿ] after=[</h3>
+              ]
+L1019:                       <span className="custom-level-meta">{lv.difficulty} �� {lv.tubes.length}�� �� {lv.completed ? '? ��ͨ��' : 'δͨ��'}</span>
+  FFFD(2): before=[ta">{lv.difficulty} ] after=[ {lv.tubes.length}��]
+  FFFD(2): before=[�� {lv.tubes.length}] after=[ �� {lv.completed ? ]
+  FFFD(2): before=[{lv.tubes.length}�� ] after=[ {lv.completed ? '? ]
+  FFFD(2): before=[ {lv.completed ? '? ] after=[ͨ��' : 'δͨ��'}</span]
+  FFFD(2): before=[v.completed ? '? ��ͨ] after=[' : 'δͨ��'}</span>
+ ]
+  FFFD(2): before=[ed ? '? ��ͨ��' : 'δͨ] after=['}</span>
+          ]
+L1025:               <button className="btn btn-secondary btn-small" onClick={() => setPage('editor')}>�鿴ȫ�� ��</button>
+  FFFD(1): before=[ setPage('editor')}>] after=[鿴ȫ�� ��</button>
+   ]
+  FFFD(2): before=[tPage('editor')}>�鿴ȫ] after=[ ��</button>
+       ]
+  FFFD(2): before=[ge('editor')}>�鿴ȫ�� ] after=[</button>
+          ]
+L1029:           {/* ���λԤ�� - ��ҳ�ײ� */}
+  FFFD(3): before=[  )}
+
+          {/* ] after=[λԤ�� - ��ҳ�ײ� */}
+  ]
+  FFFD(2): before=[
+          {/* ���λԤ] after=[ - ��ҳ�ײ� */}
+      ]
+  FFFD(2): before=[      {/* ���λԤ�� - ] after=[ҳ�ײ� */}
+          <]
+  FFFD(1): before=[   {/* ���λԤ�� - ��ҳ] after=[ײ� */}
+          <di]
+  FFFD(1): before=[ {/* ���λԤ�� - ��ҳ�ײ] after=[ */}
+          <div ]
+L1031:             <span className="ad-label">���λ</span>
+  FFFD(3): before=[lassName="ad-label">] after=[λ</span>
+          <]
+L1034:           {/* �������� */}
+  FFFD(8): before=[div>
+
+          {/* ] after=[ */}
+          <div ]
+L1036:             <p>ϲ�������Ϸ��</p>
+  FFFD(7): before=[n">
+            <p>ϲ] after=[Ϸ��</p>
+            ]
+  FFFD(2): before=[        <p>ϲ�������Ϸ] after=[</p>
+            <a ]
+L1038:               ? ֧�ֿ�����
+  FFFD(1): before=[}>
+              ? ֧] after=[ֿ�����
+            <]
+  FFFD(5): before=[
+              ? ֧�ֿ] after=[
+            </a>
+  ]
+L1044:           <button className="footer-link" onClick={() => setPage('about')}>����</button>
+  FFFD(4): before=[> setPage('about')}>] after=[</button>
+          ]
+L1046:           <button className="footer-link" onClick={() => setShowHelpModal(true)}>? �淨</button>
+  FFFD(1): before=[wHelpModal(true)}>? ] after=[淨</button>
+         ]
+L1048:           <button className="footer-link" onClick={() => setPage('achievements')}>?? �ɾ�</button>
+  FFFD(1): before=['achievements')}>?? ] after=[ɾ�</button>
+        ]
+  FFFD(1): before=[chievements')}>?? �ɾ] after=[</button>
+          ]
+L1050:           <button className="footer-link" onClick={() => setPage('stats')}>?? ͳ��</button>
+  FFFD(2): before=[tPage('stats')}>?? ͳ] after=[</button>
+          ]
+L1052:           <button className="footer-link" onClick={() => setPage('editor')}>??? �༭��</button>
+  FFFD(1): before=[Page('editor')}>??? ] after=[༭��</button>
+       ]
+  FFFD(2): before=[ge('editor')}>??? �༭] after=[</button>
+          ]
+L1054:           <button className="footer-link" onClick={() => setPage('settings')}>?? ����</button>
+  FFFD(4): before=[age('settings')}>?? ] after=[</button>
+          ]
+L1056:           <button className="footer-link" onClick={() => setPage('privacy')}>��˽����</button>
+  FFFD(2): before=[setPage('privacy')}>] after=[˽����</button>
+     ]
+  FFFD(4): before=[Page('privacy')}>��˽] after=[</button>
+        </]
+L1059:         {/* �Զ��浵�ָ��Ի��� */}
+  FFFD(1): before=[ooter>
+
+        {/* ] after=[Զ��浵�ָ��Ի��� */}
+   ]
+  FFFD(2): before=[ter>
+
+        {/* �Զ] after=[浵�ָ��Ի��� */}
+      ]
+  FFFD(1): before=[>
+
+        {/* �Զ��浵] after=[ָ��Ի��� */}
+        ]
+  FFFD(2): before=[
+        {/* �Զ��浵�ָ] after=[Ի��� */}
+        {sh]
+  FFFD(3): before=[      {/* �Զ��浵�ָ��Ի] after=[ */}
+        {showRe]
+L1064:               <h2>����δ��ɵ���Ϸ</h2>
+  FFFD(4): before=[>
+              <h2>] after=[δ��ɵ���Ϸ</h2>
+      ]
+  FFFD(2): before=[           <h2>����δ] after=[ɵ���Ϸ</h2>
+         ]
+  FFFD(3): before=[        <h2>����δ��ɵ] after=[Ϸ</h2>
+             ]
+L1067:                   ? `�޾�ģʽ�� ${autosaveData.endlessScore ?? 0 + 1} ���ѽ��� ${autosaveData.moves} ��`
+  FFFD(1): before=[                 ? `] after=[޾�ģʽ�� ${autosaveDat]
+  FFFD(1): before=[               ? `�޾] after=[ģʽ�� ${autosaveData.]
+  FFFD(2): before=[            ? `�޾�ģʽ] after=[ ${autosaveData.endl]
+  FFFD(3): before=[lessScore ?? 0 + 1} ] after=[ѽ��� ${autosaveData.]
+  FFFD(3): before=[Score ?? 0 + 1} ���ѽ] after=[ ${autosaveData.move]
+  FFFD(2): before=[autosaveData.moves} ] after=[`
+                  ]
+L1069:                   ? `��ʱ��ս�ѽ��� ${autosaveData.moves} ��`
+  FFFD(2): before=[                 ? `] after=[ʱ��ս�ѽ��� ${autosave]
+  FFFD(2): before=[              ? `��ʱ] after=[ս�ѽ��� ${autosaveDat]
+  FFFD(1): before=[           ? `��ʱ��ս] after=[ѽ��� ${autosaveData.]
+  FFFD(3): before=[         ? `��ʱ��ս�ѽ] after=[ ${autosaveData.move]
+  FFFD(2): before=[autosaveData.moves} ] after=[`
+                  ]
+L1070:                   : `�� ${autosaveData.level} ���ѽ��� ${autosaveData.moves} ��`}
+  FFFD(2): before=[                 : `] after=[ ${autosaveData.leve]
+  FFFD(3): before=[autosaveData.level} ] after=[ѽ��� ${autosaveData.]
+  FFFD(3): before=[saveData.level} ���ѽ] after=[ ${autosaveData.move]
+  FFFD(2): before=[autosaveData.moves} ] after=[`}
+              </p]
+L1088:                 }}>? ������Ϸ</button>
+  FFFD(6): before=[               }}>? ] after=[Ϸ</button>
+         ]
+L1091:                   try { localStorage.removeItem(AUTOSAVE_KEY); } catch (e) { /* ���� */ }
+  FFFD(4): before=[); } catch (e) { /* ] after=[ */ }
+              ]
+L1092:                 }}>�����浵</button>
+  FFFD(5): before=[
+                }}>] after=[浵</button>
+         ]
+L1098:         {/* ������������ */}
+  FFFD(12): before=[    )}
+
+        {/* ] after=[ */}
+        {showTu]
+L1103:               <h2>��ӭ����ɫ������</h2>
+  FFFD(2): before=[>
+              <h2>] after=[ӭ����ɫ������</h2>
+  ]
+  FFFD(4): before=[             <h2>��ӭ] after=[ɫ������</h2>
+       ]
+  FFFD(6): before=[        <h2>��ӭ����ɫ] after=[</h2>
+              ]
+L1107:                   <span>���һ������ɫ���Թ�ѡ����</span>
+  FFFD(3): before=[              <span>] after=[һ������ɫ���Թ�ѡ����</]
+  FFFD(6): before=[          <span>���һ] after=[ɫ���Թ�ѡ����</span>
+ ]
+  FFFD(3): before=[   <span>���һ������ɫ] after=[Թ�ѡ����</span>
+     ]
+  FFFD(1): before=[span>���һ������ɫ���Թ] after=[ѡ����</span>
+       ]
+  FFFD(4): before=[an>���һ������ɫ���Թ�ѡ] after=[</span>
+            ]
+L1111:                   <span>�ٵ����һ���Թܣ���ɫ�ᵹ��ȥ</span>
+  FFFD(1): before=[              <span>] after=[ٵ����һ���Թܣ���ɫ�ᵹ��ȥ]
+  FFFD(4): before=[            <span>�ٵ] after=[һ���Թܣ���ɫ�ᵹ��ȥ</spa]
+  FFFD(3): before=[       <span>�ٵ����һ] after=[Թܣ���ɫ�ᵹ��ȥ</span>
+ ]
+  FFFD(3): before=[  <span>�ٵ����һ���Թܣ] after=[ɫ�ᵹ��ȥ</span>
+      ]
+  FFFD(1): before=[pan>�ٵ����һ���Թܣ���ɫ] after=[ᵹ��ȥ</span>
+        ]
+  FFFD(2): before=[n>�ٵ����һ���Թܣ���ɫ�ᵹ] after=[ȥ</span>
+           ]
+L1115:                   <span>ֻ�ܵ���չܻ򶥲���ɫ��ͬ���Թ�</span>
+  FFFD(1): before=[             <span>ֻ] after=[ܵ���չܻ򶥲���ɫ��ͬ���Թ�]
+  FFFD(3): before=[           <span>ֻ�ܵ] after=[չܻ򶥲���ɫ��ͬ���Թ�</sp]
+  FFFD(3): before=[    <span>ֻ�ܵ���չܻ򶥲] after=[ɫ��ͬ���Թ�</span>
+   ]
+  FFFD(2): before=[<span>ֻ�ܵ���չܻ򶥲���ɫ] after=[ͬ���Թ�</span>
+      ]
+  FFFD(3): before=[an>ֻ�ܵ���չܻ򶥲���ɫ��ͬ] after=[Թ�</span>
+          ]
+  FFFD(1): before=[�ܵ���չܻ򶥲���ɫ��ͬ���Թ] after=[</span>
+            ]
+L1119:                   <span>��ÿ����ɫ�鵽һ���Թܾ�Ӯ�ˣ�</span>
+  FFFD(2): before=[              <span>] after=[ÿ����ɫ�鵽һ���Թܾ�Ӯ�ˣ�<]
+  FFFD(4): before=[           <span>��ÿ] after=[ɫ�鵽һ���Թܾ�Ӯ�ˣ�</span]
+  FFFD(1): before=[      <span>��ÿ����ɫ] after=[鵽һ���Թܾ�Ӯ�ˣ�</span>
+]
+  FFFD(3): before=[   <span>��ÿ����ɫ�鵽һ] after=[Թܾ�Ӯ�ˣ�</span>
+     ]
+  FFFD(1): before=[pan>��ÿ����ɫ�鵽һ���Թܾ] after=[Ӯ�ˣ�</span>
+        ]
+  FFFD(1): before=[n>��ÿ����ɫ�鵽һ���Թܾ�Ӯ] after=[ˣ�</span>
+          ]
+  FFFD(1): before=[��ÿ����ɫ�鵽һ���Թܾ�Ӯ�ˣ] after=[</span>
+            ]
+L1123:                 ֪���ˣ���ʼ�棡
+  FFFD(3): before=[}>
+                ֪] after=[ˣ���ʼ�棡
+            ]
+  FFFD(3): before=[               ֪���ˣ] after=[ʼ�棡
+              </]
+  FFFD(1): before=[           ֪���ˣ���ʼ] after=[棡
+              </bu]
+L1129:         {/* �����ɹ���ʾ */}
+  FFFD(5): before=[    )}
+
+        {/* ] after=[ɹ���ʾ */}
+        {s]
+  FFFD(3): before=[
+
+        {/* �����ɹ] after=[ʾ */}
+        {showS]
+L1131:           <div className="share-toast">? ս���Ѹ��Ƶ������壡</div>
+  FFFD(3): before=[me="share-toast">? ս] after=[Ѹ��Ƶ������壡</div>
+  ]
+  FFFD(2): before=[share-toast">? ս���Ѹ] after=[Ƶ������壡</div>
+     ]
+  FFFD(6): before=[re-toast">? ս���Ѹ��Ƶ] after=[壡</div>
+        )}
+
+]
+L1134:         {/* �ɾͽ���֪ͨ */}
+  FFFD(1): before=[    )}
+
+        {/* ] after=[ɾͽ���֪ͨ */}
+        ]
+  FFFD(3): before=[ )}
+
+        {/* �ɾͽ] after=[֪ͨ */}
+        {newA]
+L1140:                 <div className="achievement-notif-title">?? �ɾͽ�����</div>
+  FFFD(1): before=[ent-notif-title">?? ] after=[ɾͽ�����</div>
+      ]
+  FFFD(5): before=[-notif-title">?? �ɾͽ] after=[</div>
+             ]
+L1148:         {/* PWA ��װ������ʾ */}
+  FFFD(2): before=[)}
+
+        {/* PWA ] after=[װ������ʾ */}
+       ]
+  FFFD(6): before=[
+        {/* PWA ��װ] after=[ʾ */}
+        {showP]
+L1154:                 <div className="pwa-install-title">��װ������</div>
+  FFFD(2): before=["pwa-install-title">] after=[װ������</div>
+      ]
+  FFFD(6): before=[a-install-title">��װ] after=[</div>
+             ]
+L1155:                 <div className="pwa-install-desc">����Ҳ���棬���������</div>
+  FFFD(4): before=[="pwa-install-desc">] after=[Ҳ���棬���������</div>]
+  FFFD(3): before=[-install-desc">����Ҳ] after=[棬���������</div>
+   ]
+  FFFD(9): before=[tall-desc">����Ҳ���棬] after=[</div>
+             ]
+L1161:               }}>��װ</button>
+  FFFD(2): before=[);
+              }}>] after=[װ</button>
+         ]
+L1170:         {/* ��ҳ�������� */}
+  FFFD(2): before=[    )}
+
+        {/* ] after=[ҳ�������� */}
+      ]
+  FFFD(8): before=[ )}
+
+        {/* ��ҳ] after=[ */}
+        {showHe]
+L1174:               <h2>?? �淨����</h2>
+  FFFD(1): before=[             <h2>?? ] after=[淨����</h2>
+         ]
+  FFFD(4): before=[           <h2>?? �淨] after=[</h2>
+              ]
+L1177:                 <span>���һ������ɫ���Թ�ѡ����</span>
+  FFFD(3): before=[              <span>] after=[һ������ɫ���Թ�ѡ����</]
+  FFFD(6): before=[          <span>���һ] after=[ɫ���Թ�ѡ����</span>
+ ]
+  FFFD(3): before=[   <span>���һ������ɫ] after=[Թ�ѡ����</span>
+     ]
+  FFFD(1): before=[span>���һ������ɫ���Թ] after=[ѡ����</span>
+       ]
+  FFFD(4): before=[an>���һ������ɫ���Թ�ѡ] after=[</span>
+            ]
+L1181:                 <span>�ٵ����һ���Թܣ���ɫ�ᵹ��ȥ</span>
+  FFFD(1): before=[              <span>] after=[ٵ����һ���Թܣ���ɫ�ᵹ��ȥ]
+  FFFD(4): before=[            <span>�ٵ] after=[һ���Թܣ���ɫ�ᵹ��ȥ</spa]
+  FFFD(3): before=[       <span>�ٵ����һ] after=[Թܣ���ɫ�ᵹ��ȥ</span>
+ ]
+  FFFD(3): before=[  <span>�ٵ����һ���Թܣ] after=[ɫ�ᵹ��ȥ</span>
+      ]
+  FFFD(1): before=[pan>�ٵ����һ���Թܣ���ɫ] after=[ᵹ��ȥ</span>
+        ]
+  FFFD(2): before=[n>�ٵ����һ���Թܣ���ɫ�ᵹ] after=[ȥ</span>
+           ]
+L1185:                 <span>ֻ�ܵ���չܻ򶥲���ɫ��ͬ���Թ�</span>
+  FFFD(1): before=[             <span>ֻ] after=[ܵ���չܻ򶥲���ɫ��ͬ���Թ�]
+  FFFD(3): before=[           <span>ֻ�ܵ] after=[չܻ򶥲���ɫ��ͬ���Թ�</sp]
+  FFFD(3): before=[    <span>ֻ�ܵ���չܻ򶥲] after=[ɫ��ͬ���Թ�</span>
+   ]
+  FFFD(2): before=[<span>ֻ�ܵ���չܻ򶥲���ɫ] after=[ͬ���Թ�</span>
+      ]
+  FFFD(3): before=[an>ֻ�ܵ���չܻ򶥲���ɫ��ͬ] after=[Թ�</span>
+          ]
+  FFFD(1): before=[�ܵ���չܻ򶥲���ɫ��ͬ���Թ] after=[</span>
+            ]
+L1189:                 <span>��ÿ����ɫ�鵽һ���Թܾ�Ӯ�ˣ�</span>
+  FFFD(2): before=[              <span>] after=[ÿ����ɫ�鵽һ���Թܾ�Ӯ�ˣ�<]
+  FFFD(4): before=[           <span>��ÿ] after=[ɫ�鵽һ���Թܾ�Ӯ�ˣ�</span]
+  FFFD(1): before=[      <span>��ÿ����ɫ] after=[鵽һ���Թܾ�Ӯ�ˣ�</span>
+]
+  FFFD(3): before=[   <span>��ÿ����ɫ�鵽һ] after=[Թܾ�Ӯ�ˣ�</span>
+     ]
+  FFFD(1): before=[pan>��ÿ����ɫ�鵽һ���Թܾ] after=[Ӯ�ˣ�</span>
+        ]
+  FFFD(1): before=[n>��ÿ����ɫ�鵽һ���Թܾ�Ӯ] after=[ˣ�</span>
+          ]
+  FFFD(1): before=[��ÿ����ɫ�鵽һ���Թܾ�Ӯ�ˣ] after=[</span>
+            ]
+L1193:                 <span>����Խ���Ǽ�Խ�ߣ�׷������ͨ�أ�</span>
+  FFFD(4): before=[              <span>] after=[Խ���Ǽ�Խ�ߣ�׷������ͨ�أ]
+  FFFD(3): before=[         <span>����Խ] after=[Ǽ�Խ�ߣ�׷������ͨ�أ�</s]
+  FFFD(1): before=[     <span>����Խ���Ǽ] after=[Խ�ߣ�׷������ͨ�أ�</spa]
+  FFFD(1): before=[   <span>����Խ���Ǽ�Խ] after=[ߣ�׷������ͨ�أ�</span>]
+  FFFD(1): before=[ <span>����Խ���Ǽ�Խ�ߣ] after=[׷������ͨ�أ�</span>
+ ]
+  FFFD(6): before=[span>����Խ���Ǽ�Խ�ߣ�׷] after=[ͨ�أ�</span>
+        ]
+  FFFD(1): before=[��Խ���Ǽ�Խ�ߣ�׷������ͨ] after=[أ�</span>
+          ]
+  FFFD(1): before=[Խ���Ǽ�Խ�ߣ�׷������ͨ�أ] after=[</span>
+            ]
+L1196:                 ֪����
+  FFFD(4): before=[}>
+                ֪] after=[
+              </but]
+L1202:         {/* ǩ���������� */}
+  FFFD(10): before=[   )}
+
+        {/* ǩ] after=[ */}
+        {showCh]
+L1207:               <h2>ǩ������������</h2>
+  FFFD(12): before=[
+              <h2>ǩ] after=[</h2>
+              ]
+L1212:                 ����ǩ�� {checkinStreak} ��
+  FFFD(4): before=[}}>
+                ] after=[ǩ�� {checkinStreak} ]
+  FFFD(2): before=[               ����ǩ] after=[ {checkinStreak} ��
+]
+  FFFD(2): before=[ǩ�� {checkinStreak} ] after=[
+              </p>
+]
+L1215:                 ?? ̫���ˣ�
+  FFFD(3): before=[                ?? ̫] after=[ˣ�
+              </b]
+  FFFD(1): before=[            ?? ̫���ˣ] after=[
+              </but]
+L1221:         {/* ������־���� */}
+  FFFD(6): before=[    )}
+
+        {/* ] after=[־���� */}
+        {s]
+  FFFD(4): before=[
+        {/* ������־] after=[ */}
+        {showCh]
+L1226:               <h2>ɫ�����������־</h2>
+  FFFD(11): before=[
+              <h2>ɫ] after=[־</h2>
+             ]
+L1231:                     <li>??? �����ؿ��༭�����Դ��ؿ�������/�����ؿ��롢����������</li>
+  FFFD(5): before=[            <li>??? ] after=[ؿ��༭�����Դ��ؿ�������]
+  FFFD(2): before=[      <li>??? �����ؿ] after=[༭�����Դ��ؿ�������/��]
+  FFFD(5): before=[   <li>??? �����ؿ��༭] after=[Դ��ؿ�������/�����ؿ��]
+  FFFD(2): before=[>??? �����ؿ��༭�����Դ] after=[ؿ�������/�����ؿ��롢��]
+  FFFD(7): before=[? �����ؿ��༭�����Դ��ؿ] after=[/�����ؿ��롢����������]
+  FFFD(5): before=[��༭�����Դ��ؿ�������/] after=[ؿ��롢����������</li>
+]
+  FFFD(2): before=[��Դ��ؿ�������/�����ؿ] after=[롢����������</li>
+   ]
+  FFFD(10): before=[��ؿ�������/�����ؿ��롢] after=[</li>
+              ]
+L1232:                     <li>?? ������Ϸ�ڹ���ϵͳ���״ν���չʾ������ʾ</li>
+  FFFD(6): before=[             <li>?? ] after=[Ϸ�ڹ���ϵͳ���״ν���չʾ��]
+  FFFD(1): before=[      <li>?? ������Ϸ] after=[ڹ���ϵͳ���״ν���չʾ����]
+  FFFD(3): before=[    <li>?? ������Ϸ�ڹ] after=[ϵͳ���״ν���չʾ������ʾ<]
+  FFFD(3): before=[li>?? ������Ϸ�ڹ���ϵͳ] after=[״ν���չʾ������ʾ</li>
+]
+  FFFD(3): before=[ ������Ϸ�ڹ���ϵͳ���״ν] after=[չʾ������ʾ</li>
+     ]
+  FFFD(6): before=[��Ϸ�ڹ���ϵͳ���״ν���չʾ] after=[ʾ</li>
+             ]
+L1233:                     <li>?? �����ط���Ƶ�������ܣ��������طŵ���Ϊ WebM ��Ƶ����</li>
+  FFFD(5): before=[             <li>?? ] after=[ط���Ƶ�������ܣ�������]
+  FFFD(3): before=[       <li>?? �����ط] after=[Ƶ�������ܣ��������طŵ�]
+  FFFD(7): before=[   <li>?? �����ط���Ƶ] after=[ܣ��������طŵ���Ϊ WebM]
+  FFFD(8): before=[? �����ط���Ƶ�������ܣ] after=[طŵ���Ϊ WebM ��Ƶ����<]
+  FFFD(3): before=[�Ƶ�������ܣ��������طŵ] after=[Ϊ WebM ��Ƶ����</li>
+]
+  FFFD(2): before=[��������طŵ���Ϊ WebM ] after=[Ƶ����</li>
+         ]
+  FFFD(4): before=[�����طŵ���Ϊ WebM ��Ƶ] after=[</li>
+              ]
+L1234:                     <li>?? ��ҳ�����Զ���ؿ�������</li>
+  FFFD(2): before=[             <li>?? ] after=[ҳ�����Զ���ؿ�������</]
+  FFFD(5): before=[          <li>?? ��ҳ] after=[Զ���ؿ�������</li>
+  ]
+  FFFD(3): before=[    <li>?? ��ҳ�����Զ] after=[ؿ�������</li>
+      ]
+  FFFD(7): before=[<li>?? ��ҳ�����Զ���ؿ] after=[</li>
+              ]
+L1240:                     <li>?? �����طŷ������ܣ�ͨ�غ�����ɻط����ӣ����������Ѳ鿴�����ط�</li>
+  FFFD(5): before=[             <li>?? ] after=[طŷ������ܣ�ͨ�غ�����ɻط]
+  FFFD(6): before=[      <li>?? �����طŷ] after=[ܣ�ͨ�غ�����ɻط����ӣ���]
+  FFFD(1): before=[li>?? �����طŷ������ܣ] after=[ͨ�غ�����ɻط����ӣ�����]
+  FFFD(1): before=[>?? �����طŷ������ܣ�ͨ] after=[غ�����ɻط����ӣ�������]
+  FFFD(5): before=[? �����طŷ������ܣ�ͨ�غ] after=[ɻط����ӣ����������Ѳ鿴�]
+  FFFD(4): before=[طŷ������ܣ�ͨ�غ�����ɻط] after=[ӣ����������Ѳ鿴�����ط�]
+  FFFD(10): before=[���ܣ�ͨ�غ�����ɻط����ӣ] after=[Ѳ鿴�����ط�</li>
+     ]
+  FFFD(5): before=[�ɻط����ӣ����������Ѳ鿴] after=[ط�</li>
+            ]
+  FFFD(1): before=[�ӣ����������Ѳ鿴�����ط] after=[</li>
+              ]
+L1241:                     <li>?? ����8���ɾͣ�������ʦ/ǧ������/�ٶȿ���/����ͨ��/���Ǵ���/���Ǵ�ʦ/ɫ��ר��/ɫ������</li>
+  FFFD(4): before=[             <li>?? ] after=[8���ɾͣ�������ʦ/ǧ����]
+  FFFD(3): before=[        <li>?? ����8] after=[ɾͣ�������ʦ/ǧ������/�]
+  FFFD(7): before=[   <li>?? ����8���ɾͣ] after=[ʦ/ǧ������/�ٶȿ���/���]
+  FFFD(6): before=[����8���ɾͣ�������ʦ/ǧ] after=[/�ٶȿ���/����ͨ��/���Ǵ]
+  FFFD(1): before=[�ɾͣ�������ʦ/ǧ������/] after=[ٶȿ���/����ͨ��/���Ǵ��]
+  FFFD(3): before=[�������ʦ/ǧ������/�ٶȿ] after=[/����ͨ��/���Ǵ���/���]
+  FFFD(4): before=[���ʦ/ǧ������/�ٶȿ���/] after=[ͨ��/���Ǵ���/���Ǵ�ʦ/ɫ]
+  FFFD(2): before=[ǧ������/�ٶȿ���/����ͨ] after=[/���Ǵ���/���Ǵ�ʦ/ɫ��ר]
+  FFFD(3): before=[����/�ٶȿ���/����ͨ��/] after=[Ǵ���/���Ǵ�ʦ/ɫ��ר��/ɫ]
+  FFFD(3): before=[/�ٶȿ���/����ͨ��/���Ǵ] after=[/���Ǵ�ʦ/ɫ��ר��/ɫ����]
+  FFFD(3): before=[���/����ͨ��/���Ǵ���/] after=[Ǵ�ʦ/ɫ��ר��/ɫ������</]
+  FFFD(1): before=[����ͨ��/���Ǵ���/���Ǵ] after=[ʦ/ɫ��ר��/ɫ������</li]
+  FFFD(2): before=[ͨ��/���Ǵ���/���Ǵ�ʦ/ɫ] after=[ר��/ɫ������</li>
+   ]
+  FFFD(2): before=[/���Ǵ���/���Ǵ�ʦ/ɫ��ר] after=[/ɫ������</li>
+      ]
+  FFFD(6): before=[Ǵ���/���Ǵ�ʦ/ɫ��ר��/ɫ] after=[</li>
+              ]
+L1242:                     <li>?? �����汾������־�������汾���º��Զ�չʾ�¹���</li>
+  FFFD(5): before=[             <li>?? ] after=[汾������־�������汾���º]
+  FFFD(6): before=[       <li>?? �����汾] after=[־�������汾���º��Զ�չʾ�]
+  FFFD(7): before=[<li>?? �����汾������־] after=[汾���º��Զ�չʾ�¹���</li]
+  FFFD(3): before=[����汾������־�������汾] after=[º��Զ�չʾ�¹���</li>
+  ]
+  FFFD(2): before=[汾������־�������汾���º] after=[Զ�չʾ�¹���</li>
+     ]
+  FFFD(1): before=[����־�������汾���º��Զ] after=[չʾ�¹���</li>
+       ]
+  FFFD(1): before=[�־�������汾���º��Զ�չʾ] after=[¹���</li>
+          ]
+  FFFD(3): before=[�������汾���º��Զ�չʾ�¹] after=[</li>
+              ]
+L1243:                     <li>?? �ؿ��Ѷ�����Ӧ�Ż���������ұ������ܵ����Ƽ�����</li>
+  FFFD(1): before=[             <li>?? ] after=[ؿ��Ѷ�����Ӧ�Ż��������]
+  FFFD(2): before=[           <li>?? �ؿ] after=[Ѷ�����Ӧ�Ż���������ұ�]
+  FFFD(5): before=[        <li>?? �ؿ��Ѷ] after=[Ӧ�Ż���������ұ������ܵ]
+  FFFD(1): before=[  <li>?? �ؿ��Ѷ�����Ӧ] after=[Ż���������ұ������ܵ��]
+  FFFD(9): before=[<li>?? �ؿ��Ѷ�����Ӧ�Ż] after=[ұ������ܵ����Ƽ�����</]
+  FFFD(6): before=[�Ѷ�����Ӧ�Ż���������ұ] after=[ܵ����Ƽ�����</li>
+   ]
+  FFFD(4): before=[Ӧ�Ż���������ұ������ܵ] after=[Ƽ�����</li>
+        ]
+  FFFD(5): before=[�������ұ������ܵ����Ƽ] after=[</li>
+              ]
+L1249:                     <li>?? ͳ��ҳ���������ֲ�ͼ����ʱ����ͼ</li>
+  FFFD(2): before=[            <li>?? ͳ] after=[ҳ���������ֲ�ͼ����ʱ��]
+  FFFD(9): before=[         <li>?? ͳ��ҳ] after=[ֲ�ͼ����ʱ����ͼ</li>
+ ]
+  FFFD(1): before=[li>?? ͳ��ҳ���������ֲ] after=[ͼ����ʱ����ͼ</li>
+   ]
+  FFFD(4): before=[>?? ͳ��ҳ���������ֲ�ͼ] after=[ʱ����ͼ</li>
+        ]
+  FFFD(4): before=[��ҳ���������ֲ�ͼ����ʱ] after=[ͼ</li>
+             ]
+L1250:                     <li>?? ��ҳ�����Ƽ��ؿ�</li>
+  FFFD(2): before=[             <li>?? ] after=[ҳ�����Ƽ��ؿ�</li>
+   ]
+  FFFD(5): before=[          <li>?? ��ҳ] after=[Ƽ��ؿ�</li>
+         ]
+  FFFD(2): before=[    <li>?? ��ҳ�����Ƽ] after=[ؿ�</li>
+            ]
+  FFFD(1): before=[ <li>?? ��ҳ�����Ƽ��ؿ] after=[</li>
+              ]
+L1251:                     <li>?? �ӽ������ʾ�� + ������Ч</li>
+  FFFD(1): before=[             <li>?? ] after=[ӽ������ʾ�� + ������Ч]
+  FFFD(6): before=[           <li>?? �ӽ] after=[ʾ�� + ������Ч</li>
+ ]
+  FFFD(2): before=[    <li>?? �ӽ������ʾ] after=[ + ������Ч</li>
+    ]
+  FFFD(6): before=[li>?? �ӽ������ʾ�� + ] after=[Ч</li>
+             ]
+L1252:                     <li>?? ����ҳ����չʾ</li>
+  FFFD(4): before=[             <li>?? ] after=[ҳ����չʾ</li>
+       ]
+  FFFD(4): before=[        <li>?? ����ҳ] after=[չʾ</li>
+            ]
+L1258:                     <li>?? ÿ��ǩ��ϵͳ��ǩ����������̱�������ǩ����¼��</li>
+  FFFD(2): before=[            <li>?? ÿ] after=[ǩ��ϵͳ��ǩ����������̱�]
+  FFFD(2): before=[         <li>?? ÿ��ǩ] after=[ϵͳ��ǩ����������̱����]
+  FFFD(2): before=[     <li>?? ÿ��ǩ��ϵͳ] after=[ǩ����������̱�������ǩ]
+  FFFD(10): before=[  <li>?? ÿ��ǩ��ϵͳ��ǩ] after=[̱�������ǩ����¼��</li]
+  FFFD(7): before=[�ǩ��ϵͳ��ǩ����������̱] after=[ǩ����¼��</li>
+      ]
+  FFFD(4): before=[ǩ����������̱�������ǩ] after=[¼��</li>
+           ]
+  FFFD(2): before=[������̱�������ǩ����¼] after=[</li>
+              ]
+L1259:                     <li>?? �������֣�Web Audio API �ϳ��������ɣ�</li>
+  FFFD(7): before=[             <li>?? ] after=[֣�Web Audio API �ϳ��]
+  FFFD(1): before=[     <li>?? �������֣] after=[Web Audio API �ϳ����]
+  FFFD(1): before=[����֣�Web Audio API ] after=[ϳ��������ɣ�</li>
+   ]
+  FFFD(8): before=[��֣�Web Audio API �ϳ] after=[ɣ�</li>
+            ]
+  FFFD(1): before=[udio API �ϳ��������ɣ] after=[</li>
+              ]
+L1260:                     <li>?? ��ʾ����ϵͳ��ǩ��������ʾ����ʵ����Ч��</li>
+  FFFD(2): before=[             <li>?? ] after=[ʾ����ϵͳ��ǩ��������ʾ�]
+  FFFD(4): before=[          <li>?? ��ʾ] after=[ϵͳ��ǩ��������ʾ����ʵ�]
+  FFFD(2): before=[    <li>?? ��ʾ����ϵͳ] after=[ǩ��������ʾ����ʵ����Ч]
+  FFFD(8): before=[ <li>?? ��ʾ����ϵͳ��ǩ] after=[ʾ����ʵ����Ч��</li>
+ ]
+  FFFD(4): before=[�ʾ����ϵͳ��ǩ��������ʾ] after=[ʵ����Ч��</li>
+      ]
+  FFFD(4): before=[�ϵͳ��ǩ��������ʾ����ʵ] after=[Ч��</li>
+           ]
+  FFFD(2): before=[ǩ��������ʾ����ʵ����Ч] after=[</li>
+              ]
+L1261:                     <li>??? ǩ���������ӻ�</li>
+  FFFD(9): before=[           <li>??? ǩ] after=[ӻ�</li>
+            ]
+  FFFD(1): before=[ <li>??? ǩ���������ӻ] after=[</li>
+              ]
+L1267:                     <li>?? ����2��������ɫ�������� + ��������</li>
+  FFFD(4): before=[             <li>?? ] after=[2��������ɫ�������� +]
+  FFFD(8): before=[        <li>?? ����2] after=[ɫ�������� + ��������]
+  FFFD(8): before=[li>?? ����2��������ɫ] after=[ + ��������</li>
+   ]
+  FFFD(8): before=[��������ɫ�������� + ] after=[</li>
+              ]
+L1268:                     <li>?? ͳ��ҳ�����Ǽ��ֲ�ͼ��ͨ�ؽ�������ͼ</li>
+  FFFD(2): before=[            <li>?? ͳ] after=[ҳ�����Ǽ��ֲ�ͼ��ͨ�ؽ���]
+  FFFD(5): before=[         <li>?? ͳ��ҳ] after=[Ǽ��ֲ�ͼ��ͨ�ؽ�������ͼ<]
+  FFFD(2): before=[   <li>?? ͳ��ҳ�����Ǽ] after=[ֲ�ͼ��ͨ�ؽ�������ͼ</li]
+  FFFD(1): before=[<li>?? ͳ��ҳ�����Ǽ��ֲ] after=[ͼ��ͨ�ؽ�������ͼ</li>
+]
+  FFFD(2): before=[i>?? ͳ��ҳ�����Ǽ��ֲ�ͼ] after=[ͨ�ؽ�������ͼ</li>
+   ]
+  FFFD(1): before=[? ͳ��ҳ�����Ǽ��ֲ�ͼ��ͨ] after=[ؽ�������ͼ</li>
+     ]
+  FFFD(7): before=[ͳ��ҳ�����Ǽ��ֲ�ͼ��ͨ�ؽ] after=[ͼ</li>
+             ]
+L1269:                     <li>?? �޾�/��ʱģʽ�Զ�������ָ�</li>
+  FFFD(1): before=[             <li>?? ] after=[޾�/��ʱģʽ�Զ�������ָ�<]
+  FFFD(1): before=[           <li>?? �޾] after=[/��ʱģʽ�Զ�������ָ�</l]
+  FFFD(2): before=[         <li>?? �޾�/] after=[ʱģʽ�Զ�������ָ�</li>
+]
+  FFFD(1): before=[    <li>?? �޾�/��ʱģʽ] after=[Զ�������ָ�</li>
+    ]
+  FFFD(7): before=[  <li>?? �޾�/��ʱģʽ�Զ] after=[ָ�</li>
+            ]
+  FFFD(1): before=[ �޾�/��ʱģʽ�Զ�������ָ] after=[</li>
+              ]
+L1274:                 ֪����
+  FFFD(4): before=[}>
+                ֪] after=[
+              </but]
+L1280:         {/* �طŲ鿴�������ӷ������Ӵ򿪣� */}
+  FFFD(1): before=[    )}
+
+        {/* ] after=[طŲ鿴�������ӷ������Ӵ򿪣]
+  FFFD(7): before=[)}
+
+        {/* �طŲ鿴] after=[ӷ������Ӵ򿪣� */}
+    ]
+  FFFD(6): before=[    {/* �طŲ鿴�������ӷ] after=[Ӵ򿪣� */}
+        {sh]
+  FFFD(1): before=[طŲ鿴�������ӷ������Ӵ򿪣] after=[ */}
+        {showVi]
+L1285:               <h2>�����ط�</h2>
+  FFFD(5): before=[>
+              <h2>] after=[ط�</h2>
+            ]
+  FFFD(1): before=[          <h2>�����ط] after=[</h2>
+              ]
+L1287:                 {viewReplayData.level === -1 ? 'ÿ����ս' : viewReplayData.level === -2 ? '�޾�ģʽ' : viewReplayData.level === -3 ? '��ʱģʽ' : `�� ${viewReplayData.level} ��`}
+  FFFD(4): before=[ta.level === -1 ? 'ÿ] after=[ս' : viewReplayData.]
+  FFFD(1): before=[ata.level === -2 ? '] after=[޾�ģʽ' : viewReplayDa]
+  FFFD(1): before=[a.level === -2 ? '�޾] after=[ģʽ' : viewReplayData]
+  FFFD(2): before=[ata.level === -3 ? '] after=[ʱģʽ' : `�� ${viewRep]
+  FFFD(2): before=[=== -3 ? '��ʱģʽ' : `] after=[ ${viewReplayData.le]
+  FFFD(2): before=[ewReplayData.level} ] after=[`}
+                {]
+L1288:                 {' �� '}{viewReplayData.stepsUsed} �� �� {'?'.repeat(viewReplayData.starRating)}
+  FFFD(2): before=[
+                {' ] after=[ '}{viewReplayData.s]
+  FFFD(2): before=[playData.stepsUsed} ] after=[ �� {'?'.repeat(view]
+  FFFD(2): before=[yData.stepsUsed} �� ] after=[ {'?'.repeat(viewRep]
+L1290:               <p className="replay-actions-hint">����·���ť����Ϸ�в鿴�����ط�</p>
+  FFFD(4): before=[eplay-actions-hint">] after=[·���ť����Ϸ�в鿴�����ط�]
+  FFFD(3): before=[-actions-hint">����·] after=[ť����Ϸ�в鿴�����ط�</p>]
+  FFFD(4): before=[ions-hint">����·���ť] after=[Ϸ�в鿴�����ط�</p>
+    ]
+  FFFD(1): before=[hint">����·���ť����Ϸ] after=[в鿴�����ط�</p>
+      ]
+  FFFD(5): before=[t">����·���ť����Ϸ�в鿴] after=[ط�</p>
+             ]
+  FFFD(1): before=[�·���ť����Ϸ�в鿴�����ط] after=[</p>
+              <]
+L1293:                   // ��ת����Ӧ�ؿ����Զ����Żط�
+  FFFD(2): before=[                 // ] after=[ת����Ӧ�ؿ����Զ����Żط�]
+  FFFD(4): before=[              // ��ת] after=[Ӧ�ؿ����Զ����Żط�
+    ]
+  FFFD(1): before=[         // ��ת����Ӧ] after=[ؿ����Զ����Żط�
+      ]
+  FFFD(4): before=[       // ��ת����Ӧ�ؿ] after=[Զ����Żط�
+           ]
+  FFFD(4): before=[  // ��ת����Ӧ�ؿ����Զ] after=[Żط�
+                ]
+  FFFD(1): before=[�ת����Ӧ�ؿ����Զ����Żط] after=[
+                  i]
+L1300:                 }}>?? ǰ���ؿ�</button>
+  FFFD(3): before=[             }}>?? ǰ] after=[ؿ�</button>
+        ]
+  FFFD(1): before=[         }}>?? ǰ���ؿ] after=[</button>
+          ]
+L1301:                 <button className="btn btn-secondary" onClick={() => { setShowViewReplay(false); setViewReplayData(null); window.location.hash = ''; }}>�ر�</button>
+  FFFD(1): before=[ation.hash = ''; }}>] after=[ر�</button>
+        ]
+  FFFD(1): before=[ion.hash = ''; }}>�ر] after=[</button>
+          ]
+L1304:                 �������У�{viewReplayData.moves.map(m => `${m.from + 1}��${m.to + 1}`).join(', ')}
+  FFFD(7): before=[s">
+                ] after=[У�{viewReplayData.mo]
+  FFFD(1): before=[            �������У] after=[{viewReplayData.move]
+  FFFD(2): before=[(m => `${m.from + 1}] after=[${m.to + 1}`).join(']
+L1310:         {/* ���浯�� */}
+  FFFD(3): before=[    )}
+
+        {/* ] after=[浯�� */}
+        {sho]
+  FFFD(2): before=[)}
+
+        {/* ���浯] after=[ */}
+        {showAn]
+L1321:                   ֪����
+  FFFD(4): before=[
+                  ֪] after=[
+                </b]
+L1325:                     ���� {announcements.length - 1} ������
+  FFFD(4): before=[                    ] after=[ {announcements.leng]
+  FFFD(6): before=[cements.length - 1} ] after=[
+                  <]
+L1336:     // ��ȡ��ǰ�ؿ��Ѷȱ�ǩ
+  FFFD(2): before=[== 'game') {
+    // ] after=[ȡ��ǰ�ؿ��Ѷȱ�ǩ
+    con]
+  FFFD(2): before=['game') {
+    // ��ȡ] after=[ǰ�ؿ��Ѷȱ�ǩ
+    const ]
+  FFFD(1): before=[me') {
+    // ��ȡ��ǰ] after=[ؿ��Ѷȱ�ǩ
+    const ge]
+  FFFD(2): before=[') {
+    // ��ȡ��ǰ�ؿ] after=[Ѷȱ�ǩ
+    const getDi]
+  FFFD(1): before=[
+    // ��ȡ��ǰ�ؿ��Ѷȱ] after=[ǩ
+    const getDiffi]
+L1338:       if (lvl <= 3) return '����';
+  FFFD(4): before=[ (lvl <= 3) return '] after=[';
+      if (lvl <= ]
+L1339:       if (lvl <= 6) return '��';
+  FFFD(2): before=[ (lvl <= 6) return '] after=[';
+      if (lvl <= ]
+L1340:       if (lvl <= 12) return '��ͨ';
+  FFFD(2): before=[(lvl <= 12) return '] after=[ͨ';
+      if (lvl <=]
+L1341:       if (lvl <= 20) return '�е�';
+  FFFD(1): before=[(lvl <= 20) return '] after=[е�';
+      if (lvl <]
+  FFFD(1): before=[vl <= 20) return '�е] after=[';
+      if (lvl <= ]
+L1342:       if (lvl <= 30) return '����';
+  FFFD(4): before=[(lvl <= 30) return '] after=[';
+      if (lvl <= ]
+L1343:       if (lvl <= 50) return '��ս';
+  FFFD(2): before=[(lvl <= 50) return '] after=[ս';
+      if (lvl <=]
+L1344:       if (lvl <= 70) return '�߼�';
+  FFFD(1): before=[(lvl <= 70) return '] after=[߼�';
+      if (lvl <]
+  FFFD(1): before=[vl <= 70) return '�߼] after=[';
+      if (lvl <= ]
+L1345:       if (lvl <= 90) return 'ר��';
+  FFFD(2): before=[lvl <= 90) return 'ר] after=[';
+      return '��ʦ]
+L1346:       return '��ʦ';
+  FFFD(2): before=[ר��';
+      return '] after=[ʦ';
+    };
+    const]
+L1349:       '����': '#4ECDC4', '��': '#4ECDC4', '��ͨ': '#667eea',
+  FFFD(4): before=[ string> = {
+      '] after=[': '#4ECDC4', '��': ]
+  FFFD(2): before=['����': '#4ECDC4', '] after=[': '#4ECDC4', '��ͨ':]
+  FFFD(2): before=[, '��': '#4ECDC4', '] after=[ͨ': '#667eea',
+     ]
+L1350:       '�е�': '#667eea', '����': '#FFA07A', '��ս': '#FFA07A',
+  FFFD(1): before=[: '#667eea',
+      '] after=[е�': '#667eea', '���]
+  FFFD(1): before=['#667eea',
+      '�е] after=[': '#667eea', '����']
+  FFFD(4): before=[ '�е�': '#667eea', '] after=[': '#FFA07A', '��ս':]
+  FFFD(2): before=['����': '#FFA07A', '] after=[ս': '#FFA07A',
+     ]
+L1351:       '�߼�': '#FF6B6B', 'ר��': '#C589E8', '��ʦ': '#333',
+  FFFD(1): before=[: '#FFA07A',
+      '] after=[߼�': '#FF6B6B', 'ר��]
+  FFFD(1): before=['#FFA07A',
+      '�߼] after=[': '#FF6B6B', 'ר��':]
+  FFFD(2): before=['�߼�': '#FF6B6B', 'ר] after=[': '#C589E8', '��ʦ':]
+  FFFD(2): before=[ 'ר��': '#C589E8', '] after=[ʦ': '#333',
+    };
+ ]
+L1359:           <button className="btn-back" onClick={handleGoHomeWithConfirm}>�� ����</button>
+  FFFD(2): before=[eGoHomeWithConfirm}>] after=[ ����</button>
+     ]
+  FFFD(4): before=[HomeWithConfirm}>�� ] after=[</button>
+          ]
+L1360:           <h1 className="game-title">{isDailyMode ? '?? ÿ����ս' : isEndlessMode ? `?? �޾�ģʽ (${endlessScore})` : isTimedMode ? `?? ��ʱ��ս (${timedScore})` : '?? ɫ������'}</h1>
+  FFFD(4): before=[{isDailyMode ? '?? ÿ] after=[ս' : isEndlessMode ?]
+  FFFD(1): before=[isEndlessMode ? `?? ] after=[޾�ģʽ (${endlessScore]
+  FFFD(1): before=[EndlessMode ? `?? �޾] after=[ģʽ (${endlessScore})]
+  FFFD(2): before=[: isTimedMode ? `?? ] after=[ʱ��ս (${timedScore})]
+  FFFD(2): before=[sTimedMode ? `?? ��ʱ] after=[ս (${timedScore})` :]
+  FFFD(6): before=[imedScore})` : '?? ɫ] after=['}</h1>
+          <b]
+L1361:           <button className="btn-hint" onClick={handleHint}>?? ��ʾ</button>
+  FFFD(2): before=[ick={handleHint}>?? ] after=[ʾ</button>
+        <]
+L1365:             <span className="level-info-item">�� {currentLevel} ��</span>
+  FFFD(2): before=[e="level-info-item">] after=[ {currentLevel} ��</]
+  FFFD(2): before=[">�� {currentLevel} ] after=[</span>
+            ]
+L1371:                 <span className="level-info-item">?? ���: {bestScores[currentLevel]}��</span>
+  FFFD(3): before=[level-info-item">?? ] after=[: {bestScores[curren]
+  FFFD(2): before=[cores[currentLevel]}] after=[</span>
+            ]
+L1399:           {/* ���λԤ�� - ����ҳ����λ�� */}
+  FFFD(3): before=[   />
+          {/* ] after=[λԤ�� - ����ҳ����λ�� ]
+  FFFD(2): before=[
+          {/* ���λԤ] after=[ - ����ҳ����λ�� */}
+]
+  FFFD(4): before=[      {/* ���λԤ�� - ] after=[ҳ����λ�� */}
+       ]
+  FFFD(4): before=[ {/* ���λԤ�� - ����ҳ] after=[λ�� */}
+          <d]
+  FFFD(2): before=[���λԤ�� - ����ҳ����λ] after=[ */}
+          <div ]
+L1401:             <span className="ad-label">���λ</span>
+  FFFD(3): before=[lassName="ad-label">] after=[λ</span>
+          <]
+L1405:         {/* ��Ϸ�ڰ���������ť */}
+  FFFD(2): before=[/main>
+
+        {/* ] after=[Ϸ�ڰ���������ť */}
+  ]
+  FFFD(1): before=[in>
+
+        {/* ��Ϸ] after=[ڰ���������ť */}
+    ]
+  FFFD(9): before=[>
+
+        {/* ��Ϸ�ڰ] after=[ť */}
+        <butto]
+L1406:         <button className="help-fab" onClick={() => setShowHelpModal(true)} aria-label="�鿴�淨����">?</button>
+  FFFD(1): before=[(true)} aria-label="] after=[鿴�淨����">?</button>
+]
+  FFFD(1): before=[rue)} aria-label="�鿴] after=[淨����">?</button>
+
+ ]
+  FFFD(4): before=[e)} aria-label="�鿴�淨] after=[">?</button>
+
+      ]
+L1408:         {/* �������� */}
+  FFFD(8): before=[utton>
+
+        {/* ] after=[ */}
+        {showHe]
+L1412:               <h2>?? �淨����</h2>
+  FFFD(1): before=[             <h2>?? ] after=[淨����</h2>
+         ]
+  FFFD(4): before=[           <h2>?? �淨] after=[</h2>
+              ]
+L1415:                 <span>���һ������ɫ���Թ�ѡ����</span>
+  FFFD(3): before=[              <span>] after=[һ������ɫ���Թ�ѡ����</]
+  FFFD(6): before=[          <span>���һ] after=[ɫ���Թ�ѡ����</span>
+ ]
+  FFFD(3): before=[   <span>���һ������ɫ] after=[Թ�ѡ����</span>
+     ]
+  FFFD(1): before=[span>���һ������ɫ���Թ] after=[ѡ����</span>
+       ]
+  FFFD(4): before=[an>���һ������ɫ���Թ�ѡ] after=[</span>
+            ]
+L1419:                 <span>�ٵ����һ���Թܣ���ɫ�ᵹ��ȥ</span>
+  FFFD(1): before=[              <span>] after=[ٵ����һ���Թܣ���ɫ�ᵹ��ȥ]
+  FFFD(4): before=[            <span>�ٵ] after=[һ���Թܣ���ɫ�ᵹ��ȥ</spa]
+  FFFD(3): before=[       <span>�ٵ����һ] after=[Թܣ���ɫ�ᵹ��ȥ</span>
+ ]
+  FFFD(3): before=[  <span>�ٵ����һ���Թܣ] after=[ɫ�ᵹ��ȥ</span>
+      ]
+  FFFD(1): before=[pan>�ٵ����һ���Թܣ���ɫ] after=[ᵹ��ȥ</span>
+        ]
+  FFFD(2): before=[n>�ٵ����һ���Թܣ���ɫ�ᵹ] after=[ȥ</span>
+           ]
+L1423:                 <span>ֻ�ܵ���չܻ򶥲���ɫ��ͬ���Թ�</span>
+  FFFD(1): before=[             <span>ֻ] after=[ܵ���չܻ򶥲���ɫ��ͬ���Թ�]
+  FFFD(3): before=[           <span>ֻ�ܵ] after=[չܻ򶥲���ɫ��ͬ���Թ�</sp]
+  FFFD(3): before=[    <span>ֻ�ܵ���չܻ򶥲] after=[ɫ��ͬ���Թ�</span>
+   ]
+  FFFD(2): before=[<span>ֻ�ܵ���չܻ򶥲���ɫ] after=[ͬ���Թ�</span>
+      ]
+  FFFD(3): before=[an>ֻ�ܵ���չܻ򶥲���ɫ��ͬ] after=[Թ�</span>
+          ]
+  FFFD(1): before=[�ܵ���չܻ򶥲���ɫ��ͬ���Թ] after=[</span>
+            ]
+L1427:                 <span>��ÿ����ɫ�鵽һ���Թܾ�Ӯ�ˣ�</span>
+  FFFD(2): before=[              <span>] after=[ÿ����ɫ�鵽һ���Թܾ�Ӯ�ˣ�<]
+  FFFD(4): before=[           <span>��ÿ] after=[ɫ�鵽һ���Թܾ�Ӯ�ˣ�</span]
+  FFFD(1): before=[      <span>��ÿ����ɫ] after=[鵽һ���Թܾ�Ӯ�ˣ�</span>
+]
+  FFFD(3): before=[   <span>��ÿ����ɫ�鵽һ] after=[Թܾ�Ӯ�ˣ�</span>
+     ]
+  FFFD(1): before=[pan>��ÿ����ɫ�鵽һ���Թܾ] after=[Ӯ�ˣ�</span>
+        ]
+  FFFD(1): before=[n>��ÿ����ɫ�鵽һ���Թܾ�Ӯ] after=[ˣ�</span>
+          ]
+  FFFD(1): before=[��ÿ����ɫ�鵽һ���Թܾ�Ӯ�ˣ] after=[</span>
+            ]
+L1431:                 <span>��ݼ������ּ�ѡ�� �� Z���� �� R���� �� H��ʾ �� PageDown��һ��</span>
+  FFFD(2): before=[              <span>] after=[ݼ������ּ�ѡ�� �� Z���]
+  FFFD(6): before=[           <span>��ݼ] after=[ּ�ѡ�� �� Z���� �� R�]
+  FFFD(1): before=[    <span>��ݼ������ּ] after=[ѡ�� �� Z���� �� R���]
+  FFFD(2): before=[  <span>��ݼ������ּ�ѡ] after=[ �� Z���� �� R���� �]
+  FFFD(2): before=[span>��ݼ������ּ�ѡ�� ] after=[ Z���� �� R���� �� H]
+  FFFD(4): before=[>��ݼ������ּ�ѡ�� �� Z] after=[ �� R���� �� H��ʾ ��]
+  FFFD(2): before=[�����ּ�ѡ�� �� Z���� ] after=[ R���� �� H��ʾ �� Pa]
+  FFFD(4): before=[�ּ�ѡ�� �� Z���� �� R] after=[ �� H��ʾ �� PageDown]
+  FFFD(2): before=[� �� Z���� �� R���� ] after=[ H��ʾ �� PageDown��һ]
+  FFFD(2): before=[ Z���� �� R���� �� H] after=[ʾ �� PageDown��һ��</]
+  FFFD(2): before=[�� �� R���� �� H��ʾ ] after=[ PageDown��һ��</span]
+  FFFD(2): before=[ �� H��ʾ �� PageDown] after=[һ��</span>
+         ]
+  FFFD(2): before=[ H��ʾ �� PageDown��һ] after=[</span>
+            ]
+L1434:                 ֪����
+  FFFD(4): before=[}>
+                ֪] after=[
+              </but]
+L1440:         {/* �����ɹ���ʾ */}
+  FFFD(5): before=[    )}
+
+        {/* ] after=[ɹ���ʾ */}
+        {s]
+  FFFD(3): before=[
+
+        {/* �����ɹ] after=[ʾ */}
+        {showS]
+L1442:           <div className="share-toast">? ս���Ѹ��Ƶ������壡</div>
+  FFFD(3): before=[me="share-toast">? ս] after=[Ѹ��Ƶ������壡</div>
+  ]
+  FFFD(2): before=[share-toast">? ս���Ѹ] after=[Ƶ������壡</div>
+     ]
+  FFFD(6): before=[re-toast">? ս���Ѹ��Ƶ] after=[壡</div>
+        )}
+
+]
+L1445:         {/* �ɾͽ���֪ͨ */}
+  FFFD(1): before=[    )}
+
+        {/* ] after=[ɾͽ���֪ͨ */}
+        ]
+  FFFD(3): before=[ )}
+
+        {/* �ɾͽ] after=[֪ͨ */}
+        {newA]
+L1451:                 <div className="achievement-notif-title">?? �ɾͽ�����</div>
+  FFFD(1): before=[ent-notif-title">?? ] after=[ɾͽ�����</div>
+      ]
+  FFFD(5): before=[-notif-title">?? �ɾͽ] after=[</div>
+             ]
+L1507:   // ����ҳ
+  FFFD(4): before=[v>
+    );
+  }
+
+  // ] after=[ҳ
+  if (page === 'ab]
+L1512:           <button className="btn-back" onClick={() => setPage('home')}>�� ����</button>
+  FFFD(2): before=[=> setPage('home')}>] after=[ ����</button>
+     ]
+  FFFD(4): before=[setPage('home')}>�� ] after=[</button>
+          ]
+L1513:           <h1 className="game-title">����</h1>
+  FFFD(4): before=[ssName="game-title">] after=[</h1>
+          <div]
+L1517:           <h2>?? ɫ������</h2>
+  FFFD(6): before=[>
+          <h2>?? ɫ] after=[</h2>
+          <p>һ]
+L1518:           <p>һ����Һ�����������Ϸ��</p>
+  FFFD(1): before=[</h2>
+          <p>һ] after=[���Һ�����������Ϸ��<]
+  FFFD(3): before=[h2>
+          <p>һ�] after=[Һ�����������Ϸ��</p>
+]
+  FFFD(11): before=[          <p>һ����Һ] after=[Ϸ��</p>
+          <h]
+  FFFD(2): before=[>һ����Һ�����������Ϸ] after=[</p>
+          <h3>�]
+L1519:           <h3>�淨����</h3>
+  FFFD(1): before=[�</p>
+          <h3>] after=[淨����</h3>
+         ]
+  FFFD(4): before=[/p>
+          <h3>�淨] after=[</h3>
+          <ul>]
+L1521:             <li>����Թ�ѡ�У��ٵ����һ���Թ��㵹��ɫ</li>
+  FFFD(4): before=[ul>
+            <li>] after=[Թ�ѡ�У��ٵ����һ���Թ��㵹]
+  FFFD(1): before=[           <li>����Թ] after=[ѡ�У��ٵ����һ���Թ��㵹��]
+  FFFD(1): before=[         <li>����Թ�ѡ] after=[У��ٵ����һ���Թ��㵹��ɫ<]
+  FFFD(2): before=[       <li>����Թ�ѡ�У] after=[ٵ����һ���Թ��㵹��ɫ</li]
+  FFFD(4): before=[    <li>����Թ�ѡ�У��ٵ] after=[һ���Թ��㵹��ɫ</li>
+   ]
+  FFFD(3): before=[li>����Թ�ѡ�У��ٵ����һ] after=[Թ��㵹��ɫ</li>
+       ]
+  FFFD(2): before=[���Թ�ѡ�У��ٵ����һ���Թ] after=[㵹��ɫ</li>
+          ]
+  FFFD(2): before=[Թ�ѡ�У��ٵ����һ���Թ��㵹] after=[ɫ</li>
+            <]
+L1522:             <li>ֻ�ܽ���ɫ����չܻ򶥲���ɫ��ͬ���Թ�</li>
+  FFFD(1): before=[i>
+            <li>ֻ] after=[ܽ���ɫ����չܻ򶥲���ɫ��ͬ]
+  FFFD(3): before=[
+            <li>ֻ�ܽ] after=[ɫ����չܻ򶥲���ɫ��ͬ���Թ]
+  FFFD(4): before=[         <li>ֻ�ܽ���ɫ] after=[չܻ򶥲���ɫ��ͬ���Թ�</li]
+  FFFD(3): before=[ <li>ֻ�ܽ���ɫ����չܻ򶥲] after=[ɫ��ͬ���Թ�</li>
+     ]
+  FFFD(2): before=[>ֻ�ܽ���ɫ����չܻ򶥲���ɫ] after=[ͬ���Թ�</li>
+        ]
+  FFFD(3): before=[ܽ���ɫ����չܻ򶥲���ɫ��ͬ] after=[Թ�</li>
+            ]
+  FFFD(1): before=[ɫ����չܻ򶥲���ɫ��ͬ���Թ] after=[</li>
+            <l]
+L1523:             <li>�Թ��������ܼ�������</li>
+  FFFD(1): before=[li>
+            <li>] after=[Թ��������ܼ�������</l]
+  FFFD(8): before=[>
+            <li>�Թ] after=[ܼ�������</li>
+      ]
+  FFFD(7): before=[     <li>�Թ��������ܼ] after=[</li>
+            <l]
+L1524:             <li>��������ɫ���Թֺܷü���ʤ</li>
+  FFFD(8): before=[li>
+            <li>] after=[ɫ���Թֺܷü���ʤ</li>
+  ]
+  FFFD(3): before=[       <li>��������ɫ] after=[Թֺܷü���ʤ</li>
+      ]
+  FFFD(3): before=[<li>��������ɫ���Թֺܷü] after=[ʤ</li>
+          </u]
+L1526:           <h3>�淨��ɫ��</h3>
+  FFFD(1): before=[</ul>
+          <h3>] after=[淨��ɫ��</h3>
+        ]
+  FFFD(2): before=[ul>
+          <h3>�淨] after=[ɫ��</h3>
+          <]
+  FFFD(2): before=[
+          <h3>�淨��ɫ] after=[</h3>
+          <div]
+L1528:             <h4>?? ��Ϸģʽ</h4>
+  FFFD(2): before=[
+            <h4>?? ] after=[Ϸģʽ</h4>
+           ]
+L1530:               <li>100�ش���ģʽ���Ѷ�ѭ�򽥽�</li>
+  FFFD(1): before=[             <li>100] after=[ش���ģʽ���Ѷ�ѭ�򽥽�</li]
+  FFFD(3): before=[           <li>100�ش] after=[ģʽ���Ѷ�ѭ�򽥽�</li>
+  ]
+  FFFD(3): before=[      <li>100�ش���ģʽ] after=[Ѷ�ѭ�򽥽�</li>
+       ]
+  FFFD(1): before=[  <li>100�ش���ģʽ���Ѷ] after=[ѭ�򽥽�</li>
+         ]
+  FFFD(1): before=[<li>100�ش���ģʽ���Ѷ�ѭ] after=[򽥽�</li>
+           ]
+  FFFD(1): before=[>100�ش���ģʽ���Ѷ�ѭ�򽥽] after=[</li>
+              ]
+L1531:               <li>ÿ����ս��ȫ��ͬһ�ؿ�</li>
+  FFFD(4): before=[
+              <li>ÿ] after=[ս��ȫ��ͬһ�ؿ�</li>
+   ]
+  FFFD(2): before=[          <li>ÿ����ս] after=[ȫ��ͬһ�ؿ�</li>
+      ]
+  FFFD(2): before=[       <li>ÿ����ս��ȫ] after=[ͬһ�ؿ�</li>
+         ]
+  FFFD(1): before=[   <li>ÿ����ս��ȫ��ͬһ] after=[ؿ�</li>
+            ]
+  FFFD(1): before=[ <li>ÿ����ս��ȫ��ͬһ�ؿ] after=[</li>
+              ]
+L1532:               <li>�޾�ģʽ����������Ѷȵ���</li>
+  FFFD(1): before=[>
+              <li>] after=[޾�ģʽ����������Ѷȵ���<]
+  FFFD(1): before=[              <li>�޾] after=[ģʽ����������Ѷȵ���</l]
+  FFFD(10): before=[           <li>�޾�ģʽ] after=[Ѷȵ���</li>
+         ]
+  FFFD(3): before=[li>�޾�ģʽ����������Ѷȵ] after=[</li>
+              ]
+L1533:               <li>��ʱ��ս��120�뼫��ͨ��</li>
+  FFFD(2): before=[>
+              <li>] after=[ʱ��ս��120�뼫��ͨ��</li]
+  FFFD(2): before=[             <li>��ʱ] after=[ս��120�뼫��ͨ��</li>
+ ]
+  FFFD(2): before=[          <li>��ʱ��ս] after=[120�뼫��ͨ��</li>
+    ]
+  FFFD(1): before=[     <li>��ʱ��ս��120] after=[뼫��ͨ��</li>
+        ]
+  FFFD(2): before=[   <li>��ʱ��ս��120�뼫] after=[ͨ��</li>
+           ]
+  FFFD(2): before=[<li>��ʱ��ս��120�뼫��ͨ] after=[</li>
+            </]
+L1537:             <h4>?? �ɾ�������</h4>
+  FFFD(1): before=[
+            <h4>?? ] after=[ɾ�������</h4>
+      ]
+  FFFD(7): before=[           <h4>?? �ɾ] after=[</h4>
+            <u]
+L1539:               <li>31 ���ɾͣ���¼����˲��</li>
+  FFFD(3): before=[             <li>31 ] after=[ɾͣ���¼����˲��</li>
+ ]
+  FFFD(3): before=[        <li>31 ���ɾͣ] after=[¼����˲��</li>
+      ]
+  FFFD(4): before=[    <li>31 ���ɾͣ���¼] after=[˲��</li>
+           ]
+  FFFD(2): before=[li>31 ���ɾͣ���¼����˲] after=[</li>
+              ]
+L1540:               <li>�Ǽ����ۣ�׷������ͨ��</li>
+  FFFD(1): before=[>
+              <li>] after=[Ǽ����ۣ�׷������ͨ��</l]
+  FFFD(4): before=[              <li>�Ǽ] after=[ۣ�׷������ͨ��</li>
+  ]
+  FFFD(1): before=[         <li>�Ǽ����ۣ] after=[׷������ͨ��</li>
+    ]
+  FFFD(6): before=[       <li>�Ǽ����ۣ�׷] after=[ͨ��</li>
+           ]
+  FFFD(2): before=[<li>�Ǽ����ۣ�׷������ͨ] after=[</li>
+              ]
+L1541:               <li>��ʤϵͳ����ʹ����ʾ/��������ͨ��</li>
+  FFFD(2): before=[>
+              <li>] after=[ʤϵͳ����ʹ����ʾ/������]
+  FFFD(4): before=[           <li>��ʤϵͳ] after=[ʹ����ʾ/��������ͨ��</]
+  FFFD(4): before=[      <li>��ʤϵͳ����ʹ] after=[ʾ/��������ͨ��</li>
+ ]
+  FFFD(8): before=[<li>��ʤϵͳ����ʹ����ʾ/] after=[ͨ��</li>
+           ]
+  FFFD(2): before=[����ʹ����ʾ/��������ͨ] after=[</li>
+              ]
+L1542:               <li>ÿ��ǩ��������ǩ����������</li>
+  FFFD(2): before=[
+              <li>ÿ] after=[ǩ��������ǩ����������]
+  FFFD(8): before=[            <li>ÿ��ǩ] after=[ǩ����������</li>
+   ]
+  FFFD(10): before=[   <li>ÿ��ǩ��������ǩ] after=[</li>
+              ]
+L1543:               <li>ǩ���������ӻ�</li>
+  FFFD(9): before=[
+              <li>ǩ] after=[ӻ�</li>
+            ]
+  FFFD(1): before=[     <li>ǩ���������ӻ] after=[</li>
+              ]
+L1544:               <li>��ʾ����ϵͳ</li>
+  FFFD(2): before=[>
+              <li>] after=[ʾ����ϵͳ</li>
+       ]
+  FFFD(4): before=[             <li>��ʾ] after=[ϵͳ</li>
+            ]
+L1548:             <h4>?? �Ӿ�������</h4>
+  FFFD(1): before=[
+            <h4>?? ] after=[Ӿ�������</h4>
+      ]
+  FFFD(7): before=[           <h4>?? �Ӿ] after=[</h4>
+            <u]
+L1550:               <li>6 ��������ɫ�����Ի�����</li>
+  FFFD(8): before=[              <li>6 ] after=[ɫ�����Ի�����</li>
+  ]
+  FFFD(5): before=[     <li>6 ��������ɫ] after=[Ի�����</li>
+        ]
+  FFFD(5): before=[li>6 ��������ɫ�����Ի] after=[</li>
+              ]
+L1551:               <li>�㵹������˿���Ӿ�����</li>
+  FFFD(1): before=[>
+              <li>] after=[㵹������˿���Ӿ�����</l]
+  FFFD(6): before=[              <li>�㵹] after=[˿���Ӿ�����</li>
+    ]
+  FFFD(3): before=[       <li>�㵹������˿] after=[Ӿ�����</li>
+        ]
+  FFFD(5): before=[   <li>�㵹������˿���Ӿ] after=[</li>
+              ]
+L1552:               <li>ͨ�����Ӷ���</li>
+  FFFD(5): before=[
+              <li>ͨ] after=[Ӷ���</li>
+          ]
+  FFFD(3): before=[         <li>ͨ�����Ӷ] after=[</li>
+              ]
+L1553:               <li>�������嶯����ѡ���Թܺ�����Ч</li>
+  FFFD(7): before=[>
+              <li>] after=[嶯����ѡ���Թܺ�����Ч</l]
+  FFFD(4): before=[        <li>�������嶯] after=[ѡ���Թܺ�����Ч</li>
+  ]
+  FFFD(3): before=[   <li>�������嶯����ѡ] after=[Թܺ�����Ч</li>
+      ]
+  FFFD(5): before=[i>�������嶯����ѡ���Թܺ] after=[Ч</li>
+             ]
+L1554:               <li>��ť������Ч</li>
+  FFFD(2): before=[>
+              <li>] after=[ť������Ч</li>
+      ]
+  FFFD(6): before=[             <li>��ť] after=[Ч</li>
+            <]
+L1558:             <h4>?? ������ͳ��</h4>
+  FFFD(6): before=[
+            <h4>?? ] after=[ͳ��</h4>
+           ]
+  FFFD(2): before=[      <h4>?? ������ͳ] after=[</h4>
+            <u]
+L1560:               <li>��Ϸͳ����壬ȫ���¼����</li>
+  FFFD(2): before=[>
+              <li>] after=[Ϸͳ����壬ȫ���¼����</li]
+  FFFD(4): before=[            <li>��Ϸͳ] after=[壬ȫ���¼����</li>
+    ]
+  FFFD(3): before=[      <li>��Ϸͳ����壬ȫ] after=[¼����</li>
+         ]
+  FFFD(4): before=[  <li>��Ϸͳ����壬ȫ���¼] after=[</li>
+              ]
+L1561:               <li>�����ֲ�ͼ����ʱ����ͼ</li>
+  FFFD(5): before=[>
+              <li>] after=[ֲ�ͼ����ʱ����ͼ</li>
+ ]
+  FFFD(1): before=[          <li>�����ֲ] after=[ͼ����ʱ����ͼ</li>
+   ]
+  FFFD(4): before=[        <li>�����ֲ�ͼ] after=[ʱ����ͼ</li>
+        ]
+  FFFD(4): before=[   <li>�����ֲ�ͼ����ʱ] after=[ͼ</li>
+             ]
+L1562:               <li>�Ǽ��ֲ�ͼ��ͨ�ؽ�������</li>
+  FFFD(1): before=[>
+              <li>] after=[Ǽ��ֲ�ͼ��ͨ�ؽ�������</]
+  FFFD(2): before=[              <li>�Ǽ] after=[ֲ�ͼ��ͨ�ؽ�������</li>]
+  FFFD(1): before=[           <li>�Ǽ��ֲ] after=[ͼ��ͨ�ؽ�������</li>
+ ]
+  FFFD(2): before=[         <li>�Ǽ��ֲ�ͼ] after=[ͨ�ؽ�������</li>
+    ]
+  FFFD(1): before=[      <li>�Ǽ��ֲ�ͼ��ͨ] after=[ؽ�������</li>
+      ]
+  FFFD(7): before=[    <li>�Ǽ��ֲ�ͼ��ͨ�ؽ] after=[</li>
+              ]
+L1563:               <li>��Ϸ��ʱ������ȷͳ��ÿ��ʱ��</li>
+  FFFD(2): before=[>
+              <li>] after=[Ϸ��ʱ������ȷͳ��ÿ��ʱ��]
+  FFFD(2): before=[             <li>��Ϸ] after=[ʱ������ȷͳ��ÿ��ʱ��</l]
+  FFFD(6): before=[          <li>��Ϸ��ʱ] after=[ȷͳ��ÿ��ʱ��</li>
+    ]
+  FFFD(2): before=[  <li>��Ϸ��ʱ������ȷͳ] after=[ÿ��ʱ��</li>
+        ]
+  FFFD(2): before=[li>��Ϸ��ʱ������ȷͳ��ÿ] after=[ʱ��</li>
+           ]
+  FFFD(2): before=[��Ϸ��ʱ������ȷͳ��ÿ��ʱ] after=[</li>
+              ]
+L1564:               <li>���ܹؿ��Ƽ�</li>
+  FFFD(3): before=[>
+              <li>] after=[ܹؿ��Ƽ�</li>
+        ]
+  FFFD(2): before=[           <li>���ܹؿ] after=[Ƽ�</li>
+            ]
+  FFFD(1): before=[        <li>���ܹؿ��Ƽ] after=[</li>
+            </]
+L1568:             <h4>?? ��Чϵͳ</h4>
+  FFFD(2): before=[
+            <h4>?? ] after=[Чϵͳ</h4>
+           ]
+L1570:               <li>Web Audio �ϳ���Ч�����ز�����</li>
+  FFFD(1): before=[      <li>Web Audio ] after=[ϳ���Ч�����ز�����</li]
+  FFFD(3): before=[    <li>Web Audio �ϳ] after=[Ч�����ز�����</li>
+  ]
+  FFFD(5): before=[<li>Web Audio �ϳ���Ч] after=[ز�����</li>
+        ]
+  FFFD(5): before=[b Audio �ϳ���Ч�����ز] after=[</li>
+              ]
+L1571:               <li>�������֣������������ѭ��</li>
+  FFFD(7): before=[>
+              <li>] after=[֣������������ѭ��</li]
+  FFFD(12): before=[        <li>�������֣] after=[ѭ��</li>
+           ]
+  FFFD(2): before=[������֣������������ѭ] after=[</li>
+              ]
+L1572:               <li>�ӽ������ʾ����������Ч</li>
+  FFFD(1): before=[>
+              <li>] after=[ӽ������ʾ����������Ч<]
+  FFFD(6): before=[              <li>�ӽ] after=[ʾ����������Ч</li>
+  ]
+  FFFD(10): before=[       <li>�ӽ������ʾ] after=[Ч</li>
+             ]
+L1573:               <li>��ͬ����ר����Ч</li>
+  FFFD(2): before=[>
+              <li>] after=[ͬ����ר����Ч</li>
+   ]
+  FFFD(4): before=[             <li>��ͬ] after=[ר����Ч</li>
+        ]
+  FFFD(4): before=[        <li>��ͬ����ר] after=[Ч</li>
+            <]
+L1577:             <h4>?? ����������</h4>
+  FFFD(10): before=[
+            <h4>?? ] after=[</h4>
+            <u]
+L1579:               <li>PWA ���߻��棬����Ҳ����</li>
+  FFFD(3): before=[            <li>PWA ] after=[߻��棬����Ҳ����</li>
+ ]
+  FFFD(2): before=[        <li>PWA ���߻] after=[棬����Ҳ����</li>
+    ]
+  FFFD(4): before=[     <li>PWA ���߻��棬] after=[Ҳ����</li>
+         ]
+  FFFD(4): before=[<li>PWA ���߻��棬����Ҳ] after=[</li>
+              ]
+L1580:               <li>PWA ��װ������һ�����ӵ�����</li>
+  FFFD(2): before=[            <li>PWA ] after=[װ������һ�����ӵ�����<]
+  FFFD(6): before=[         <li>PWA ��װ] after=[һ�����ӵ�����</li>
+  ]
+  FFFD(5): before=[  <li>PWA ��װ������һ] after=[ӵ�����</li>
+        ]
+  FFFD(5): before=[PWA ��װ������һ�����ӵ] after=[</li>
+              ]
+L1581:               <li>������Ӧʽ���䣨�ֻ�/ƽ��/���棩</li>
+  FFFD(6): before=[>
+              <li>] after=[Ӧʽ���䣨�ֻ�/ƽ��/���棩</]
+  FFFD(3): before=[        <li>������Ӧʽ] after=[䣨�ֻ�/ƽ��/���棩</li>
+ ]
+  FFFD(1): before=[    <li>������Ӧʽ���䣨] after=[ֻ�/ƽ��/���棩</li>
+   ]
+  FFFD(1): before=[  <li>������Ӧʽ���䣨�ֻ] after=[/ƽ��/���棩</li>
+     ]
+  FFFD(2): before=[li>������Ӧʽ���䣨�ֻ�/ƽ] after=[/���棩</li>
+         ]
+  FFFD(3): before=[������Ӧʽ���䣨�ֻ�/ƽ��/] after=[棩</li>
+             ]
+L1582:               <li>���ϰ����䣬֧����Ļ�Ķ���</li>
+  FFFD(3): before=[>
+              <li>] after=[ϰ����䣬֧����Ļ�Ķ���</l]
+  FFFD(4): before=[            <li>���ϰ] after=[䣬֧����Ļ�Ķ���</li>
+  ]
+  FFFD(4): before=[      <li>���ϰ����䣬֧] after=[Ļ�Ķ���</li>
+        ]
+  FFFD(1): before=[ <li>���ϰ����䣬֧����Ļ] after=[Ķ���</li>
+          ]
+  FFFD(3): before=[li>���ϰ����䣬֧����Ļ�Ķ] after=[</li>
+              ]
+L1583:               <li>���̿�ݼ�����Ч����</li>
+  FFFD(3): before=[>
+              <li>] after=[̿�ݼ�����Ч����</li>
+ ]
+  FFFD(1): before=[            <li>���̿] after=[ݼ�����Ч����</li>
+   ]
+  FFFD(5): before=[          <li>���̿�ݼ] after=[Ч����</li>
+         ]
+  FFFD(4): before=[    <li>���̿�ݼ�����Ч] after=[</li>
+              ]
+L1584:               <li>�浵����/��������</li>
+  FFFD(1): before=[>
+              <li>] after=[浵����/��������</li>
+]
+  FFFD(4): before=[              <li>�浵] after=[/��������</li>
+     ]
+  FFFD(8): before=[         <li>�浵����/] after=[</li>
+              ]
+L1585:               <li>��Ϸ�Զ����棬ˢ�²�������</li>
+  FFFD(2): before=[>
+              <li>] after=[Ϸ�Զ����棬ˢ�²�������</]
+  FFFD(1): before=[             <li>��Ϸ] after=[Զ����棬ˢ�²�������</li]
+  FFFD(4): before=[           <li>��Ϸ�Զ] after=[棬ˢ�²�������</li>
+   ]
+  FFFD(1): before=[     <li>��Ϸ�Զ����棬ˢ] after=[²�������</li>
+      ]
+  FFFD(7): before=[   <li>��Ϸ�Զ����棬ˢ�²] after=[</li>
+              ]
+L1586:               <li>�����ְ��Ż������ظ���</li>
+  FFFD(5): before=[>
+              <li>] after=[ְ��Ż������ظ���</li>
+]
+  FFFD(2): before=[          <li>�����ְ] after=[Ż������ظ���</li>
+   ]
+  FFFD(6): before=[       <li>�����ְ��Ż] after=[ظ���</li>
+          ]
+  FFFD(3): before=[<li>�����ְ��Ż������ظ] after=[</li>
+            </]
+L1590:             <h4>?? �罻�����</h4>
+  FFFD(1): before=[
+            <h4>?? ] after=[罻�����</h4>
+        ]
+  FFFD(5): before=[           <h4>?? �罻] after=[</h4>
+            <u]
+L1592:               <li>ս��ͼ�����������ĳɼ�</li>
+  FFFD(2): before=[
+              <li>ս] after=[ͼ�����������ĳɼ�</li>]
+  FFFD(11): before=[            <li>ս��ͼ] after=[ĳɼ�</li>
+           ]
+  FFFD(1): before=[li>ս��ͼ�����������ĳɼ] after=[</li>
+              ]
+L1593:               <li>�罻���� OG ͼƬ</li>
+  FFFD(1): before=[>
+              <li>] after=[罻���� OG ͼƬ</li>
+   ]
+  FFFD(4): before=[              <li>�罻] after=[ OG ͼƬ</li>
+        ]
+L1594:               <li>������������</li>
+  FFFD(12): before=[>
+              <li>] after=[</li>
+              ]
+L1595:               <li>�طŷ������������Ӹ����Ѳ鿴��������</li>
+  FFFD(1): before=[>
+              <li>] after=[طŷ������������Ӹ����Ѳ]
+  FFFD(12): before=[             <li>�طŷ] after=[Ӹ����Ѳ鿴��������</li>]
+  FFFD(4): before=[<li>�طŷ������������Ӹ] after=[Ѳ鿴��������</li>
+    ]
+  FFFD(8): before=[ŷ������������Ӹ����Ѳ鿴] after=[</li>
+            </]
+L1598:           <p className="version">�汾: v1.12.0 | 2026</p>
+  FFFD(1): before=[className="version">] after=[汾: v1.12.0 | 2026</p]
+L1604:   // �ɾ�ҳ
+  FFFD(1): before=[v>
+    );
+  }
+
+  // ] after=[ɾ�ҳ
+  if (page === ']
+  FFFD(1): before=[
+    );
+  }
+
+  // �ɾ] after=[ҳ
+  if (page === 'ac]
+L1611:           <button className="btn-back" onClick={() => setPage('home')}>�� ����</button>
+  FFFD(2): before=[=> setPage('home')}>] after=[ ����</button>
+     ]
+  FFFD(4): before=[setPage('home')}>�� ] after=[</button>
+          ]
+L1612:           <h1 className="game-title">?? �ɾ�</h1>
+  FFFD(1): before=[ame="game-title">?? ] after=[ɾ�</h1>
+          <d]
+  FFFD(1): before=[e="game-title">?? �ɾ] after=[</h1>
+          <div]
+L1617:             �ѽ��� {unlockedCount} / {achievements.length}
+  FFFD(1): before=[mmary">
+            ] after=[ѽ��� {unlockedCount}]
+  FFFD(3): before=[ary">
+            �ѽ] after=[ {unlockedCount} / {]
+L1635:   // ͳ��ҳ
+  FFFD(2): before=[>
+    );
+  }
+
+  // ͳ] after=[ҳ
+  if (page === 'st]
+L1646:           <button className="btn-back" onClick={() => setPage('home')}>�� ����</button>
+  FFFD(2): before=[=> setPage('home')}>] after=[ ����</button>
+     ]
+  FFFD(4): before=[setPage('home')}>�� ] after=[</button>
+          ]
+L1647:           <h1 className="game-title">?? ��Ϸͳ��</h1>
+  FFFD(2): before=[ame="game-title">?? ] after=[Ϸͳ��</h1>
+          ]
+  FFFD(2): before=["game-title">?? ��Ϸͳ] after=[</h1>
+          <div]
+L1655:               <div className="stat-card-label">��ͨ����</div>
+  FFFD(2): before=[e="stat-card-label">] after=[ͨ����</div>
+        ]
+  FFFD(4): before=[stat-card-label">��ͨ] after=[</div>
+            <]
+L1660:               <div className="stat-card-label">�ܲ���</div>
+  FFFD(1): before=[e="stat-card-label">] after=[ܲ���</div>
+         ]
+  FFFD(3): before=["stat-card-label">�ܲ] after=[</div>
+            <]
+L1665:               <div className="stat-card-label">������</div>
+  FFFD(6): before=[e="stat-card-label">] after=[</div>
+            <]
+L1670:               <div className="stat-card-label">����ͨ��</div>
+  FFFD(4): before=[e="stat-card-label">] after=[ͨ��</div>
+          ]
+  FFFD(2): before=[at-card-label">����ͨ] after=[</div>
+            <]
+L1675:               <div className="stat-card-label">��Ϸʱ��</div>
+  FFFD(2): before=[e="stat-card-label">] after=[Ϸʱ��</div>
+         ]
+  FFFD(2): before=[tat-card-label">��Ϸʱ] after=[</div>
+            <]
+L1680:               <div className="stat-card-label">ÿ����ս���</div>
+  FFFD(4): before=[="stat-card-label">ÿ] after=[ս���</div>
+         ]
+  FFFD(3): before=[t-card-label">ÿ����ս] after=[</div>
+            <]
+L1685:               <div className="stat-card-label">�޾����</div>
+  FFFD(1): before=[e="stat-card-label">] after=[޾����</div>
+        ]
+  FFFD(4): before=["stat-card-label">�޾] after=[</div>
+            <]
+L1690:               <div className="stat-card-label">��ʱ���</div>
+  FFFD(2): before=[e="stat-card-label">] after=[ʱ���</div>
+         ]
+  FFFD(3): before=[stat-card-label">��ʱ] after=[</div>
+            <]
+L1695:               <div className="stat-card-label">��ʾʹ��</div>
+  FFFD(2): before=[e="stat-card-label">] after=[ʾʹ��</div>
+         ]
+  FFFD(2): before=[tat-card-label">��ʾʹ] after=[</div>
+            <]
+L1700:               <div className="stat-card-label">����ʹ��</div>
+  FFFD(4): before=[e="stat-card-label">] after=[ʹ��</div>
+          ]
+  FFFD(2): before=[at-card-label">����ʹ] after=[</div>
+            <]
+L1705:               <div className="stat-card-label">��ͨ�ؿ���</div>
+  FFFD(2): before=[e="stat-card-label">] after=[ͨ�ؿ���</div>
+       ]
+  FFFD(1): before=[stat-card-label">��ͨ] after=[ؿ���</div>
+         ]
+  FFFD(3): before=[at-card-label">��ͨ�ؿ] after=[</div>
+            <]
+L1710:             <h3>?? Ч������</h3>
+  FFFD(6): before=[            <h3>?? Ч] after=[</h3>
+            <d]
+L1711:             <div className="stats-row"><span>ƽ������</span><span>{avgMoves} ��/��</span></div>
+  FFFD(6): before=[="stats-row"><span>ƽ] after=[</span><span>{avgMov]
+  FFFD(2): before=[an><span>{avgMoves} ] after=[/��</span></div>
+   ]
+  FFFD(2): before=[<span>{avgMoves} ��/] after=[</span></div>
+      ]
+L1712:             <div className="stats-row"><span>ƽ���Ǽ�</span><span>{avgStars} ?</span></div>
+  FFFD(3): before=[="stats-row"><span>ƽ] after=[Ǽ�</span><span>{avgS]
+  FFFD(1): before=[ats-row"><span>ƽ���Ǽ] after=[</span><span>{avgSta]
+L1713:             <div className="stats-row"><span>������</span><span>{perfectRate}%</span></div>
+  FFFD(6): before=[e="stats-row"><span>] after=[</span><span>{perfec]
+L1714:             <div className="stats-row"><span>ͨ�ؽ���</span><span>{completedLevels}/100 ��</span></div>
+  FFFD(1): before=[="stats-row"><span>ͨ] after=[ؽ���</span><span>{co]
+  FFFD(3): before=[stats-row"><span>ͨ�ؽ] after=[</span><span>{comple]
+  FFFD(2): before=[ompletedLevels}/100 ] after=[</span></div>
+      ]
+L1718:             <h3>?? ��ʤ��¼</h3>
+  FFFD(2): before=[
+            <h3>?? ] after=[ʤ��¼</h3>
+          ]
+  FFFD(2): before=[          <h3>?? ��ʤ] after=[¼</h3>
+            <]
+L1719:             <div className="stats-row"><span>��ǰ��ʤ</span><span>?? {stats.currentStreak} ��ʤ</span></div>
+  FFFD(2): before=[e="stats-row"><span>] after=[ǰ��ʤ</span><span>?? ]
+  FFFD(2): before=[stats-row"><span>��ǰ] after=[ʤ</span><span>?? {st]
+  FFFD(2): before=[tats.currentStreak} ] after=[ʤ</span></div>
+     ]
+L1720:             <div className="stats-row"><span>�����ʤ</span><span>?? {stats.bestStreak} ��ʤ</span></div>
+  FFFD(5): before=[e="stats-row"><span>] after=[ʤ</span><span>?? {st]
+  FFFD(2): before=[ {stats.bestStreak} ] after=[ʤ</span></div>
+     ]
+L1721:             <div className="stats-row" style={{ fontSize: '12px', color: '#999' }}><span>˵��</span><span>��ʹ����ʾ�ͳ���ͨ�ؿ��ۻ���ʤ</span></div>
+  FFFD(2): before=[r: '#999' }}><span>˵] after=[</span><span>��ʹ����]
+  FFFD(2): before=[pan>˵��</span><span>] after=[ʹ����ʾ�ͳ���ͨ�ؿ��ۻ���]
+  FFFD(4): before=[>˵��</span><span>��ʹ] after=[ʾ�ͳ���ͨ�ؿ��ۻ���ʤ</sp]
+  FFFD(1): before=[/span><span>��ʹ����ʾ] after=[ͳ���ͨ�ؿ��ۻ���ʤ</span]
+  FFFD(3): before=[pan><span>��ʹ����ʾ�ͳ] after=[ͨ�ؿ��ۻ���ʤ</span></d]
+  FFFD(1): before=[<span>��ʹ����ʾ�ͳ���ͨ] after=[ؿ��ۻ���ʤ</span></div]
+  FFFD(2): before=[pan>��ʹ����ʾ�ͳ���ͨ�ؿ] after=[ۻ���ʤ</span></div>
+ ]
+  FFFD(3): before=[>��ʹ����ʾ�ͳ���ͨ�ؿ��ۻ] after=[ʤ</span></div>
+     ]
+L1724:           {/* ǩ����¼ */}
+  FFFD(4): before=[iv>
+
+          {/* ǩ] after=[¼ */}
+          <div]
+L1726:             <h3>?? ǩ����¼</h3>
+  FFFD(4): before=[            <h3>?? ǩ] after=[¼</h3>
+            {]
+L1736:               const weekdays = ['��', 'һ', '��', '��', '��', '��', '��'];
+  FFFD(2): before=[ const weekdays = ['] after=[', 'һ', '��', '��', ]
+  FFFD(2): before=[days = ['��', 'һ', '] after=[', '��', '��', '��',]
+  FFFD(2): before=[ ['��', 'һ', '��', '] after=[', '��', '��', '��']]
+  FFFD(2): before=[, 'һ', '��', '��', '] after=[', '��', '��'];
+    ]
+  FFFD(2): before=[ '��', '��', '��', '] after=[', '��'];
+          ]
+  FFFD(2): before=[ '��', '��', '��', '] after=['];
+              re]
+L1739:                   <div className="stats-row"><span>����ǩ��</span><span>?? {checkinRecord.currentStreak} ��</span></div>
+  FFFD(4): before=[e="stats-row"><span>] after=[ǩ��</span><span>?? {]
+  FFFD(2): before=[ats-row"><span>����ǩ] after=[</span><span>?? {che]
+  FFFD(2): before=[cord.currentStreak} ] after=[</span></div>
+      ]
+L1740:                   <div className="stats-row"><span>�������</span><span>?? {checkinRecord.bestStreak} ��</span></div>
+  FFFD(7): before=[e="stats-row"><span>] after=[</span><span>?? {che]
+  FFFD(2): before=[nRecord.bestStreak} ] after=[</span></div>
+      ]
+L1741:                   <div className="stats-row"><span>�ۼ�ǩ��</span><span>?? {checkinRecord.totalCheckins} ��</span></div>
+  FFFD(1): before=[e="stats-row"><span>] after=[ۼ�ǩ��</span><span>??]
+  FFFD(1): before=["stats-row"><span>�ۼ] after=[ǩ��</span><span>?? {]
+  FFFD(2): before=[tats-row"><span>�ۼ�ǩ] after=[</span><span>?? {che]
+  FFFD(2): before=[cord.totalCheckins} ] after=[</span></div>
+      ]
+L1743:                     <div className="calendar-header">{year}��{month + 1}��</div>
+  FFFD(2): before=[endar-header">{year}] after=[{month + 1}��</div>
+]
+  FFFD(2): before=[>{year}��{month + 1}] after=[</div>
+             ]
+L1770:           {/* �Ǽ��ֲ�ͼ */}
+  FFFD(1): before=[div>
+
+          {/* ] after=[Ǽ��ֲ�ͼ */}
+         ]
+  FFFD(2): before=[v>
+
+          {/* �Ǽ] after=[ֲ�ͼ */}
+          <d]
+  FFFD(1): before=[
+          {/* �Ǽ��ֲ] after=[ͼ */}
+          <div]
+L1772:             <h3>? �Ǽ��ֲ�</h3>
+  FFFD(1): before=[>
+            <h3>? ] after=[Ǽ��ֲ�</h3>
+         ]
+  FFFD(2): before=[            <h3>? �Ǽ] after=[ֲ�</h3>
+            ]
+  FFFD(1): before=[         <h3>? �Ǽ��ֲ] after=[</h3>
+            {(]
+L1775:               if (levelEntries.length === 0) return <p style={{ color: '#999', fontSize: '13px' }}>����ͨ������</p>;
+  FFFD(4): before=[fontSize: '13px' }}>] after=[ͨ������</p>;
+       ]
+  FFFD(6): before=[ize: '13px' }}>����ͨ] after=[</p>;
+              ]
+L1781:                 { label: '??? ����', count: star3, color: '#FFD700' },
+  FFFD(4): before=[      { label: '??? ] after=[', count: star3, col]
+L1782:                 { label: '?? ����', count: star2, color: '#C0C0C0' },
+  FFFD(4): before=[       { label: '?? ] after=[', count: star2, col]
+L1783:                 { label: '? һ��', count: star1, color: '#CD7F32' },
+  FFFD(2): before=[       { label: '? һ] after=[', count: star1, col]
+L1801:           {/* �ؿ�����ͼ */}
+  FFFD(1): before=[div>
+
+          {/* ] after=[ؿ�����ͼ */}
+        ]
+  FFFD(5): before=[v>
+
+          {/* �ؿ] after=[ͼ */}
+          <div]
+L1803:             <h3>?? ͨ�ؽ���</h3>
+  FFFD(1): before=[            <h3>?? ͨ] after=[ؽ���</h3>
+          ]
+  FFFD(3): before=[          <h3>?? ͨ�ؽ] after=[</h3>
+            {(]
+L1813:                   <div className="stats-row"><span>��ɶ�</span><span>{completed}/{totalLevels} ({pct}%)</span></div>
+  FFFD(2): before=[e="stats-row"><span>] after=[ɶ�</span><span>{comp]
+  FFFD(1): before=[stats-row"><span>��ɶ] after=[</span><span>{comple]
+L1814:                   {/* �ؿ����� */}
+  FFFD(1): before=[                {/* ] after=[ؿ����� */}
+         ]
+  FFFD(5): before=[              {/* �ؿ] after=[ */}
+               ]
+L1826:                         <div key={lv} className="level-grid-cell" style={{ background: bg }} title={`�ؿ� ${lv}${ls ? ` �� ${ls.stars}�� �� ���${ls.bestMoves}��` : ' �� δͨ��'}`} />
+  FFFD(1): before=[ound: bg }} title={`] after=[ؿ� ${lv}${ls ? ` �� ]
+  FFFD(1): before=[nd: bg }} title={`�ؿ] after=[ ${lv}${ls ? ` �� ${]
+  FFFD(2): before=[{`�ؿ� ${lv}${ls ? ` ] after=[ ${ls.stars}�� �� ��]
+  FFFD(2): before=[s ? ` �� ${ls.stars}] after=[ �� ���${ls.bestMove]
+  FFFD(2): before=[ ` �� ${ls.stars}�� ] after=[ ���${ls.bestMoves}�]
+  FFFD(3): before=[�� ${ls.stars}�� �� ] after=[${ls.bestMoves}��` :]
+  FFFD(2): before=[� ���${ls.bestMoves}] after=[` : ' �� δͨ��'}`} />]
+  FFFD(2): before=[s.bestMoves}��` : ' ] after=[ δͨ��'}`} />
+       ]
+  FFFD(2): before=[tMoves}��` : ' �� δͨ] after=['}`} />
+            ]
+L1831:                     <span className="legend-item"><span className="legend-dot" style={{ background: '#FFD700' }} />����</span>
+  FFFD(4): before=[und: '#FFD700' }} />] after=[</span>
+            ]
+L1832:                     <span className="legend-item"><span className="legend-dot" style={{ background: '#C0C0C0' }} />����</span>
+  FFFD(4): before=[und: '#C0C0C0' }} />] after=[</span>
+            ]
+L1833:                     <span className="legend-item"><span className="legend-dot" style={{ background: '#CD7F32' }} />һ��</span>
+  FFFD(2): before=[nd: '#CD7F32' }} />һ] after=[</span>
+            ]
+L1834:                     <span className="legend-item"><span className="legend-dot" style={{ background: '#e0e0e0' }} />δͨ��</span>
+  FFFD(2): before=[d: '#e0e0e0' }} />δͨ] after=[</span>
+            ]
+L1841:           {/* �����ֲ�ͼ */}
+  FFFD(5): before=[div>
+
+          {/* ] after=[ֲ�ͼ */}
+          <d]
+  FFFD(1): before=[          {/* �����ֲ] after=[ͼ */}
+          <div]
+L1843:             <h3>?? �����ֲ�</h3>
+  FFFD(5): before=[
+            <h3>?? ] after=[ֲ�</h3>
+            ]
+  FFFD(1): before=[       <h3>?? �����ֲ] after=[</h3>
+            {(]
+L1846:               if (records.length === 0) return <p style={{ color: '#999', fontSize: '13px' }}>����ͨ������</p>;
+  FFFD(4): before=[fontSize: '13px' }}>] after=[ͨ������</p>;
+       ]
+  FFFD(6): before=[ize: '13px' }}>����ͨ] after=[</p>;
+              ]
+L1847:               // �������������
+  FFFD(13): before=[>;
+              // ] after=[
+              const]
+L1849:                 { label: '1-10��', min: 1, max: 10, color: '#4CAF50' },
+  FFFD(2): before=[      { label: '1-10] after=[', min: 1, max: 10, ]
+L1850:                 { label: '11-20��', min: 11, max: 20, color: '#2196F3' },
+  FFFD(2): before=[     { label: '11-20] after=[', min: 11, max: 20,]
+L1851:                 { label: '21-30��', min: 21, max: 30, color: '#FF9800' },
+  FFFD(2): before=[     { label: '21-30] after=[', min: 21, max: 30,]
+L1852:                 { label: '31-50��', min: 31, max: 50, color: '#f44336' },
+  FFFD(2): before=[     { label: '31-50] after=[', min: 31, max: 50,]
+L1853:                 { label: '50+��', min: 51, max: 9999, color: '#9C27B0' },
+  FFFD(2): before=[       { label: '50+] after=[', min: 51, max: 999]
+L1873:           {/* ��ʱ����ͼ */}
+  FFFD(2): before=[div>
+
+          {/* ] after=[ʱ����ͼ */}
+         ]
+  FFFD(4): before=[>
+
+          {/* ��ʱ] after=[ͼ */}
+          <div]
+L1875:             <h3>?? ���ͨ����ʱ����</h3>
+  FFFD(3): before=[
+            <h3>?? ] after=[ͨ����ʱ����</h3>
+    ]
+  FFFD(4): before=[         <h3>?? ���ͨ] after=[ʱ����</h3>
+         ]
+  FFFD(4): before=[    <h3>?? ���ͨ����ʱ] after=[</h3>
+            {(]
+L1878:               if (records.length === 0) return <p style={{ color: '#999', fontSize: '13px' }}>����ͨ������</p>;
+  FFFD(4): before=[fontSize: '13px' }}>] after=[ͨ������</p>;
+       ]
+  FFFD(6): before=[ize: '13px' }}>����ͨ] after=[</p>;
+              ]
+L1888:                         <div key={i} className="trend-bar-wrapper" title={`��${rec.level}�� �� ${rec.moves}�� �� ${rec.playTimeSec}�� �� ${'?'.repeat(rec.stars)}`}>
+  FFFD(2): before=[ar-wrapper" title={`] after=[${rec.level}�� �� ${]
+  FFFD(2): before=[tle={`��${rec.level}] after=[ �� ${rec.moves}�� �]
+  FFFD(2): before=[={`��${rec.level}�� ] after=[ ${rec.moves}�� �� $]
+  FFFD(2): before=[l}�� �� ${rec.moves}] after=[ �� ${rec.playTimeSe]
+  FFFD(2): before=[� �� ${rec.moves}�� ] after=[ ${rec.playTimeSec}�]
+  FFFD(2): before=[� ${rec.playTimeSec}] after=[ �� ${'?'.repeat(rec]
+  FFFD(2): before=[{rec.playTimeSec}�� ] after=[ ${'?'.repeat(rec.st]
+L1895:                   <div className="stats-row" style={{ marginTop: '8px' }}><span>���</span><span>{Math.min(...times)}��</span></div>
+  FFFD(3): before=[Top: '8px' }}><span>] after=[</span><span>{Math.m]
+  FFFD(2): before=[{Math.min(...times)}] after=[</span></div>
+      ]
+L1896:                   <div className="stats-row"><span>����</span><span>{Math.max(...times)}��</span></div>
+  FFFD(4): before=[e="stats-row"><span>] after=[</span><span>{Math.m]
+  FFFD(2): before=[{Math.max(...times)}] after=[</span></div>
+      ]
+L1897:                   <div className="stats-row"><span>ƽ��</span><span>{Math.round(times.reduce((a, b) => a + b, 0) / times.length)}��</span></div>
+  FFFD(2): before=[="stats-row"><span>ƽ] after=[</span><span>{Math.r]
+  FFFD(2): before=[ 0) / times.length)}] after=[</span></div>
+      ]
+L1907:   // ����ҳ
+  FFFD(4): before=[v>
+    );
+  }
+
+  // ] after=[ҳ
+  if (page === 'se]
+L1912:   // �ؿ��༭��ҳ
+  FFFD(1): before=[me')} />;
+  }
+
+  // ] after=[ؿ��༭��ҳ
+  if (page =]
+  FFFD(2): before=[')} />;
+  }
+
+  // �ؿ] after=[༭��ҳ
+  if (page === ]
+  FFFD(2): before=[ />;
+  }
+
+  // �ؿ��༭] after=[ҳ
+  if (page === 'ed]
+L1924:   // �Զ���ؿ�����ҳ
+  FFFD(1): before=[}
+    />;
+  }
+
+  // ] after=[Զ���ؿ�����ҳ
+  if (pa]
+  FFFD(3): before=[    />;
+  }
+
+  // �Զ] after=[ؿ�����ҳ
+  if (page =]
+  FFFD(5): before=[/>;
+  }
+
+  // �Զ���ؿ] after=[ҳ
+  if (page === 'ed]
+L1929:           <button className="btn-back" onClick={() => { setPage('editor'); setPlayingCustomLevel(null); }}>�� ����</button>
+  FFFD(2): before=[stomLevel(null); }}>] after=[ ����</button>
+     ]
+  FFFD(4): before=[mLevel(null); }}>�� ] after=[</button>
+          ]
+L1937:               // �����Զ���ؿ���ͨ��״̬
+  FFFD(5): before=[ {
+              // ] after=[Զ���ؿ���ͨ��״̬
+      ]
+  FFFD(3): before=[           // �����Զ] after=[ؿ���ͨ��״̬
+          ]
+  FFFD(3): before=[       // �����Զ���ؿ] after=[ͨ��״̬
+              ]
+  FFFD(2): before=[   // �����Զ���ؿ���ͨ] after=[״̬
+              con]
+L1944:               const text = `����ɫ������༭�������˹ؿ���${playingCustomLevel.name}��������ս�ɣ�\n�ؿ��룺${code}\n��ֱ�Ӵ����ӣ�${window.location.origin}${window.location.pathname}#level=${code}`;
+  FFFD(4): before=[      const text = `] after=[ɫ������༭�������˹ؿ���]
+  FFFD(6): before=[ const text = `����ɫ] after=[༭�������˹ؿ���${playi]
+  FFFD(7): before=[text = `����ɫ������༭] after=[˹ؿ���${playingCustom]
+  FFFD(3): before=[���ɫ������༭�������˹ؿ] after=[${playingCustomLevel]
+  FFFD(8): before=[ingCustomLevel.name}] after=[ս�ɣ�\n�ؿ��룺${code}\n]
+  FFFD(1): before=[Level.name}��������ս] after=[ɣ�\n�ؿ��룺${code}\n��]
+  FFFD(1): before=[vel.name}��������ս�ɣ] after=[\n�ؿ��룺${code}\n��ֱ�]
+  FFFD(1): before=[.name}��������ս�ɣ�\n] after=[ؿ��룺${code}\n��ֱ�Ӵ��]
+  FFFD(2): before=[ame}��������ս�ɣ�\n�ؿ] after=[룺${code}\n��ֱ�Ӵ����ӣ]
+  FFFD(2): before=[ս�ɣ�\n�ؿ��룺${code}\n] after=[ֱ�Ӵ����ӣ�${window.lo]
+  FFFD(1): before=[�\n�ؿ��룺${code}\n��ֱ] after=[Ӵ����ӣ�${window.loca]
+  FFFD(4): before=[n�ؿ��룺${code}\n��ֱ�Ӵ] after=[ӣ�${window.location.]
+  FFFD(1): before=[룺${code}\n��ֱ�Ӵ����ӣ] after=[${window.location.or]
+L1946:                 navigator.share({ title: 'ɫ�������Զ���ؿ�', text });
+  FFFD(7): before=[or.share({ title: 'ɫ] after=[Զ���ؿ�', text });
+  ]
+  FFFD(3): before=[({ title: 'ɫ�������Զ] after=[ؿ�', text });
+      ]
+  FFFD(1): before=[itle: 'ɫ�������Զ���ؿ] after=[', text });
+        ]
+L1958:           <div className="share-toast">? �ؿ�������Ϣ�Ѹ��Ƶ������壡</div>
+  FFFD(1): before=[ame="share-toast">? ] after=[ؿ�������Ϣ�Ѹ��Ƶ������]
+  FFFD(7): before=[e="share-toast">? �ؿ] after=[Ϣ�Ѹ��Ƶ������壡</div>
+]
+  FFFD(1): before=[-toast">? �ؿ�������Ϣ] after=[Ѹ��Ƶ������壡</div>
+  ]
+  FFFD(2): before=[oast">? �ؿ�������Ϣ�Ѹ] after=[Ƶ������壡</div>
+     ]
+  FFFD(6): before=[t">? �ؿ�������Ϣ�Ѹ��Ƶ] after=[壡</div>
+        )}
+ ]
+L1964:   // ��˽����ҳ
+  FFFD(2): before=[v>
+    );
+  }
+
+  // ] after=[˽����ҳ
+  return (
+  ]
+  FFFD(4): before=[    );
+  }
+
+  // ��˽] after=[ҳ
+  return (
+    <di]
+L1968:         <button className="btn-back" onClick={() => setPage('home')}>�� ����</button>
+  FFFD(2): before=[=> setPage('home')}>] after=[ ����</button>
+     ]
+  FFFD(4): before=[setPage('home')}>�� ] after=[</button>
+        <h]
+L1969:         <h1 className="game-title">��˽����</h1>
+  FFFD(2): before=[ssName="game-title">] after=[˽����</h1>
+        <]
+  FFFD(4): before=[ame="game-title">��˽] after=[</h1>
+        <div s]
+L1973:         <h2>��˽����</h2>
+  FFFD(2): before=[-page">
+        <h2>] after=[˽����</h2>
+        <]
+  FFFD(4): before=[ge">
+        <h2>��˽] after=[</h2>
+        <p>���]
+L1974:         <p>���������ڣ�2026��7��2��</p>
+  FFFD(9): before=[���</h2>
+        <p>] after=[ڣ�2026��7��2��</p>
+
+]
+  FFFD(1): before=[       <p>���������ڣ] after=[2026��7��2��</p>
+
+  ]
+  FFFD(2): before=[  <p>���������ڣ�2026] after=[7��2��</p>
+
+        ]
+  FFFD(2): before=[p>���������ڣ�2026��7] after=[2��</p>
+
+        <h3]
+  FFFD(2): before=[��������ڣ�2026��7��2] after=[</p>
+
+        <h3>1.]
+L1976:         <h3>1. ��Ϣ�ռ�</h3>
+  FFFD(2): before=[/p>
+
+        <h3>1. ] after=[Ϣ�ռ�</h3>
+        <p]
+  FFFD(1): before=[
+
+        <h3>1. ��Ϣ] after=[ռ�</h3>
+        <p>�]
+  FFFD(1): before=[        <h3>1. ��Ϣ�ռ] after=[</h3>
+        <p>���]
+L1977:         <p>����Ϸ���ռ��κθ���������Ϣ����Ϸ���Ⱥ���ѳɼ����洢��������������أ�localStorage���������ϴ�����������</p>
+  FFFD(4): before=[�ռ�</h3>
+        <p>] after=[Ϸ���ռ��κθ���������Ϣ�]
+  FFFD(3): before=[h3>
+        <p>����Ϸ] after=[ռ��κθ���������Ϣ����Ϸ]
+  FFFD(2): before=[        <p>����Ϸ���ռ] after=[κθ���������Ϣ����Ϸ���]
+  FFFD(9): before=[    <p>����Ϸ���ռ��κθ] after=[Ϣ����Ϸ���Ⱥ���ѳɼ����洢]
+  FFFD(4): before=[�Ϸ���ռ��κθ���������Ϣ] after=[Ϸ���Ⱥ���ѳɼ����洢�����]
+  FFFD(3): before=[ռ��κθ���������Ϣ����Ϸ] after=[Ⱥ���ѳɼ����洢���������]
+  FFFD(3): before=[θ���������Ϣ����Ϸ���Ⱥ] after=[ѳɼ����洢�������������]
+  FFFD(4): before=[�����Ϣ����Ϸ���Ⱥ���ѳɼ] after=[洢��������������أ�loc]
+  FFFD(14): before=[Ϣ����Ϸ���Ⱥ���ѳɼ����洢] after=[أ�localStorage������]
+  FFFD(1): before=[����洢��������������أ] after=[localStorage��������]
+  FFFD(9): before=[������أ�localStorage] after=[ϴ�����������</p>
+
+  ]
+  FFFD(11): before=[calStorage���������ϴ] after=[</p>
+
+        <h3>2.]
+L1979:         <h3>2. ���</h3>
+  FFFD(3): before=[/p>
+
+        <h3>2. ] after=[</h3>
+        <p>���]
+L1980:         <p>����Ϸ����չʾ���Ե�����������ˣ��� Google AdSense���Ĺ�档������˿���ʹ�� Cookie �����Ƽ������ṩ��ع�档����Ĺ�����˵���˽�����˽������Ϣ��</p>
+  FFFD(4): before=[���</h3>
+        <p>] after=[Ϸ����չʾ���Ե���������]
+  FFFD(4): before=[h3>
+        <p>����Ϸ] after=[չʾ���Ե�����������ˣ��]
+  FFFD(3): before=[      <p>����Ϸ����չʾ] after=[Ե�����������ˣ��� Goo]
+  FFFD(11): before=[  <p>����Ϸ����չʾ���Ե] after=[ˣ��� Google AdSense�]
+  FFFD(3): before=[��չʾ���Ե�����������ˣ] after=[ Google AdSense���Ĺ�]
+  FFFD(3): before=[�ˣ��� Google AdSense] after=[Ĺ�档������˿���ʹ�� Coo]
+  FFFD(1): before=[� Google AdSense���Ĺ] after=[档������˿���ʹ�� Cooki]
+  FFFD(6): before=[Google AdSense���Ĺ�档] after=[˿���ʹ�� Cookie �����]
+  FFFD(3): before=[AdSense���Ĺ�档������˿] after=[ʹ�� Cookie �����Ƽ���]
+  FFFD(2): before=[nse���Ĺ�档������˿���ʹ] after=[ Cookie �����Ƽ������]
+  FFFD(5): before=[�����˿���ʹ�� Cookie ] after=[Ƽ������ṩ��ع�档����Ĺ��]
+  FFFD(6): before=[���ʹ�� Cookie �����Ƽ] after=[ṩ��ع�档����Ĺ�����˵���]
+  FFFD(2): before=[Cookie �����Ƽ������ṩ] after=[ع�档����Ĺ�����˵���˽��]
+  FFFD(1): before=[kie �����Ƽ������ṩ��ع] after=[档����Ĺ�����˵���˽����]
+  FFFD(4): before=[e �����Ƽ������ṩ��ع�档] after=[Ĺ�����˵���˽�����˽���]
+  FFFD(5): before=[��Ƽ������ṩ��ع�档����Ĺ] after=[˵���˽�����˽������Ϣ��]
+  FFFD(3): before=[���ṩ��ع�档����Ĺ�����˵] after=[˽�����˽������Ϣ��</p>]
+  FFFD(5): before=[��ع�档����Ĺ�����˵���˽] after=[˽������Ϣ��</p>
+
+    ]
+  FFFD(6): before=[���Ĺ�����˵���˽�����˽] after=[Ϣ��</p>
+
+        <h3]
+  FFFD(2): before=[��˵���˽�����˽������Ϣ] after=[</p>
+
+        <h3>3.]
+L1983:         <p>����Ϸ������ʹ�� Cookie�����������������ʹ�� Cookie��������ͨ����������ù��� Cookie��</p>
+  FFFD(4): before=[kie</h3>
+        <p>] after=[Ϸ������ʹ�� Cookie���]
+  FFFD(6): before=[h3>
+        <p>����Ϸ] after=[ʹ�� Cookie����������]
+  FFFD(2): before=[     <p>����Ϸ������ʹ] after=[ Cookie�������������]
+  FFFD(17): before=[���Ϸ������ʹ�� Cookie] after=[ʹ�� Cookie��������ͨ�]
+  FFFD(2): before=[ie�����������������ʹ] after=[ Cookie��������ͨ����]
+  FFFD(8): before=[����������ʹ�� Cookie] after=[ͨ����������ù��� Cook]
+  FFFD(10): before=[�ʹ�� Cookie��������ͨ] after=[ù��� Cookie��</p>
+
+ ]
+  FFFD(3): before=[��������ͨ����������ù] after=[ Cookie��</p>
+
+     ]
+  FFFD(2): before=[���������ù��� Cookie] after=[</p>
+
+        <h3>4.]
+L1985:         <h3>4. δ�����˱���</h3>
+  FFFD(5): before=[p>
+
+        <h3>4. δ] after=[˱���</h3>
+        <p]
+  FFFD(3): before=[      <h3>4. δ�����˱] after=[</h3>
+        <p>���]
+L1986:         <p>����Ϸ�ʺ������������ҡ����ǲ��ռ�δ�����˵ĸ�����Ϣ���ҳ���Թ�����������ǣ������ù��ƫ�á�</p>
+  FFFD(4): before=[���</h3>
+        <p>] after=[Ϸ�ʺ������������ҡ����]
+  FFFD(1): before=[h3>
+        <p>����Ϸ] after=[ʺ������������ҡ����ǲ�]
+  FFFD(12): before=[>
+        <p>����Ϸ�ʺ] after=[ҡ����ǲ��ռ�δ�����˵ĸ��]
+  FFFD(4): before=[����Ϸ�ʺ������������ҡ] after=[ǲ��ռ�δ�����˵ĸ�����Ϣ�]
+  FFFD(2): before=[�ʺ������������ҡ����ǲ] after=[ռ�δ�����˵ĸ�����Ϣ���ҳ]
+  FFFD(1): before=[�����������ҡ����ǲ��ռ] after=[δ�����˵ĸ�����Ϣ���ҳ��]
+  FFFD(5): before=[���������ҡ����ǲ��ռ�δ] after=[˵ĸ�����Ϣ���ҳ���Թ����]
+  FFFD(5): before=[��ҡ����ǲ��ռ�δ�����˵ĸ] after=[Ϣ���ҳ���Թ�����������]
+  FFFD(3): before=[�ǲ��ռ�δ�����˵ĸ�����Ϣ] after=[ҳ���Թ�����������ǣ���]
+  FFFD(3): before=[ռ�δ�����˵ĸ�����Ϣ���ҳ] after=[Թ�����������ǣ������ù]
+  FFFD(11): before=[����˵ĸ�����Ϣ���ҳ���Թ] after=[ǣ������ù��ƫ�á�</p>
+
+]
+  FFFD(6): before=[���ҳ���Թ�����������ǣ] after=[ù��ƫ�á�</p>
+
+       ]
+  FFFD(2): before=[Թ�����������ǣ������ù] after=[ƫ�á�</p>
+
+        <h]
+  FFFD(1): before=[���������ǣ������ù��ƫ] after=[á�</p>
+
+        <h3>]
+  FFFD(1): before=[�������ǣ������ù��ƫ�á] after=[</p>
+
+        <h3>5.]
+L1988:         <h3>5. ��ϵ����</h3>
+  FFFD(2): before=[/p>
+
+        <h3>5. ] after=[ϵ����</h3>
+        <]
+  FFFD(4): before=[
+
+        <h3>5. ��ϵ] after=[</h3>
+        <p>���]
+L1989:         <p>�����κ����⣬��ͨ����վ�ϵ���ϵ��ʽ�����ǹ�ͨ��</p>
+  FFFD(5): before=[���</h3>
+        <p>] after=[κ����⣬��ͨ����վ�ϵ���ϵ]
+  FFFD(4): before=[3>
+        <p>�����κ] after=[⣬��ͨ����վ�ϵ���ϵ��ʽ��]
+  FFFD(2): before=[      <p>�����κ����⣬] after=[ͨ����վ�ϵ���ϵ��ʽ�����]
+  FFFD(4): before=[   <p>�����κ����⣬��ͨ] after=[վ�ϵ���ϵ��ʽ�����ǹ�ͨ��]
+  FFFD(1): before=[>�����κ����⣬��ͨ����վ] after=[ϵ���ϵ��ʽ�����ǹ�ͨ��</]
+  FFFD(3): before=[����κ����⣬��ͨ����վ�ϵ] after=[ϵ��ʽ�����ǹ�ͨ��</p>
+ ]
+  FFFD(2): before=[κ����⣬��ͨ����վ�ϵ���ϵ] after=[ʽ�����ǹ�ͨ��</p>
+    ]
+  FFFD(5): before=[��⣬��ͨ����վ�ϵ���ϵ��ʽ] after=[ǹ�ͨ��</p>
+      </ma]
+  FFFD(1): before=[����վ�ϵ���ϵ��ʽ�����ǹ] after=[ͨ��</p>
+      </main]
+  FFFD(2): before=[��վ�ϵ���ϵ��ʽ�����ǹ�ͨ] after=[</p>
+      </main>
+ ]
+L1995: // ����ҳ���
+  FFFD(4): before=[  </div>
+  );
+}
+
+// ] after=[ҳ���
+import { Settin]
+  FFFD(3): before=[iv>
+  );
+}
+
+// ����ҳ] after=[
+import { Settings a]
+L2038:     if (confirm('ȷ��Ҫ����������Ϸ�����𣿴˲������ɳ�����')) {
+  FFFD(2): before=[{
+    if (confirm('ȷ] after=[Ҫ����������Ϸ�����𣿴˲]
+  FFFD(10): before=[   if (confirm('ȷ��Ҫ] after=[Ϸ�����𣿴˲������ɳ����]
+  FFFD(5): before=[irm('ȷ��Ҫ����������Ϸ] after=[𣿴˲������ɳ�����')) {]
+  FFFD(6): before=[Ҫ����������Ϸ�����𣿴˲] after=[ɳ�����')) {
+      lo]
+  FFFD(5): before=[����Ϸ�����𣿴˲������ɳ] after=[')) {
+      localSto]
+L2051:       alert('��Ϸ���������á�');
+  FFFD(2): before=[set();
+      alert('] after=[Ϸ���������á�');
+    ]
+  FFFD(9): before=[();
+      alert('��Ϸ] after=[á�');
+    }
+  };
+
+  ]
+  FFFD(1): before=[alert('��Ϸ���������á] after=[');
+    }
+  };
+
+  //]
+L2055:   // �����浵
+  FFFD(5): before=[);
+    }
+  };
+
+  // ] after=[浵
+  const handleExpo]
+L2080:   // ����浵
+  FFFD(4): before=[RL(url);
+  };
+
+  // ] after=[浵
+  const handleImpo]
+L2088:         if (typeof data !== 'object' || data === null) throw new Error('��ʽ����');
+  FFFD(2): before=[l) throw new Error('] after=[ʽ����');
+        if ]
+  FFFD(4): before=[throw new Error('��ʽ] after=[');
+        if (!con]
+L2089:         if (!confirm('����浵�����ǵ�ǰ���ȣ�ȷ��������')) return;
+  FFFD(4): before=[      if (!confirm('] after=[浵�����ǵ�ǰ���ȣ�ȷ�����]
+  FFFD(5): before=[ if (!confirm('����浵] after=[ǵ�ǰ���ȣ�ȷ��������'))]
+  FFFD(1): before=[confirm('����浵�����ǵ] after=[ǰ���ȣ�ȷ��������')) r]
+  FFFD(3): before=[nfirm('����浵�����ǵ�ǰ] after=[ȣ�ȷ��������')) retur]
+  FFFD(1): before=[m('����浵�����ǵ�ǰ���ȣ] after=[ȷ��������')) return;]
+  FFFD(8): before=['����浵�����ǵ�ǰ���ȣ�ȷ] after=[')) return;
+        ]
+L2095:         alert('�浵����ɹ�����ˢ��ҳ���Լ��ص�������ݡ�');
+  FFFD(1): before=[ });
+        alert('] after=[浵����ɹ�����ˢ��ҳ���Լ�]
+  FFFD(4): before=[);
+        alert('�浵] after=[ɹ�����ˢ��ҳ���Լ��ص���]
+  FFFD(5): before=[      alert('�浵����ɹ] after=[ˢ��ҳ���Լ��ص�������ݡ�]
+  FFFD(2): before=[alert('�浵����ɹ�����ˢ] after=[ҳ���Լ��ص�������ݡ�');]
+  FFFD(3): before=[rt('�浵����ɹ�����ˢ��ҳ] after=[Լ��ص�������ݡ�');
+   ]
+  FFFD(2): before=[�浵����ɹ�����ˢ��ҳ���Լ] after=[ص�������ݡ�');
+      ]
+  FFFD(7): before=[���ɹ�����ˢ��ҳ���Լ��ص] after=[ݡ�');
+        locati]
+  FFFD(1): before=[�ˢ��ҳ���Լ��ص�������ݡ] after=[');
+        location]
+L2098:         alert('�浵�ļ���ʽ���󣬵���ʧ�ܡ�');
+  FFFD(1): before=[ch {
+        alert('] after=[浵�ļ���ʽ���󣬵���ʧ�ܡ�']
+  FFFD(1): before=[ {
+        alert('�浵] after=[ļ���ʽ���󣬵���ʧ�ܡ�');]
+  FFFD(3): before=[
+        alert('�浵�ļ] after=[ʽ���󣬵���ʧ�ܡ�');
+   ]
+  FFFD(3): before=[     alert('�浵�ļ���ʽ] after=[󣬵���ʧ�ܡ�');
+      }]
+  FFFD(3): before=[alert('�浵�ļ���ʽ���󣬵] after=[ʧ�ܡ�');
+      }
+    ]
+  FFFD(1): before=[t('�浵�ļ���ʽ���󣬵���ʧ] after=[ܡ�');
+      }
+    };]
+  FFFD(1): before=['�浵�ļ���ʽ���󣬵���ʧ�ܡ] after=[');
+      }
+    };
+ ]
+L2102:     e.target.value = ''; // ����input�������ظ�����ͬһ�ļ�
+  FFFD(4): before=[rget.value = ''; // ] after=[input�������ظ�����ͬһ]
+  FFFD(7): before=[e = ''; // ����input] after=[ظ�����ͬһ�ļ�
+  };
+
+  ]
+  FFFD(5): before=[// ����input�������ظ] after=[ͬһ�ļ�
+  };
+
+  return]
+  FFFD(1): before=[input�������ظ�����ͬһ] after=[ļ�
+  };
+
+  return (
+]
+  FFFD(1): before=[put�������ظ�����ͬһ�ļ] after=[
+  };
+
+  return (
+  ]
+L2108:         <button className="btn-back" onClick={onBack}>�� ����</button>
+  FFFD(2): before=[k" onClick={onBack}>] after=[ ����</button>
+     ]
+  FFFD(4): before=[onClick={onBack}>�� ] after=[</button>
+        <h]
+L2109:         <h1 className="game-title">?? ����</h1>
+  FFFD(4): before=[ame="game-title">?? ] after=[</h1>
+        <div s]
+L2118:                 <div className="setting-name">��Ч</div>
+  FFFD(2): before=[Name="setting-name">] after=[Ч</div>
+            ]
+L2119:                 <div className="setting-desc">��Ϸ������Ч</div>
+  FFFD(2): before=[Name="setting-desc">] after=[Ϸ������Ч</div>
+     ]
+  FFFD(6): before=[e="setting-desc">��Ϸ] after=[Ч</div>
+            ]
+L2131:                 <div className="setting-name">��</div>
+  FFFD(2): before=[Name="setting-name">] after=[</div>
+             ]
+L2132:                 <div className="setting-desc">���������񶯣����豸֧�֣�</div>
+  FFFD(9): before=[Name="setting-desc">] after=[񶯣����豸֧�֣�</div>
+  ]
+  FFFD(4): before=[ng-desc">���������񶯣] after=[豸֧�֣�</div>
+        ]
+  FFFD(1): before=[c">���������񶯣����豸֧] after=[֣�</div>
+           ]
+  FFFD(1): before=[>���������񶯣����豸֧�֣] after=[</div>
+             ]
+L2144:                 <div className="setting-name">��������</div>
+  FFFD(8): before=[Name="setting-name">] after=[</div>
+             ]
+L2145:                 <div className="setting-desc">��������ѭ������</div>
+  FFFD(8): before=[Name="setting-desc">] after=[ѭ������</div>
+      ]
+  FFFD(6): before=[ting-desc">��������ѭ] after=[</div>
+             ]
+L2158:               <div className="setting-name">�����л�</div>
+  FFFD(5): before=[Name="setting-name">] after=[л�</div>
+           ]
+  FFFD(1): before=[setting-name">�����л] after=[</div>
+             ]
+L2159:               <div className="setting-desc">ѡ����ϲ������ɫ���</div>
+  FFFD(4): before=[ame="setting-desc">ѡ] after=[ϲ������ɫ���</div>
+  ]
+  FFFD(6): before=[setting-desc">ѡ����ϲ] after=[ɫ���</div>
+         ]
+  FFFD(3): before=[-desc">ѡ����ϲ������ɫ] after=[</div>
+            <]
+L2178:           {/* ����Ԥ����� */}
+  FFFD(4): before=[/div>
+          {/* ] after=[Ԥ����� */}
+         ]
+  FFFD(5): before=[
+          {/* ����Ԥ] after=[ */}
+          <div ]
+L2181:               {THEMES[settings.theme].icon} {THEMES[settings.theme].name} �� Ԥ��
+  FFFD(2): before=[ttings.theme].name} ] after=[ Ԥ��
+            </d]
+  FFFD(2): before=[gs.theme].name} �� Ԥ] after=[
+            </div>
+]
+L2214:                 <div className="setting-name">���ý���</div>
+  FFFD(3): before=[Name="setting-name">] after=[ý���</div>
+         ]
+  FFFD(3): before=[="setting-name">���ý] after=[</div>
+             ]
+L2215:                 <div className="setting-desc">������йؿ����ȡ���Ѽ�¼�ͳɾ�</div>
+  FFFD(6): before=[Name="setting-desc">] after=[йؿ����ȡ���Ѽ�¼�ͳɾ�</d]
+  FFFD(4): before=[tting-desc">������йؿ] after=[ȡ���Ѽ�¼�ͳɾ�</div>
+  ]
+  FFFD(3): before=[-desc">������йؿ����ȡ] after=[Ѽ�¼�ͳɾ�</div>
+      ]
+  FFFD(1): before=[c">������йؿ����ȡ���Ѽ] after=[¼�ͳɾ�</div>
+        ]
+  FFFD(1): before=[>������йؿ����ȡ���Ѽ�¼] after=[ͳɾ�</div>
+          ]
+  FFFD(1): before=[����йؿ����ȡ���Ѽ�¼�ͳɾ] after=[</div>
+             ]
+L2225:               <div className="setting-name">�浵����</div>
+  FFFD(1): before=[Name="setting-name">] after=[浵����</div>
+        ]
+  FFFD(4): before=[me="setting-name">�浵] after=[</div>
+             ]
+L2226:               <div className="setting-desc">���ݻ�ָ���Ϸ����</div>
+  FFFD(3): before=[Name="setting-desc">] after=[ݻ�ָ���Ϸ����</div>
+  ]
+  FFFD(1): before=[="setting-desc">���ݻ] after=[ָ���Ϸ����</div>
+    ]
+  FFFD(3): before=[setting-desc">���ݻ�ָ] after=[Ϸ����</div>
+        ]
+  FFFD(4): before=[ing-desc">���ݻ�ָ���Ϸ] after=[</div>
+            <]
+L2231:               ?? �����浵
+  FFFD(5): before=[}>
+              ?? ] after=[浵
+            </butt]
+L2235:               ?? ����浵
+  FFFD(4): before=[}>
+              ?? ] after=[浵
+              <inp]
+L2251:               <div className="setting-name">�汾��Ϣ</div>
+  FFFD(1): before=[Name="setting-name">] after=[汾��Ϣ</div>
+         ]
+  FFFD(2): before=[me="setting-name">�汾] after=[Ϣ</div>
+            ]
+L2252:               <div className="setting-desc">ɫ������ v1.12.0 | 2026</div>
+  FFFD(6): before=[ame="setting-desc">ɫ] after=[ v1.12.0 | 2026</div]
+L2261: // �ؿ��༭��ҳ�����
+  FFFD(1): before=[  </div>
+  );
+}
+
+// ] after=[ؿ��༭��ҳ�����
+import ]
+  FFFD(2): before=[</div>
+  );
+}
+
+// �ؿ] after=[༭��ҳ�����
+import { C]
+  FFFD(2): before=[iv>
+  );
+}
+
+// �ؿ��༭] after=[ҳ�����
+import { COLO]
+  FFFD(5): before=[
+  );
+}
+
+// �ؿ��༭��ҳ] after=[
+import { COLOR_KEYS]
+L2284:   // ��ʼ���༭��������Ĭ���Թ�
+  FFFD(2): before=[useState('');
+
+  // ] after=[ʼ���༭��������Ĭ���Թ�
+]
+  FFFD(3): before=[State('');
+
+  // ��ʼ] after=[༭��������Ĭ���Թ�
+  co]
+  FFFD(8): before=[e('');
+
+  // ��ʼ���༭] after=[Ĭ���Թ�
+  const initE]
+  FFFD(3): before=[ // ��ʼ���༭��������Ĭ] after=[Թ�
+  const initEdito]
+  FFFD(1): before=[��ʼ���༭��������Ĭ���Թ] after=[
+  const initEditor ]
+L2287:     // 2������ɫ���Թ� + 1���չ�
+  FFFD(6): before=[ube[] = [];
+    // 2] after=[ɫ���Թ� + 1���չ�
+    ]
+  FFFD(3): before=[ [];
+    // 2������ɫ] after=[Թ� + 1���չ�
+    for ]
+  FFFD(1): before=[
+    // 2������ɫ���Թ] after=[ + 1���չ�
+    for (l]
+  FFFD(3): before=[// 2������ɫ���Թ� + 1] after=[չ�
+    for (let i = ]
+  FFFD(1): before=[������ɫ���Թ� + 1���չ] after=[
+    for (let i = 0;]
+L2299:   // �л�������ģʽ
+  FFFD(1): before=[(tubes);
+  };
+
+  // ] after=[л�������ģʽ
+  const h]
+  FFFD(7): before=[ubes);
+  };
+
+  // �л] after=[ģʽ
+  const handleCre]
+L2307:   // �����Թ�
+  FFFD(5): before=[ditor();
+  };
+
+  // ] after=[Թ�
+  const handleAdd]
+  FFFD(1): before=[);
+  };
+
+  // �����Թ] after=[
+  const handleAddTu]
+L2313:   // ɾ���Թ�
+  FFFD(3): before=[ty }]);
+  };
+
+  // ɾ] after=[Թ�
+  const handleRem]
+  FFFD(1): before=[]);
+  };
+
+  // ɾ���Թ] after=[
+  const handleRemov]
+L2321:   // ���Թ�������ɫ��
+  FFFD(3): before=[wTubes);
+  };
+
+  // ] after=[Թ�������ɫ��
+  const ]
+  FFFD(7): before=[es);
+  };
+
+  // ���Թ] after=[ɫ��
+  const handleTu]
+  FFFD(2): before=[;
+
+  // ���Թ�������ɫ] after=[
+  const handleTubeC]
+L2325:       // �Թ����ˣ��Ƴ����
+  FFFD(1): before=[apacity) {
+      // ] after=[Թ����ˣ��Ƴ����
+     ]
+  FFFD(4): before=[acity) {
+      // �Թ] after=[ˣ��Ƴ����
+      cons]
+  FFFD(2): before=[) {
+      // �Թ����ˣ] after=[Ƴ����
+      const n]
+  FFFD(2): before=[
+      // �Թ����ˣ��Ƴ] after=[��
+      const newT]
+  FFFD(2): before=[    // �Թ����ˣ��Ƴ��] after=[
+      const newTube]
+L2336:   // ����Թ�
+  FFFD(4): before=[wTubes);
+  };
+
+  // ] after=[Թ�
+  const handleCle]
+  FFFD(1): before=[s);
+  };
+
+  // ����Թ] after=[
+  const handleClear]
+L2343:   // ����ؿ�
+  FFFD(4): before=[wTubes);
+  };
+
+  // ] after=[ؿ�
+  const handleSav]
+  FFFD(1): before=[s);
+  };
+
+  // ����ؿ] after=[
+  const handleSave ]
+L2352:       name: levelName || `�Զ���ؿ� ${customLevels.length + 1}`,
+  FFFD(1): before=[name: levelName || `] after=[Զ���ؿ� ${customLevel]
+  FFFD(3): before=[me: levelName || `�Զ] after=[ؿ� ${customLevels.le]
+  FFFD(1): before=[levelName || `�Զ���ؿ] after=[ ${customLevels.leng]
+L2355:       difficulty: '�Զ���',
+  FFFD(1): before=[
+      difficulty: '] after=[Զ���',
+      created]
+  FFFD(3): before=[     difficulty: '�Զ] after=[',
+      createdAt: ]
+L2363:   // �����ؿ���
+  FFFD(5): before=[Msg('');
+  };
+
+  // ] after=[ؿ���
+  const handleE]
+  FFFD(3): before=[);
+  };
+
+  // �����ؿ] after=[
+  const handleExpor]
+L2366:     const text = `ɫ������ؿ���${level.name}��\n�ؿ��룺${code}`;
+  FFFD(6): before=[
+    const text = `ɫ] after=[ؿ���${level.name}��\]
+  FFFD(3): before=[nst text = `ɫ������ؿ] after=[${level.name}��\n�ؿ�]
+  FFFD(2): before=[���ؿ���${level.name}] after=[\n�ؿ��룺${code}`;
+   ]
+  FFFD(1): before=[���${level.name}��\n] after=[ؿ��룺${code}`;
+    na]
+  FFFD(2): before=[�${level.name}��\n�ؿ] after=[룺${code}`;
+    navig]
+L2368:       setImportMsg('? �ؿ����Ѹ��Ƶ������壡');
+  FFFD(1): before=[    setImportMsg('? ] after=[ؿ����Ѹ��Ƶ������壡');
+]
+  FFFD(4): before=[  setImportMsg('? �ؿ] after=[Ѹ��Ƶ������壡');
+     ]
+  FFFD(2): before=[ImportMsg('? �ؿ����Ѹ] after=[Ƶ������壡');
+      se]
+  FFFD(6): before=[ortMsg('? �ؿ����Ѹ��Ƶ] after=[壡');
+      setTimeou]
+L2373:   // ����ؿ���
+  FFFD(4): before=[
+    });
+  };
+
+  // ] after=[ؿ���
+  const handleI]
+  FFFD(3): before=[});
+  };
+
+  // ����ؿ] after=[
+  const handleImpor]
+L2376:       setImportMsg('������ؿ���');
+  FFFD(6): before=[      setImportMsg('] after=[ؿ���');
+      return]
+  FFFD(3): before=[etImportMsg('������ؿ] after=[');
+      return;
+  ]
+L2381:       setImportMsg('? �ؿ�����ɹ���');
+  FFFD(1): before=[    setImportMsg('? ] after=[ؿ�����ɹ���');
+      ]
+  FFFD(5): before=[  setImportMsg('? �ؿ] after=[ɹ���');
+      setImp]
+  FFFD(3): before=[mportMsg('? �ؿ�����ɹ] after=[');
+      setImportC]
+L2385:       setImportMsg('? �ؿ����ʽ����');
+  FFFD(1): before=[    setImportMsg('? ] after=[ؿ����ʽ����');
+    }
+]
+  FFFD(4): before=[  setImportMsg('? �ؿ] after=[ʽ����');
+    }
+  };
+]
+  FFFD(4): before=[ImportMsg('? �ؿ����ʽ] after=[');
+    }
+  };
+
+  re]
+L2392:         <button className="btn-back" onClick={onBack}>�� ����</button>
+  FFFD(2): before=[k" onClick={onBack}>] after=[ ����</button>
+     ]
+  FFFD(4): before=[onClick={onBack}>�� ] after=[</button>
+        <h]
+L2393:         <h1 className="game-title">??? �ؿ��༭��</h1>
+  FFFD(1): before=[me="game-title">??? ] after=[ؿ��༭��</h1>
+        ]
+  FFFD(2): before=[="game-title">??? �ؿ] after=[༭��</h1>
+        <di]
+  FFFD(2): before=[ame-title">??? �ؿ��༭] after=[</h1>
+        <div s]
+L2402:               <button className="btn btn-primary" onClick={handleCreateMode}>? �����¹ؿ�</button>
+  FFFD(5): before=[handleCreateMode}>? ] after=[¹ؿ�</button>
+       ]
+  FFFD(1): before=[reateMode}>? �����¹ؿ] after=[</button>
+          ]
+L2403:               <button className="btn btn-secondary" onClick={() => { setMode('import'); setImportCode(''); setImportMsg(''); }}>?? ����ؿ���</button>
+  FFFD(4): before=[mportMsg(''); }}>?? ] after=[ؿ���</button>
+      ]
+  FFFD(3): before=[Msg(''); }}>?? ����ؿ] after=[</button>
+          ]
+L2409:                 <p>��û���Զ���ؿ�</p>
+  FFFD(2): before=[
+                <p>] after=[û���Զ���ؿ�</p>
+     ]
+  FFFD(3): before=[              <p>��û] after=[Զ���ؿ�</p>
+         ]
+  FFFD(3): before=[          <p>��û���Զ] after=[ؿ�</p>
+             ]
+  FFFD(1): before=[      <p>��û���Զ���ؿ] after=[</p>
+               ]
+L2410:                 <p className="empty-hint">������ĵ�һ���ؿ��ɣ�</p>
+  FFFD(6): before=[ssName="empty-hint">] after=[ĵ�һ���ؿ��ɣ�</p>
+    ]
+  FFFD(1): before=["empty-hint">������ĵ] after=[һ���ؿ��ɣ�</p>
+      ]
+  FFFD(3): before=[mpty-hint">������ĵ�һ] after=[ؿ��ɣ�</p>
+          ]
+  FFFD(2): before=[-hint">������ĵ�һ���ؿ] after=[ɣ�</p>
+             ]
+  FFFD(1): before=[nt">������ĵ�һ���ؿ��ɣ] after=[</p>
+              <]
+L2421:                       <span>?? {lv.tubes.length}��</span>
+  FFFD(2): before=[?? {lv.tubes.length}] after=[</span>
+            ]
+L2422:                       <span>?? {lv.tubeCapacity}����</span>
+  FFFD(4): before=[?? {lv.tubeCapacity}] after=[</span>
+            ]
+L2423:                       {lv.completed && <span>?? ���{lv.bestMoves}��</span>}
+  FFFD(3): before=[mpleted && <span>?? ] after=[{lv.bestMoves}��</sp]
+  FFFD(2): before=[?? ���{lv.bestMoves}] after=[</span>}
+           ]
+L2426:                       <button className="btn btn-primary btn-small" onClick={() => onPlay(lv)}>?? ����</button>
+  FFFD(4): before=[) => onPlay(lv)}>?? ] after=[</button>
+          ]
+L2427:                       <button className="btn btn-secondary btn-small" onClick={() => handleExport(lv)}>?? ������</button>
+  FFFD(6): before=[andleExport(lv)}>?? ] after=[</button>
+          ]
+L2428:                       <button className="btn btn-danger btn-small" onClick={() => { if (confirm(`ɾ���ؿ���${lv.name}����`)) onDelete(lv.id); }}>??? ɾ��</button>
+  FFFD(3): before=[ => { if (confirm(`ɾ] after=[ؿ���${lv.name}����`)]
+  FFFD(3): before=[{ if (confirm(`ɾ���ؿ] after=[${lv.name}����`)) on]
+  FFFD(4): before=[(`ɾ���ؿ���${lv.name}] after=[`)) onDelete(lv.id);]
+  FFFD(2): before=[ete(lv.id); }}>??? ɾ] after=[</button>
+          ]
+L2440:               <label className="editor-label">�ؿ�����</label>
+  FFFD(1): before=[Name="editor-label">] after=[ؿ�����</label>
+     ]
+  FFFD(5): before=[me="editor-label">�ؿ] after=[</label>
+           ]
+L2444:                 placeholder="����Ĺؿ��������"
+  FFFD(4): before=[       placeholder="] after=[Ĺؿ��������"
+        ]
+  FFFD(8): before=[ placeholder="����Ĺؿ] after=["
+                va]
+L2476:               <label className="editor-label">ѡ����ɫ</label>
+  FFFD(4): before=[ame="editor-label">ѡ] after=[ɫ</label>
+          ]
+L2484:                     aria-label={`ѡ����ɫ ${color}`}
+  FFFD(4): before=[      aria-label={`ѡ] after=[ɫ ${color}`}
+       ]
+L2491:               <label className="editor-label">�Թܣ����������ɫ�����ܵ���Ƴ����㣩</label>
+  FFFD(1): before=[Name="editor-label">] after=[Թܣ����������ɫ�����ܵ�]
+  FFFD(10): before=[e="editor-label">�Թܣ] after=[ɫ�����ܵ���Ƴ����㣩</la]
+  FFFD(5): before=[abel">�Թܣ����������ɫ] after=[ܵ���Ƴ����㣩</label>
+ ]
+  FFFD(3): before=[�Թܣ����������ɫ�����ܵ] after=[Ƴ����㣩</label>
+     ]
+  FFFD(4): before=[���������ɫ�����ܵ���Ƴ] after=[㣩</label>
+          ]
+L2499:                       title="�������/�Ƴ���ɫ�㣬�Ҽ����"
+  FFFD(7): before=[             title="] after=[/�Ƴ���ɫ�㣬�Ҽ����"
+   ]
+  FFFD(1): before=[     title="�������/] after=[Ƴ���ɫ�㣬�Ҽ����"
+     ]
+  FFFD(3): before=[   title="�������/�Ƴ] after=[ɫ�㣬�Ҽ����"
+         ]
+  FFFD(1): before=[itle="�������/�Ƴ���ɫ] after=[㣬�Ҽ����"
+           ]
+  FFFD(1): before=[le="�������/�Ƴ���ɫ�㣬] after=[Ҽ����"
+             ]
+  FFFD(4): before=[="�������/�Ƴ���ɫ�㣬�Ҽ] after=["
+                  ]
+L2526:                 <button className="add-tube-btn" onClick={handleAddTube}>+ �����Թ�</button>
+  FFFD(5): before=[k={handleAddTube}>+ ] after=[Թ�</button>
+        ]
+  FFFD(1): before=[dleAddTube}>+ �����Թ] after=[</button>
+          ]
+L2535:               <button className="btn btn-primary" onClick={handleSave}>?? ����ؿ�</button>
+  FFFD(4): before=[ick={handleSave}>?? ] after=[ؿ�</button>
+        ]
+  FFFD(1): before=[handleSave}>?? ����ؿ] after=[</button>
+          ]
+L2536:               <button className="btn btn-secondary" onClick={initEditor}>?? �������</button>
+  FFFD(7): before=[ick={initEditor}>?? ] after=[</button>
+          ]
+L2537:               <button className="btn btn-secondary" onClick={() => setMode('list')}>ȡ��</button>
+  FFFD(2): before=[> setMode('list')}>ȡ] after=[</button>
+          ]
+L2541:               <p>?? ������ʾ��</p>
+  FFFD(6): before=[              <p>?? ] after=[ʾ��</p>
+            ]
+  FFFD(2): before=[       <p>?? ������ʾ] after=[</p>
+              <]
+L2542:               <p>1. ѡ����ɫ�����Թ����Ӹ���ɫ��</p>
+  FFFD(4): before=[             <p>1. ѡ] after=[ɫ�����Թ����Ӹ���ɫ��</]
+  FFFD(5): before=[        <p>1. ѡ����ɫ] after=[Թ����Ӹ���ɫ��</p>
+   ]
+  FFFD(4): before=[  <p>1. ѡ����ɫ�����Թ] after=[Ӹ���ɫ��</p>
+        ]
+  FFFD(3): before=[1. ѡ����ɫ�����Թ����Ӹ] after=[ɫ��</p>
+            ]
+  FFFD(2): before=[����ɫ�����Թ����Ӹ���ɫ] after=[</p>
+              <]
+L2543:               <p>2. �Թ��������Ƴ������ɫ</p>
+  FFFD(1): before=[              <p>2. ] after=[Թ��������Ƴ������ɫ</]
+  FFFD(8): before=[            <p>2. �Թ] after=[Ƴ������ɫ</p>
+      ]
+  FFFD(2): before=[   <p>2. �Թ��������Ƴ] after=[����ɫ</p>
+         ]
+  FFFD(4): before=[<p>2. �Թ��������Ƴ��] after=[ɫ</p>
+              ]
+L2544:               <p>3. �Ҽ��Թܿ����������ɫ</p>
+  FFFD(1): before=[              <p>3. ] after=[Ҽ��Թܿ����������ɫ</p>]
+  FFFD(2): before=[            <p>3. �Ҽ] after=[Թܿ����������ɫ</p>
+  ]
+  FFFD(10): before=[        <p>3. �Ҽ��Թܿ] after=[ɫ</p>
+              ]
+L2545:               <p>4. ������Ҫ1�����Թ�</p>
+  FFFD(6): before=[              <p>4. ] after=[Ҫ1�����Թ�</p>
+      ]
+  FFFD(5): before=[      <p>4. ������Ҫ1] after=[Թ�</p>
+             ]
+  FFFD(1): before=[<p>4. ������Ҫ1�����Թ] after=[</p>
+              <]
+L2546:               <p>5. ÿ����ɫ�Ĳ�����������Թ�����</p>
+  FFFD(4): before=[             <p>5. ÿ] after=[ɫ�Ĳ�����������Թ�����]
+  FFFD(1): before=[        <p>5. ÿ����ɫ] after=[Ĳ�����������Թ�����</]
+  FFFD(11): before=[      <p>5. ÿ����ɫ�Ĳ] after=[Թ�����</p>
+         ]
+  FFFD(5): before=[ÿ����ɫ�Ĳ�����������Թ] after=[</p>
+            </d]
+L2554:               <label className="editor-label">����ؿ�������</label>
+  FFFD(4): before=[Name="editor-label">] after=[ؿ�������</label>
+   ]
+  FFFD(7): before=["editor-label">����ؿ] after=[</label>
+           ]
+L2557:                 placeholder="ճ�����ѷ����Ĺؿ���..."
+  FFFD(5): before=[      placeholder="ճ] after=[ѷ����Ĺؿ���..."
+     ]
+  FFFD(4): before=[placeholder="ճ�����ѷ] after=[Ĺؿ���..."
+          ]
+  FFFD(3): before=[older="ճ�����ѷ����Ĺؿ] after=[..."
+               ]
+L2564:               <button className="btn btn-primary" onClick={handleImport}>?? ����ؿ�</button>
+  FFFD(4): before=[k={handleImport}>?? ] after=[ؿ�</button>
+        ]
+  FFFD(1): before=[ndleImport}>?? ����ؿ] after=[</button>
+          ]
+L2565:               <button className="btn btn-secondary" onClick={() => setMode('list')}>ȡ��</button>
+  FFFD(2): before=[> setMode('list')}>ȡ] after=[</button>
+          ]
+L2574: // �Զ���ؿ��������
+  FFFD(1): before=[  </div>
+  );
+}
+
+// ] after=[Զ���ؿ��������
+functi]
+  FFFD(3): before=[</div>
+  );
+}
+
+// �Զ] after=[ؿ��������
+function C]
+  FFFD(8): before=[v>
+  );
+}
+
+// �Զ���ؿ] after=[
+function CustomLeve]
+L2666:   // ��� URL hash �Ƿ��������Ĺؿ���
+  FFFD(3): before=[reset();
+  };
+
+  // ] after=[ URL hash �Ƿ��������]
+  FFFD(1): before=[
+
+  // ��� URL hash ] after=[Ƿ��������Ĺؿ���
+  use]
+  FFFD(8): before=[  // ��� URL hash �Ƿ] after=[Ĺؿ���
+  useEffect(()]
+  FFFD(3): before=[RL hash �Ƿ��������Ĺؿ] after=[
+  useEffect(() => {]
+L2671:       // ���Ե���
+  FFFD(3): before=[string(7);
+      // ] after=[Ե���
+      const imp]
+  FFFD(3): before=[ng(7);
+      // ���Ե] after=[
+      const importe]
+L2683:     <div className="game-board" role="region" aria-label="�Զ���ؿ���Ϸ����">
+  FFFD(1): before=[region" aria-label="] after=[Զ���ؿ���Ϸ����">
+    ]
+  FFFD(3): before=[gion" aria-label="�Զ] after=[ؿ���Ϸ����">
+      <P]
+  FFFD(3): before=[" aria-label="�Զ���ؿ] after=[Ϸ����">
+      <Parti]
+  FFFD(4): before=[ia-label="�Զ���ؿ���Ϸ] after=[">
+      <ParticleEf]
+L2688:         <span className="moves-badge">����: {moves}</span>
+  FFFD(4): before=[sName="moves-badge">] after=[: {moves}</span>
+   ]
+L2691:       <div className="tubes-grid" role="group" aria-label="�Թ��б�">
+  FFFD(1): before=["group" aria-label="] after=[Թ��б�">
+        {tub]
+  FFFD(2): before=[roup" aria-label="�Թ] after=[б�">
+        {tubes.]
+  FFFD(1): before=[p" aria-label="�Թ��б] after=[">
+        {tubes.ma]
+L2726:             <h2>�ؿ���ɣ�</h2>
+  FFFD(1): before=[iv>
+            <h2>] after=[ؿ���ɣ�</h2>
+        ]
+  FFFD(3): before=[>
+            <h2>�ؿ] after=[ɣ�</h2>
+            ]
+  FFFD(1): before=[          <h2>�ؿ���ɣ] after=[</h2>
+            <p]
+L2727:             <p>��ʱ {moves} �����</p>
+  FFFD(2): before=[/h2>
+            <p>] after=[ʱ {moves} �����</p>
+]
+  FFFD(5): before=[     <p>��ʱ {moves} ] after=[</p>
+            {le]
+L2729:               <p className="new-record-badge">?? {moves < level.bestMoves ? '�¼�¼��' : 'ƽ��ѣ�'}</p>
+  FFFD(1): before=[ level.bestMoves ? '] after=[¼�¼��' : 'ƽ��ѣ�'}</p]
+  FFFD(1): before=[evel.bestMoves ? '�¼] after=[¼��' : 'ƽ��ѣ�'}</p>
+]
+  FFFD(2): before=[el.bestMoves ? '�¼�¼] after=[' : 'ƽ��ѣ�'}</p>
+   ]
+  FFFD(2): before=[oves ? '�¼�¼��' : 'ƽ] after=[ѣ�'}</p>
+           ]
+  FFFD(1): before=[s ? '�¼�¼��' : 'ƽ��ѣ] after=['}</p>
+            )]
+L2732:               <button className="btn btn-primary" onClick={handleReset}>?? ����һ��</button>
+  FFFD(4): before=[ck={handleReset}>?? ] after=[һ��</button>
+       ]
+  FFFD(2): before=[andleReset}>?? ����һ] after=[</button>
+          ]
+L2733:               <button className="btn btn-primary" onClick={() => onShare(exportLevelCode(level))}>?? �����ؿ�</button>
+  FFFD(5): before=[velCode(level))}>?? ] after=[ؿ�</button>
+        ]
+  FFFD(1): before=[e(level))}>?? �����ؿ] after=[</button>
+          ]
+L2734:               <button className="btn btn-secondary" onClick={onGoHome}>?? ����</button>
+  FFFD(4): before=[Click={onGoHome}>?? ] after=[</button>
+          ]
+L2744:             <h2>û�п��в�����</h2>
+  FFFD(1): before=[v>
+            <h2>û] after=[п��в�����</h2>
+     ]
+  FFFD(2): before=[
+            <h2>û�п] after=[в�����</h2>
+        ]
+  FFFD(5): before=[          <h2>û�п��в] after=[</h2>
+            <d]
+L2746:               <button className="btn btn-primary" onClick={handleUndo} disabled={history.length === 0}>?? ����</button>
+  FFFD(4): before=[ry.length === 0}>?? ] after=[</button>
+          ]
+L2747:               <button className="btn btn-secondary" onClick={handleReset}>?? ����</button>
+  FFFD(4): before=[ck={handleReset}>?? ] after=[</button>
+          ]
+L2754:         <button className="btn btn-undo" onClick={handleUndo} disabled={history.length === 0 || isWon}>?? ����</button>
+  FFFD(4): before=[ === 0 || isWon}>?? ] after=[</button>
+        <b]
+L2755:         <button className="btn btn-reset" onClick={handleReset}>?? ����</button>
+  FFFD(4): before=[ck={handleReset}>?? ] after=[</button>
+        <b]
+L2756:         <button className="btn btn-secondary" onClick={() => onShare(exportLevelCode(level))}>?? ����</button>
+  FFFD(4): before=[velCode(level))}>?? ] after=[</button>
+      </di]

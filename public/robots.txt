@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# 禁止爬取开发资源
+Disallow: /src/
+Disallow: /node_modules/
+Disallow: /docs/
+
+Sitemap: https://colorsort.app/sitemap.xml

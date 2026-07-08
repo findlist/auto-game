@@ -1,0 +1,69 @@
+# 依赖
+node_modules/
+
+# 构建产物
+dist/
+build/
+.output/
+
+# TypeScript 构建缓存
+*.tsbuildinfo
+
+# 环境变量
+.env
+.env.local
+.env.*.local
+
+# 日志
+*.log
+npm-debug.log*
+npm-err.log
+npm-install.log
+npm-out.log
+
+# 编辑器与系统
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# IDE/工具目录
+.trae/
+.workbuddy/
+
+# 临时文件
+*.tmp
+*.bak
+*.patch
+patch.txt
+.cache/
+
+# 调试/修复脚本与输出（根目录临时文件）
+debug*.cjs
+debug*.txt
+debug_chars.txt
+fix*.cjs
+apply_repair.cjs
+build_repair_data.cjs
+repair_app.cjs
+repair_data.json
+all_corrupted*.txt
+all_fffd_lines.json
+fffd_lines.json
+dist_chinese_*.txt
+dist_chinese_*.json
+dist_segments*.json
+dist_segments*.txt
+tsc-output.txt
+app_tsx_encoding_repair*.md
+
+# App.tsx 备份/中间版本
+App.tsx.bak
+App.tsx.compilable
+App.tsx.fixed
+App.tsx.fixed2
+App.tsx.global
+App.tsx.v4
+App.tsx.v5

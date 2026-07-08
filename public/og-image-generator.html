@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>OG 图片生成器</title>
+<style>
+body { font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif; background: #1a1a2e; color: #fff; display: flex; flex-direction: column; align-items: center; padding: 40px; }
+canvas { border: 2px solid #444; border-radius: 12px; margin: 20px 0; }
+button { padding: 12px 32px; font-size: 16px; border: none; border-radius: 8px; background: linear-gradient(135deg, #667eea, #764ba2); color: #fff; cursor: pointer; }
+button:hover { transform: scale(1.05); }
+</style>
+</head>
+<body>
+<h1>🎨 OG 图片 PNG 生成器</h1>
+<p>点击下方按钮下载 PNG 格式的 OG 图片，放入 public/ 目录替换 SVG 版本</p>
+<canvas id="canvas" width="1200" height="630"></canvas>
+<button onclick="downloadPNG()">📥 下载 og-image.png</button>
+<script>
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const W = 1200, H = 630;
+
+// 背景渐变
+const bgGrad = ctx.createLinearGradient(0, 0, W, H);
+bgGrad.addColorStop(0, '#667eea');
+bgGrad.addColorStop(1, '#764ba2');
+ctx.fillStyle = bgGrad;
+ctx.fillRect(0, 0, W, H);
+
+// 装饰圆点
+ctx.globalAlpha = 0.08;
+const dotColors = ['#FF6B6B', '#4ECDC4', '#FFE66D', '#95E1A3', '#C589E8'];
+for (let i = 0; i < 40; i++) {
+  const x = Math.random() * W;
+  const y = Math.random() * H;
+  const r = 15 + Math.random() * 50;
+  ctx.fillStyle = dotColors[i % dotColors.length];
+  ctx.beginPath();
+  ctx.arc(x, y, r, 0, Math.PI * 2);
+  ctx.fill();
+}
+ctx.globalAlpha = 1;
+
+// 标题
+ctx.fillStyle = '#fff';
+ctx.font = 'bold 72px -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif';
+ctx.textAlign = 'center';
+ctx.fillText('🎨 色彩排序', W / 2, 200);
+
+// 副标题
+ctx.font = '32px -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif';
+ctx.globalAlpha = 0.9;
+ctx.fillText('经典液体排序解谜游戏', W / 2, 260);
+ctx.globalAlpha = 1;
+
+// 试管图标装饰
+const tubeColors = ['#FF6B6B', '#4ECDC4', '#FFE66D', '#95E1A3', '#C589E8'];
+const tubeStartX = (W - tubeColors.length * 80) / 2;
+tubeColors.forEach((color, i) => {
+  const x = tubeStartX + i * 80;
+  const y = 320;
+  const w = 50, h = 100;
+  // 试管外框
+  ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.lineTo(x, y + h);
+  ctx.quadraticCurveTo(x, y + h + 12, x + w / 2, y + h + 12);
+  ctx.quadraticCurveTo(x + w, y + h + 12, x + w, y + h);
+  ctx.lineTo(x + w, y);
+  ctx.stroke();
+  // 液体
+  ctx.fillStyle = color;
+  ctx.globalAlpha = 0.85;
+  const liquidH = h * 0.75;
+  ctx.fillRect(x + 3, y + h - liquidH, w - 6, liquidH - 3);
+  ctx.beginPath();
+  ctx.arc(x + w / 2, y + h, w / 2 - 3, 0, Math.PI);
+  ctx.fill();
+  ctx.globalAlpha = 1;
+});
+
+// 底部特色标签
+ctx.fillStyle = '#fff';
+ctx.font = '24px -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif';
+ctx.globalAlpha = 0.7;
+ctx.fillText('100关卡 · 每日挑战 · 无尽模式 · 限时挑战', W / 2, 500);
+ctx.globalAlpha = 1;
+
+// 底部引导
+ctx.font = '20px -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif';
+ctx.globalAlpha = 0.5;
+ctx.fillText('即开即玩 · 无需下载 · 离线可玩', W / 2, 560);
+ctx.globalAlpha = 1;
+
+function downloadPNG() {
+  const link = document.createElement('a');
+  link.download = 'og-image.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+</script>
+</body>
+</html>
