@@ -8,14 +8,25 @@ interface TubeViewProps {
   isSelected: boolean;
   isHinted: boolean;
   isPouring?: boolean;
+  isSettled?: boolean;
   onClick: (index: number) => void;
   onLongPress?: () => void;
 }
 
-export const TubeView: React.FC<TubeViewProps> = React.memo(({ tube, index, isSelected, isHinted, isPouring, onClick, onLongPress }) => {
+export const TubeView: React.FC<TubeViewProps> = React.memo(({ tube, index, isSelected, isHinted, isPouring, isSettled, onClick, onLongPress }) => {
   const longPressTimer = React.useRef<number | null>(null);
   const longPressTriggered = React.useRef(false);
   const touchStartPos = React.useRef<{ x: number; y: number } | null>(null);
+
+  // 组件卸载时清理长按定时器，避免卸载后仍触发 onLongPress
+  React.useEffect(() => {
+    return () => {
+      if (longPressTimer.current) {
+        clearTimeout(longPressTimer.current);
+        longPressTimer.current = null;
+      }
+    };
+  }, []);
 
   // 触摸开始
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -56,6 +67,9 @@ export const TubeView: React.FC<TubeViewProps> = React.memo(({ tube, index, isSe
     if (longPressTriggered.current) {
       e.preventDefault();
       e.stopPropagation();
+      // 修复：延迟重置标志，避免同一触摸序列后续的鼠标点击被误拦截
+      // （触摸结束后 click 事件紧随其后，需让本次 touchend 后的 click 被拦截）
+      setTimeout(() => { longPressTriggered.current = false; }, 0);
     }
   };
 
@@ -65,6 +79,7 @@ export const TubeView: React.FC<TubeViewProps> = React.memo(({ tube, index, isSe
       clearTimeout(longPressTimer.current);
       longPressTimer.current = null;
     }
+    longPressTriggered.current = false;
   };
   const { layers, capacity } = tube;
 
@@ -84,7 +99,7 @@ export const TubeView: React.FC<TubeViewProps> = React.memo(({ tube, index, isSe
 
   return (
     <div
-      className={`tube-container ${isSelected ? 'selected' : ''} ${isHinted ? 'hinted' : ''} ${isPouring ? 'pouring' : ''}`}
+      className={`tube-container ${isSelected ? 'selected' : ''} ${isHinted ? 'hinted' : ''} ${isPouring ? 'pouring' : ''} ${isSettled ? 'tube-settled' : ''}`}
       onClick={() => {
         if (!longPressTriggered.current) {
           onClick(index);
@@ -132,6 +147,7 @@ export const TubeView: React.FC<TubeViewProps> = React.memo(({ tube, index, isSe
     prevProps.isSelected === nextProps.isSelected &&
     prevProps.isHinted === nextProps.isHinted &&
     prevProps.isPouring === nextProps.isPouring &&
+    prevProps.isSettled === nextProps.isSettled &&
     prevProps.index === nextProps.index &&
     prevProps.onLongPress === nextProps.onLongPress
   );

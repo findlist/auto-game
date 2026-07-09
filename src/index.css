@@ -2426,6 +2426,57 @@ body {
   line-height: 1;
 }
 
+/* 每日策略小贴士卡片 */
+.daily-tip-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  background: linear-gradient(135deg, rgba(78, 205, 196, 0.08), rgba(196, 89, 232, 0.08));
+  border: 1px solid rgba(78, 205, 196, 0.15);
+  border-radius: 12px;
+  margin-bottom: 12px;
+  transition: all 0.3s ease;
+}
+
+.daily-tip-card:hover {
+  background: linear-gradient(135deg, rgba(78, 205, 196, 0.12), rgba(196, 89, 232, 0.12));
+  border-color: rgba(78, 205, 196, 0.3);
+}
+
+.daily-tip-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+  line-height: 1.2;
+}
+
+.daily-tip-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.daily-tip-label {
+  font-size: 11px;
+  color: #4ECDC4;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.daily-tip-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.daily-tip-text {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.5;
+}
+
 /* 智能推荐关卡卡片 */
 .recommend-card {
   display: flex;
@@ -2744,6 +2795,143 @@ body {
 }
 
 /* ������ť����Ϸ������������Ӧ */
+/* 设置页小贴士列表 */
+.tips-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.tip-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  background: rgba(102, 126, 234, 0.04);
+  border: 1px solid rgba(102, 126, 234, 0.1);
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.tip-item:hover {
+  background: rgba(102, 126, 234, 0.08);
+  border-color: rgba(102, 126, 234, 0.2);
+}
+
+.tip-item-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+  line-height: 1.2;
+}
+
+.tip-item-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.tip-item-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+}
+
+.tip-item-text {
+  font-size: 12px;
+  color: #666;
+  line-height: 1.5;
+}
+
+/* 浮动快捷导航按钮 */
+.fab-nav {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 100;
+}
+
+.fab-nav-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(102, 126, 234, 0.9);
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 12px rgba(102, 126, 234, 0.4);
+  transition: all 0.2s ease;
+  backdrop-filter: blur(4px);
+}
+
+.fab-nav-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.5);
+}
+
+.fab-nav-btn:active {
+  transform: scale(0.95);
+}
+
+@media (max-width: 768px) {
+  .fab-nav {
+    bottom: 16px;
+    right: 16px;
+  }
+  .fab-nav-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+}
+
+/* 关卡完成波纹动画 */
+@keyframes tube-settle {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.08); box-shadow: 0 0 16px rgba(78, 205, 196, 0.6); }
+  100% { transform: scale(1); }
+}
+
+.tube-settled {
+  animation: tube-settle 0.4s ease-out;
+}
+
+@keyframes ripple-effect {
+  0% { transform: scale(0); opacity: 0.6; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+
+.win-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(78, 205, 196, 0.3);
+  pointer-events: none;
+  animation: ripple-effect 0.8s ease-out forwards;
+}
+
+/* 步数脉冲增强 */
+@keyframes moves-pulse-enhanced {
+  0% { transform: scale(1); color: #333; }
+  30% { transform: scale(1.15); color: #4ECDC4; }
+  100% { transform: scale(1); color: #333; }
+}
+
+.moves-pulse-active {
+  animation: moves-pulse-enhanced 0.3s ease-out;
+}
+
 @media (max-width: 375px) {
   .btn-help {
     padding: 6px 10px;
@@ -2755,5 +2943,14 @@ body {
   }
   .help-section li {
     font-size: 12px;
+  }
+  .tips-list {
+    max-height: 300px;
+  }
+  .tip-item {
+    padding: 8px 10px;
+  }
+  .tip-item-icon {
+    font-size: 18px;
   }
 }

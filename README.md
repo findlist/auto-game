@@ -285,6 +285,37 @@ auto-game/
 
 ---
 
+## 🕐 质量保障定时任务
+
+本项目除自驱迭代任务外，还配置了两个每日质量保障定时任务，**每天 00:00（北京时间）** 执行，与自动开发并行运行，形成「开发—检查—优化」闭环。
+
+### 1. Bug 检查任务
+
+- **任务名称**：`auto-game Bug 检查`
+- **执行时间**：每天 00:00（Asia/Shanghai）
+- **检查范围**：
+  - 项目根目录：运行 `npm run build`（即 `tsc -b && vite build`）检查类型与构建是否通过（本项目无 lint / test 脚本，重点通过类型检查和构建发现问题）
+  - 手动审查 `src/game/` 游戏逻辑代码（levelGenerator / solver / adaptiveDifficulty / dailyChallenge / statsTracker / soundEngine 等）
+  - 审查 `src/components/` 组件代码（GameBoard / TubeView / ParticleEffect）与 `src/pages/` 页面代码
+  - 分析最近一次提交变更（`git diff HEAD~1`），重点关注游戏逻辑错误、状态管理问题、类型错误、内存泄漏（事件监听器 / 定时器未清理）、移动端兼容性、PWA 相关问题
+- **输出位置**：`docs/bug-check/bug-check-YYYYMMDD.md`
+- **原则**：只读不写，仅生成检查报告，不修改任何代码
+
+### 2. 前端样式优化任务
+
+- **任务名称**：`auto-game 前端样式优化`
+- **执行时间**：每天 00:00（Asia/Shanghai）
+- **优化范围**：
+  - 审查 `src/App.tsx`、`src/components/`（GameBoard / TubeView / ParticleEffect）、`src/pages/` 各页面、`src/index.css` 全局样式
+  - 使用 `frontend-design` 技能审查页面设计质量
+  - 改善游戏界面视觉表现力（色彩 / 动画 / 过渡效果），优化试管与球体视觉效果，改善移动端响应式布局（游戏移动端体验至关重要）
+- **验证**：修改后运行 `npm run build` 确保构建通过，不破坏现有功能
+- **输出位置**：`docs/style-optimization/style-opt-YYYYMMDD.md`
+
+> 两个任务均设置了「当天已有同名报告则跳过」的防重复规则，避免覆盖既有成果。
+
+---
+
 ## 许可证
 
 本项目基于 [Apache License 2.0](./LICENSE) 协议开源。

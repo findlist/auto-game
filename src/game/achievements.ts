@@ -215,6 +215,13 @@ interface AchievementState {
   lastDailyDate: string | null; // 上次完成每日挑战的日期
 }
 
+// 本地日期字符串（与 dailyChallenge.ts 的 getTodayString 保持一致）
+// 修复：原代码用 toISOString().slice(0,10) 取 UTC 日期，
+// 与每日挑战的本地日期判断不一致，导致连胜计数在跨日时失效
+function getLocalDateString(d: Date): string {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
 function loadState(): AchievementState {
   try {
     const data = localStorage.getItem(ACHIEVEMENT_KEY);
@@ -308,18 +315,19 @@ export const AchievementManager = {
   checkDailyAchievements(): Achievement[] {
     const newlyUnlocked: Achievement[] = [];
     const state = loadState();
-    const today = new Date().toISOString().slice(0, 10);
-    
+    // 使用本地日期，与 dailyChallenge.hasCompletedDailyToday 保持一致
+    const today = getLocalDateString(new Date());
+
     // 首次每日挑战
     if (!('daily_first' in state.unlocked)) {
       newlyUnlocked.push(...this.unlock('daily_first'));
     }
-    
+
     // 连续天数计算
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
-    const yesterdayStr = yesterday.toISOString().slice(0, 10);
-    
+    const yesterdayStr = getLocalDateString(yesterday);
+
     const newState = loadState();
     if (state.lastDailyDate === yesterdayStr) {
       newState.dailyStreak = (state.dailyStreak || 0) + 1;

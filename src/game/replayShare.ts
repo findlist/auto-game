@@ -1,7 +1,7 @@
 // 回放分享系统
 // 将操作序列编码为紧凑字符串，生成可分享的回放链接
-// 格式: level|moves|encodedActions
-// 编码: from-to 对用 Base36 压缩，每步用单个字符对表示
+// 格式: L{level}M{steps}S{stars}D{data}
+// 编码: 每步固定 2 字符，from 和 to 各 1 个 Base36 字符（支持 0-35 号试管）
 
 export interface ReplayData {
   level: number;
@@ -12,18 +12,18 @@ export interface ReplayData {
 
 /**
  * 将操作序列编码为紧凑字符串
- * 格式: L{level}M{moves}S{stars}D{data}
- * data部分: 每步 from-to 用 Base36 编码，from*36+to
+ * 每步用 2 个 Base36 字符：第 1 个是 from，第 2 个是 to
+ * 修复：原代码 from*36+to 编码会在 from>=1 时产生 2 字符，与逐字符解码不匹配
  */
 export function encodeReplay(data: ReplayData): string {
   const { level, moves, starRating, stepsUsed } = data;
-  // 编码操作序列：from*36+to -> Base36 字符
-  const encodedMoves = moves.map(m => (m.from * 36 + m.to).toString(36)).join('');
+  const encodedMoves = moves.map(m => m.from.toString(36) + m.to.toString(36)).join('');
   return `L${level}M${stepsUsed}S${starRating}D${encodedMoves}`;
 }
 
 /**
  * 解码回放字符串
+ * 每步读取 2 个字符：第 1 个是 from，第 2 个是 to
  */
 export function decodeReplay(encoded: string): ReplayData | null {
   try {
@@ -34,9 +34,12 @@ export function decodeReplay(encoded: string): ReplayData | null {
     const starRating = parseInt(levelMatch[3], 10);
     const dataStr = levelMatch[4];
     const moves: Array<{ from: number; to: number }> = [];
-    for (let i = 0; i < dataStr.length; i++) {
-      const val = parseInt(dataStr[i], 36);
-      moves.push({ from: Math.floor(val / 36), to: val % 36 });
+    // 每步 2 字符，防止奇数长度截断
+    for (let i = 0; i + 1 < dataStr.length; i += 2) {
+      const from = parseInt(dataStr[i], 36);
+      const to = parseInt(dataStr[i + 1], 36);
+      if (isNaN(from) || isNaN(to)) return null;
+      moves.push({ from, to });
     }
     return { level, moves, starRating, stepsUsed };
   } catch (e) {

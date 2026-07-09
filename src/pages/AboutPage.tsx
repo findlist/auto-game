@@ -61,6 +61,8 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onBack }) => {
             <li>步数分布图、通关时间趋势图</li>
             <li>星级分布图、通关进度热力图</li>
             <li>智能关卡推荐，根据表现推荐合适难度</li>
+            <li>自适应难度调整，根据玩家表现动态微调关卡参数</li>
+            <li>每日策略小贴士，30天轮播分享游戏技巧</li>
           </ul>
         </div>
         <div className="feature-section">

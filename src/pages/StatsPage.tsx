@@ -93,7 +93,7 @@ export const StatsPage: React.FC<StatsPageProps> = ({ onBack, timedHighScore }) 
           <h3>🎉 连胜记录</h3>
           <div className="stats-row"><span>当前连胜</span><span>🔥 {stats.currentStreak} 连胜</span></div>
           <div className="stats-row"><span>最佳连胜</span><span>🏆 {stats.bestStreak} 连胜</span></div>
-          <div className="stats-row" style={{ fontSize: '12px', color: '#999' }}><span>说明</span><span>不使用提示和撒销通关才累计连胜</span></div>
+          <div className="stats-row" style={{ fontSize: '12px', color: '#999' }}><span>说明</span><span>不使用提示和撤销通关才累计连胜</span></div>
         </div>
 
         {/* 签到记录 */}

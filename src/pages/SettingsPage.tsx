@@ -6,6 +6,7 @@ import { DailyCheckin } from '../game/dailyCheckin';
 import { StatsTracker } from '../game/statsTracker';
 import { resetHintItems } from '../game/hintItems';
 import { getTodayString } from '../game/dailyChallenge';
+import { getAllDailyTips } from '../game/announcements';
 
 interface SettingsPageProps {
   onBack: () => void;
@@ -254,6 +255,27 @@ export function SettingsPage({ onBack }: SettingsPageProps) {
                 onChange={handleImportData}
               />
             </label>
+          </div>
+        </div>
+
+        <div className="settings-card">
+          <div className="setting-item-static">
+            <div className="setting-icon">💡</div>
+            <div>
+              <div className="setting-name">策略小贴士</div>
+              <div className="setting-desc">30 条游戏技巧，每天轮播一条</div>
+            </div>
+          </div>
+          <div className="tips-list">
+            {getAllDailyTips().map((tip, idx) => (
+              <div key={idx} className="tip-item">
+                <span className="tip-item-icon">{tip.icon}</span>
+                <div className="tip-item-content">
+                  <div className="tip-item-title">{tip.title}</div>
+                  <div className="tip-item-text">{tip.content}</div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 

@@ -103,3 +103,55 @@ export function getDifficultyHint(level: number): string {
   if (level <= 90) return '高难度关卡，需要策略';
   return '大师关卡，极限挑战';
 }
+
+/**
+ * 根据玩家近期表现微调关卡难度参数
+ * - 表现优秀（高星+快速通关）：减少空试管（增加难度）
+ * - 表现挣扎（低星+慢速通关+频繁撤销）：增加空试管（降低难度）
+ * - 表现正常：保持默认配置
+ */
+export function getAdaptiveDifficultyModifier(level: number): {
+  extraEmptyTubes: number;
+  reason: string;
+} {
+  const stats = StatsTracker.get();
+  const recentRecords = stats.recentRecords.slice(-5); // 最近5条记录
+
+  // 新手玩家（通关次数 < 5），不做调整
+  if (stats.totalWins < 5) {
+    return { extraEmptyTubes: 0, reason: '新手保护' };
+  }
+
+  // 低关卡（1-6关）不做调整，保持入门体验
+  if (level <= 6) {
+    return { extraEmptyTubes: 0, reason: '入门关卡' };
+  }
+
+  // 分析近期表现
+  if (recentRecords.length < 3) {
+    return { extraEmptyTubes: 0, reason: '数据不足' };
+  }
+
+  // 计算平均星级和平均用时
+  const recentStars = recentRecords.map(r => r.stars || 1);
+  const avgStars = recentStars.reduce((a, b) => a + b, 0) / recentStars.length;
+  const avgTime = recentRecords.reduce((sum, r) => sum + r.playTimeSec, 0) / recentRecords.length;
+  // 使用全局撤销率作为近似
+  const undoRate = stats.totalWins > 0 ? stats.undosUsed / stats.totalWins : 0;
+
+  // 表现挣扎：低星 + 长时间 + 高撤销率
+  if (avgStars < 1.5 && avgTime > 90 && undoRate > 0.8) {
+    return { extraEmptyTubes: 1, reason: '增加缓冲空间，降低难度' };
+  }
+
+  // 表现优秀：高星 + 快速通关 + 低撤销率
+  if (avgStars >= 2.5 && avgTime < 45 && undoRate < 0.3) {
+    // 高难度关卡减少空试管（但不少于0），增加挑战感
+    if (level >= 20) {
+      return { extraEmptyTubes: -1, reason: '减少缓冲，增加挑战' };
+    }
+  }
+
+  // 表现正常
+  return { extraEmptyTubes: 0, reason: '难度适中' };
+}

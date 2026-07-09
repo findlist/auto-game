@@ -8,6 +8,7 @@ import { ParticleEffect } from './ParticleEffect';
 import { GameSettings } from '../game/settings';
 import { generateShareImage, dataURLToBlob } from '../game/shareImage';
 import { StatsTracker } from '../game/statsTracker';
+import { getAdaptiveDifficultyModifier } from '../game/adaptiveDifficulty';
 
 interface GameBoardProps {
   level: number;
@@ -44,6 +45,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
   const [history, setHistory] = useState<Tube[][]>([]);
   const [hadDeadlock, setHadDeadlock] = useState(false);
   const [showParticles, setShowParticles] = useState(false);
+  const [settledTubes, setSettledTubes] = useState<Set<number>>(new Set());
   const [timeLeft, setTimeLeft] = useState(timedDuration);
   const [isTimeUp, setIsTimeUp] = useState(false);
   const [starRating, setStarRating] = useState(0); // 星级评价：0-3星
@@ -61,6 +63,8 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
   const [replayStep, setReplayStep] = useState(0);
   const [replayTubes, setReplayTubes] = useState<Tube[]>([]);
   const replayTimerRef = useRef<number | null>(null);
+  // 回放当前步数 ref：用于自动播放循环驱动，避免依赖 setState updater 的同步性
+  const replayStepRef = useRef(0);
   // 连击系统
   const comboCountRef = useRef(0);
   const lastPourTimeRef = useRef(0);
@@ -70,45 +74,6 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
 
   // 同步当前 tubes 到父组件的 ref（用于提示功能）
   tubesRef.current = tubes;
-
-  // 键盘快捷键
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (isWon || isTimeUp) return;
-      // 数字键 1-9 选择试管
-      const num = parseInt(e.key, 10);
-      if (!isNaN(num) && num >= 1 && num <= tubes.length) {
-        e.preventDefault();
-        handleTubeClick(num - 1);
-        return;
-      }
-      switch (e.key.toLowerCase()) {
-        case 'z':
-          e.preventDefault();
-          handleUndo();
-          break;
-        case 'r':
-          e.preventDefault();
-          handleReset();
-          break;
-        case 'h':
-          e.preventDefault();
-          if (onHint) onHint();
-          break;
-      }
-      // Page Up/Down 上一关/下一关（仅在已通关时生效）
-      if (e.key === 'PageUp' || e.key === 'PageDown') {
-        e.preventDefault();
-        if (e.key === 'PageDown' && onNextLevel && isWon) {
-          onNextLevel();
-        } else if (e.key === 'PageUp' && onPrevLevel && isWon) {
-          onPrevLevel();
-        }
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [tubes, isWon, isTimeUp, selectedTube, history, onHint]);
 
   // 限时模式倒计时
   useEffect(() => {
@@ -130,6 +95,38 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
   // 关卡变化时重置
   useEffect(() => {
     const newLevel = level === -1 ? generateDailyChallenge() : level === -2 ? generateEndlessLevel(endlessScore) : level === -3 ? generateTimedLevel(timedScore) : generateLevel(level);
+    
+    // 自适应难度修正：仅对普通关卡（level > 0）生效
+    if (level > 0) {
+      const modifier = getAdaptiveDifficultyModifier(level);
+      if (modifier.extraEmptyTubes !== 0) {
+        const adjustedTubes = [...newLevel.tubes];
+        if (modifier.extraEmptyTubes > 0) {
+          // 增加空试管（降低难度）
+          for (let i = 0; i < modifier.extraEmptyTubes; i++) {
+            adjustedTubes.push({ id: adjustedTubes.length, layers: [], capacity: newLevel.tubeCapacity });
+          }
+        } else if (modifier.extraEmptyTubes < 0) {
+          // 减少空试管（增加难度），但至少保留1个空试管
+          const emptyIndices = adjustedTubes
+            .map((t, i) => ({ idx: i, empty: t.layers.length === 0 }))
+            .filter(x => x.empty);
+          const removeCount = Math.min(-modifier.extraEmptyTubes, emptyIndices.length - 1);
+          for (let i = 0; i < removeCount; i++) {
+            const lastEmpty = adjustedTubes
+              .map((t, idx) => ({ idx, empty: t.layers.length === 0 }))
+              .filter(x => x.empty)
+              .pop();
+            if (lastEmpty) {
+              adjustedTubes.splice(lastEmpty.idx, 1);
+            }
+          }
+        }
+        adjustedTubes.forEach((t, i) => { t.id = i; });
+        newLevel.tubes = adjustedTubes;
+      }
+    }
+    
     setLevelData(newLevel);
     setTubes(newLevel.tubes);
     setSelectedTube(null);
@@ -139,6 +136,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
     setMoveHistory([]);
     setHadDeadlock(false);
     setElapsedTime(0);
+    setSettledTubes(new Set());
     gameStartTime.current = Date.now(); // 重置计时器
   }, [level, endlessScore, timedScore]);
 
@@ -198,11 +196,13 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
 
     // 执行倾倒
     const { from: newFrom, to: newTo } = pour(fromTube, toTube);
-    const newTubes = cloneTubes(tubes);
-    newTubes[selectedTube] = newFrom;
-    newTubes[index] = newTo;
+    // 优化：只替换被修改的两个试管，其他保持原引用
+    // 修复：原 cloneTubes 深拷贝所有试管，导致所有 TubeView 的 React.memo 失效
+    const newTubes = tubes.map((t, i) =>
+      i === selectedTube ? newFrom : i === index ? newTo : t
+    );
 
-    // 保存历史
+    // 保存历史（深拷贝当前 tubes，因为后续状态会继续修改）
     setHistory(prev => [...prev, cloneTubes(tubes)]);
     setMoveHistory(prev => [...prev, { from: selectedTube, to: index }]);
     setTubes(newTubes);
@@ -258,6 +258,14 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
       setIsWon(true);
       setShowParticles(true);
       SoundEngine.win();
+      // 试管归位波纹动画：依次给每个试管添加动画
+      newTubes.forEach((_, idx) => {
+        setTimeout(() => {
+          setSettledTubes(prev => new Set(prev).add(idx));
+        }, idx * 80);
+      });
+      // 2秒后清除归位动画状态
+      setTimeout(() => setSettledTubes(new Set()), 2000);
       // 振动反馈
       if (GameSettings.getVibration()) {
         navigator.vibrate?.([100, 50, 100, 50, 200]);
@@ -289,6 +297,15 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
       setTimeout(() => onWin(moves + 1, levelData.minSteps ?? -1, stars, playTimeSec), 500);
     }
   }, [selectedTube, tubes, isWon, moves, onWin, onMove, levelData]);
+
+  // 使用 ref 保存 handleTubeClick 的最新引用
+  // 解决：React.memo 未比较 onClick，导致 TubeView 持有旧闭包
+  // 表现为选中试管后点击空试管无响应（旧闭包中 selectedTube 仍为 null）
+  const handleTubeClickRef = useRef(handleTubeClick);
+  handleTubeClickRef.current = handleTubeClick;
+  const stableHandleTubeClick = useCallback((index: number) => {
+    handleTubeClickRef.current(index);
+  }, []);
 
   // 撤销
   const handleUndo = useCallback(() => {
@@ -322,6 +339,66 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
     onReset();
     StatsTracker.breakStreak(); // 重置关卡中断连胜
   }, [levelData, onReset]);
+
+  // stable 版本的 handleUndo / handleReset
+  // 修复：键盘事件和 onLongPress 若直接捕获 handleUndo/handleReset，
+  // 会因依赖变化导致闭包陷阱（hadDeadlock 变化时键盘持有旧 handleUndo）
+  const handleUndoRef = useRef(handleUndo);
+  handleUndoRef.current = handleUndo;
+  const stableHandleUndo = useCallback(() => {
+    handleUndoRef.current();
+  }, []);
+
+  const handleResetRef = useRef(handleReset);
+  handleResetRef.current = handleReset;
+  const stableHandleReset = useCallback(() => {
+    handleResetRef.current();
+  }, []);
+
+  // 键盘快捷键
+  // 修复：原代码直接捕获 handleTubeClick/handleUndo/handleReset，
+  // 这些函数依赖 [tubes, hadDeadlock, history] 等会频繁变化的 state，
+  // 但 useEffect 依赖未包含完整集合，导致键盘持有过期闭包
+  // （如 hadDeadlock 变化后键盘按 Z 不触发 onDeadlockRecover）
+  // 现统一使用 stable 版本，useEffect 依赖只剩 isWon/isTimeUp（用于禁用快捷键）
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (isWon || isTimeUp) return;
+      // 数字键 1-9 选择试管（通过 ref 获取最新试管数量，避免闭包陷阱）
+      const num = parseInt(e.key, 10);
+      const tubeCount = tubesRef.current?.length ?? 0;
+      if (!isNaN(num) && num >= 1 && num <= tubeCount) {
+        e.preventDefault();
+        stableHandleTubeClick(num - 1);
+        return;
+      }
+      switch (e.key.toLowerCase()) {
+        case 'z':
+          e.preventDefault();
+          stableHandleUndo();
+          break;
+        case 'r':
+          e.preventDefault();
+          stableHandleReset();
+          break;
+        case 'h':
+          e.preventDefault();
+          if (onHint) onHint();
+          break;
+      }
+      // Page Up/Down 上一关/下一关（仅在已通关时生效）
+      if (e.key === 'PageUp' || e.key === 'PageDown') {
+        e.preventDefault();
+        if (e.key === 'PageDown' && onNextLevel && isWon) {
+          onNextLevel();
+        } else if (e.key === 'PageUp' && onPrevLevel && isWon) {
+          onPrevLevel();
+        }
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isWon, isTimeUp, onHint, onNextLevel, onPrevLevel, stableHandleTubeClick, stableHandleUndo, stableHandleReset]);
 
   // 清除提示
   useEffect(() => {
@@ -365,7 +442,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
           <span className="level-badge">第 {level} 关</span>
         )}
         <span className="difficulty-badge">{levelData.difficulty}</span>
-        <span className={`moves-badge ${movesPulse ? 'pulse' : ''}`}>步数: {moves}</span>
+        <span className={`moves-badge ${movesPulse ? 'moves-pulse-active' : ''}`}>步数: {moves}</span>
         {levelData.minSteps && levelData.minSteps > 0 && (
           <>
             <span className="optimal-badge">💎 最优: {levelData.minSteps}</span>
@@ -392,8 +469,9 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
             isSelected={selectedTube === i}
             isHinted={hintPair !== null && (hintPair[0] === i || hintPair[1] === i)}
             isPouring={pouringTo === i}
-            onClick={handleTubeClick}
-            onLongPress={handleUndo}
+            isSettled={settledTubes.has(i)}
+            onClick={stableHandleTubeClick}
+            onLongPress={stableHandleUndo}
           />
         ))}
       </div>
@@ -421,6 +499,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
             <div className="win-actions">
               <button className="btn btn-primary" onClick={() => {
                 // 初始化回放：从初始状态开始
+                replayStepRef.current = 0;
                 setReplayTubes(cloneTubes(levelData.tubes));
                 setReplayStep(0);
                 setShowReplay(true);
@@ -562,45 +641,51 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
               <button className="btn btn-secondary" onClick={() => {
                 // 回到开头
                 if (replayTimerRef.current) { clearTimeout(replayTimerRef.current); replayTimerRef.current = null; }
+                replayStepRef.current = 0;
                 setReplayStep(0);
                 setReplayTubes(cloneTubes(levelData.tubes));
               }}>⏮ 重新开始</button>
               <button className="btn btn-primary" onClick={() => {
-                if (replayStep >= moveHistory.length) return;
                 if (replayTimerRef.current) { clearTimeout(replayTimerRef.current); replayTimerRef.current = null; }
-                // 执行下一步
-                const move = moveHistory[replayStep];
-                const currentTubes = replayStep === 0 ? cloneTubes(levelData.tubes) : cloneTubes(replayTubes);
+                // 单步：用 ref 读取当前步数，避免闭包陷阱
+                const step = replayStepRef.current;
+                if (step >= moveHistory.length) return;
+                const move = moveHistory[step];
+                const currentTubes = step === 0 ? cloneTubes(levelData.tubes) : cloneTubes(replayTubes);
                 const { from, to } = pour(currentTubes[move.from], currentTubes[move.to]);
                 currentTubes[move.from] = from;
                 currentTubes[move.to] = to;
                 setReplayTubes(currentTubes);
-                setReplayStep(s => s + 1);
+                replayStepRef.current = step + 1;
+                setReplayStep(step + 1);
                 SoundEngine.pour();
               }}>▶ 单步</button>
               <button className="btn btn-primary" onClick={() => {
                 // 自动播放
                 if (replayTimerRef.current) { clearTimeout(replayTimerRef.current); replayTimerRef.current = null; return; }
-                const autoPlay = () => {
-                  setReplayStep(prevStep => {
-                    if (prevStep >= moveHistory.length) {
-                      if (replayTimerRef.current) { clearTimeout(replayTimerRef.current); replayTimerRef.current = null; }
-                      return prevStep;
-                    }
-                    const move = moveHistory[prevStep];
-                    setReplayTubes(prevTubes => {
-                      const currentTubes = prevStep === 0 ? cloneTubes(levelData.tubes) : cloneTubes(prevTubes);
-                      const { from, to } = pour(currentTubes[move.from], currentTubes[move.to]);
-                      currentTubes[move.from] = from;
-                      currentTubes[move.to] = to;
-                      return currentTubes;
-                    });
-                    SoundEngine.pour();
-                    replayTimerRef.current = setTimeout(autoPlay, 500) as unknown as number;
-                    return prevStep + 1;
+                // 修复：原代码把 SoundEngine.pour() 和 setTimeout 放在 setReplayStep 的 updater 里，
+                // React StrictMode 下 updater 会被调用两次，导致音效播放两次、定时器调度两个
+                // 现用 replayStepRef 驱动循环，副作用完全在 updater 外部
+                const stepNext = () => {
+                  const step = replayStepRef.current;
+                  if (step >= moveHistory.length) {
+                    if (replayTimerRef.current) { clearTimeout(replayTimerRef.current); replayTimerRef.current = null; }
+                    return;
+                  }
+                  const move = moveHistory[step];
+                  setReplayTubes(prevTubes => {
+                    const currentTubes = step === 0 ? cloneTubes(levelData.tubes) : cloneTubes(prevTubes);
+                    const { from, to } = pour(currentTubes[move.from], currentTubes[move.to]);
+                    currentTubes[move.from] = from;
+                    currentTubes[move.to] = to;
+                    return currentTubes;
                   });
+                  replayStepRef.current = step + 1;
+                  setReplayStep(step + 1); // 仅用于 UI 显示步数
+                  SoundEngine.pour();
+                  replayTimerRef.current = setTimeout(stepNext, 500) as unknown as number;
                 };
-                autoPlay();
+                stepNext();
               }}>{replayTimerRef.current ? '⏸ 暂停' : '⏩ 自动播放'}</button>
               <button className="btn btn-secondary" onClick={() => { setShowReplay(false); if (replayTimerRef.current) { clearTimeout(replayTimerRef.current); replayTimerRef.current = null; } }}>关闭</button>
             </div>

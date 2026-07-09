@@ -1,4 +1,4 @@
-﻿import { useState, useCallback, useRef, useEffect, lazy, Suspense } from 'react';
+import { useState, useCallback, useRef, useEffect, lazy, Suspense } from 'react';
 import { GameBoard } from './components/GameBoard';
 import { canPour } from './game/levelGenerator';
 import { SoundEngine } from './game/soundEngine';
@@ -587,14 +587,15 @@ export default function App() {
       handleGoHome();
     } else if (isEndlessMode) {
       // 无尽模式关数+1，生成下一关，难度递增
+      // 依赖 endlessScore 变化触发 GameBoard 的 useEffect 重置（无需改 level）
+      // 注意：原代码 setCurrentLevel(l => l - 1) 会把 -2 递减成 -3，误触发限时模式逻辑
       setEndlessScore(s => s + 1);
-      setCurrentLevel(l => l - 1); // 保持 -2，触发 useEffect 重置
       setHintPair(null);
       setUsedHintThisLevel(false);
       setRecoveredFromDeadlock(false);
     } else if (isTimedMode) {
-      // 限时模式直接过下一关
-      setCurrentLevel(l => l - 1); // 保持 -3，触发 useEffect 重置
+      // 限时模式过下一关，依赖 timedScore 变化触发重置
+      setTimedScore(s => s + 1);
       setHintPair(null);
       setUsedHintThisLevel(false);
       setRecoveredFromDeadlock(false);
@@ -1051,7 +1052,7 @@ export default function App() {
                       aria-label={`第${lvl}关${progress.completedLevels.includes(lvl) ? `，已完成，最佳${best || '?'}步，${stars}星！` : ''}`}
                       title={progress.completedLevels.includes(lvl) ? `第${lvl}关 | 最佳: ${best || '?'}步 | ${'⭐'.repeat(stars) || '未评级'}` : `第${lvl}关`}
                     >
-                      {progress.completedLevels.includes(lvl) ? `${'?'.repeat(Math.min(stars, 3)) || '?'}` : ''} {lvl}
+                      {progress.completedLevels.includes(lvl) ? `${'⭐'.repeat(Math.min(stars, 3)) || '✓'}` : ''} {lvl}
                     </button>
                   );
                 })}
@@ -1108,6 +1109,13 @@ export default function App() {
           <button className="footer-link" onClick={() => setPage('privacy')}>隐私政策</button>
         </footer>
 
+        {/* 浮动快捷导航按钮 */}
+        <div className="fab-nav">
+          <button className="fab-nav-btn" onClick={() => { setPage('achievements'); SoundEngine.click(); }} aria-label="成就" title="成就">🏆</button>
+          <button className="fab-nav-btn" onClick={() => { setPage('stats'); SoundEngine.click(); }} aria-label="统计" title="统计">📊</button>
+          <button className="fab-nav-btn" onClick={() => { setPage('settings'); SoundEngine.click(); }} aria-label="设置" title="设置">⚙️</button>
+        </div>
+
         {/* 自动存档恢复对话框 */}
         {showResumeDialog && autosaveData && (
           <div className="tutorial-overlay" onClick={() => setShowResumeDialog(false)}>
@@ -1115,8 +1123,8 @@ export default function App() {
               <div className="tutorial-emoji">💾</div>
               <h2>发现未完成的游戏</h2>
               <p style={{ textAlign: 'center', color: '#666', marginBottom: '16px' }}>
-                {autosaveData.mode === 'endless' 
-                  ? `无尽模式第 ${autosaveData.endlessScore ?? 0 + 1} 关已走 ${autosaveData.moves} 步`
+                {autosaveData.mode === 'endless'
+                  ? `无尽模式第 ${(autosaveData.endlessScore ?? 0) + 1} 关已走 ${autosaveData.moves} 步`
                   : autosaveData.mode === 'timed'
                   ? `限时挑战已走 ${autosaveData.moves} 步`
                   : `第 ${autosaveData.level} 关已走 ${autosaveData.moves} 步`}

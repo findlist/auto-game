@@ -108,13 +108,10 @@ export const StatsTracker = {
       }
     }
 
-    // 更新模式最高分
-    if (isTimed) {
-      stats.bestTimedScore = Math.max(stats.bestTimedScore, 1);
-    }
-    if (isEndless) {
-      stats.bestEndlessScore = Math.max(stats.bestEndlessScore, 1);
-    }
+    // 模式最高分由 updateBestScore 单独负责（传入实际 score）
+    // 修复：原代码 Math.max(stats.bestXxxScore, 1) 永远把最高分设为 max(当前值, 1)，
+    // 即使通关也没有用实际 score 更新，导致最高分永远最多为 1
+    // 现在移除这段错误逻辑，由调用方在通关时调用 updateBestScore
 
     // 记录最近通关记录（保留最近50条）
     const mode: GameRecord['mode'] = isDaily ? 'daily' : isEndless ? 'endless' : isTimed ? 'timed' : 'normal';

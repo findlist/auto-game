@@ -112,24 +112,30 @@ function playBgmNote() {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       const filter = ctx.createBiquadFilter();
-      
+
       osc.type = 'sine';
       osc.frequency.setValueAtTime(note.freq, ctx.currentTime);
-      
+
       filter.type = 'lowpass';
       filter.frequency.setValueAtTime(2000, ctx.currentTime);
-      
+
       gain.gain.setValueAtTime(0, ctx.currentTime);
       gain.gain.linearRampToValueAtTime(0.06, ctx.currentTime + 0.05);
       gain.gain.linearRampToValueAtTime(0.04, ctx.currentTime + note.dur * 0.7);
       gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + note.dur);
-      
+
       osc.connect(filter);
       filter.connect(gain);
       gain.connect(ctx.destination);
-      
+
       osc.start(ctx.currentTime);
       osc.stop(ctx.currentTime + note.dur);
+      // 修复内存泄漏：播放结束后断开音频节点，否则节点会一直留在音频图中
+      osc.onended = () => {
+        osc.disconnect();
+        filter.disconnect();
+        gain.disconnect();
+      };
     } catch (e) { /* 忽略 */ }
   }
   
@@ -156,6 +162,11 @@ function playTone(frequency: number, duration: number, type: OscillatorType = 's
 
     oscillator.start(ctx.currentTime);
     oscillator.stop(ctx.currentTime + duration);
+    // 修复内存泄漏：播放结束后断开节点
+    oscillator.onended = () => {
+      oscillator.disconnect();
+      gainNode.disconnect();
+    };
   } catch (e) {
     // 音频播放失败不阻塞游戏
   }
@@ -261,7 +272,8 @@ export const SoundEngine = {
   // 开始播放背景音乐
   startBGM() {
     if (bgmActive) return;
-    if (!GameSettings.getSound()) return;
+    // 修复：原代码检查 getSound()（音效开关），应检查 getBGM()（背景音乐开关）
+    if (!GameSettings.getBGM()) return;
     bgmActive = true;
     bgmNoteIndex = 0;
     bgmSegmentIndex = 0;

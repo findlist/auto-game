@@ -6,10 +6,12 @@ import { Tube } from './types';
 import { canPour, pour, checkWin, cloneTubes } from './levelGenerator';
 
 // 状态哈希：将试管数组转为紧凑字符串
+// 注意：不能用颜色名首字符（purple/pink、blue/brown、green/gray 会碰撞）
+// 改用完整颜色名 + 分隔符，确保无碰撞
 function stateHash(tubes: Tube[]): string {
   return tubes.map(t => {
     if (t.layers.length === 0) return 'E';
-    return t.layers.map(l => l.color[0]).join('');
+    return t.layers.map(l => l.color).join(',');
   }).join('|');
 }
 
