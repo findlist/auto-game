@@ -2,6 +2,8 @@
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
+    <link rel="preconnect" href="/" />
+    <link rel="dns-prefetch" href="/" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/icon-192.png" />
     <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
@@ -46,6 +48,10 @@
     <meta name="apple-mobile-web-app-title" content="色彩排序" />
 
     <title>色彩排序 - 免费在线解谜游戏 | 100关卡·每日挑战·无尽模式</title>
+
+    <!-- 预加载关键资源，提升首屏加载速度 -->
+    <link rel="preload" href="/icon-192.png" as="image" type="image/png" />
+    <link rel="modulepreload" href="/src/main.tsx" />
 
     <!-- 结构化数据 SEO -->
     <script type="application/ld+json">

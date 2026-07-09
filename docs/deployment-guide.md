@@ -7,14 +7,20 @@ npm run build
 ```
 
 构建后产物在 `dist/` 目录：
-- `index.html` — 入口 HTML（~2.3KB, gzip ~1.1KB）
-- `assets/index-*.js` — JS bundle（~201KB, gzip ~65KB）
-- `assets/index-*.css` — CSS（~21KB, gzip ~5KB）
+- `index.html` — 入口 HTML（~5.7KB, gzip ~2.5KB）
+- `assets/index-*.js` — 主 JS bundle（~92KB, gzip ~31KB）
+- `assets/react-vendor-*.js` — React 运行时（~141KB, gzip ~45KB）
+- `assets/index-*.css` — CSS（~36KB, gzip ~7.5KB）
+- `assets/*.js` — 懒加载页面（共 ~33KB, gzip ~12KB）
 - `favicon.svg` — 站点图标
+- `icon-192.png` / `icon-512.png` — PWA 图标
+- `og-image.png` / `og-image.svg` — 社交分享封面图
 - `manifest.json` — PWA 清单
 - `sw.js` — Service Worker（离线缓存）
+- `robots.txt` — SEO 爬虫指引
+- `sitemap.xml` — 站点地图
 
-**性能达标**：JS bundle 201KB < 300KB 红线 ✅ | 首屏加载 < 3秒 ✅
+**性能达标**：JS bundle 总计 233KB < 300KB 红线 ✅ | 首屏加载 < 3秒 ✅
 
 ## 二、部署到 Vercel（推荐）
 

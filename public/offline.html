@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#667eea" />
+  <title>色彩排序 - 离线模式</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      color: #333;
+    }
+    .offline-card {
+      background: #fff; border-radius: 20px; padding: 40px 32px;
+      text-align: center; max-width: 360px; width: 90%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    }
+    .offline-icon { font-size: 64px; margin-bottom: 16px; }
+    .offline-title { font-size: 22px; font-weight: 700; margin-bottom: 8px; color: #333; }
+    .offline-desc { font-size: 14px; color: #666; line-height: 1.6; margin-bottom: 24px; }
+    .offline-btn {
+      display: inline-block; background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #fff; text-decoration: none; padding: 12px 32px;
+      border-radius: 12px; font-size: 16px; font-weight: 600;
+      transition: transform 0.2s;
+    }
+    .offline-btn:active { transform: scale(0.96); }
+    .offline-hint { margin-top: 16px; font-size: 12px; color: #999; }
+  </style>
+</head>
+<body>
+  <div class="offline-card">
+    <div class="offline-icon">🎨</div>
+    <h1 class="offline-title">色彩排序</h1>
+    <p class="offline-desc">当前处于离线模式，已缓存的关卡仍可正常游玩。<br>连接网络后可使用每日挑战、分享等功能。</p>
+    <a href="/" class="offline-btn">进入游戏</a>
+    <p class="offline-hint">提示：游戏数据已保存在本地，不会丢失</p>
+  </div>
+</body>
+</html>

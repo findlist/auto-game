@@ -143,12 +143,22 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
   }, [level, endlessScore, timedScore]);
 
   // 实时计时器（非限时模式也显示已用时间）
+  // 使用 requestAnimationFrame 替代 setInterval，减少不必要的重渲染
+  // 仅在秒数变化时更新状态
   useEffect(() => {
     if (isWon || isTimeUp) return;
-    const timer = setInterval(() => {
-      setElapsedTime(Math.floor((Date.now() - gameStartTime.current) / 1000));
-    }, 1000);
-    return () => clearInterval(timer);
+    let rafId: number;
+    let lastSecond = -1;
+    const tick = () => {
+      const sec = Math.floor((Date.now() - gameStartTime.current) / 1000);
+      if (sec !== lastSecond) {
+        lastSecond = sec;
+        setElapsedTime(sec);
+      }
+      rafId = requestAnimationFrame(tick);
+    };
+    rafId = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafId);
   }, [isWon, isTimeUp, level]);
 
   const handleTubeClick = useCallback((index: number) => {
@@ -332,9 +342,13 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
   }, [isDeadlock]);
 
   return (
-    <div className="game-board" role="region" aria-label="游戏区域">
+    <div className="game-board" role="region" aria-label="游戏区域" aria-live="polite">
       <ParticleEffect trigger={showParticles} />
-      <div className="game-info" role="status" aria-live="polite">
+      {/* 无障碍：屏幕阅读器游戏状态播报 */}
+      <span className="sr-only" role="status" aria-live="assertive">
+        {isWon ? `恭喜过关！用时${moves}步，${starRating}星评价` : isDeadlock ? '没有可行操作了，请撤销或重新开始' : isTimeUp ? '时间到' : ''}
+      </span>
+      <div className="game-info" role="status" aria-live="polite" aria-atomic="true">
         {level === -3 && (
           <span className={`timer-badge ${timeLeft <= 10 ? 'timer-danger' : ''}`}>⏱️ {timeLeft}s</span>
         )}

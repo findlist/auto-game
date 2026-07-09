@@ -1,5 +1,5 @@
 // 色彩排序 Service Worker - 离线缓存
-const CACHE_VERSION = 'color-sort-v1.14.0';
+const CACHE_VERSION = 'color-sort-v1.15.0';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -11,6 +11,7 @@ const STATIC_ASSETS = [
   '/og-image.svg',
   '/robots.txt',
   '/sitemap.xml',
+  '/offline.html',
 ];
 
 // 安装：预缓存核心资源
@@ -68,9 +69,9 @@ self.addEventListener('fetch', (event) => {
         });
         return response;
       }).catch(() => {
-        // 离线回退到首页
+        // 离线回退：导航请求优先展示离线页
         if (event.request.mode === 'navigate') {
-          return caches.match('/index.html');
+          return caches.match('/offline.html');
         }
       });
     })

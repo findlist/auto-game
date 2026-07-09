@@ -771,7 +771,7 @@ export default function App() {
       <div className="app">
         <a href="#main-content" className="sr-only">跳转到主要内容</a>
         <header className="home-header">
-          <div className="logo">??</div>
+          <div className="logo">🎨</div>
           <h1 className="title">色彩排序</h1>
           <p className="subtitle">经典好玩的颜色游戏</p>
           <p className="tagline">动动手指排列颜色吧！</p>
@@ -782,14 +782,14 @@ export default function App() {
           {/* 每日签到卡片 */}
           <div className={`checkin-card ${checkinDone ? 'checkin-done' : ''}`}>
             <div className="checkin-info">
-              <span className="checkin-icon">??</span>
+              <span className="checkin-icon">📅</span>
               <div className="checkin-text">
                 <span className="checkin-title">{checkinDone ? '今日已签到' : '每日签到'}</span>
                 <span className="checkin-streak">🔥 连续 {checkinStreak} 天 · 累计 {checkinTotal} 天</span>
               </div>
             </div>
             {checkinDone ? (
-              <span className="checkin-checked">?</span>
+              <span className="checkin-checked">✅</span>
             ) : (
               <button className="checkin-btn" onClick={handleCheckin}>签到</button>
             )}
@@ -807,7 +807,7 @@ export default function App() {
 
           {/* 提示道具展示 */}
           <div className="hint-items-card">
-            <span className="hint-items-icon">??</span>
+            <span className="hint-items-icon">💡</span>
             <span className="hint-items-text">提示道具: <strong>{hintItems}</strong> / {MAX_HINT_ITEMS}</span>
             <span className="hint-items-tip">每日登录 +1 · 签到可领取</span>
           </div>
@@ -815,7 +815,7 @@ export default function App() {
           {/* 忽略 */}
           {recentPlay && progress.completedLevels.length > 0 && (
             <div className="recent-play-card" onClick={() => handleSelectLevel(recentPlay.level)}>
-              <span className="recent-icon">?</span>
+              <span className="recent-icon">▶️</span>
               <span className="recent-text">
                 <span className="recent-label">继续上次</span>
                 <span className="recent-level">第 {recentPlay.level} 关</span>
@@ -900,7 +900,7 @@ export default function App() {
               <span className="stat-label">总星数</span>
             </div>
             <div className="stat-item">
-              <span className="stat-value" style={{ color: StatsTracker.get().currentStreak > 0 ? '#FF6B6B' : undefined }}>??{StatsTracker.get().currentStreak}</span>
+              <span className="stat-value" style={{ color: StatsTracker.get().currentStreak > 0 ? '#FF6B6B' : undefined }}>🔥{StatsTracker.get().currentStreak}</span>
               <span className="stat-label">连胜</span>
             </div>
             <div className="stat-item">
@@ -996,13 +996,13 @@ export default function App() {
                   className="page-btn"
                   onClick={() => setPageLevel(p => Math.max(0, p - 1))}
                   disabled={pageLevel === 0}
-                >?</button>
+                >◀</button>
                 <span className="page-info">第 {pageLevel + 1}/{Math.max(1, Math.ceil(Math.max(20, progress.currentLevel + 5) / LEVELS_PER_PAGE))} 页</span>
                 <button
                   className="page-btn"
                   onClick={() => setPageLevel(p => p + 1)}
                   disabled={(pageLevel + 1) * LEVELS_PER_PAGE >= Math.max(20, progress.currentLevel + 5)}
-                >?</button>
+                >▶</button>
               </div>
             </div>
             <div className="difficulty-legend" aria-label="难度颜色图例">
@@ -1050,12 +1050,12 @@ export default function App() {
               <div className="custom-levels-list">
                 {customLevels.slice(0, 3).map(lv => (
                   <div key={lv.id} className="custom-level-card" onClick={() => handlePlayCustomLevel(lv)}>
-                    <span className="custom-level-icon">??</span>
+                    <span className="custom-level-icon">🎮</span>
                     <div className="custom-level-info">
                       <span className="custom-level-name">{lv.name}</span>
                       <span className="custom-level-meta">{lv.difficulty} · {lv.tubes.length}管 · {lv.completed ? '✅ 已通关' : '未通关'}</span>
                     </div>
-                    <span className="custom-level-arrow">?</span>
+                    <span className="custom-level-arrow">→</span>
                   </div>
                 ))}
               </div>
@@ -1097,7 +1097,7 @@ export default function App() {
         {showResumeDialog && autosaveData && (
           <div className="tutorial-overlay" onClick={() => setShowResumeDialog(false)}>
             <div className="tutorial-card" onClick={(e) => e.stopPropagation()}>
-              <div className="tutorial-emoji">??</div>
+              <div className="tutorial-emoji">💾</div>
               <h2>发现未完成的游戏</h2>
               <p style={{ textAlign: 'center', color: '#666', marginBottom: '16px' }}>
                 {autosaveData.mode === 'endless' 
@@ -1136,23 +1136,23 @@ export default function App() {
         {showTutorial && (
           <div className="tutorial-overlay" onClick={handleTutorialClose}>
             <div className="tutorial-card" onClick={(e) => e.stopPropagation()}>
-              <div className="tutorial-emoji">??</div>
+              <div className="tutorial-emoji">🎨</div>
               <h2>欢迎来到色彩排序！</h2>
               <div className="tutorial-steps">
                 <div className="tutorial-step">
-                  <span className="step-icon">1??</span>
+                  <span className="step-icon">1️⃣</span>
                   <span>点击一个有颜色的试管选中它</span>
                 </div>
                 <div className="tutorial-step">
-                  <span className="step-icon">2??</span>
+                  <span className="step-icon">2️⃣</span>
                   <span>再点击一个试管，颜色会倒过去</span>
                 </div>
                 <div className="tutorial-step">
-                  <span className="step-icon">3??</span>
+                  <span className="step-icon">3️⃣</span>
                   <span>只能倒入空管或顶部颜色相同的试管</span>
                 </div>
                 <div className="tutorial-step">
-                  <span className="step-icon">4??</span>
+                  <span className="step-icon">4️⃣</span>
                   <span>把每种颜色归到一个试管就赢了！</span>
                 </div>
               </div>
@@ -1186,7 +1186,7 @@ export default function App() {
         {showPWAInstall && (
           <div className="pwa-install-banner">
             <div className="pwa-install-content">
-              <span className="pwa-install-icon">??</span>
+              <span className="pwa-install-icon">📱</span>
               <div className="pwa-install-text">
                 <div className="pwa-install-title">安装到桌面</div>
                 <div className="pwa-install-desc">离线也能玩，更流畅</div>
@@ -1199,7 +1199,7 @@ export default function App() {
               <button className="pwa-install-close" onClick={() => {
                 setShowPWAInstall(false);
                 dismissPWAInstall();
-              }}>?</button>
+              }}>✕</button>
             </div>
           </div>
         )}
@@ -1210,23 +1210,23 @@ export default function App() {
             <div className="help-modal-card" onClick={(e) => e.stopPropagation()}>
               <h2>📖 玩法说明</h2>
               <div className="help-modal-step">
-                <span className="step-icon">1??</span>
+                <span className="step-icon">1️⃣</span>
                 <span>点击一个有颜色的试管选中它</span>
               </div>
               <div className="help-modal-step">
-                <span className="step-icon">2??</span>
+                <span className="step-icon">2️⃣</span>
                 <span>再点击一个试管，颜色会倒过去</span>
               </div>
               <div className="help-modal-step">
-                <span className="step-icon">3??</span>
+                <span className="step-icon">3️⃣</span>
                 <span>只能倒入空管或顶部颜色相同的试管</span>
               </div>
               <div className="help-modal-step">
-                <span className="step-icon">4??</span>
+                <span className="step-icon">4️⃣</span>
                 <span>把每种颜色归到一个试管就赢了！</span>
               </div>
               <div className="help-modal-step">
-                <span className="step-icon">?</span>
+                <span className="step-icon">⭐</span>
                 <span>关卡越后星级越高，追求三星通关！</span>
               </div>
               <button className="btn btn-primary help-modal-close" onClick={() => setShowHelpModal(false)}>
@@ -1240,7 +1240,7 @@ export default function App() {
         {showCheckinReward && (
           <div className="tutorial-overlay" onClick={() => setShowCheckinReward(null)}>
             <div className="tutorial-card" onClick={(e) => e.stopPropagation()}>
-              <div className="tutorial-emoji">??</div>
+              <div className="tutorial-emoji">🎁</div>
               <h2>签到奖励已发放</h2>
               <p style={{ textAlign: 'center', color: '#666', marginBottom: '16px', fontSize: '16px' }}>
                 {showCheckinReward}
@@ -1259,11 +1259,11 @@ export default function App() {
         {showChangelog && (
           <div className="tutorial-overlay" onClick={() => setShowChangelog(false)}>
             <div className="tutorial-card" onClick={(e) => e.stopPropagation()}>
-              <div className="tutorial-emoji">??</div>
+              <div className="tutorial-emoji">📋</div>
               <h2>色彩排序更新日志</h2>
               <div className="changelog-content">
                 <div className="changelog-version">
-                  <h3>?? v1.12.0</h3>
+                  <h3>🎉 v1.12.0</h3>
                   <ul>
                     <li>🔧 新增关卡编辑器，可自创关卡、导入/导出关卡码、验证合法性</li>
                     <li>🎯 新增游戏内公告系统，首次进入展示欢迎公告</li>
@@ -1272,7 +1272,7 @@ export default function App() {
                   </ul>
                 </div>
                 <div className="changelog-version">
-                  <h3>?? v1.12.0</h3>
+                  <h3>🎨 v1.12.0</h3>
                   <ul>
                     <li>📣 新增回放分享功能，通关后可生成回放链接，支持好友查看和导入回放</li>
                     <li>🏆 新增8个成就：签到大师/千步行者/速度狂人/满星达人/满星大师/色彩专家/色彩王者/等等</li>
@@ -1281,7 +1281,7 @@ export default function App() {
                   </ul>
                 </div>
                 <div className="changelog-version">
-                  <h3>?? v1.10.0</h3>
+                  <h3>📊 v1.10.0</h3>
                   <ul>
                     <li>📊 统计页新增步数分布图、通关时间趋势图</li>
                     <li>💻 首页新增智能推荐关卡</li>
@@ -1290,7 +1290,7 @@ export default function App() {
                   </ul>
                 </div>
                 <div className="changelog-version">
-                  <h3>?? v1.9.0 - v1.9.1</h3>
+                  <h3>📅 v1.9.0 - v1.9.1</h3>
                   <ul>
                     <li>📅 每日签到系统，签到可获得奖励，连续签到额外奖励</li>
                     <li>🎵 背景音乐（Web Audio API 合成循环音乐）</li>
@@ -1299,7 +1299,7 @@ export default function App() {
                   </ul>
                 </div>
                 <div className="changelog-version">
-                  <h3>?? v1.8.0</h3>
+                  <h3>🌈 v1.8.0</h3>
                   <ul>
                     <li>🌈 新增2个新主题颜色排序 + 孔雀绿主题</li>
                     <li>📊 统计页新增星级分布图、通关进度热力图</li>
@@ -1318,7 +1318,7 @@ export default function App() {
         {showViewReplay && viewReplayData && (
           <div className="tutorial-overlay" onClick={() => { setShowViewReplay(false); setViewReplayData(null); window.location.hash = ''; }}>
             <div className="tutorial-card" onClick={(e) => e.stopPropagation()}>
-              <div className="tutorial-emoji">??</div>
+              <div className="tutorial-emoji">🎥</div>
               <h2>查看回放</h2>
               <p className="replay-info-text">
                 {viewReplayData.level === -1 ? "每日挑战" : viewReplayData.level === -2 ? "无尽模式" : viewReplayData.level === -3 ? "限时模式" : `第 ${viewReplayData.level} 关`}
@@ -1401,7 +1401,7 @@ export default function App() {
           <div className="level-info-bar">
             <span className="level-info-item">第 {currentLevel} 关</span>
             <span className="level-info-divider">|</span>
-            <span className="level-info-item" style={{ color: diffColor }}>?? {diffLabel}</span>
+            <span className="level-info-item" style={{ color: diffColor }}>🎯 {diffLabel}</span>
             {bestScores[currentLevel] && (
               <>
                 <span className="level-info-divider">|</span>
@@ -1440,7 +1440,7 @@ export default function App() {
         </main>
 
         {/* 游戏内浮动帮助按钮 */}
-        <button className="help-fab" onClick={() => setShowHelpModal(true)} aria-label="查看玩法说明">?</button>
+        <button className="help-fab" onClick={() => setShowHelpModal(true)} aria-label="查看玩法说明">❓</button>
 
         {/* 忽略 */}
         {showHelpModal && (
@@ -1448,23 +1448,23 @@ export default function App() {
             <div className="help-modal-card" onClick={(e) => e.stopPropagation()}>
               <h2>📖 玩法说明</h2>
               <div className="help-modal-step">
-                <span className="step-icon">1??</span>
+                <span className="step-icon">1️⃣</span>
                 <span>点击一个有颜色的试管选中它</span>
               </div>
               <div className="help-modal-step">
-                <span className="step-icon">2??</span>
+                <span className="step-icon">2️⃣</span>
                 <span>再点击一个试管，颜色会倒过去</span>
               </div>
               <div className="help-modal-step">
-                <span className="step-icon">3??</span>
+                <span className="step-icon">3️⃣</span>
                 <span>只能倒入空管或顶部颜色相同的试管</span>
               </div>
               <div className="help-modal-step">
-                <span className="step-icon">4??</span>
+                <span className="step-icon">4️⃣</span>
                 <span>把每种颜色归到一个试管就赢了！</span>
               </div>
               <div className="help-modal-step">
-                <span className="step-icon">??</span>
+                <span className="step-icon">⌨️</span>
                 <span>快捷键：数字键选管 · Z撤销 · R重置 · H提示 · PageDown下一关</span>
               </div>
               <button className="btn btn-primary help-modal-close" onClick={() => setShowHelpModal(false)}>
@@ -1582,7 +1582,7 @@ export default function App() {
       <div className="app">
         <header className="game-header">
           <button className="btn-back" onClick={() => { setPage('editor'); setPlayingCustomLevel(null); }}>← 返回</button>
-          <h1 className="game-title">??? {playingCustomLevel.name}</h1>
+          <h1 className="game-title">🎮 {playingCustomLevel.name}</h1>
           <div style={{ width: '40px' }} />
         </header>
         <main className="game-main">
