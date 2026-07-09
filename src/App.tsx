@@ -12,7 +12,7 @@ import { DailyCheckin } from './game/dailyCheckin';
 import { getHintItems, useHintItem, addHintItems, claimDailyHintBonus, MAX_HINT_ITEMS } from './game/hintItems';
 import { generateReplayUrl, parseReplayFromUrl, formatReplayShareText, ReplayData } from './game/replayShare';
 import { getAdaptiveRecommendation } from './game/adaptiveDifficulty';
-import { getUnreadAnnouncements, markAnnouncementRead, Announcement } from './game/announcements';
+import { getUnreadAnnouncements, markAnnouncementRead, Announcement, getTodayTip } from './game/announcements';
 import { getCustomLevels, saveCustomLevel, deleteCustomLevel, importLevelCode, CustomLevel } from './game/levelEditor';
 import { generateReplayVideo, generateReplayThumbnail } from './game/replayVideo';
 // 懒加载非首屏页面组件，减小首屏 bundle 大小
@@ -874,6 +874,21 @@ export default function App() {
           )}
           </div>
 
+          {/* 每日策略小贴士 */}
+          {(() => {
+            const tip = getTodayTip();
+            return (
+              <div className="daily-tip-card">
+                <span className="daily-tip-icon">{tip.icon}</span>
+                <div className="daily-tip-content">
+                  <span className="daily-tip-label">💡 每日小贴士</span>
+                  <span className="daily-tip-title">{tip.title}</span>
+                  <span className="daily-tip-text">{tip.content}</span>
+                </div>
+              </div>
+            );
+          })()}
+
           {/* 智能推荐关卡 */}
           {(() => {
             const recommend = getAdaptiveRecommendation(progress.completedLevels, levelStars, progress.currentLevel);
@@ -1597,7 +1612,10 @@ export default function App() {
               setPlayingCustomLevel(updated);
             }}
             onShare={(code: string) => {
-              const text = `🏆《色彩排序》编辑器创建了关卡「${playingCustomLevel.name}」，来挑战吧！\n关卡码：${code}\n或直接打开链接：${window.location.origin}${window.location.pathname}#level=${code}`;
+              // 剥离端口，避免经反向代理时泄漏内部端口
+              const host = window.location.host.split(':')[0];
+              const shareUrl = `${window.location.protocol}//${host}${window.location.pathname}#level=${code}`;
+              const text = `🏆《色彩排序》编辑器创建了关卡「${playingCustomLevel.name}」，来挑战吧！\n关卡码：${code}\n或直接打开链接：${shareUrl}`;
               if (navigator.share) {
                 navigator.share({ title: '色彩排序自定关卡', text });
               } else {

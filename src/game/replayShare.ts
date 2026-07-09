@@ -49,7 +49,9 @@ export function decodeReplay(encoded: string): ReplayData | null {
  */
 export function generateReplayUrl(data: ReplayData): string {
   const encoded = encodeReplay(data);
-  const baseUrl = window.location.origin + window.location.pathname;
+  // 剥离端口，避免经反向代理时泄漏内部端口（如 :8080）
+  const host = window.location.host.split(':')[0];
+  const baseUrl = `${window.location.protocol}//${host}${window.location.pathname}`;
   return `${baseUrl}#replay=${encoded}`;
 }
 
