@@ -208,7 +208,7 @@ Phaser 3
 ---
 八、硬性约束红线（不可突破）
 1. 全站代码注释、页面文案、游戏提示全部使用中文，适配中文玩家群体
-2. Git安全红线：无用户明确指令，禁止执行git commit、git push、修改git config、强制重置、分支删除等所有破坏性Git操作
+2. Git 提交规范（强制执行）：每次完成一个最小修改单元并通过验收后，必须立即执行 git add（仅添加本次修改的文件，禁止 git add -A）→ git commit → git push origin HEAD 提交代码。提交信息使用中文，格式：feat/fix/refactor/docs: 简要描述修改内容。禁止：修改 git config、force push、push --force-with-lease、reset --hard、branch -D、clean -f 等破坏性命令。
 3. 禁止主动创建非必要文档，仅允许生成部署指南、站点配置、开发规划文档
 4. 不引入付费依赖、重型框架，保证站点轻量化、加载快、部署便捷
 5. 所有代码、玩法改动必须本地验证通过，无BUG、无性能问题方可收尾

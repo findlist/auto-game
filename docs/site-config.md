@@ -2,9 +2,9 @@
 
 ## 基本信息
 - 站点名称：色彩排序解谜
-- 线上 URL：（待填写）
-- 部署平台：（待填写：Vercel / Cloudflare Pages / Netlify）
-- 上线日期：（待填写）
+- 线上 URL：https://game.niuzi.asia
+- 部署平台：Vercel
+- 上线日期：2026-07-09
 - 游戏品类：几何图形类 - 色彩排序解谜
 
 ## 统计分析（可选）
