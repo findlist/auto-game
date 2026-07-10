@@ -27,7 +27,8 @@ export function encodeReplay(data: ReplayData): string {
  */
 export function decodeReplay(encoded: string): ReplayData | null {
   try {
-    const levelMatch = encoded.match(/^L(-?\d+)M(\d+)S(\d+)D(.+)$/);
+    // 修复：D 后允许 0 个字符（空步数回放），原 (.+) 要求至少 1 字符导致 0 步通关无法解码
+    const levelMatch = encoded.match(/^L(-?\d+)M(\d+)S(\d+)D(.*)$/);
     if (!levelMatch) return null;
     const level = parseInt(levelMatch[1], 10);
     const stepsUsed = parseInt(levelMatch[2], 10);

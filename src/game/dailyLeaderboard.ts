@@ -62,11 +62,20 @@ export function addDailyLeaderboardEntry(entry: DailyLeaderboardEntry): void {
   try {
     const entries = getDailyLeaderboard();
     entries.push(entry);
-    // 只保留最近 MAX_ENTRIES 条
+    // 修复：原代码按时间戳截断会丢失历史最佳成绩
+    // 现改为：先按日期去重保留每日最佳（星级优先，步数次之），再按日期保留最近 MAX_ENTRIES 天
     if (entries.length > MAX_ENTRIES) {
-      // 按日期排序，保留最近的记录
-      entries.sort((a, b) => b.timestamp - a.timestamp);
-      entries.splice(MAX_ENTRIES);
+      // 按日期分组，每组只保留最佳成绩（星级降序，步数升序）
+      const bestByDate = new Map<string, DailyLeaderboardEntry>();
+      for (const e of entries) {
+        const existing = bestByDate.get(e.date);
+        if (!existing || e.stars > existing.stars || (e.stars === existing.stars && e.moves < existing.moves)) {
+          bestByDate.set(e.date, e);
+        }
+      }
+      // 按日期降序排序，保留最近 MAX_ENTRIES 天的最佳成绩
+      const sorted = Array.from(bestByDate.values()).sort((a, b) => b.date.localeCompare(a.date));
+      entries.splice(0, entries.length, ...sorted.slice(0, MAX_ENTRIES));
     }
     localStorage.setItem(LEADERBOARD_KEY, JSON.stringify(entries));
   } catch (e) { /* 忽略 */ }

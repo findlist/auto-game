@@ -4,7 +4,8 @@ import { updateColors } from './types';
 
 // 应用主题到页面
 export function applyTheme(themeName?: ThemeName) {
-  const config = themeName ? THEMES[themeName] : GameSettings.getThemeConfig();
+  // 修复：对无效主题名防御，避免 THEMES[themeName] 为 undefined 时后续访问抛 TypeError 白屏
+  const config = themeName ? (THEMES[themeName] || THEMES.classic) : GameSettings.getThemeConfig();
   
   const root = document.documentElement;
   root.style.setProperty('--bg-gradient', config.bgGradient);

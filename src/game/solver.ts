@@ -70,33 +70,33 @@ export function isSolvable(tubes: Tube[], maxNodes: number = 5000): boolean {
  */
 export function solveBFS(tubes: Tube[], maxNodes: number = 5000): { solvable: boolean; minSteps: number } {
   if (checkWin(tubes)) return { solvable: true, minSteps: 0 };
-  
+
   const visited = new Set<string>();
-  // 队列存储 [状态, 步数]
-  const queue: Array<{ tubes: Tube[][]; steps: number }> = [];
+  // 修复：队列只存储当前状态而非完整路径，避免内存随深度指数增长
+  // 原代码存储 Tube[][]（完整路径），但仅使用 path[path.length-1]，完整路径从未使用
+  const queue: Array<{ tubes: Tube[]; steps: number }> = [];
   const initialClone = cloneTubes(tubes);
-  queue.push({ tubes: [initialClone], steps: 0 });
+  queue.push({ tubes: initialClone, steps: 0 });
   visited.add(stateHash(tubes));
-  
+
   let nodeCount = 0;
-  
+
   while (queue.length > 0 && nodeCount < maxNodes) {
-    const { tubes: path, steps } = queue.shift()!;
-    const current = path[path.length - 1];
+    const { tubes: current, steps } = queue.shift()!;
     nodeCount++;
-    
+
     const nextStates = getNextStates(current);
-    
+
     for (const [, nextTubes] of nextStates) {
       const hash = stateHash(nextTubes);
       if (visited.has(hash)) continue;
       visited.add(hash);
-      
+
       if (checkWin(nextTubes)) {
         return { solvable: true, minSteps: steps + 1 };
       }
-      
-      queue.push({ tubes: [...path, nextTubes], steps: steps + 1 });
+
+      queue.push({ tubes: nextTubes, steps: steps + 1 });
     }
   }
   

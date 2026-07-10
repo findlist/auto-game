@@ -47,9 +47,10 @@ export function claimDailyHintBonus(): { claimed: boolean; total: number } {
     if (lastBonus === todayStr) {
       return { claimed: false, total: getHintItems() };
     }
-    // 领取每日赠送
-    const newTotal = addHintItems(1);
+    // 修复：先写入"今日已领"标记，成功后再发放道具，保证幂等性
+    // 原代码先 addHintItems 后 setItem，setItem 失败时道具已加但标记未写，可重复领取
     localStorage.setItem(DAILY_BONUS_KEY, todayStr);
+    const newTotal = addHintItems(1);
     return { claimed: true, total: newTotal };
   } catch {
     return { claimed: false, total: getHintItems() };

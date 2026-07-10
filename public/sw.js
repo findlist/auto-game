@@ -1,5 +1,6 @@
 // 色彩排序 Service Worker - 离线缓存
-const CACHE_VERSION = 'color-sort-v1.15.0';
+// 修复：缓存版本与 package.json 版本保持一致
+const CACHE_VERSION = 'color-sort-v1.14.0';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -18,7 +19,9 @@ const STATIC_ASSETS = [
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_VERSION).then((cache) => {
-      return cache.addAll(STATIC_ASSETS).catch(() => {});
+      // 修复：cache.addAll 是原子操作，任一资源失败会导致全部预缓存失败
+      // 改为 Promise.allSettled 逐个缓存，单个失败不影响其他资源
+      return Promise.allSettled(STATIC_ASSETS.map(url => cache.add(url)));
     })
   );
   self.skipWaiting();

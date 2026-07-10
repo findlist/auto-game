@@ -72,6 +72,7 @@ export function generateDailyChallenge(): Level {
   finalTubes.forEach((t, i) => { t.id = i; });
 
   // 验证可解性（每日挑战不重试，如果无解则调整）
+  // 修复：不可解时保留初始 finalTubes，不用可能不可解的最后一次覆盖
   let resultTubes = finalTubes;
   if (!isSolvable(resultTubes)) {
     // 用不同偏移的种子重试
@@ -96,7 +97,6 @@ export function generateDailyChallenge(): Level {
         resultTubes = shuffledRetry;
         break;
       }
-      resultTubes = shuffledRetry;
     }
   }
 

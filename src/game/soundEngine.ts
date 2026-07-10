@@ -274,6 +274,11 @@ export const SoundEngine = {
     if (bgmActive) return;
     // 修复：原代码检查 getSound()（音效开关），应检查 getBGM()（背景音乐开关）
     if (!GameSettings.getBGM()) return;
+    // 修复：非用户交互场景下 AudioContext 可能 suspended，需先 resume 否则 BGM 静默失败
+    try {
+      const ctx = getAudioContext();
+      if (ctx.state === 'suspended') ctx.resume();
+    } catch (e) { /* 忽略 */ }
     bgmActive = true;
     bgmNoteIndex = 0;
     bgmSegmentIndex = 0;

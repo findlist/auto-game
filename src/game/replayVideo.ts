@@ -146,11 +146,15 @@ export async function generateReplayVideo(options: RenderOptions): Promise<strin
     if (e.data.size > 0) chunks.push(e.data);
   };
 
-  return new Promise<string>((resolve) => {
+  return new Promise<string>((resolve, reject) => {
     recorder.onstop = () => {
       const blob = new Blob(chunks, { type: 'video/webm' });
       const url = URL.createObjectURL(blob);
       resolve(url);
+    };
+    // 修复：原代码无 onerror 处理，录制出错时 Promise 永远挂起，UI 卡死
+    recorder.onerror = () => {
+      reject(new Error('视频录制失败'));
     };
 
     recorder.start();

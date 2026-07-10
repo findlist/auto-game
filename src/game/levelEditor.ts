@@ -124,9 +124,10 @@ export function validateLevel(tubes: Tube[]): { valid: boolean; reason: string }
     });
   });
 
-  // 每种颜色的层数必须等于某个试管的容量（可整除）
+  // 每种颜色的层数必须能整除某个试管的容量（可填满整数个试管）
+  // 修复：原代码 t.capacity === count 仅匹配单管容量，颜色层数为容量整数倍时误判无效
   for (const [color, count] of colorCounts) {
-    const validCapacity = tubes.some(t => t.capacity === count);
+    const validCapacity = tubes.some(t => t.capacity > 0 && count % t.capacity === 0);
     if (!validCapacity) {
       return { valid: false, reason: `颜色 ${color} 有 ${count} 层，无法整除填满任何试管` };
     }

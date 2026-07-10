@@ -152,7 +152,8 @@ function loadSettings(): Settings {
     const data = localStorage.getItem(SETTINGS_KEY);
     if (data) return { ...DEFAULT_SETTINGS, ...JSON.parse(data) };
   } catch (e) { /* 忽略 */ }
-  return DEFAULT_SETTINGS;
+  // 修复：返回副本而非原始引用，避免外部修改污染默认值
+  return { ...DEFAULT_SETTINGS };
 }
 
 function saveSettings(settings: Settings) {
