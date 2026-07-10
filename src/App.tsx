@@ -12,9 +12,12 @@ import { DailyCheckin } from './game/dailyCheckin';
 import { getHintItems, useHintItem, addHintItems, claimDailyHintBonus, MAX_HINT_ITEMS } from './game/hintItems';
 import { generateReplayUrl, parseReplayFromUrl, formatReplayShareText, ReplayData } from './game/replayShare';
 import { getAdaptiveRecommendation } from './game/adaptiveDifficulty';
+import { getDailyRecommend } from './game/dailyRecommend';
+import { hasCompletedWeeklyThisWeek, saveWeeklyRecord, getWeeklyStreak, getWeeklyInfo, getWeeklyRecord } from './game/weeklyChallenge';
 import { getUnreadAnnouncements, markAnnouncementRead, Announcement, getTodayTip } from './game/announcements';
 import { getCustomLevels, saveCustomLevel, deleteCustomLevel, importLevelCode, CustomLevel } from './game/levelEditor';
 import { generateReplayVideo, generateReplayThumbnail } from './game/replayVideo';
+import { STORAGE_KEYS } from './game/storageKeys';
 // 懒加载非首屏页面组件，减小首屏 bundle 大小
 const AboutPage = lazy(() => import('./pages/AboutPage').then(m => ({ default: m.AboutPage })));
 const AchievementsPage = lazy(() => import('./pages/AchievementsPage').then(m => ({ default: m.AchievementsPage })));
@@ -26,10 +29,10 @@ const CustomLevelPlayer = lazy(() => import('./pages/LevelEditorPage').then(m =>
 
 // 页面加载占位组件
 const PageLoading = () => (
-  <div className="app" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
-    <div style={{ textAlign: 'center' }}>
-      <div style={{ fontSize: '48px', marginBottom: '12px' }}>🎨</div>
-      <p style={{ color: '#667eea', fontSize: '14px' }}>加载中...</p>
+  <div className="app page-loading-container">
+    <div className="page-loading-inner">
+      <div className="page-loading-emoji">🎨</div>
+      <p className="page-loading-text">加载中...</p>
     </div>
   </div>
 );
@@ -38,18 +41,17 @@ type Page = 'home' | 'game' | 'about' | 'privacy' | 'achievements' | 'settings' 
 
 // 限时模式配置
 const TIMED_DURATION = 120; // 限时模式时长（秒）
-const TIMED_KEY = 'color-sort-timed-highscore';
 const LEVELS_PER_PAGE = 20; // 关卡选择每页显示数量
 
-// 本地存储键
-const STORAGE_KEY = 'color-sort-progress';
-const BEST_SCORES_KEY = 'color-sort-best-scores';
-const TUTORIAL_KEY = 'color-sort-tutorial-seen';
-const STARS_KEY = 'color-sort-stars';
-const AUTOSAVE_KEY = 'color-sort-autosave';
-
-// 最近游戏记录
-const RECENT_KEY = 'color-sort-recent';
+// 本地存储键 - 统一使用 STORAGE_KEYS 管理（src/game/storageKeys.ts）
+const STORAGE_KEY = STORAGE_KEYS.PROGRESS;
+const BEST_SCORES_KEY = STORAGE_KEYS.BEST_SCORES;
+const TUTORIAL_KEY = STORAGE_KEYS.TUTORIAL;
+const STARS_KEY = STORAGE_KEYS.STARS;
+const AUTOSAVE_KEY = STORAGE_KEYS.AUTOSAVE;
+const RECENT_KEY = STORAGE_KEYS.RECENT;
+const TIMED_KEY = STORAGE_KEYS.TIMED;
+const PWA_INSTALL_DISMISSED_KEY = STORAGE_KEYS.PWA_INSTALL_DISMISSED;
 
 interface RecentPlay {
   level: number;
@@ -78,9 +80,6 @@ async function triggerPWAInstall(): Promise<boolean> {
   deferredPrompt = null;
   return outcome === 'accepted';
 }
-
-// PWA 安装提示状态键
-const PWA_INSTALL_DISMISSED_KEY = 'color-sort-pwa-install-dismissed';
 
 function isPWAInstallDismissed(): boolean {
   try {
@@ -220,6 +219,12 @@ export default function App() {
   const [replayThumbnail, setReplayThumbnail] = useState('');
   const [generatingVideo, setGeneratingVideo] = useState(false);
 
+  // 首页可折叠区域状态
+  const [progressCollapsed, setProgressCollapsed] = useState(false);
+  const [levelSelectCollapsed, setLevelSelectCollapsed] = useState(false);
+  const [faqCollapsed, setFaqCollapsed] = useState(true);
+  const [difficultyFilter, setDifficultyFilter] = useState<string>('all'); // 关卡难度筛选
+
   // 内部提示功能：获取当前游戏状态
   const currentTubesRef = useRef<Tube[] | null>(null);
 
@@ -242,8 +247,8 @@ export default function App() {
     } catch (e) { /* 忽略 */ }
 
     // 新版本更新，显示更新日志
-    const CHANGELOG_KEY = 'color-sort-last-version';
-    const currentVersion = '1.12.0';
+    const CHANGELOG_KEY = STORAGE_KEYS.CHANGELOG_VERSION;
+    const currentVersion = '1.15.0';
     try {
       const lastVersion = localStorage.getItem(CHANGELOG_KEY);
       if (lastVersion !== currentVersion) {
@@ -303,6 +308,8 @@ export default function App() {
   const [isDailyMode, setIsDailyMode] = useState(false);
   const [isEndlessMode, setIsEndlessMode] = useState(false);
   const [isTimedMode, setIsTimedMode] = useState(false);
+  const [isWeeklyMode, setIsWeeklyMode] = useState(false);
+  const [weeklyCompleted, setWeeklyCompleted] = useState(hasCompletedWeeklyThisWeek());
   const [timedScore, setTimedScore] = useState(0);
   const [timedHighScore, setTimedHighScore] = useState(() => {
     try { return parseInt(localStorage.getItem(TIMED_KEY) || '0', 10); } catch (e) { return 0; }
@@ -411,6 +418,17 @@ export default function App() {
       if (milestoneAchievements.length > 0) {
         setNewAchievements(prev => [...prev, ...milestoneAchievements]);
       }
+      // 关卡探索者成就
+      const explorerAchievements = AchievementManager.checkExplorerAchievements(newCompleted.length);
+      if (explorerAchievements.length > 0) {
+        setNewAchievements(prev => [...prev, ...explorerAchievements]);
+      }
+      // 色彩收藏家成就（根据关卡配置推断颜色数）
+      const colorCount = currentLevel <= 3 ? 2 : currentLevel <= 6 ? 3 : currentLevel <= 12 ? 4 : currentLevel <= 20 ? 5 : currentLevel <= 30 ? 6 : currentLevel <= 50 ? 7 : currentLevel <= 70 ? 8 : currentLevel <= 90 ? 9 : 10;
+      const colorAchievements = AchievementManager.checkColorMasterAchievements(colorCount);
+      if (colorAchievements.length > 0) {
+        setNewAchievements(prev => [...prev, ...colorAchievements]);
+      }
     }
 
     // 检查步数表成就
@@ -453,6 +471,16 @@ export default function App() {
         setNewAchievements(prev => [...prev, ...dailyAchievements]);
       }
     }
+    // 周挑战完成处理
+    if (isWeeklyMode) {
+      saveWeeklyRecord(winMoves, playTimeSec, stars);
+      setWeeklyCompleted(true);
+      const weeklyStreak = getWeeklyStreak();
+      const weeklyAchievements = AchievementManager.checkWeeklyAchievements(weeklyStreak.currentStreak);
+      if (weeklyAchievements.length > 0) {
+        setNewAchievements(prev => [...prev, ...weeklyAchievements]);
+      }
+    }
     // 无尽模式完成处理
     if (isEndlessMode) {
       const newScore = endlessScore + 1;
@@ -466,8 +494,9 @@ export default function App() {
     // 限时模式完成处理
     if (isTimedMode) {
       const newScore = timedScore + 1;
-      setTimedScore(newScore);
-      // 更新最高分
+      // 修复：原代码在此 setTimedScore(newScore)，timedScore 是 GameBoard 的 prop 且在其 useEffect 依赖中，
+      // timedScore 变化触发 GameBoard 重新生成关卡（setIsWon(false)），胜利弹窗 500ms 后消失
+      // 现仅更新最高分，timedScore 累加交给用户点击"下一关"时的 handleNextLevelAction
       try {
         const current = parseInt(localStorage.getItem(TIMED_KEY) || '0', 10);
         if (newScore > current) {
@@ -480,7 +509,7 @@ export default function App() {
         setNewAchievements(prev => [...prev, ...timedAchievements]);
       }
     }
-  }, [progress, currentLevel, usedHintThisLevel, recoveredFromDeadlock, isDailyMode, isEndlessMode, endlessScore, isTimedMode, timedScore]);
+  }, [progress, currentLevel, usedHintThisLevel, recoveredFromDeadlock, isDailyMode, isEndlessMode, endlessScore, isTimedMode, timedScore, isWeeklyMode]);
 
   // 胜利时清除自动存档
   // 由handleWin 内部处理，不需要在游戏页面渲染时对 onWin 回调做额外处理
@@ -516,7 +545,7 @@ export default function App() {
 
   // 返回上一关（仅普通模式可减小关卡1）
   const handlePrevLevel = useCallback(() => {
-    if (isDailyMode || isEndlessMode || isTimedMode) return;
+    if (isDailyMode || isEndlessMode || isTimedMode || isWeeklyMode) return;
     setCurrentLevel(l => Math.max(1, l - 1));
     setHintPair(null);
     setUsedHintThisLevel(false);
@@ -529,6 +558,7 @@ export default function App() {
     setIsDailyMode(false);
     setIsEndlessMode(false);
     setIsTimedMode(false);
+    setIsWeeklyMode(false);
     setUsedHintThisLevel(false);
     setRecoveredFromDeadlock(false);
     // 清除自动存档
@@ -537,11 +567,23 @@ export default function App() {
 
   // 确认的返回首页：防止误退出
   const handleGoHomeWithConfirm = () => {
-    if (currentMoves > 0 && !isDailyMode && !isEndlessMode && !isTimedMode) {
+    if (currentMoves > 0 && !isDailyMode && !isEndlessMode && !isTimedMode && !isWeeklyMode) {
       if (!confirm('当前关卡进度将丢失，确认返回首页？')) return;
       StatsTracker.breakStreak();
     }
     handleGoHome();
+  };
+
+  const handleWeeklyChallenge = () => {
+    setIsWeeklyMode(true);
+    setIsDailyMode(false);
+    setIsEndlessMode(false);
+    setIsTimedMode(false);
+    setCurrentLevel(-4); // -4 表示周挑战
+    setPage('game');
+    SoundEngine.resume();
+    setUsedHintThisLevel(false);
+    setRecoveredFromDeadlock(false);
   };
   const handleDailyChallenge = () => {
     setIsDailyMode(true);
@@ -602,7 +644,7 @@ export default function App() {
     } else {
       handleNextLevel();
     }
-  }, [isDailyMode, isEndlessMode, isTimedMode]);
+  }, [isDailyMode, isEndlessMode, isTimedMode, isWeeklyMode]);
 
   const dismissAchievement = useCallback(() => {
     setNewAchievements(prev => prev.slice(1));
@@ -615,6 +657,8 @@ export default function App() {
       ? `🎉《色彩排序》无尽模式连过${endlessScore + 1}关，来挑战吧！🔥🔥`
       : level === -3
       ? `🎉《色彩排序》限时模式${TIMED_DURATION}秒连过${timedScore + 1}关，来挑战吧！🔥🔥`
+      : level === -4
+      ? `🎉《色彩排序》本周周挑战只用${moves}步完成，来挑战吧！🏆`
       : `🎉《色彩排序》第${level}关只用${moves}步完成，来挑战吧！👏`
     try {
       if (navigator.share) {
@@ -780,20 +824,29 @@ export default function App() {
 
         <main className="home-main" id="main-content">
           <div className="mode-entry">
-          {/* 每日签到卡片 */}
-          <div className={`checkin-card ${checkinDone ? 'checkin-done' : ''}`}>
-            <div className="checkin-info">
-              <span className="checkin-icon">📅</span>
-              <div className="checkin-text">
-                <span className="checkin-title">{checkinDone ? '今日已签到' : '每日签到'}</span>
-                <span className="checkin-streak">🔥 连续 {checkinStreak} 天 · 累计 {checkinTotal} 天</span>
+          {/* 签到 + 提示道具 合并行 */}
+          <div className="status-bar">
+            <div className={`checkin-card checkin-card-compact ${checkinDone ? 'checkin-done' : ''}`}>
+              <div className="checkin-info">
+                <span className="checkin-icon">📅</span>
+                <div className="checkin-text">
+                  <span className="checkin-title">{checkinDone ? '已签到' : '签到'}</span>
+                  <span className="checkin-streak">🔥{checkinStreak}天</span>
+                </div>
+              </div>
+              {checkinDone ? (
+                <span className="checkin-checked">✅</span>
+              ) : (
+                <button className="checkin-btn" onClick={handleCheckin}>签到</button>
+              )}
+            </div>
+            <div className="hint-items-card hint-items-card-compact">
+              <span className="hint-items-icon">💡</span>
+              <div className="hint-items-info">
+                <span className="hint-items-text">提示 <strong>{hintItems}</strong>/{MAX_HINT_ITEMS}</span>
+                <span className="hint-items-tip">签到可领</span>
               </div>
             </div>
-            {checkinDone ? (
-              <span className="checkin-checked">✅</span>
-            ) : (
-              <button className="checkin-btn" onClick={handleCheckin}>签到</button>
-            )}
           </div>
           {/* 下一个签到奖励提示 */}
           {(() => {
@@ -801,72 +854,86 @@ export default function App() {
             if (!next) return null;
             return (
               <div className="checkin-milestone-hint">
-                <span>{next.icon} 再签 {next.remaining} 天可获得: {next.reward}</span>
+                <span>{next.icon} 再签 {next.remaining} 天可得: {next.reward} · 累计{checkinTotal}天</span>
               </div>
             );
           })()}
 
-          {/* 提示道具展示 */}
-          <div className="hint-items-card">
-            <span className="hint-items-icon">💡</span>
-            <span className="hint-items-text">提示道具: <strong>{hintItems}</strong> / {MAX_HINT_ITEMS}</span>
-            <span className="hint-items-tip">每日登录 +1 · 签到可领取</span>
-          </div>
-
           {/* 忽略 */}
           {recentPlay && progress.completedLevels.length > 0 && (
-            <div className="recent-play-card" onClick={() => handleSelectLevel(recentPlay.level)}>
+            <div className="recent-play-card" onClick={() => {
+              if (recentPlay.mode === 'daily') handleDailyChallenge();
+              else if (recentPlay.mode === 'endless') handleEndlessMode();
+              else if (recentPlay.mode === 'timed') handleTimedMode();
+              else handleSelectLevel(recentPlay.level);
+            }}>
               <span className="recent-icon">▶️</span>
               <span className="recent-text">
                 <span className="recent-label">继续上次</span>
-                <span className="recent-level">第 {recentPlay.level} 关</span>
+                <span className="recent-level">
+                  {recentPlay.mode === 'daily' ? '每日挑战' : recentPlay.mode === 'endless' ? '无尽模式' : recentPlay.mode === 'timed' ? '限时挑战' : `第 ${recentPlay.level} 关`}
+                  <span className="recent-mode-tag">{
+                    recentPlay.mode === 'daily' ? '📅' : recentPlay.mode === 'endless' ? '∞' : recentPlay.mode === 'timed' ? '⏱' : '🎯'
+                  }</span>
+                </span>
               </span>
               <span className="recent-arrow">→</span>
             </div>
           )}
 
-          <button className="btn btn-primary btn-large" onClick={handleStartGame}>
-            🎯 {progress.currentLevel > 1 ? `继续游戏 (第${progress.currentLevel}关)` : "开始游戏"}
-          </button>
-          <p className="mode-desc">100关闲关模式，难度循序渐进</p>
+          {/* 游戏模式 2×2 网格 */}
+          <div className="mode-grid">
+            <button className="btn btn-primary mode-grid-btn" onClick={handleStartGame}>
+              <span className="mode-grid-icon">🎯</span>
+              <span className="mode-grid-label">{progress.currentLevel > 1 ? `继续游戏` : "开始游戏"}</span>
+              <span className="mode-grid-sub">{progress.currentLevel > 1 ? `第${progress.currentLevel}关` : '100关闯关'}</span>
+            </button>
+            <button 
+              className={`btn mode-grid-btn ${dailyCompletedToday ? 'btn-daily-done' : 'btn-daily'}`} 
+              onClick={handleDailyChallenge}
+            >
+              <span className="mode-grid-icon">📅</span>
+              <span className="mode-grid-label">{dailyCompletedToday ? "已完成" : "每日挑战"}</span>
+              <span className="mode-grid-sub">{dailyCompletedToday && getTodayLeaderboard()[0] ? `最佳${getTodayLeaderboard()[0].moves}步` : '每天一题'}</span>
+            </button>
+            <button
+              className="btn btn-endless mode-grid-btn"
+              onClick={handleEndlessMode}
+            >
+              <span className="mode-grid-icon">∞</span>
+              <span className="mode-grid-label">无尽模式</span>
+              <span className="mode-grid-sub">难度无限递增</span>
+            </button>
+            <button
+              className="btn btn-timed mode-grid-btn"
+              onClick={handleTimedMode}
+            >
+              <span className="mode-grid-icon">⏱</span>
+              <span className="mode-grid-label">限时挑战</span>
+              <span className="mode-grid-sub">120秒极限</span>
+            </button>
+          </div>
 
-          {/* 每日挑战 */}
-          <button 
-            className={`btn ${dailyCompletedToday ? 'btn-daily-done' : 'btn-daily'}`} 
-            onClick={handleDailyChallenge}
-          >
-            {dailyCompletedToday ? "✅ 每日挑战完成" : "📅 每日挑战"}
-          </button>
-          <p className="mode-desc">每天一关，全球同一题目</p>
-          {dailyCompletedToday && (() => {
-            const todayBest = getTodayLeaderboard()[0];
-            if (todayBest) {
-              return (
-                <p className="mode-desc daily-best-hint">
-                  🏆 今日最佳: {todayBest.moves} 步 · {'⭐'.repeat(todayBest.stars)}
-                </p>
-              );
-            }
-            return null;
+          {/* 周挑战入口 */}
+          {(() => {
+            const weeklyInfo = getWeeklyInfo();
+            const weeklyRecord = getWeeklyRecord();
+            const weeklyStreak = getWeeklyStreak();
+            return (
+              <div className={`weekly-challenge-banner ${weeklyCompleted ? 'weekly-done' : ''}`} onClick={() => { if (!weeklyCompleted) handleWeeklyChallenge(); }} role="button" tabIndex={0}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (!weeklyCompleted) handleWeeklyChallenge(); } }}>
+                <div className="weekly-banner-icon">🏆</div>
+                <div className="weekly-banner-content">
+                  <span className="weekly-banner-title">{weeklyCompleted ? '本周挑战已完成' : `第${weeklyInfo.week}周挑战`}</span>
+                  <span className="weekly-banner-sub">
+                    {weeklyCompleted && weeklyRecord ? `✅ ${weeklyRecord.moves}步 · ${'⭐'.repeat(weeklyRecord.stars)}` : '高难度关卡，等你来战！'}
+                    {weeklyStreak.currentStreak > 0 ? ` · 🔥${weeklyStreak.currentStreak}周连续` : ''}
+                  </span>
+                </div>
+                {!weeklyCompleted && <span className="weekly-banner-arrow">→</span>}
+              </div>
+            );
           })()}
-
-          {/* 无尽模式 */}
-          <button
-            className="btn btn-endless"
-            onClick={handleEndlessMode}
-          >
-            ∞ 无尽模式
-          </button>
-          <p className="mode-desc">连续过关，难度无限递增</p>
-
-          {/* 限时模式 */}
-          <button
-            className="btn btn-timed"
-            onClick={handleTimedMode}
-          >
-            ⏱ 限时挑战
-          </button>
-          <p className="mode-desc">120秒内连续过关，挑战极限</p>
 
           {progress.currentLevel > 1 && (
             <button className="btn btn-secondary" onClick={() => handleSelectLevel(1)}>
@@ -886,6 +953,36 @@ export default function App() {
                   <span className="daily-tip-title">{tip.title}</span>
                   <span className="daily-tip-text">{tip.content}</span>
                 </div>
+              </div>
+            );
+          })()}
+
+          {/* 每日挑战醒目入口 - 未完成时展示 */}
+          {!dailyCompletedToday && (
+            <div className="daily-challenge-banner" onClick={handleDailyChallenge} role="button" tabIndex={0}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleDailyChallenge(); } }}>
+              <div className="daily-banner-icon">📅</div>
+              <div className="daily-banner-content">
+                <span className="daily-banner-title">今日挑战未完成</span>
+                <span className="daily-banner-sub">每天一题，等你来解！</span>
+              </div>
+              <span className="daily-banner-arrow">→</span>
+            </div>
+          )}
+
+          {/* 每日推荐关卡 - 基于日期种子推荐重玩 */}
+          {(() => {
+            const dailyRec = getDailyRecommend(progress.completedLevels, levelStars, progress.currentLevel);
+            if (!dailyRec) return null;
+            return (
+              <div className="daily-recommend-card" onClick={() => handleSelectLevel(dailyRec.level)} role="button" tabIndex={0}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSelectLevel(dailyRec.level); } }}>
+                <span className="daily-rec-icon">{dailyRec.icon}</span>
+                <div className="daily-rec-info">
+                  <span className="daily-rec-label">📌 今日推荐</span>
+                  <span className="daily-rec-detail">第 {dailyRec.level} 关 · {dailyRec.reason}</span>
+                </div>
+                <span className="daily-rec-arrow">→</span>
               </div>
             );
           })()}
@@ -916,7 +1013,7 @@ export default function App() {
               <span className="stat-label">总星数</span>
             </div>
             <div className="stat-item">
-              <span className="stat-value" style={{ color: StatsTracker.get().currentStreak > 0 ? '#FF6B6B' : undefined }}>🔥{StatsTracker.get().currentStreak}</span>
+              <span className={`stat-value${StatsTracker.get().currentStreak > 0 ? ' stat-value-streak-hot' : ''}`}>🔥{StatsTracker.get().currentStreak}</span>
               <span className="stat-label">连胜</span>
             </div>
             <div className="stat-item">
@@ -934,6 +1031,12 @@ export default function App() {
           </div>
 
           {/* 通关进度条 */}
+          <div className="collapsible-section">
+            <div className="collapse-header" onClick={() => setProgressCollapsed(!progressCollapsed)} role="button" tabIndex={0} aria-expanded={!progressCollapsed} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setProgressCollapsed(!progressCollapsed); } }}>
+              <h3>📊 通关进度</h3>
+              <span className={`collapse-toggle ${progressCollapsed ? 'collapsed' : ''}`}>▼</span>
+            </div>
+            <div className={`collapse-content ${progressCollapsed ? 'collapsed' : ''}`}>
           <div className="progress-bar-section">
             <div className="progress-bar-header">
               <span>通关进度</span>
@@ -971,8 +1074,16 @@ export default function App() {
               })()}
             </div>
           </div>
+            </div>
+          </div>
 
           {/* 关卡选择 */}
+          <div className="collapsible-section">
+            <div className="collapse-header" onClick={() => setLevelSelectCollapsed(!levelSelectCollapsed)} role="button" tabIndex={0} aria-expanded={!levelSelectCollapsed} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setLevelSelectCollapsed(!levelSelectCollapsed); } }}>
+              <h3>🎮 选择关卡</h3>
+              <span className={`collapse-toggle ${levelSelectCollapsed ? 'collapsed' : ''}`}>▼</span>
+            </div>
+            <div className={`collapse-content ${levelSelectCollapsed ? 'collapsed' : ''}`}>
           <div className="level-select">
             <div className="level-select-header">
               <h3>选择关卡</h3>
@@ -1021,16 +1132,27 @@ export default function App() {
                 >▶</button>
               </div>
             </div>
-            <div className="difficulty-legend" aria-label="难度颜色图例">
-              <span className="legend-item"><span className="legend-dot diff-easy"></span>入门</span>
-              <span className="legend-item"><span className="legend-dot diff-normal"></span>普通</span>
-              <span className="legend-item"><span className="legend-dot diff-medium"></span>中等</span>
-              <span className="legend-item"><span className="legend-dot diff-hard"></span>困难</span>
-              <span className="legend-item"><span className="legend-dot diff-expert"></span>专家</span>
-              <span className="legend-item"><span className="legend-dot diff-master"></span>大师</span>
+            <div className="difficulty-filter" aria-label="难度筛选">
+              <button className={`diff-filter-btn ${difficultyFilter === 'all' ? 'active' : ''}`} onClick={() => setDifficultyFilter('all')}>全部</button>
+              <button className={`diff-filter-btn diff-easy ${difficultyFilter === 'easy' ? 'active' : ''}`} onClick={() => setDifficultyFilter('easy')}>入门</button>
+              <button className={`diff-filter-btn diff-normal ${difficultyFilter === 'normal' ? 'active' : ''}`} onClick={() => setDifficultyFilter('normal')}>普通</button>
+              <button className={`diff-filter-btn diff-medium ${difficultyFilter === 'medium' ? 'active' : ''}`} onClick={() => setDifficultyFilter('medium')}>中等</button>
+              <button className={`diff-filter-btn diff-hard ${difficultyFilter === 'hard' ? 'active' : ''}`} onClick={() => setDifficultyFilter('hard')}>困难</button>
+              <button className={`diff-filter-btn diff-expert ${difficultyFilter === 'expert' ? 'active' : ''}`} onClick={() => setDifficultyFilter('expert')}>专家</button>
+              <button className={`diff-filter-btn diff-master ${difficultyFilter === 'master' ? 'active' : ''}`} onClick={() => setDifficultyFilter('master')}>大师</button>
             </div>
             <div className="level-grid">
               {Array.from({ length: Math.max(20, progress.currentLevel + 5) }, (_, i) => i + 1)
+                .filter(lvl => {
+                  if (difficultyFilter === 'all') return true;
+                  let diffClass = 'diff-easy';
+                  if (lvl > 90) diffClass = 'diff-master';
+                  else if (lvl > 50) diffClass = 'diff-expert';
+                  else if (lvl > 30) diffClass = 'diff-hard';
+                  else if (lvl > 20) diffClass = 'diff-medium';
+                  else if (lvl > 6) diffClass = 'diff-normal';
+                  return diffClass === `diff-${difficultyFilter}`;
+                })
                 .slice(pageLevel * LEVELS_PER_PAGE, (pageLevel + 1) * LEVELS_PER_PAGE)
                 .map(lvl => {
                   const stars = levelStars[lvl] || 0;
@@ -1052,10 +1174,13 @@ export default function App() {
                       aria-label={`第${lvl}关${progress.completedLevels.includes(lvl) ? `，已完成，最佳${best || '?'}步，${stars}星！` : ''}`}
                       title={progress.completedLevels.includes(lvl) ? `第${lvl}关 | 最佳: ${best || '?'}步 | ${'⭐'.repeat(stars) || '未评级'}` : `第${lvl}关`}
                     >
+                      <span className="level-diff-dot" data-diff={diffClass} />
                       {progress.completedLevels.includes(lvl) ? `${'⭐'.repeat(Math.min(stars, 3)) || '✓'}` : ''} {lvl}
                     </button>
                   );
                 })}
+            </div>
+          </div>
             </div>
           </div>
 
@@ -1091,6 +1216,54 @@ export default function App() {
               👍 支持开发者
             </a>
           </div>
+
+          {/* 常见问题 */}
+          <div className="collapsible-section">
+            <div className="collapse-header" onClick={() => setFaqCollapsed(!faqCollapsed)} role="button" tabIndex={0} aria-expanded={!faqCollapsed} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setFaqCollapsed(!faqCollapsed); } }}>
+              <h3>❓ 常见问题</h3>
+              <span className={`collapse-toggle ${faqCollapsed ? 'collapsed' : ''}`}>▼</span>
+            </div>
+            <div className={`collapse-content ${faqCollapsed ? 'collapsed' : ''}`}>
+              <div className="faq-list">
+                <div className="faq-item">
+                  <div className="faq-question">🎨 色彩排序是什么游戏？</div>
+                  <div className="faq-answer">色彩排序是一款经典的液体排序解谜游戏，玩家需要将不同颜色的液体倒入试管中，使每种颜色归到同一个试管即可过关。游戏包含100关、每日挑战、无尽模式和限时挑战。</div>
+                </div>
+                <div className="faq-item">
+                  <div className="faq-question">💰 色彩排序游戏免费吗？</div>
+                  <div className="faq-answer">完全免费！无需注册、无需登录，打开网页即可游玩。所有关卡和模式均免费开放。</div>
+                </div>
+                <div className="faq-item">
+                  <div className="faq-question">📱 支持手机游玩吗？</div>
+                  <div className="faq-answer">支持！色彩排序完美适配手机、平板和桌面端，移动端支持触摸操作，长按试管可撤销上一步。</div>
+                </div>
+                <div className="faq-item">
+                  <div className="faq-question">📡 可以离线游玩吗？</div>
+                  <div className="faq-answer">可以！色彩排序是PWA应用，支持离线游玩。游戏进度和成绩保存在本地，刷新不丢失。</div>
+                </div>
+                <div className="faq-item">
+                  <div className="faq-question">⭐ 星级评价怎么计算？</div>
+                  <div className="faq-answer">三星：达到或超过最优步数；二星：步数不超过最优的1.5倍；一星：超过1.5倍但通关。追求三星通关吧！</div>
+                </div>
+                <div className="faq-item">
+                  <div className="faq-question">💡 提示道具怎么获取？</div>
+                  <div className="faq-answer">每日登录自动领取1个提示道具，每日签到也可获得。提示道具上限为5个，合理使用哦！</div>
+                </div>
+                <div className="faq-item">
+                  <div className="faq-question">🎮 色彩排序有哪些游戏模式？</div>
+                  <div className="faq-answer">色彩排序包含四种模式：100关闯关模式、每天一题的每日挑战、难度无限递增的无尽模式、120秒极限的限时挑战模式。每种模式都有独特的乐趣！</div>
+                </div>
+                <div className="faq-item">
+                  <div className="faq-question">🏆 成就系统怎么玩？</div>
+                  <div className="faq-answer">色彩排序拥有丰富的成就系统，包含通关进度、技巧挑战、速度成就、每日签到、收集成就等多个分类。在首页点击🏆成就按钮查看所有成就和进度。</div>
+                </div>
+                <div className="faq-item">
+                  <div className="faq-question">🔧 有关卡编辑器吗？</div>
+                  <div className="faq-answer">有！色彩排序内置关卡编辑器，玩家可以自创关卡、导入和导出关卡码、验证关卡合法性。在首页点击🔧编辑器按钮即可使用。</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </main>
 
         <footer className="home-footer">
@@ -1122,14 +1295,14 @@ export default function App() {
             <div className="tutorial-card" onClick={(e) => e.stopPropagation()}>
               <div className="tutorial-emoji">💾</div>
               <h2>发现未完成的游戏</h2>
-              <p style={{ textAlign: 'center', color: '#666', marginBottom: '16px' }}>
+              <p className="modal-body-text">
                 {autosaveData.mode === 'endless'
                   ? `无尽模式第 ${(autosaveData.endlessScore ?? 0) + 1} 关已走 ${autosaveData.moves} 步`
                   : autosaveData.mode === 'timed'
                   ? `限时挑战已走 ${autosaveData.moves} 步`
                   : `第 ${autosaveData.level} 关已走 ${autosaveData.moves} 步`}
               </p>
-              <div style={{ display: 'flex', gap: '12px', flexDirection: 'column' }}>
+              <div className="modal-actions">
                 <button className="btn btn-primary btn-large" onClick={() => {
                   if (autosaveData.mode === 'endless') {
                     setIsEndlessMode(true);
@@ -1265,10 +1438,10 @@ export default function App() {
             <div className="tutorial-card" onClick={(e) => e.stopPropagation()}>
               <div className="tutorial-emoji">🎁</div>
               <h2>签到奖励已发放</h2>
-              <p style={{ textAlign: 'center', color: '#666', marginBottom: '16px', fontSize: '16px' }}>
+              <p className="modal-body-text-lg">
                 {showCheckinReward}
               </p>
-              <p style={{ textAlign: 'center', color: '#999', fontSize: '13px', marginBottom: '16px' }}>
+              <p className="modal-hint-text">
                 连续签到 {checkinStreak} 天
               </p>
               <button className="btn btn-primary btn-large" onClick={() => setShowCheckinReward(null)}>
@@ -1285,6 +1458,36 @@ export default function App() {
               <div className="tutorial-emoji">📋</div>
               <h2>色彩排序更新日志</h2>
               <div className="changelog-content">
+                <div className="changelog-version">
+                  <h3>🎉 v1.15.0</h3>
+                  <ul>
+                    <li>🔧 修复重置进度清理不完整问题：统一管理所有本地存储键名，确保数据彻底清理</li>
+                    <li>📖 帮助弹窗新增SVG可视化图示：三步图解基本玩法，新手更易上手</li>
+                    <li>⭐ 胜利结算星星弹出动画：星星逐个弹出并旋转，增强成就感</li>
+                    <li>🔄 胜利弹窗新增“再来一局”按钮：方便刷最佳记录，提升重复游玩动力</li>
+                    <li>🏆 游戏中新增个人最佳步数徽章：实时展示历史最佳记录，激发挑战欲</li>
+                  </ul>
+                </div>
+                <div className="changelog-version">
+                  <h3>🎉 v1.14.0</h3>
+                  <ul>
+                    <li>⚠️ 新增死局预警系统：当可行操作≤2时自动提示玩家注意规划路线</li>
+                    <li>📊 胜利结算页新增步数效率可视化条：直观展示与最优步数的差距</li>
+                    <li>▶️ 首页“继续上次"卡片增强：支持显示上次游玩模式（每日/无尽/限时/普通）</li>
+                    <li>🎨 关卡选择新增难度小圆点指示器，更直观展示关卡难度</li>
+                    <li>🔍 SEO优化：新增VideoGame结构化数据、扩充FAQ内容至7个问题</li>
+                  </ul>
+                </div>
+                <div className="changelog-version">
+                  <h3>🎉 v1.13.0</h3>
+                  <ul>
+                    <li>🏆 成就页大改版：新增分类筛选标签、总体进度条、分类进度条、解锁日期显示</li>
+                    <li>💡 游戏内智能上下文提示：根据当前局面分析，提供针对性策略建议</li>
+                    <li>🔥 游戏内新增连胜指示器，实时显示当前连胜次数</li>
+                    <li>🖼️ 新增品牌 OG 图片，社交分享更精美</li>
+                    <li>📝 修复统计页文字拼写错误</li>
+                  </ul>
+                </div>
                 <div className="changelog-version">
                   <h3>🎉 v1.12.0</h3>
                   <ul>
@@ -1373,15 +1576,15 @@ export default function App() {
             <div className="tutorial-card" onClick={(e) => e.stopPropagation()}>
               <div className="tutorial-emoji">{announcements[0].icon}</div>
               <h2>{announcements[0].title}</h2>
-              <p style={{ textAlign: 'center', color: '#666', marginBottom: '16px', fontSize: '15px', lineHeight: '1.6' }}>
+              <p className="modal-body-text-announcement">
                 {announcements[0].content}
               </p>
-              <div style={{ display: 'flex', gap: '8px', flexDirection: 'column' }}>
+              <div className="modal-actions-sm">
                 <button className="btn btn-primary btn-large" onClick={() => handleDismissAnnouncement(announcements[0].id)}>
                 知道了
                 </button>
                 {announcements.length > 1 && (
-                  <p style={{ textAlign: 'center', color: '#999', fontSize: '12px' }}>
+                  <p className="modal-hint-text-sm">
                     还有 {announcements.length - 1} 条公告
                   </p>
                 )}
@@ -1417,10 +1620,10 @@ export default function App() {
       <div className="app">
         <header className="game-header">
           <button className="btn-back" onClick={handleGoHomeWithConfirm}>← 返回</button>
-          <h1 className="game-title">{isDailyMode ? "📅 每日挑战" : isEndlessMode ? `∞ 无尽模式 (${endlessScore})` : isTimedMode ? `⏱ 限时挑战 (${timedScore})` : "🎨 色彩排序"}</h1>
+          <h1 className="game-title">{isDailyMode ? "📅 每日挑战" : isEndlessMode ? `∞ 无尽模式 (${endlessScore})` : isTimedMode ? `⏱ 限时挑战 (${timedScore})` : isWeeklyMode ? "🏆 周挑战" : "🎨 色彩排序"}</h1>
           <button className="btn-hint" onClick={handleHint}>💡 提示</button>
         </header>
-        {!isDailyMode && !isEndlessMode && !isTimedMode && (
+        {!isDailyMode && !isEndlessMode && !isTimedMode && !isWeeklyMode && (
           <div className="level-info-bar">
             <span className="level-info-item">第 {currentLevel} 关</span>
             <span className="level-info-divider">|</span>
@@ -1441,7 +1644,7 @@ export default function App() {
             timedDuration={TIMED_DURATION}
             bestScore={bestScores[currentLevel] || 0}
             onWin={(winMoves: number, minSteps: number, stars: number, playTimeSec: number) => handleWin(winMoves, minSteps, stars, playTimeSec)}
-            onMove={(m: number) => { setMoves(m); autoSaveGame(currentLevel, isDailyMode ? 'daily' : isEndlessMode ? 'endless' : isTimedMode ? 'timed' : 'normal', m, false, isEndlessMode ? { endlessScore } : isTimedMode ? { timedScore } : undefined); }}
+            onMove={(m: number) => { setMoves(m); autoSaveGame(currentLevel, isDailyMode ? 'daily' : isEndlessMode ? 'endless' : isTimedMode ? 'timed' : isWeeklyMode ? 'weekly' : 'normal', m, false, isEndlessMode ? { endlessScore } : isTimedMode ? { timedScore } : undefined); }}
             onReset={() => setMoves(0)}
             hintPair={hintPair}
             clearHint={() => setHintPair(null)}
@@ -1606,7 +1809,7 @@ export default function App() {
         <header className="game-header">
           <button className="btn-back" onClick={() => { setPage('editor'); setPlayingCustomLevel(null); }}>← 返回</button>
           <h1 className="game-title">🎮 {playingCustomLevel.name}</h1>
-          <div style={{ width: '40px' }} />
+          <div className="header-spacer" />
         </header>
         <main className="game-main">
           <Suspense fallback={<PageLoading />}>

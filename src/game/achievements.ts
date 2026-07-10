@@ -203,9 +203,63 @@ export const ACHIEVEMENT_DEFS = [
     description: '通过第 100 关',
     icon: '👑',
   },
+  // 周挑战成就
+  {
+    id: 'weekly_first',
+    name: '周挑战者',
+    description: '完成首次周挑战',
+    icon: '🏆',
+  },
+  {
+    id: 'weekly_streak_4',
+    name: '月度坚持',
+    description: '连续 4 周完成周挑战',
+    icon: '🏅',
+  },
+  {
+    id: 'weekly_streak_12',
+    name: '季度挑战王',
+    description: '连续 12 周完成周挑战',
+    icon: '👑',
+  },
+  // 关卡探索者成就
+  {
+    id: 'explorer_20',
+    name: '探索新手',
+    description: '通关 20 个不同关卡',
+    icon: '🗺️',
+  },
+  {
+    id: 'explorer_50',
+    name: '探索达人',
+    description: '通关 50 个不同关卡',
+    icon: '🧭',
+  },
+  // 色彩收藏家成就
+  {
+    id: 'color_master_5',
+    name: '色彩收藏家',
+    description: '在单关中整理 5 种以上颜色',
+    icon: '🌈',
+  },
+  {
+    id: 'color_master_8',
+    name: '色彩指挥家',
+    description: '在单关中整理 8 种以上颜色',
+    icon: '🎨',
+  },
+  // 全模式体验成就
+  {
+    id: 'all_round',
+    name: '全能玩家',
+    description: '体验所有游戏模式（闯关/每日/无尽/限时/周挑战）',
+    icon: '🎮',
+  },
 ];
 
-const ACHIEVEMENT_KEY = 'color-sort-achievements';
+import { STORAGE_KEYS } from './storageKeys';
+
+const ACHIEVEMENT_KEY = STORAGE_KEYS.ACHIEVEMENTS;
 
 // 成就状态（含连续不使用提示计数）
 interface AchievementState {
@@ -461,6 +515,55 @@ export const AchievementManager = {
       newlyUnlocked.push(...this.unlock('level_100'));
     }
     return newlyUnlocked;
+  },
+
+  // 检查周挑战成就
+  checkWeeklyAchievements(weeklyStreak: number): Achievement[] {
+    const newlyUnlocked: Achievement[] = [];
+    if (!('weekly_first' in loadState().unlocked)) {
+      newlyUnlocked.push(...this.unlock('weekly_first'));
+    }
+    if (weeklyStreak >= 4 && !('weekly_streak_4' in loadState().unlocked)) {
+      newlyUnlocked.push(...this.unlock('weekly_streak_4'));
+    }
+    if (weeklyStreak >= 12 && !('weekly_streak_12' in loadState().unlocked)) {
+      newlyUnlocked.push(...this.unlock('weekly_streak_12'));
+    }
+    return newlyUnlocked;
+  },
+
+  // 检查关卡探索者成就（传入已通关卡总数）
+  checkExplorerAchievements(completedCount: number): Achievement[] {
+    const newlyUnlocked: Achievement[] = [];
+    if (completedCount >= 20 && !('explorer_20' in loadState().unlocked)) {
+      newlyUnlocked.push(...this.unlock('explorer_20'));
+    }
+    if (completedCount >= 50 && !('explorer_50' in loadState().unlocked)) {
+      newlyUnlocked.push(...this.unlock('explorer_50'));
+    }
+    return newlyUnlocked;
+  },
+
+  // 检查色彩收藏家成就（传入本关颜色种类数）
+  checkColorMasterAchievements(colorCount: number): Achievement[] {
+    const newlyUnlocked: Achievement[] = [];
+    if (colorCount >= 5 && !('color_master_5' in loadState().unlocked)) {
+      newlyUnlocked.push(...this.unlock('color_master_5'));
+    }
+    if (colorCount >= 8 && !('color_master_8' in loadState().unlocked)) {
+      newlyUnlocked.push(...this.unlock('color_master_8'));
+    }
+    return newlyUnlocked;
+  },
+
+  // 检查全模式体验成就
+  checkAllRoundAchievements(modesPlayed: string[]): Achievement[] {
+    const allModes = ['normal', 'daily', 'endless', 'timed', 'weekly'];
+    const hasAll = allModes.every(m => modesPlayed.includes(m));
+    if (hasAll && !('all_round' in loadState().unlocked)) {
+      return this.unlock('all_round');
+    }
+    return [];
   },
 
   // 重置所有成就

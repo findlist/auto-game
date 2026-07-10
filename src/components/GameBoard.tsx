@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { Tube, Level, COLORS } from '../game/types';
 import { generateLevel, canPour, pour, checkWin, checkDeadlock, cloneTubes, generateEndlessLevel, generateTimedLevel } from '../game/levelGenerator';
 import { generateDailyChallenge } from '../game/dailyChallenge';
+import { generateWeeklyChallenge } from '../game/weeklyChallenge';
 import { SoundEngine } from '../game/soundEngine';
 import { TubeView } from './TubeView';
 import { ParticleEffect } from './ParticleEffect';
@@ -36,7 +37,7 @@ interface GameBoardProps {
 
 export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, timedScore = 0, timedDuration = 120, bestScore = 0, onWin, onMove, onReset, hintPair, clearHint, onNextLevel, onPrevLevel, onGoHome, onShare, onReplayShare, onExportVideo, onTimeUp, tubesRef, onDeadlockRecover, onHint, hintItems = 0 }) => {
   const [levelData, setLevelData] = useState<Level>(() =>
-    level === -1 ? generateDailyChallenge() : level === -2 ? generateEndlessLevel(endlessScore) : level === -3 ? generateTimedLevel(timedScore) : generateLevel(level)
+    level === -1 ? generateDailyChallenge() : level === -2 ? generateEndlessLevel(endlessScore) : level === -3 ? generateTimedLevel(timedScore) : level === -4 ? generateWeeklyChallenge() : generateLevel(level)
   );
   const [tubes, setTubes] = useState<Tube[]>(levelData.tubes);
   const [selectedTube, setSelectedTube] = useState<number | null>(null);
@@ -94,7 +95,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
 
   // 关卡变化时重置
   useEffect(() => {
-    const newLevel = level === -1 ? generateDailyChallenge() : level === -2 ? generateEndlessLevel(endlessScore) : level === -3 ? generateTimedLevel(timedScore) : generateLevel(level);
+    const newLevel = level === -1 ? generateDailyChallenge() : level === -2 ? generateEndlessLevel(endlessScore) : level === -3 ? generateTimedLevel(timedScore) : level === -4 ? generateWeeklyChallenge() : generateLevel(level);
     
     // 自适应难度修正：仅对普通关卡（level > 0）生效
     if (level > 0) {
@@ -483,10 +484,34 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
             <h2>{level === -3 ? `通过第 ${timedScore + 1} 关！` : level === -2 ? `通过第 ${endlessScore + 1} 关！` : '恭喜过关！'}</h2>
             <div className="star-rating">
               {[1, 2, 3].map(s => (
-                <span key={s} className={`star ${s <= starRating ? 'star-filled' : 'star-empty'}`}>⭐</span>
+                <span key={s} className={`star ${s <= starRating ? 'star-filled star-pop' : 'star-empty'}`} style={{ animationDelay: `${0.5 + s * 0.2}s` }}>⭐</span>
               ))}
             </div>
             <p>用时 {moves} 步完成{(levelData.minSteps ?? -1) > 0 && ` · 最优 ${levelData.minSteps} 步`}</p>
+            {/* 步数效率可视化 */}
+            {(levelData.minSteps ?? -1) > 0 && (() => {
+              const min = levelData.minSteps ?? 1;
+              const ratio = Math.min(moves / min, 2.5);
+              const pct = Math.min((ratio / 2.5) * 100, 100);
+              const isPerfect = ratio <= 1.0;
+              const isGood = ratio <= 1.5;
+              const barColor = isPerfect ? '#4ECDC4' : isGood ? '#667eea' : '#FF9800';
+              const labelText = isPerfect ? '✨ 完美通关！' : isGood ? '👍 表现良好' : '💪 还有提升空间';
+              return (
+                <div className="win-efficiency-bar">
+                  <div className="win-efficiency-label">{labelText}</div>
+                  <div className="win-efficiency-track">
+                    <div className="win-efficiency-fill" style={{ width: `${pct}%`, background: barColor }} />
+                    <div className="win-efficiency-marker" style={{ left: `${(1 / 2.5) * 100}%` }} title={`最优: ${min}步`} />
+                  </div>
+                  <div className="win-efficiency-scale">
+                    <span>0</span>
+                    <span>最优 {min}</span>
+                    <span>{Math.round(min * 2.5)}</span>
+                  </div>
+                </div>
+              );
+            })()}
             {bestScore > 0 && moves < bestScore && (
               <p className="new-record-badge">🎉 新纪录！上次最佳 {bestScore} 步</p>
             )}
@@ -529,6 +554,9 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
                 setShowShareImage(true);
               }}>🖼️ 生成战绩图</button>
               <button className="btn btn-primary" onClick={() => onShare(moves, level)}>📤 分享战绩</button>
+              {level > 0 && (
+                <button className="btn btn-secondary" onClick={handleReset}>🔄 再来一局</button>
+              )}
               <button className="btn btn-primary" onClick={onNextLevel}>{level === -3 ? '➡️ 继续挑战' : level === -2 ? '➡️ 继续挑战' : '➡️ 下一关'}</button>
               <button className="btn btn-secondary" onClick={onGoHome}>🏠 返回首页</button>
             </div>
@@ -721,7 +749,10 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
           ❓ 帮助
         </button>
       </div>
-      <div className="keyboard-hint">快捷键: 数字键选管 · Z 撤销 · R 重置 · H 提示(消耗道具) · PageUp 上一关 · PageDown 下一关 · 移动端长按试管可撤销</div>
+      <div className="keyboard-hint">
+        <span className="hint-desktop">快捷键: 数字键选管 · Z 撤销 · R 重置 · H 提示(消耗道具) · PageUp 上一关 · PageDown 下一关 · 移动端长按试管撤销</span>
+        <span className="hint-mobile">点击试管选中 → 再点目标试管倒色 · 长按试管撤销 · 💡提示需消耗道具</span>
+      </div>
 
       {/* 游戏内帮助弹窗 */}
       {showHelpModal && (
@@ -734,9 +765,59 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
             <div className="help-modal-body">
               <div className="help-section">
                 <h4>🎮 基本玩法</h4>
-                <ul>
-                  <li>点击有颜色的试管选中它（高亮显示）</li>
-                  <li>再点击另一个试管，颜色会从上往下倒过去</li>
+                <div className="help-visual-steps">
+                  <div className="help-visual-step">
+                    <div className="help-visual-demo">
+                      <svg viewBox="0 0 120 70" preserveAspectRatio="xMidYMid meet">
+                        <rect x="10" y="15" width="22" height="50" rx="4" fill="rgba(255,255,255,0.15)" stroke="#FF6B6B" strokeWidth="2.5"/>
+                        <rect x="12" y="25" width="18" height="12" fill="#FF6B6B"/>
+                        <rect x="12" y="37" width="18" height="12" fill="#4ECDC4"/>
+                        <rect x="12" y="49" width="18" height="12" fill="#4ECDC4"/>
+                        <text x="21" y="12" fontSize="9" fill="#FF6B6B" textAnchor="middle">1</text>
+                        <path d="M38 35 L52 35" stroke="#667eea" strokeWidth="2" markerEnd="url(#arrowhead)"/>
+                        <defs><marker id="arrowhead" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><polygon points="0 0, 6 3, 0 6" fill="#667eea"/></marker></defs>
+                        <rect x="55" y="15" width="22" height="50" rx="4" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.4)" strokeWidth="1.5"/>
+                        <text x="66" y="12" fontSize="9" fill="#999" textAnchor="middle">2</text>
+                        <text x="95" y="40" fontSize="20">👆</text>
+                      </svg>
+                    </div>
+                    <p><strong>第1步：</strong>点击有颜色的试管选中它</p>
+                  </div>
+                  <div className="help-visual-step">
+                    <div className="help-visual-demo">
+                      <svg viewBox="0 0 120 70" preserveAspectRatio="xMidYMid meet">
+                        <rect x="10" y="15" width="22" height="50" rx="4" fill="rgba(255,255,255,0.15)" stroke="#FF6B6B" strokeWidth="2.5"/>
+                        <rect x="12" y="25" width="18" height="12" fill="#FF6B6B"/>
+                        <rect x="12" y="37" width="18" height="24" fill="#4ECDC4"/>
+                        <text x="21" y="12" fontSize="9" fill="#FF6B6B" textAnchor="middle">1</text>
+                        <path d="M38 30 Q45 20 52 30" stroke="#4ECDC4" strokeWidth="2" fill="none" markerEnd="url(#arrowhead2)"/>
+                        <defs><marker id="arrowhead2" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><polygon points="0 0, 6 3, 0 6" fill="#4ECDC4"/></marker></defs>
+                        <rect x="55" y="15" width="22" height="50" rx="4" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.4)" strokeWidth="1.5"/>
+                        <rect x="57" y="49" width="18" height="12" fill="#4ECDC4"/>
+                        <text x="66" y="12" fontSize="9" fill="#999" textAnchor="middle">2</text>
+                        <text x="95" y="40" fontSize="20">👆</text>
+                      </svg>
+                    </div>
+                    <p><strong>第2步：</strong>再点击目标试管倒过去</p>
+                  </div>
+                  <div className="help-visual-step">
+                    <div className="help-visual-demo">
+                      <svg viewBox="0 0 120 70" preserveAspectRatio="xMidYMid meet">
+                        <rect x="10" y="15" width="22" height="50" rx="4" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.4)" strokeWidth="1.5"/>
+                        <text x="21" y="12" fontSize="9" fill="#999" textAnchor="middle">1</text>
+                        <rect x="55" y="15" width="22" height="50" rx="4" fill="rgba(255,255,255,0.15)" stroke="#4ECDC4" strokeWidth="2.5"/>
+                        <rect x="57" y="19" width="18" height="12" fill="#4ECDC4"/>
+                        <rect x="57" y="31" width="18" height="12" fill="#4ECDC4"/>
+                        <rect x="57" y="43" width="18" height="12" fill="#4ECDC4"/>
+                        <rect x="57" y="51" width="18" height="10" fill="#4ECDC4"/>
+                        <text x="66" y="12" fontSize="9" fill="#4ECDC4" textAnchor="middle">2</text>
+                        <text x="88" y="45" fontSize="18">✅</text>
+                      </svg>
+                    </div>
+                    <p><strong>目标：</strong>每种颜色归到一个试管</p>
+                  </div>
+                </div>
+                <ul className="help-rules-list">
                   <li>只能倒入<strong>空试管</strong>或<strong>顶部颜色相同</strong>的试管</li>
                   <li>把每种颜色全部归到同一个试管即获胜！</li>
                 </ul>
@@ -757,6 +838,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
                 <ul>
                   <li>点击试管选中/倾倒</li>
                   <li><strong>长按试管 0.5 秒</strong>可撤销上一步</li>
+                  <li><strong>滑动手指</strong>从源试管拖到目标试管可直接倾倒</li>
                 </ul>
               </div>
               <div className="help-section">

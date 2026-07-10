@@ -37,9 +37,9 @@ export const TubeView: React.FC<TubeViewProps> = React.memo(({ tube, index, isSe
     longPressTimer.current = window.setTimeout(() => {
       longPressTriggered.current = true;
       // 长按触觉反馈
-      if (navigator.vibrate) navigator.vibrate(50);
+      if (navigator.vibrate) navigator.vibrate(30);
       onLongPress();
-    }, 500);
+    }, 400);
   };
 
   // 触摸移动（超过阈值则取消长按）
@@ -50,7 +50,7 @@ export const TubeView: React.FC<TubeViewProps> = React.memo(({ tube, index, isSe
     if (start) {
       const dx = Math.abs(touch.clientX - start.x);
       const dy = Math.abs(touch.clientY - start.y);
-      if (dx > 10 || dy > 10) {
+      if (dx > 12 || dy > 12) {
         clearTimeout(longPressTimer.current);
         longPressTimer.current = null;
       }
@@ -129,6 +129,8 @@ export const TubeView: React.FC<TubeViewProps> = React.memo(({ tube, index, isSe
               style={{
                 height: `${layerHeight}%`,
                 backgroundColor: COLORS[layer.color] || layer.color,
+                // 叠加纵向渐变：顶部高光、底部暗影，让颜色层呈现立体球体感
+                backgroundImage: 'linear-gradient(180deg, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0.05) 40%, rgba(0,0,0,0.12) 100%)',
                 bottom: `${i * layerHeight}%`,
               }}
             />

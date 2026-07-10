@@ -2,6 +2,7 @@ import React from 'react';
 import { StatsTracker } from '../game/statsTracker';
 import { DailyCheckin } from '../game/dailyCheckin';
 import { getTodayLeaderboard, getDailyStats } from '../game/dailyLeaderboard';
+import { getVisitSummary, getRecentVisitTrend, getAvgSessionDuration, getReturnRate } from '../game/visitTracker';
 
 interface StatsPageProps {
   onBack: () => void;
@@ -20,7 +21,7 @@ export const StatsPage: React.FC<StatsPageProps> = ({ onBack, timedHighScore }) 
       <header className="game-header">
         <button className="btn-back" onClick={onBack}>← 返回</button>
         <h1 className="game-title">📊 游戏统计</h1>
-        <div style={{ width: '40px' }} />
+        <div className="header-spacer" />
       </header>
       <main className="info-page">
         <div className="stats-grid">
@@ -72,7 +73,7 @@ export const StatsPage: React.FC<StatsPageProps> = ({ onBack, timedHighScore }) 
           <div className="stat-card">
             <div className="stat-card-icon">↩️</div>
             <div className="stat-card-value">{stats.undosUsed}</div>
-            <div className="stat-card-label">撒销使用</div>
+            <div className="stat-card-label">撤销使用</div>
           </div>
           <div className="stat-card">
             <div className="stat-card-icon">🎯</div>
@@ -93,7 +94,7 @@ export const StatsPage: React.FC<StatsPageProps> = ({ onBack, timedHighScore }) 
           <h3>🎉 连胜记录</h3>
           <div className="stats-row"><span>当前连胜</span><span>🔥 {stats.currentStreak} 连胜</span></div>
           <div className="stats-row"><span>最佳连胜</span><span>🏆 {stats.bestStreak} 连胜</span></div>
-          <div className="stats-row" style={{ fontSize: '12px', color: '#999' }}><span>说明</span><span>不使用提示和撤销通关才累计连胜</span></div>
+          <div className="stats-row stats-note"><span>说明</span><span>不使用提示和撤销通关才累计连胜</span></div>
         </div>
 
         {/* 签到记录 */}
@@ -244,6 +245,65 @@ export const StatsPage: React.FC<StatsPageProps> = ({ onBack, timedHighScore }) 
           })()}
         </div>
 
+        {/* 关卡效率分析 */}
+        <div className="stats-detail">
+          <h3>🎯 关卡效率分析</h3>
+          {(() => {
+            const levelEntries = Object.entries(stats.levelStats).filter(([, s]) => s.playCount > 0);
+            if (levelEntries.length === 0) return <p style={{ color: '#999', fontSize: '13px' }}>还未通关哦</p>;
+            // 分析各难度区间平均步数与重玩率
+            const ranges = [
+              { name: '入门(1-6)', min: 1, max: 6, color: '#4ECDC4' },
+              { name: '初级(7-12)', min: 7, max: 12, color: '#667eea' },
+              { name: '中等(13-20)', min: 13, max: 20, color: '#FFA07A' },
+              { name: '困难(21-30)', min: 21, max: 30, color: '#FF6B6B' },
+              { name: '挑战(31-50)', min: 31, max: 50, color: '#C589E8' },
+              { name: '高级(51+)', min: 51, max: 100, color: '#333' },
+            ];
+            return (
+              <>
+                {ranges.map(r => {
+                  const levels = levelEntries.filter(([l]) => {
+                    const lv = parseInt(l, 10);
+                    return lv >= r.min && lv <= r.max;
+                  });
+                  if (levels.length === 0) return null;
+                  const avgMoves = Math.round(levels.reduce((sum, [, s]) => sum + s.bestMoves, 0) / levels.length);
+                  const avgStars = (levels.reduce((sum, [, s]) => sum + s.stars, 0) / levels.length).toFixed(1);
+                  const totalPlays = levels.reduce((sum, [, s]) => sum + s.playCount, 0);
+                  const completed = levels.length;
+                  return (
+                    <div key={r.name} className="chart-bar-row">
+                      <span className="chart-bar-label">{r.name}</span>
+                      <div className="chart-bar-track">
+                        <div className="chart-bar-fill" style={{ width: `${(completed / (r.max - r.min + 1)) * 100}%`, background: r.color }} />
+                      </div>
+                      <span className="chart-bar-count">{completed}关 · 均{avgMoves}步 · 均{avgStars}⭐ · {totalPlays}次</span>
+                    </div>
+                  );
+                })}
+                {/* 最常重玩的关卡 Top5 */}
+                {(() => {
+                  const sorted = levelEntries.sort((a, b) => b[1].playCount - a[1].playCount);
+                  const top5 = sorted.filter(([, s]) => s.playCount > 1).slice(0, 5);
+                  if (top5.length === 0) return null;
+                  return (
+                    <>
+                      <h4 style={{ marginTop: '12px', color: '#667eea' }}>🔁 最常重玩关卡</h4>
+                      {top5.map(([lv, s]) => (
+                        <div key={lv} className="stats-row">
+                          <span>第 {lv} 关</span>
+                          <span>重玩 {s.playCount} 次 · 最佳 {s.bestMoves} 步 · {'⭐'.repeat(s.stars)}</span>
+                        </div>
+                      ))}
+                    </>
+                  );
+                })()}
+              </>
+            );
+          })()}
+        </div>
+
         {/* 用时趋势图 */}
         <div className="stats-detail">
           <h3>📈 近通关用时趋势</h3>
@@ -269,6 +329,42 @@ export const StatsPage: React.FC<StatsPageProps> = ({ onBack, timedHighScore }) 
                 <div className="stats-row" style={{ marginTop: '8px' }}><span>最快</span><span>{Math.min(...times)}秒</span></div>
                 <div className="stats-row"><span>最慢</span><span>{Math.max(...times)}秒</span></div>
                 <div className="stats-row"><span>平均</span><span>{Math.round(times.reduce((a, b) => a + b, 0) / times.length)}秒</span></div>
+              </>
+            );
+          })()}
+        </div>
+
+        <div className="stats-detail">
+          <h3>📈 访问数据</h3>
+          {(() => {
+            const visit = getVisitSummary();
+            const trend = getRecentVisitTrend(7);
+            const avgDuration = getAvgSessionDuration();
+            const returnRate = getReturnRate();
+            const firstVisit = visit.firstVisit ? new Date(visit.firstVisit).toLocaleDateString('zh-CN') : '今日';
+            const maxVisits = Math.max(...trend.map(t => t.visits), 1);
+            return (
+              <>
+                <div className="stats-row"><span>总访问次数</span><span>👁️ {visit.totalVisits} 次</span></div>
+                <div className="stats-row"><span>首次访问</span><span>📅 {firstVisit}</span></div>
+                <div className="stats-row"><span>回访次数</span><span>🔄 {visit.returnVisits} 次</span></div>
+                <div className="stats-row"><span>回访率</span><span>📊 {returnRate}%</span></div>
+                <div className="stats-row"><span>总会话数</span><span>🔒 {visit.totalSessions} 次</span></div>
+                <div className="stats-row"><span>平均会话时长</span><span>⏱️ {Math.floor(avgDuration / 60)}分{avgDuration % 60}秒</span></div>
+                {/* 近7天访问趋势 */}
+                <h4 style={{ marginTop: '12px', color: '#667eea' }}>近7天访问趋势</h4>
+                <div className="trend-chart" style={{ height: '80px' }}>
+                  {trend.map((t, i) => {
+                    const pct = (t.visits / maxVisits) * 100;
+                    const dateLabel = t.date.slice(5).replace('-', '/');
+                    return (
+                      <div key={i} className="trend-bar-wrapper" title={`${t.date} · ${t.visits}次访问`}>
+                        <div className="trend-bar" style={{ height: `${Math.max(pct, 3)}%` }} />
+                        <span className="trend-bar-label" style={{ fontSize: '10px' }}>{dateLabel}</span>
+                      </div>
+                    );
+                  })}
+                </div>
               </>
             );
           })()}
