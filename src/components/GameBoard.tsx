@@ -439,6 +439,8 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
           <span className="level-badge">无尽模式 #{endlessScore + 1}</span>
         ) : level === -1 ? (
           <span className="level-badge">每日挑战</span>
+        ) : level === -4 ? (
+          <span className="level-badge">周挑战</span>
         ) : (
           <span className="level-badge">第 {level} 关</span>
         )}

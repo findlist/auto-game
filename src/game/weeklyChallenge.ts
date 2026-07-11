@@ -78,13 +78,34 @@ export function generateWeeklyChallenge(): Level {
   const finalTubes = rng.shuffle(tubes);
   finalTubes.forEach((t, i) => { t.id = i; });
 
-  // 验证可解性，不可解时微调（交换前两管顶层颜色）
+  // 验证可解性，不可解时用不同种子偏移重试
+  // 修复：原代码仅交换前两管顶层颜色但不重新验证可解性，交换后仍不可解则返回死关
+  // 改为参考 dailyChallenge.ts 的重试机制，不可解时保留初始 finalTubes 作为兜底
   let solvableTubes = finalTubes;
   if (!isSolvable(solvableTubes)) {
-    if (solvableTubes[0].layers.length > 0 && solvableTubes[1].layers.length > 0) {
-      const temp = solvableTubes[0].layers[solvableTubes[0].layers.length - 1];
-      solvableTubes[0].layers[solvableTubes[0].layers.length - 1] = solvableTubes[1].layers[solvableTubes[1].layers.length - 1];
-      solvableTubes[1].layers[solvableTubes[1].layers.length - 1] = temp;
+    for (let offset = 1; offset <= 5; offset++) {
+      const retryRng = new SeededRandom(seed + offset * 7919);
+      const retryPool = retryRng.shuffle(colorPool);
+      let idx = 0;
+      const retryTubes: Tube[] = [];
+      for (let i = 0; i < colorCount; i++) {
+        const layers: ColorLayer[] = [];
+        for (let j = 0; j < capacity; j++) {
+          layers.push(retryPool[idx++]);
+        }
+        retryTubes.push({ id: i, layers, capacity });
+      }
+      const emptyCount = tubeCount - colorCount;
+      for (let i = 0; i < emptyCount; i++) {
+        retryTubes.push({ id: colorCount + i, layers: [], capacity });
+      }
+      const shuffledRetry = retryRng.shuffle(retryTubes);
+      shuffledRetry.forEach((t, i) => { t.id = i; });
+      if (isSolvable(shuffledRetry)) {
+        solvableTubes = shuffledRetry;
+        break;
+      }
+      // 不覆盖 solvableTubes，保留初始 finalTubes 作为兜底
     }
   }
 
