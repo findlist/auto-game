@@ -14,7 +14,7 @@
 
 ---
 
-**Color Sort Puzzle（色彩排序）** 是一款经典液体排序（Water Sort）解谜休闲小游戏：点击选中试管，再点击目标试管，让同色液体层层归类、完成闯关。**零注册、零后端、纯前端实现，支持 PWA 离线安装到手机桌面**，面向中文休闲玩家，含 100 关卡通关、每日挑战、无尽模式、限时挑战、关卡编辑器、成就系统、本地排行榜等丰富玩法。
+**Color Sort Puzzle（色彩排序）** 是一款经典液体排序（Water Sort）解谜休闲小游戏：点击选中试管，再点击目标试管，让同色液体层层归类、完成闯关。**零注册、零后端、纯前端实现，支持 PWA 离线安装到手机桌面**，面向中文休闲玩家，含 100 关卡通关、每日挑战、周挑战、无尽模式、限时挑战、关卡编辑器、色彩百科（混合器/辨识测试/记忆配对/序列记忆）、47 个成就、本地排行榜等丰富玩法。
 
 > 单局 1–10 分钟，碎片时间随时开玩；本地运行、数据留在您设备内。
 
@@ -56,7 +56,7 @@
 - ♾️ **无尽模式** — 随机无限生成、难度递增、最高分留念
 - ⏱️ **限时挑战** — 120 秒倒计时连续通关
 - 🛠️ **关卡编辑器** — 自创、导入/导出关卡码、分享链接
-- 🏆 **25 个成就** — 闯关 / 无尽 / 限时 / 签到 / 步数 / 完美 / 满星 全覆盖
+- 🏆 **47 个成就** — 闯关 / 无尽 / 限时 / 签到 / 步数 / 完美 / 满星 / 周挑战 / 色彩百科 全覆盖
 - ✅ **每日签到** — 里程碑奖励 + 签到日历可视化
 - 📊 **深度统计** — 通关数 / 步数 / 星数 / 时长 / 效率 / 完美率 / 连胜、柱状图 + 趋势图 + 星级分布
 - 🎨 **6 套主题** — 经典紫 / 暗黑黑 / 马卡龙 / 霓虹光 / 护眼绿 / 海洋蓝（CSS 变量动态切换）
@@ -68,7 +68,7 @@
 - 💾 **本地存档** — `localStorage` 自动保存 / 恢复进度（最高分 / 设置 / 最近游玩）
 - 🛰️ **PWA 离线** — manifest + Service Worker 缓存优先离线策略 + 安装引导
 - 🔍 **SEO 友好** — JSON-LD 结构化数据 + OG / Twitter + robots / sitemap + 中文长尾关键词
-- ⚡ **极致性能** — react-vendor 分包 / TubeView React.memo / 稳定 60FPS / JS ~201KB（gzip ~65KB）/ 首屏 < 3s
+- ⚡ **极致性能** — react-vendor 分包 / TubeView React.memo / 稳定 60FPS / 首屏 JS ~272KB（主包 131KB + react-vendor 141KB，< 300KB 红线）/ 首屏 < 3s
 
 ---
 
@@ -88,9 +88,11 @@
 
 | 文件 | 大小 |
 | --- | --- |
-| `index.html` | ~2.3 KB（gzip ~1.1 KB） |
-| `assets/index-*.js` | ~201 KB（gzip ~65 KB）【< 300KB 红线 ✅】 |
-| `assets/index-*.css` | ~21 KB（gzip ~5 KB） |
+| `index.html` | ~12 KB（gzip ~5 KB） |
+| `assets/index-*.js`（主包） | ~131 KB |
+| `assets/react-vendor-*.js` | ~141 KB |
+| 首屏 JS 合计 | ~272 KB【< 300KB 红线 ✅】 |
+| `assets/index-*.css` | ~89 KB（gzip ~17 KB） |
 | `manifest.json` / `sw.js` / `*.png` / `*.svg` | PWA + 图标 + OG 图 |
 
 ---
@@ -103,15 +105,18 @@
 4. 1–9 键可快速选管，`Z` 撤销，`R` 重置，`H` 使用提示道具
 5. 支持死局检测与一键重新开始
 
-### 5 种模式总览
+### 6 种模式总览
 
 | 模式 | 介绍 |
 | --- | --- |
 | **闯关模式** | 100 关（入门→专家），4–12 试管 / 2–10 色 / 容量 4–5 |
 | **每日挑战** | 日期种子，全球同题，含本地 Top5 排行榜 |
+| **周挑战** | 每周高难度关卡（7色+3空管），连胜记录专属成就 |
 | **无尽模式** | 随机无限生成，难度递增，最高分留念 |
 | **限时挑战** | 120 秒倒计时连续通关 |
 | **自定义关卡** | 编辑器自创、导入/导出关卡码、分享链接 |
+
+> 另有**色彩百科**页面，含颜色混合器、色彩辨识测试、记忆配对、序列记忆 4 个支线小游戏。
 
 ---
 
@@ -166,25 +171,29 @@ auto-game/
 │   │   └── ParticleEffect.tsx         # 通关粒子动画
 │   ├── pages/                         # 按需 lazy + Suspense 加载
 │   │   ├── AboutPage.tsx              # 关于
-│   │   ├── AchievementsPage.tsx       # 成就（25 个）
+│   │   ├── AchievementsPage.tsx       # 成就（47 个）
+│   │   ├── ColorEncyclopediaPage.tsx  # 色彩百科（混合器/辨识测试/记忆配对/序列记忆）
 │   │   ├── LevelEditorPage.tsx        # 关卡编辑器
 │   │   ├── PrivacyPage.tsx            # 隐私政策（广告联盟合规）
 │   │   ├── SettingsPage.tsx           # 设置（音效/振动/主题/BGM/重置）
-│   │   └── StatsPage.tsx              # 统计（签到日历+柱状图+趋势图）
+│   │   └── StatsPage.tsx              # 统计（签到日历+柱状图+趋势图+效率分析）
 │   └── game/                          # 纯逻辑层，独立于 UI
 │       ├── types.ts                   # ColorLayer / Tube / Level / GameState
 │       ├── levelGenerator.ts          # 关卡生成 + canPour / pour / checkWin / checkDeadlock
 │       ├── solver.ts                  # BFS：可解性验证 + 理论最少步数
-│       ├── achievements.ts            # 成就系统
+│       ├── achievements.ts            # 成就系统（47 个）
 │       ├── dailyChallenge.ts          # 每日挑战
 │       ├── dailyCheckin.ts            # 每日签到
 │       ├── dailyLeaderboard.ts        # 每日挑战本地 Top5
+│       ├── weeklyChallenge.ts         # 周挑战（种子生成+连胜+历史记录）
+│       ├── weekendBonus.ts            # 周末奖励
 │       ├── levelEditor.ts             # 自定义关卡码导出/验证
 │       ├── replayShare.ts / replayVideo.ts  # 回放 + WebM 导出
 │       ├── settings.ts / themeManager.ts    # 设置 / 主题持久化
 │       ├── shareImage.ts              # Canvas 战绩图
 │       ├── soundEngine.ts             # Web Audio 音效引擎
-│       └── statsTracker.ts            # 统计追踪
+│       ├── statsTracker.ts            # 统计追踪
+│       └── announcements.ts           # 公告 + 每日色彩知识
 ├── public/                            # PWA + SEO 资产
 │   ├── favicon.svg · icon-192.png · icon-512.png
 │   ├── manifest.json · sw.js          # PWA 清单与 Service Worker
@@ -197,7 +206,7 @@ auto-game/
 ├── index.html                         # SEO/社交/PWA 完备的入口 HTML
 ├── vite.config.ts
 ├── tsconfig.json
-└── package.json                       # v1.12.0
+└── package.json                       # v1.22.0
 ```
 
 ---
@@ -213,15 +222,18 @@ auto-game/
 | v1.10.0 | 统计柱状图 / 趋势图 / 智能推荐关卡 / 音效增强 |
 | v1.11.0 | 回放分享 URL、8 个新成就、更新日志弹窗、自适应难度推荐 |
 | v1.12.0 | **关卡编辑器、公告系统、WebM 视频入口、移动端长按撤销、每日排行榜、首页每日最佳** |
+| v1.13 → v1.15 | 成就页大改版、智能上下文提示、死局预警、步数效率可视化、帮助 SVG 图示、星星弹出动画 |
+| v1.17 → v1.18 | **周挑战模式、周末奖励、+9 成就、色彩知识百科页、暗色主题跟随系统、色弱颜色标签** |
+| v1.19 → v1.22 | **颜色混合器、色彩辨识测试、色彩记忆配对、序列记忆游戏、每日色彩知识卡片、+11 成就、SEO 长尾词持续扩展** |
 
-路线图详见 [docs/development-plan.md](./docs/development-plan.md)，后续阶段二（数据驱动精细化迭代）与阶段三（流量变现升级）按规范推进。
+路线图详见 [docs/development-plan.md](./docs/development-plan.md)，当前处于阶段二（数据驱动精细化迭代），阶段三（流量变现升级）按规范推进。
 
 ---
 
 ## 文档
 
 - [部署指南](./docs/deployment-guide.md) — Vercel / Cloudflare Pages / Netlify 三平台部署，含上线后 checklist
-- [开发计划](./docs/development-plan.md) — v1.0 → v1.12 完整版本记录 + 阶段二/三路线图
+- [开发计划](./docs/development-plan.md) — v1.0 → v1.22 完整版本记录 + 阶段二/三路线图
 - [自动迭代规范](./auto-game-spec.md) — TRAE AI Agent 自建 H5 游戏网站定时任务规范 v1.2
 - [站点配置模板](./docs/site-config.md) — 上线后回写，驱动 Agent 阶段切换
 
