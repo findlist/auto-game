@@ -154,6 +154,9 @@ export async function generateReplayVideo(options: RenderOptions): Promise<strin
     };
     // 修复：原代码无 onerror 处理，录制出错时 Promise 永远挂起，UI 卡死
     recorder.onerror = () => {
+      // 修复 P1：onerror 触发时必须释放 MediaRecorder 和 stream 资源，避免内存泄漏
+      try { recorder.stop(); } catch { /* ignore */ }
+      stream.getTracks().forEach(t => t.stop());
       reject(new Error('视频录制失败'));
     };
 
@@ -178,17 +181,30 @@ export async function generateReplayVideo(options: RenderOptions): Promise<strin
         return;
       }
 
-      const move = moves[currentStep];
-      const { from, to } = pour(currentTubes[move.from], currentTubes[move.to]);
-      currentTubes = cloneTubes(currentTubes);
-      currentTubes[move.from] = from;
-      currentTubes[move.to] = to;
-      currentStep++;
+      // 修复 P0：pour 抛错会导致递归 setTimeout 链中断，recorder.stop() 永不执行，Promise 永久挂起
+      // 此处用 try/catch 兜底，任何异常都结束录制并 reject，避免 UI 卡死
+      try {
+        const move = moves[currentStep];
+        // 防御：move.from/move.to 越界时 currentTubes[idx] 为 undefined，pour 内部会抛 TypeError
+        if (!move || !currentTubes[move.from] || !currentTubes[move.to]) {
+          throw new Error('回放步骤索引越界');
+        }
+        const { from, to } = pour(currentTubes[move.from], currentTubes[move.to]);
+        currentTubes = cloneTubes(currentTubes);
+        currentTubes[move.from] = from;
+        currentTubes[move.to] = to;
+        currentStep++;
 
-      renderFrame(canvas, currentTubes, level, currentStep, stepsUsed, stars, move.from, move.to);
-      track.requestFrame();
+        renderFrame(canvas, currentTubes, level, currentStep, stepsUsed, stars, move.from, move.to);
+        track.requestFrame();
 
-      setTimeout(playNext, FRAME_INTERVAL);
+        setTimeout(playNext, FRAME_INTERVAL);
+      } catch (err) {
+        // 出错时必须停止录制并释放资源，否则 Promise 永久挂起导致 UI 卡死
+        try { recorder.stop(); } catch { /* ignore */ }
+        stream.getTracks().forEach(t => t.stop());
+        reject(err instanceof Error ? err : new Error('回放生成失败'));
+      }
     };
 
     // 延迟开始
@@ -205,11 +221,18 @@ function generateReplayAsImages(options: RenderOptions): string {
 
   // 渲染最终状态
   let currentTubes = cloneTubes(initialTubes);
-  moves.forEach(move => {
-    const { from, to } = pour(currentTubes[move.from], currentTubes[move.to]);
-    currentTubes[move.from] = from;
-    currentTubes[move.to] = to;
-  });
+  // 修复 P1：pour 抛错时整个 generateReplayVideo 会 reject，但调用方可能未 catch
+  // 此处 try/catch 兜底，出错时至少返回初始帧，避免未处理 rejection
+  try {
+    moves.forEach(move => {
+      if (!move || !currentTubes[move.from] || !currentTubes[move.to]) {
+        throw new Error('回放步骤索引越界');
+      }
+      const { from, to } = pour(currentTubes[move.from], currentTubes[move.to]);
+      currentTubes[move.from] = from;
+      currentTubes[move.to] = to;
+    });
+  } catch { /* 索引越界则保留初始状态渲染 */ }
 
   renderFrame(canvas, currentTubes, level, stepsUsed, stepsUsed, stars, null, null);
   return canvas.toDataURL('image/png');
