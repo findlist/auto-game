@@ -6335,6 +6335,21 @@ html {
   font-weight: 600;
   color: #FFD700;
 }
+/* 新纪录提示 */
+.cpt-new-record {
+  font-size: 18px;
+  font-weight: 700;
+  color: #FF6B6B;
+  margin: 8px 0;
+  animation: bounce-in 0.5s ease;
+}
+/* 历史最佳分数展示 */
+.cpt-best-score {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-light, #888);
+  margin: 4px 0;
+}
 
 /* ============ 每日色彩知识卡片 ============ */
 .daily-color-knowledge-card {

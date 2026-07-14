@@ -155,9 +155,16 @@ const ColorPerceptionTest: React.FC<{ onComplete?: (score: number) => void }> = 
     { name: '棕色', hex: '#D4A574' },
     { name: '灰色', hex: '#B0B0B0' },
   ];
+  const TOTAL_ROUNDS = 10;
+  // 辨识测试最佳分数存储键
+  const BEST_SCORE_KEY = 'color_perception_best_score';
   const [score, setScore] = useState(0);
   const [round, setRound] = useState(0);
   const [finished, setFinished] = useState(false);
+  // 读取历史最佳分数
+  const [bestScore, setBestScore] = useState<number>(() => {
+    try { return parseInt(localStorage.getItem(BEST_SCORE_KEY) || '0', 10); } catch (e) { return 0; }
+  });
   const [targetIdx, setTargetIdx] = useState(() => Math.floor(Math.random() * COLORS.length));
   const [options, setOptions] = useState(() => {
     const indices = [targetIdx];
@@ -181,9 +188,15 @@ const ColorPerceptionTest: React.FC<{ onComplete?: (score: number) => void }> = 
     }
     setTimeout(() => {
       setFeedback('');
-      if (round + 1 >= 10) {
+      if (round + 1 >= TOTAL_ROUNDS) {
+        const finalScore = score + (idx === targetIdx ? 1 : 0);
         setFinished(true);
-        if (onComplete) onComplete(score + (idx === targetIdx ? 1 : 0));
+        // 保存最佳分数
+        if (finalScore > bestScore && finalScore > 0) {
+          setBestScore(finalScore);
+          try { localStorage.setItem(BEST_SCORE_KEY, String(finalScore)); } catch (e) { /* 忽略 */ }
+        }
+        if (onComplete) onComplete(finalScore);
       } else {
         const newTarget = Math.floor(Math.random() * COLORS.length);
         setTargetIdx(newTarget);
@@ -196,7 +209,7 @@ const ColorPerceptionTest: React.FC<{ onComplete?: (score: number) => void }> = 
         setRound(r => r + 1);
       }
     }, 800);
-  }, [finished, targetIdx, round, score, onComplete, COLORS]);
+  }, [finished, targetIdx, round, score, onComplete, COLORS, bestScore, BEST_SCORE_KEY]);
 
   const restart = useCallback(() => {
     setScore(0);
@@ -217,7 +230,7 @@ const ColorPerceptionTest: React.FC<{ onComplete?: (score: number) => void }> = 
       {!finished ? (
         <>
           <div className="cpt-header">
-            <span className="cpt-round">第 {round + 1}/10 轮</span>
+            <span className="cpt-round">第 {round + 1}/{TOTAL_ROUNDS} 轮</span>
             <span className="cpt-score">正确：{score}</span>
           </div>
           <p className="cpt-instruction">找到指定颜色对应的色块：</p>
@@ -239,7 +252,10 @@ const ColorPerceptionTest: React.FC<{ onComplete?: (score: number) => void }> = 
         </>
       ) : (
         <div className="cpt-result">
-          <p className="cpt-result-score">🎉 你答对了 {score}/10 题！</p>
+          <p className="cpt-result-score">🎉 你答对了 {score}/{TOTAL_ROUNDS} 题！</p>
+          {/* 最佳分数展示 */}
+          {score >= bestScore && score > 0 && <p className="cpt-new-record">🌟 新纪录！</p>}
+          {bestScore > 0 && bestScore > score && <p className="cpt-best-score">🏆 历史最佳：{bestScore}/{TOTAL_ROUNDS}</p>}
           {score >= 8 && <p className="cpt-result-rating">🌟 色彩辨识大师！</p>}
           {score >= 5 && score < 8 && <p className="cpt-result-rating">👍 不错的色觉！</p>}
           {score < 5 && <p className="cpt-result-rating">💪 多练习，色觉会更好！</p>}
