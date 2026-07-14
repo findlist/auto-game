@@ -252,7 +252,7 @@ export default function App() {
 
     // 新版本更新，显示更新日志
     const CHANGELOG_KEY = STORAGE_KEYS.CHANGELOG_VERSION;
-    const currentVersion = '1.27.0';
+    const currentVersion = '1.28.0';
     try {
       const lastVersion = localStorage.getItem(CHANGELOG_KEY);
       if (lastVersion !== currentVersion) {
@@ -1407,6 +1407,18 @@ export default function App() {
                   <div className="faq-question">📚 每日问答题库有多少题？</div>
                   <div className="faq-answer">每日色彩问答现已扩充至50题，涵盖颜色科学、色彩心理学、自然现象、历史文化等丰富知识，50天循环不重复，每天一题涨知识！</div>
                 </div>
+                <div className="faq-item">
+                  <div className="faq-question">🔥 连续答题有什么奖励？</div>
+                  <div className="faq-answer">每日问答连续答题会显示天数徽章！连续3天获得⭐，7天获得🔥，14天获得💎，30天获得🏆。坚持每天答题，解锁更高等级徽章！</div>
+                </div>
+                <div className="faq-item">
+                  <div className="faq-question">⏱️ 配对游戏怎么记录最佳用时？</div>
+                  <div className="faq-answer">色彩记忆配对游戏在非计时模式下会自动记录最佳用时！完成游戏后结算页显示用时和最快记录对比，不同难度分别记录，挑战自己的速度极限！</div>
+                </div>
+                <div className="faq-item">
+                  <div className="faq-question">🧭 首页快捷导航怎么用？</div>
+                  <div className="faq-answer">首页底部「探索更多」区域提供6个功能入口卡片，包括色彩百科、成就大厅、游戏统计、关卡编辑器、每日挑战和玩法教程，一键直达想要的功能页面！</div>
+                </div>
               </div>
             </div>
           </div>
@@ -1653,6 +1665,15 @@ export default function App() {
               <div className="tutorial-emoji">📋</div>
               <h2>色彩排序更新日志</h2>
               <div className="changelog-content">
+                <div className="changelog-item">
+                  <h3>🎉 v1.28.0</h3>
+                  <ul>
+                    <li>🔥 每日问答显示连续答题天数徽章，里程碑解锁新标识</li>
+                    <li>⏱️ 色彩配对游戏记录最佳用时，结算页展示耗时对比</li>
+                    <li>🧭 首页新增「探索更多」快捷导航区，一键直达各功能</li>
+                    <li>📝 FAQ 补充连续答题与配对计时相关问答</li>
+                  </ul>
+                </div>
                 <div className="changelog-item">
                   <h3>🎉 v1.27.0</h3>
                   <ul>
