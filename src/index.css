@@ -585,6 +585,59 @@ body {
   line-height: 1.5;
 }
 
+/* 快捷功能导航区 */
+.quick-nav-section {
+  margin: 16px 0;
+}
+.quick-nav-section h3 {
+  font-size: 16px;
+  margin-bottom: 12px;
+  color: var(--text-primary, #333);
+}
+.quick-nav-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.quick-nav-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 8px;
+  background: var(--card-bg, #fff);
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  text-align: center;
+}
+.quick-nav-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+.quick-nav-card:active {
+  transform: scale(0.96);
+}
+.quick-nav-icon {
+  font-size: 28px;
+}
+.quick-nav-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary, #333);
+}
+.quick-nav-desc {
+  font-size: 10px;
+  color: var(--text-light, #888);
+  line-height: 1.3;
+}
+@media (max-width: 480px) {
+  .quick-nav-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 /* 页脚 */
 .home-footer {
   text-align: center;
