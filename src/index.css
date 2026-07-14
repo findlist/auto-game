@@ -3755,6 +3755,36 @@ html[style*="1a1a2e"] .encyclopedia-progress-track {
   background: linear-gradient(135deg, rgba(78, 205, 196, 0.12), rgba(196, 89, 232, 0.12));
   border-color: rgba(78, 205, 196, 0.3);
 }
+/* 小贴士手动切换导航按钮 */
+.daily-tip-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+.daily-tip-nav-btn {
+  width: 28px;
+  height: 28px;
+  border: 1px solid rgba(102, 126, 234, 0.2);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.6);
+  color: var(--text, #333);
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.daily-tip-nav-btn:hover {
+  background: var(--primary, #667eea);
+  color: #fff;
+  border-color: var(--primary, #667eea);
+}
+.daily-tip-nav-btn:active {
+  transform: scale(0.92);
+}
 
 /* 每日挑战醒目入口横幅 */
 .daily-challenge-banner {

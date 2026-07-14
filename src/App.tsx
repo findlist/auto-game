@@ -14,7 +14,7 @@ import { generateReplayUrl, parseReplayFromUrl, formatReplayShareText, ReplayDat
 import { getAdaptiveRecommendation } from './game/adaptiveDifficulty';
 import { getDailyRecommend } from './game/dailyRecommend';
 import { hasCompletedWeeklyThisWeek, saveWeeklyRecord, getWeeklyStreak, getWeeklyInfo, getWeeklyRecord } from './game/weeklyChallenge';
-import { getUnreadAnnouncements, markAnnouncementRead, Announcement, getTodayTip, getTodayColorKnowledge, getTodayColorQuiz, getDailyQuizHistory, getQuizStreak } from './game/announcements';
+import { getUnreadAnnouncements, markAnnouncementRead, Announcement, getTodayTip, getAllDailyTips, getTodayColorKnowledge, getTodayColorQuiz, getDailyQuizHistory, getQuizStreak } from './game/announcements';
 import { getCustomLevels, saveCustomLevel, deleteCustomLevel, importLevelCode, CustomLevel } from './game/levelEditor';
 import { generateReplayVideo, generateReplayThumbnail } from './game/replayVideo';
 import { STORAGE_KEYS } from './game/storageKeys';
@@ -228,6 +228,12 @@ export default function App() {
   const [levelSelectCollapsed, setLevelSelectCollapsed] = useState(false);
   const [faqCollapsed, setFaqCollapsed] = useState(true);
   const [difficultyFilter, setDifficultyFilter] = useState<string>('all'); // 关卡难度筛选
+  // 每日贴士手动浏览：支持点击切换上一篇/下一篇
+  const ALL_TIPS = getAllDailyTips();
+  const [tipIndex, setTipIndex] = useState(() => {
+    const todayTip = getTodayTip();
+    return ALL_TIPS.findIndex(t => t.title === todayTip.title);
+  });
 
   // 内部提示功能：获取当前游戏状态
   const currentTubesRef = useRef<Tube[] | null>(null);
@@ -997,16 +1003,20 @@ export default function App() {
           )}
           </div>
 
-          {/* 每日策略小贴士 */}
+          {/* 每日策略小贴士 - 支持手动切换浏览 */}
           {(() => {
-            const tip = getTodayTip();
+            const tip = ALL_TIPS[tipIndex] || ALL_TIPS[0];
             return (
               <div className="daily-tip-card">
                 <span className="daily-tip-icon">{tip.icon}</span>
                 <div className="daily-tip-content">
-                  <span className="daily-tip-label">💡 每日小贴士</span>
+                  <span className="daily-tip-label">💡 小贴士 {tipIndex + 1}/{ALL_TIPS.length}</span>
                   <span className="daily-tip-title">{tip.title}</span>
                   <span className="daily-tip-text">{tip.content}</span>
+                </div>
+                <div className="daily-tip-nav">
+                  <button className="daily-tip-nav-btn" onClick={() => { SoundEngine.click(); setTipIndex(i => (i - 1 + ALL_TIPS.length) % ALL_TIPS.length); }} aria-label="上一条">←</button>
+                  <button className="daily-tip-nav-btn" onClick={() => { SoundEngine.click(); setTipIndex(i => (i + 1) % ALL_TIPS.length); }} aria-label="下一条">→</button>
                 </div>
               </div>
             );
