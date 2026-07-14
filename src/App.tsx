@@ -14,10 +14,13 @@ import { generateReplayUrl, parseReplayFromUrl, formatReplayShareText, ReplayDat
 import { getAdaptiveRecommendation } from './game/adaptiveDifficulty';
 import { getDailyRecommend } from './game/dailyRecommend';
 import { hasCompletedWeeklyThisWeek, saveWeeklyRecord, getWeeklyStreak, getWeeklyInfo, getWeeklyRecord } from './game/weeklyChallenge';
-import { getUnreadAnnouncements, markAnnouncementRead, Announcement, getTodayTip } from './game/announcements';
+import { getUnreadAnnouncements, markAnnouncementRead, Announcement, getTodayTip, getTodayColorKnowledge, getTodayColorQuiz, getDailyQuizHistory } from './game/announcements';
 import { getCustomLevels, saveCustomLevel, deleteCustomLevel, importLevelCode, CustomLevel } from './game/levelEditor';
 import { generateReplayVideo, generateReplayThumbnail } from './game/replayVideo';
 import { STORAGE_KEYS } from './game/storageKeys';
+import { recordPlayedMode, getPlayedModes } from './game/playedModes';
+import { claimWeekendBonus, getWeekendBonusInfo } from './game/weekendBonus';
+import { GameSettings } from './game/settings';
 // 懒加载非首屏页面组件，减小首屏 bundle 大小
 const AboutPage = lazy(() => import('./pages/AboutPage').then(m => ({ default: m.AboutPage })));
 const AchievementsPage = lazy(() => import('./pages/AchievementsPage').then(m => ({ default: m.AchievementsPage })));
@@ -26,6 +29,7 @@ const PrivacyPage = lazy(() => import('./pages/PrivacyPage').then(m => ({ defaul
 const SettingsPage = lazy(() => import('./pages/SettingsPage').then(m => ({ default: m.SettingsPage })));
 const LevelEditorPage = lazy(() => import('./pages/LevelEditorPage').then(m => ({ default: m.LevelEditorPage })));
 const CustomLevelPlayer = lazy(() => import('./pages/LevelEditorPage').then(m => ({ default: m.CustomLevelPlayer })));
+const ColorEncyclopediaPage = lazy(() => import('./pages/ColorEncyclopediaPage').then(m => ({ default: m.ColorEncyclopediaPage })));
 
 // 页面加载占位组件
 const PageLoading = () => (
@@ -37,7 +41,7 @@ const PageLoading = () => (
   </div>
 );
 
-type Page = 'home' | 'game' | 'about' | 'privacy' | 'achievements' | 'settings' | 'stats' | 'editor' | 'editor-play';
+type Page = 'home' | 'game' | 'about' | 'privacy' | 'achievements' | 'settings' | 'stats' | 'editor' | 'editor-play' | 'encyclopedia';
 
 // 限时模式配置
 const TIMED_DURATION = 120; // 限时模式时长（秒）
@@ -248,7 +252,7 @@ export default function App() {
 
     // 新版本更新，显示更新日志
     const CHANGELOG_KEY = STORAGE_KEYS.CHANGELOG_VERSION;
-    const currentVersion = '1.15.0';
+    const currentVersion = '1.27.0';
     try {
       const lastVersion = localStorage.getItem(CHANGELOG_KEY);
       if (lastVersion !== currentVersion) {
@@ -323,6 +327,18 @@ export default function App() {
   const [usedHintThisLevel, setUsedHintThisLevel] = useState(false);
   const [recoveredFromDeadlock, setRecoveredFromDeadlock] = useState(false);
 
+  // 周末奖励状态
+  const [weekendBonusInfo, setWeekendBonusInfo] = useState(getWeekendBonusInfo());
+
+  // 领取周末奖励
+  const handleClaimWeekendBonus = useCallback(() => {
+    const result = claimWeekendBonus();
+    if (result !== null) {
+      SoundEngine.win();
+      setWeekendBonusInfo(getWeekendBonusInfo());
+    }
+  }, []);
+
   // 提示功能：从当前游戏状态找到一对可操作试管
   const handleHint = useCallback(() => {
     // 检查提示道具数量
@@ -373,21 +389,24 @@ export default function App() {
   }, []);
 
   const handleWin = useCallback((winMoves: number, minSteps: number, stars: number, playTimeSec: number) => {
+    // 仅普通模式（currentLevel > 0）更新通关进度和最佳成绩，避免写入 bestScores[-1/-2/-3/-4] 污染数据
     const newCompleted = [...progress.completedLevels];
-    if (!newCompleted.includes(currentLevel)) {
-      newCompleted.push(currentLevel);
+    if (currentLevel > 0) {
+      if (!newCompleted.includes(currentLevel)) {
+        newCompleted.push(currentLevel);
+      }
+      const newProgress = {
+        currentLevel: Math.max(progress.currentLevel, currentLevel + 1),
+        completedLevels: newCompleted,
+      };
+      setProgress(newProgress);
+      saveProgress(newProgress);
+      saveBestScore(currentLevel, winMoves);
+      setBestScores(loadBestScores());
     }
-    const newProgress = {
-      currentLevel: Math.max(progress.currentLevel, currentLevel + 1),
-      completedLevels: newCompleted,
-    };
-    setProgress(newProgress);
-    saveProgress(newProgress);
-    saveBestScore(currentLevel, winMoves);
-    setBestScores(loadBestScores());
 
-    // 保存星级数据
-    if (!isDailyMode && !isEndlessMode && !isTimedMode) {
+    // 保存星级数据（周挑战不保存星级，避免写入 stars[-4]）
+    if (!isDailyMode && !isEndlessMode && !isTimedMode && !isWeeklyMode) {
       saveStars(currentLevel, stars);
       setLevelStars(loadStars());
     }
@@ -407,7 +426,8 @@ export default function App() {
     StatsTracker.recordWin(currentLevel, winMoves, stars, isDailyMode, isEndlessMode, isTimedMode, playTimeSec, usedHintThisLevel || recoveredFromDeadlock, usedHintThisLevel);
 
     // 非胜利成就：仅普通模式胜利才累计普通连胜
-    if (!isDailyMode && !isEndlessMode && !isTimedMode) {
+    // 修复：原条件未排除 isWeeklyMode，周挑战通关会误触发普通连胜/里程碑/探索者/色彩成就
+    if (!isDailyMode && !isEndlessMode && !isTimedMode && !isWeeklyMode) {
       const currentStreak = StatsTracker.get().currentStreak;
       const streakAchievements = AchievementManager.checkStreakAchievements(currentStreak);
       if (streakAchievements.length > 0) {
@@ -438,7 +458,8 @@ export default function App() {
       setNewAchievements(prev => [...prev, ...moveAchievements]);
     }
     // 检查速度成就（仅普通模式、步数 > 0 且用时 > 0）
-    if (!isDailyMode && !isEndlessMode && !isTimedMode && playTimeSec > 0) {
+    // 修复：原条件未排除 isWeeklyMode，周挑战会误触发速度成就
+    if (!isDailyMode && !isEndlessMode && !isTimedMode && !isWeeklyMode && playTimeSec > 0) {
       const speedAchievements = AchievementManager.checkSpeedAchievements(playTimeSec);
       if (speedAchievements.length > 0) {
         setNewAchievements(prev => [...prev, ...speedAchievements]);
@@ -480,6 +501,11 @@ export default function App() {
       if (weeklyAchievements.length > 0) {
         setNewAchievements(prev => [...prev, ...weeklyAchievements]);
       }
+    }
+    // 全能玩家成就检查：体验所有5种模式
+    const allRoundAchievements = AchievementManager.checkAllRoundAchievements(getPlayedModes());
+    if (allRoundAchievements.length > 0) {
+      setNewAchievements(prev => [...prev, ...allRoundAchievements]);
     }
     // 无尽模式完成处理
     if (isEndlessMode) {
@@ -531,6 +557,7 @@ export default function App() {
     SoundEngine.resume();
     saveRecent({ level: progress.currentLevel, mode: 'normal', timestamp: Date.now() });
     setRecentPlay({ level: progress.currentLevel, mode: 'normal', timestamp: Date.now() });
+    recordPlayedMode('normal');
     if (!hasSeenTutorial()) {
       setShowTutorial(true);
     }
@@ -550,7 +577,7 @@ export default function App() {
     setHintPair(null);
     setUsedHintThisLevel(false);
     setRecoveredFromDeadlock(false);
-  }, [isDailyMode, isEndlessMode, isTimedMode]);
+  }, [isDailyMode, isEndlessMode, isTimedMode, isWeeklyMode]);
 
   const handleGoHome = () => {
     setPage('home');
@@ -584,6 +611,7 @@ export default function App() {
     SoundEngine.resume();
     setUsedHintThisLevel(false);
     setRecoveredFromDeadlock(false);
+    recordPlayedMode('weekly');
   };
   const handleDailyChallenge = () => {
     setIsDailyMode(true);
@@ -593,6 +621,7 @@ export default function App() {
     SoundEngine.resume();
     setUsedHintThisLevel(false);
     setRecoveredFromDeadlock(false);
+    recordPlayedMode('daily');
   };
 
   const handleEndlessMode = () => {
@@ -605,6 +634,7 @@ export default function App() {
     SoundEngine.resume();
     setUsedHintThisLevel(false);
     setRecoveredFromDeadlock(false);
+    recordPlayedMode('endless');
   };
 
   const handleTimedMode = () => {
@@ -617,15 +647,19 @@ export default function App() {
     SoundEngine.resume();
     setUsedHintThisLevel(false);
     setRecoveredFromDeadlock(false);
+    recordPlayedMode('timed');
   };
 
   const handleDeadlockRecover = useCallback(() => {
     setRecoveredFromDeadlock(true);
   }, []);
 
-  // 下一关：每日挑战返回首页，无尽模式累加关，限时模式过下一关，普通模式过下一关
+  // 下一关：每日/周挑战返回首页，无尽模式累加关，限时模式过下一关，普通模式过下一关
   const handleNextLevelAction = useCallback(() => {
-    if (isDailyMode) {
+    if (isDailyMode || isWeeklyMode) {
+      // 每日挑战和周挑战为单局模式，通关后返回首页
+      // 修复：原代码缺少 isWeeklyMode 分支，周挑战通关后会走 else 调用 handleNextLevel，
+      // 导致 currentLevel 从 -4 递增为 -3（限时模式标识），引发状态混乱
       handleGoHome();
     } else if (isEndlessMode) {
       // 无尽模式关数+1，生成下一关，难度递增
@@ -935,6 +969,27 @@ export default function App() {
             );
           })()}
 
+          {/* 周末奖励横幅 */}
+          {weekendBonusInfo.isWeekend && (
+            <div
+              className={`weekend-bonus-banner ${weekendBonusInfo.claimed ? 'weekend-claimed' : ''}`}
+              onClick={() => { if (!weekendBonusInfo.claimed) handleClaimWeekendBonus(); }}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (!weekendBonusInfo.claimed) handleClaimWeekendBonus(); } }}
+            >
+              <div className="weekend-banner-icon">🎁</div>
+              <div className="weekend-banner-content">
+                <span className="weekend-banner-title">{weekendBonusInfo.claimed ? '周末奖励已领取' : '周末免费提示道具'}</span>
+                <span className="weekend-banner-sub">
+                  {weekendBonusInfo.claimed ? '明天再来吧～' : '点击领取 1 个提示道具'}
+                  {weekendBonusInfo.totalClaimed > 0 ? ` · 累计领取${weekendBonusInfo.totalClaimed}次` : ''}
+                </span>
+              </div>
+              {!weekendBonusInfo.claimed && <span className="weekend-banner-arrow">→</span>}
+            </div>
+          )}
+
           {progress.currentLevel > 1 && (
             <button className="btn btn-secondary" onClick={() => handleSelectLevel(1)}>
               🔄 从头开始
@@ -953,6 +1008,45 @@ export default function App() {
                   <span className="daily-tip-title">{tip.title}</span>
                   <span className="daily-tip-text">{tip.content}</span>
                 </div>
+              </div>
+            );
+          })()}
+
+          {/* 每日色彩知识 */}
+          {(() => {
+            const knowledge = getTodayColorKnowledge();
+            return (
+              <div className="daily-color-knowledge-card" onClick={() => setPage('encyclopedia')} role="button" tabIndex={0}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setPage('encyclopedia'); } }}>
+                <span className="daily-color-knowledge-emoji">{knowledge.emoji}</span>
+                <div className="daily-color-knowledge-content">
+                  <span className="daily-color-knowledge-label">🎨 每日色彩知识</span>
+                  <span className="daily-color-knowledge-title">{knowledge.name}</span>
+                  <span className="daily-color-knowledge-text">{knowledge.text}</span>
+                </div>
+                <span className="daily-color-knowledge-arrow">→</span>
+              </div>
+            );
+          })()}
+
+          {/* 每日色彩问答入口卡片 */}
+          {(() => {
+            const quiz = getTodayColorQuiz();
+            const history = getDailyQuizHistory();
+            const today = new Date();
+            const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+            const answeredToday = history.some(h => h.dayIndex === quiz.dayIndex && h.date === todayStr);
+            const correctCount = history.filter(h => h.correct).length;
+            return (
+              <div className={`daily-quiz-entry-card ${!answeredToday ? 'quiz-unanswered' : ''}`} onClick={() => setPage('encyclopedia')} role="button" tabIndex={0}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setPage('encyclopedia'); } }}>
+                <span className="daily-quiz-entry-icon">{answeredToday ? '✅' : '📝'}</span>
+                <div className="daily-quiz-entry-content">
+                  <span className="daily-quiz-entry-label">📚 每日色彩问答</span>
+                  <span className="daily-quiz-entry-title">{answeredToday ? '今日已答题' : quiz.question}</span>
+                  <span className="daily-quiz-entry-sub">{answeredToday ? `累计正确 ${correctCount}/${history.length} 题` : '点击进入答题，每天一题涨知识！'}</span>
+                </div>
+                <span className="daily-quiz-entry-arrow">→</span>
               </div>
             );
           })()}
@@ -1227,7 +1321,7 @@ export default function App() {
               <div className="faq-list">
                 <div className="faq-item">
                   <div className="faq-question">🎨 色彩排序是什么游戏？</div>
-                  <div className="faq-answer">色彩排序是一款经典的液体排序解谜游戏，玩家需要将不同颜色的液体倒入试管中，使每种颜色归到同一个试管即可过关。游戏包含100关、每日挑战、无尽模式和限时挑战。</div>
+                  <div className="faq-answer">色彩排序是一款经典的液体排序解谜游戏，玩家需要将不同颜色的液体倒入试管中，使每种颜色归到同一个试管即可过关。游戏包含100关、每日挑战、周挑战、无尽模式和限时挑战。</div>
                 </div>
                 <div className="faq-item">
                   <div className="faq-question">💰 色彩排序游戏免费吗？</div>
@@ -1251,7 +1345,7 @@ export default function App() {
                 </div>
                 <div className="faq-item">
                   <div className="faq-question">🎮 色彩排序有哪些游戏模式？</div>
-                  <div className="faq-answer">色彩排序包含四种模式：100关闯关模式、每天一题的每日挑战、难度无限递增的无尽模式、120秒极限的限时挑战模式。每种模式都有独特的乐趣！</div>
+                  <div className="faq-answer">色彩排序包含五种模式：100关闯关模式、每天一题的每日挑战、每周一题的周挑战、难度无限递增的无尽模式、120秒极限的限时挑战模式。每种模式都有独特的乐趣！</div>
                 </div>
                 <div className="faq-item">
                   <div className="faq-question">🏆 成就系统怎么玩？</div>
@@ -1260,6 +1354,54 @@ export default function App() {
                 <div className="faq-item">
                   <div className="faq-question">🔧 有关卡编辑器吗？</div>
                   <div className="faq-answer">有！色彩排序内置关卡编辑器，玩家可以自创关卡、导入和导出关卡码、验证关卡合法性。在首页点击🔧编辑器按钮即可使用。</div>
+                </div>
+                <div className="faq-item">
+                  <div className="faq-question">🏆 什么是周挑战？</div>
+                  <div className="faq-answer">周挑战是每周更新一次的高难度关卡，使用7色+3空管配置。完成周挑战可累积连胜记录，连续完成多周可解锁专属成就。每周一更新新关卡！</div>
+                </div>
+                <div className="faq-item">
+                  <div className="faq-question">🎁 周末奖励怎么领？</div>
+                  <div className="faq-answer">周六和周日登录游戏，首页会出现「周末免费提示道具」横幅，点击即可免费领取1个提示道具。每个周末只能领取一次哦！</div>
+                </div>
+                <div className="faq-item">
+                  <div className="faq-question">🧠 色彩记忆配对怎么玩？</div>
+                  <div className="faq-answer">在色彩百科页面可以找到色彩记忆配对小游戏，翻开卡片找到相同颜色的配对，用最少步数完成所有配对即可获胜，锻炼你的记忆力和色彩辨识能力！</div>
+                </div>
+                <div className="faq-item">
+                  <div className="faq-question">🎵 色彩序列记忆怎么玩？</div>
+                  <div className="faq-answer">在色彩百科页面可以找到色彩序列记忆游戏，类似 Simon Says 玩法。观察颜色亮起的顺序，然后按相同顺序点击，每过一关序列增加一个颜色，到达第5关和第10关可解锁专属成就！</div>
+                </div>
+                <div className="faq-item">
+                  <div className="faq-question">⚡ 色彩反应力测试怎么玩？</div>
+                  <div className="faq-answer">在色彩百科页面可以找到色彩反应力测试，屏幕显示颜色名称后快速点击对应色块，共8轮挑战，测试你的反应速度和色彩辨识力！</div>
+                </div>
+                <div className="faq-item">
+                  <div className="faq-question">⏱️ 配对游戏有计时模式吗？</div>
+                  <div className="faq-answer">有！色彩记忆配对游戏新增计时模式，简单60秒、普通90秒、困难120秒内完成所有配对，挑战你的记忆力和速度极限！</div>
+                </div>
+                <div className="faq-item">
+                  <div className="faq-question">👶 适合儿童游玩吗？</div>
+                  <div className="faq-answer">非常适合！色彩排序操作简单直观，能锻炼儿童的逻辑思维能力和颜色辨识能力。游戏无暴力内容、无内购，是儿童益智教育的理想选择。</div>
+                </div>
+                <div className="faq-item">
+                  <div className="faq-question">🎭 颜色混合器有什么用？</div>
+                  <div className="faq-answer">在色彩百科页面可以体验交互式颜色混合器，选择1-3种颜色实时查看混合结果，了解色彩混合原理。使用10次以上可解锁「混合大师」成就！</div>
+                </div>
+                <div className="faq-item">
+                  <div className="faq-question">🔍 百科页怎么搜索内容？</div>
+                  <div className="faq-answer">色彩百科页面顶部新增搜索框，输入关键词即可快速查找颜色知识、色彩理论和趣味问答，还提供分类导航标签一键跳转到对应板块。</div>
+                </div>
+                <div className="faq-item">
+                  <div className="faq-question">📤 每日问答可以分享吗？</div>
+                  <div className="faq-answer">可以！答题完成后点击分享按钮，可将答题结果和累计成绩生成分享文案，支持复制到剪贴板或原生分享，方便分享给朋友！</div>
+                </div>
+                <div className="faq-item">
+                  <div className="faq-question">👁 百科页有浏览记录吗？</div>
+                  <div className="faq-answer">有！色彩百科页面会自动记录你点击查看过的颜色，在颜色详解区域顶部显示「最近浏览」色块，方便快速回看。浏览5种以上颜色可解锁「百科探索者」成就！</div>
+                </div>
+                <div className="faq-item">
+                  <div className="faq-question">📚 每日问答题库有多少题？</div>
+                  <div className="faq-answer">每日色彩问答现已扩充至50题，涵盖颜色科学、色彩心理学、自然现象、历史文化等丰富知识，50天循环不重复，每天一题涨知识！</div>
                 </div>
               </div>
             </div>
@@ -1278,6 +1420,8 @@ export default function App() {
           <button className="footer-link" onClick={() => setPage('editor')}>🔧 编辑器</button>
           <span className="footer-divider">|</span>
           <button className="footer-link" onClick={() => setPage('settings')}>⚙️ 设置</button>
+          <span className="footer-divider">|</span>
+          <button className="footer-link" onClick={() => setPage('encyclopedia')}>🎨 色彩百科</button>
           <span className="footer-divider">|</span>
           <button className="footer-link" onClick={() => setPage('privacy')}>隐私政策</button>
         </footer>
@@ -1300,6 +1444,10 @@ export default function App() {
                   ? `无尽模式第 ${(autosaveData.endlessScore ?? 0) + 1} 关已走 ${autosaveData.moves} 步`
                   : autosaveData.mode === 'timed'
                   ? `限时挑战已走 ${autosaveData.moves} 步`
+                  : autosaveData.mode === 'daily'
+                  ? `每日挑战已走 ${autosaveData.moves} 步`
+                  : autosaveData.mode === 'weekly'
+                  ? `周挑战已走 ${autosaveData.moves} 步`
                   : `第 ${autosaveData.level} 关已走 ${autosaveData.moves} 步`}
               </p>
               <div className="modal-actions">
@@ -1312,6 +1460,12 @@ export default function App() {
                     setIsTimedMode(true);
                     setTimedScore(autosaveData.timedScore ?? 0);
                     setCurrentLevel(-3);
+                  } else if (autosaveData.mode === 'daily') {
+                    setIsDailyMode(true);
+                    setCurrentLevel(-1);
+                  } else if (autosaveData.mode === 'weekly') {
+                    setIsWeeklyMode(true);
+                    setCurrentLevel(-4);
                   } else {
                     setCurrentLevel(autosaveData.level);
                   }
@@ -1458,6 +1612,116 @@ export default function App() {
               <div className="tutorial-emoji">📋</div>
               <h2>色彩排序更新日志</h2>
               <div className="changelog-content">
+                <div className="changelog-item">
+                  <h3>🎉 v1.27.0</h3>
+                  <ul>
+                    <li>🏷️ 每日问答新增难度标签（简单/中等/困难）</li>
+                    <li>🎵 序列记忆游戏每个颜色配备独特音高，听音辨色</li>
+                    <li>✨ 颜色卡片展开/折叠平滑过渡动画</li>
+                    <li>📊 百科页新增「浏览进度」指示器，追踪学习进度</li>
+                    <li>🌙 暗色主题下百科页样式全面适配</li>
+                  </ul>
+                </div>
+                <div className="changelog-item">
+                  <h3>🎉 v1.26.0</h3><ul>
+                    <li>📚 每日问答题库扩充至50题，更多色彩知识等你看</li>
+                    <li>👁 百科页新增「最近浏览」记录功能，快速回看已浏览的颜色</li>
+                    <li>📝 颜色详解卡片改为点击展开，页面更整洁</li>
+                    <li>✨ 首页未答题时每日问答卡片显示脉冲提醒动画</li>
+                    <li>🏆 新增3个成就：百科探索者、答题高手、全能玩家</li>
+                  </ul>
+                </div>
+                <div className="changelog-version">
+                  <h3>🎉 v1.25.0</h3>
+                  <ul>
+                    <li>📝 首页新增每日色彩问答入口卡片，一键直达每日答题</li>
+                    <li>📤 每日问答结果分享功能，支持复制和原生分享</li>
+                    <li>🔍 百科页搜索功能，快速查找颜色知识和趣味问答</li>
+                    <li>🏷️ 百科页快速导航标签，一键跳转到对应板块</li>
+                    <li>🏆 新增2个成就：知识探索者、知识传播者</li>
+                  </ul>
+                </div>
+                <div className="changelog-version">
+                  <h3>🎉 v1.24.0</h3>
+                  <ul>
+                    <li>📅 每日色彩问答：百科页新增每日一题，30天循环，增加回访理由</li>
+                    <li>🏆 新增3个成就：色彩学徒、好学不倦、色彩学者</li>
+                    <li>🌙 暗色主题百科页样式优化：增强迷你游戏在暗色背景下的可见性</li>
+                    <li>🔍 SEO扩展：新增每日问答、色彩问答、知识问答等长尾关键词</li>
+                    <li>📝 AboutPage更新：成就数量修正为54个，新增色彩百科入口</li>
+                  </ul>
+                </div>
+                <div className="changelog-version">
+                  <h3>🎉 v1.23.0</h3>
+                  <ul>
+                    <li>⚡ 色彩反应力测试：百科页新增反应力小游戏，8轮快速辨识挑战</li>
+                    <li>⏱️ 配对计时模式：记忆配对新增限时模式，简单60秒/普通90秒/困难120秒</li>
+                    <li>🎵 序列记忆音效升级：四种颜色对应不同音高，增强听觉反馈</li>
+                    <li>🏆 新增4个成就：反应大师、反应敏捷、闪电配对、极速配对</li>
+                    <li>🔍 SEO扩展：新增反应力测试、计时配对等长尾关键词</li>
+                  </ul>
+                </div>
+                <div className="changelog-version">
+                  <h3>🎉 v1.22.0</h3>
+                  <ul>
+                    <li>🎵 色彩序列记忆：百科页新增 Simon Says 类型记忆游戏，4色序列闯关</li>
+                    <li>🧠 记忆配对难度升级：新增简单/普通/困难三档难度（6/8/10对卡片）</li>
+                    <li>🏆 新增3个成就：序列记忆者、记忆大师、配对达人</li>
+                    <li>📊 各难度独立记录最佳步数，支持难度切换</li>
+                    <li>🔍 SEO优化：新增序列记忆、Simon Says 等长尾关键词</li>
+                  </ul>
+                </div>
+                <div className="changelog-version">
+                  <h3>🎉 v1.21.0</h3>
+                  <ul>
+                    <li>🧠 色彩记忆配对：百科页新增记忆翻牌小游戏，锻炼记忆力</li>
+                    <li>🎨 颜色混合器升级：使用计数+里程碑提示+成就联动</li>
+                    <li>🏆 混合大师成就解锁：使用混合器10次自动解锁</li>
+                    <li>🌙 暗色主题适配：修复混合器在暗色主题下的对比度问题</li>
+                    <li>🔍 SEO增强：新增记忆配对、儿童益智、减压游戏等长尾词</li>
+                  </ul>
+                </div>
+                <div className="changelog-version">
+                  <h3>🎉 v1.20.0</h3>
+                  <ul>
+                    <li>🎯 色彩辨识测试：百科页面新增色觉测试小游戏，10题辨识挑战</li>
+                    <li>📊 战绩分享图片：统计页可生成战绩分享图，保存或复制分享</li>
+                    <li>🏆 新增3个成就：色彩辨识者、混合大师、数据控</li>
+                    <li>🎨 颜色混合器暗色主题适配：修复暗色主题下显示异常</li>
+                    <li>🔍 SEO优化：新增色彩辨识、色觉测试、战绩分享等关键词</li>
+                  </ul>
+                </div>
+                <div className="changelog-version">
+                  <h3>🎉 v1.19.0</h3>
+                  <ul>
+                    <li>🎨 交互式颜色混合器：在色彩百科页面混合1-3种颜色查看效果</li>
+                    <li>📅 每日色彩知识卡片：首页展示一条色彩小知识，点击进入百科</li>
+                    <li>📜 周挑战历史成绩：统计页展示最近10次周挑战记录</li>
+                    <li>🏆 新增2个成就：色彩学家、色彩百科全书</li>
+                    <li>🔍 SEO优化：新增颜色混合器、色弱模式等长尾关键词</li>
+                  </ul>
+                </div>
+                <div className="changelog-version">
+                  <h3>🎉 v1.18.0</h3>
+                  <ul>
+                    <li>🌙 暗色主题跟随系统：设置中开启后自动检测系统暗色模式切换主题</li>
+                    <li>🏷️ 颜色名称标签：色弱模式下在试管下方显示颜色文字，辅助辨识</li>
+                    <li>🎨 新增色彩知识小百科页面：10种颜色详解、色彩理论、趣味问答</li>
+                    <li>📈 关卡难度曲线优化：修复前期关卡重复问题，第4-6关更早引入3色</li>
+                    <li>📖 FAQ新增色弱玩法、色彩百科相关问答</li>
+                  </ul>
+                </div>
+                <div className="changelog-version">
+                  <h3>🎉 v1.17.0</h3>
+                  <ul>
+                    <li>🏆 新增周挑战模式：每周一题高难度关卡，7色+3空管配置，连胜记录专属成就</li>
+                    <li>🎁 周末奖励系统：周六周日登录可免费领取提示道具</li>
+                    <li>🏅 新增9个成就：周挑战系列、探索者系列、色彩收藏家系列、全能玩家</li>
+                    <li>📊 统计页新增周挑战统计模块和关卡效率分析面板</li>
+                    <li>📖 FAQ内容大幅扩充，SEO长尾关键词覆盖优化</li>
+                    <li>🔍 SEO全面优化：关键词扩展、sitemap更新、结构化数据增强</li>
+                  </ul>
+                </div>
                 <div className="changelog-version">
                   <h3>🎉 v1.15.0</h3>
                   <ul>
@@ -1658,6 +1922,8 @@ export default function App() {
             onDeadlockRecover={handleDeadlockRecover}
             onHint={handleHint}
             hintItems={hintItems}
+            colorBlindMode={GameSettings.getColorBlindMode()}
+            colorLabels={GameSettings.getColorLabels()}
           />
           {/* 广告位预留 - 游戏页广告位 */}
           <div className="ad-slot ad-game">
@@ -1782,6 +2048,11 @@ export default function App() {
 
   // 统计页
   if (page === 'stats') {
+    // 检查数据控成就
+    const statsAchievements = AchievementManager.checkStatsViewerAchievements();
+    if (statsAchievements.length > 0) {
+      setNewAchievements(prev => [...prev, ...statsAchievements]);
+    }
     return <Suspense fallback={<PageLoading />}><StatsPage onBack={() => setPage('home')} timedHighScore={timedHighScore} /></Suspense>;
   }
 
@@ -1848,5 +2119,84 @@ export default function App() {
   }
 
   // 隐私政策页
-  return <Suspense fallback={<PageLoading />}><PrivacyPage onBack={() => setPage('home')} /></Suspense>;
+  if (page === 'privacy') {
+    return <Suspense fallback={<PageLoading />}><PrivacyPage onBack={() => setPage('home')} /></Suspense>;
+  }
+
+  // 色彩百科页
+  if (page === 'encyclopedia') {
+    // 检查色彩学家成就
+    const encyclopediaAchievements = AchievementManager.checkEncyclopediaAchievements(progress.completedLevels.includes(100));
+    if (encyclopediaAchievements.length > 0) {
+      setNewAchievements(prev => [...prev, ...encyclopediaAchievements]);
+    }
+    return <Suspense fallback={<PageLoading />}><ColorEncyclopediaPage onBack={() => setPage('home')} onTestComplete={(score: number) => {
+      const testAchievements = AchievementManager.checkColorPerceptionAchievements(score);
+      if (testAchievements.length > 0) {
+        setNewAchievements(prev => [...prev, ...testAchievements]);
+      }
+    }} onMixerUse={(useCount: number) => {
+      const mixerAchievements = AchievementManager.checkColorMixerAchievements(useCount);
+      if (mixerAchievements.length > 0) {
+        setNewAchievements(prev => [...prev, ...mixerAchievements]);
+      }
+    }} onSequenceComplete={(level: number) => {
+      const seqAchievements = AchievementManager.checkSequenceMemoryAchievements(level);
+      if (seqAchievements.length > 0) {
+        setNewAchievements(prev => [...prev, ...seqAchievements]);
+      }
+    }} onPairMatchComplete={(moves: number) => {
+      // 配对完成时检查成就（统一检查所有难度）
+      const pairAchievements = AchievementManager.checkPairMatchAchievements('hard', moves);
+      if (pairAchievements.length > 0) {
+        setNewAchievements(prev => [...prev, ...pairAchievements]);
+      }
+    }} onReactionComplete={(score: number) => {
+      const reactionAchievements = AchievementManager.checkReactionTestAchievements(score, 8);
+      if (reactionAchievements.length > 0) {
+        setNewAchievements(prev => [...prev, ...reactionAchievements]);
+      }
+    }} onQuizComplete={(totalCompleted: number) => {
+      const quizAchievements = AchievementManager.checkDailyQuizAchievements(totalCompleted);
+      if (quizAchievements.length > 0) {
+        setNewAchievements(prev => [...prev, ...quizAchievements]);
+      }
+      // 检查答题高手成就
+      const history = getDailyQuizHistory();
+      const correctCount = history.filter(h => h.correct).length;
+      const expertAchievements = AchievementManager.checkQuizExpertAchievement(correctCount);
+      if (expertAchievements.length > 0) {
+        setNewAchievements(prev => [...prev, ...expertAchievements]);
+      }
+    }} onSearch={() => {
+      const searchAchievements = AchievementManager.checkKnowledgeExplorerAchievement();
+      if (searchAchievements.length > 0) {
+        setNewAchievements(prev => [...prev, ...searchAchievements]);
+      }
+    }} onQuizShare={() => {
+      const shareAchievements = AchievementManager.checkQuizSharerAchievement();
+      if (shareAchievements.length > 0) {
+        setNewAchievements(prev => [...prev, ...shareAchievements]);
+      }
+    }} onColorView={(viewedCount: number) => {
+      const explorerAchievements = AchievementManager.checkEncyclopediaExplorerAchievement(viewedCount);
+      if (explorerAchievements.length > 0) {
+        setNewAchievements(prev => [...prev, ...explorerAchievements]);
+      }
+    }} onGamePlayed={(gameId: string) => {
+      // 记录已玩的游戏，检查全能玩家成就
+      try {
+        const data = localStorage.getItem('encyclopedia_played_games');
+        const played: string[] = data ? JSON.parse(data) : [];
+        if (!played.includes(gameId)) {
+          played.push(gameId);
+          localStorage.setItem('encyclopedia_played_games', JSON.stringify(played));
+        }
+        const allGamesAchievements = AchievementManager.checkAllEncyclopediaGamesAchievement(played);
+        if (allGamesAchievements.length > 0) {
+          setNewAchievements(prev => [...prev, ...allGamesAchievements]);
+        }
+      } catch (e) { /* 忽略 */ }
+    }} /></Suspense>;
+  }
 }

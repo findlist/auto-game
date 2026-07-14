@@ -9,11 +9,13 @@ interface TubeViewProps {
   isHinted: boolean;
   isPouring?: boolean;
   isSettled?: boolean;
+  colorBlindMode?: boolean;
+  colorLabels?: boolean;
   onClick: (index: number) => void;
   onLongPress?: () => void;
 }
 
-export const TubeView: React.FC<TubeViewProps> = React.memo(({ tube, index, isSelected, isHinted, isPouring, isSettled, onClick, onLongPress }) => {
+export const TubeView: React.FC<TubeViewProps> = React.memo(({ tube, index, isSelected, isHinted, isPouring, isSettled, colorBlindMode = false, colorLabels = false, onClick, onLongPress }) => {
   const longPressTimer = React.useRef<number | null>(null);
   const longPressTriggered = React.useRef(false);
   const touchStartPos = React.useRef<{ x: number; y: number } | null>(null);
@@ -67,9 +69,8 @@ export const TubeView: React.FC<TubeViewProps> = React.memo(({ tube, index, isSe
     if (longPressTriggered.current) {
       e.preventDefault();
       e.stopPropagation();
-      // 修复：延迟重置标志，避免同一触摸序列后续的鼠标点击被误拦截
-      // （触摸结束后 click 事件紧随其后，需让本次 touchend 后的 click 被拦截）
-      setTimeout(() => { longPressTriggered.current = false; }, 0);
+      // 注意：不在此重置 longPressTriggered，由下次 touchstart 重置
+      // 这样可确保长按后的 click 被正确拦截
     }
   };
 
@@ -101,8 +102,11 @@ export const TubeView: React.FC<TubeViewProps> = React.memo(({ tube, index, isSe
     <div
       className={`tube-container ${isSelected ? 'selected' : ''} ${isHinted ? 'hinted' : ''} ${isPouring ? 'pouring' : ''} ${isSettled ? 'tube-settled' : ''}`}
       onClick={() => {
+        console.log('[debug] TubeView onClick', { index, longPressTriggered: longPressTriggered.current });
         if (!longPressTriggered.current) {
           onClick(index);
+        } else {
+          console.log('[debug] 点击被 longPressTriggered 拦截');
         }
       }}
       onTouchStart={handleTouchStart}
@@ -125,7 +129,7 @@ export const TubeView: React.FC<TubeViewProps> = React.memo(({ tube, index, isSe
           {layers.map((layer, i) => (
             <div
               key={i}
-              className="color-layer"
+              className={`color-layer ${colorBlindMode ? 'cb-pattern-' + layer.color : ''}`}
               style={{
                 height: `${layerHeight}%`,
                 backgroundColor: COLORS[layer.color] || layer.color,
@@ -140,6 +144,15 @@ export const TubeView: React.FC<TubeViewProps> = React.memo(({ tube, index, isSe
         <div className="tube-mouth" />
       </div>
       <div className="tube-index">{index + 1}</div>
+      {colorLabels && layers.length > 0 && (
+        <div className="tube-color-labels">
+          {layers.map((layer, i) => (
+            <span key={i} className={`color-label cb-label-${layer.color}`}>
+              {colorNames[layer.color] || layer.color}
+            </span>
+          ))}
+        </div>
+      )}
     </div>
   );
 }, (prevProps, nextProps) => {
@@ -150,6 +163,8 @@ export const TubeView: React.FC<TubeViewProps> = React.memo(({ tube, index, isSe
     prevProps.isHinted === nextProps.isHinted &&
     prevProps.isPouring === nextProps.isPouring &&
     prevProps.isSettled === nextProps.isSettled &&
+    prevProps.colorBlindMode === nextProps.colorBlindMode &&
+    prevProps.colorLabels === nextProps.colorLabels &&
     prevProps.index === nextProps.index &&
     prevProps.onLongPress === nextProps.onLongPress
   );

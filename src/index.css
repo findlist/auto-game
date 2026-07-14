@@ -27,6 +27,15 @@
   --tube-highlight: rgba(255, 255, 255, 0.55);
   --tube-shadow-inner: rgba(0, 0, 0, 0.18);
   --color-layer-shine: rgba(255, 255, 255, 0.45);
+  /* 新增静态辅助变量（不会被 themeManager 覆盖），用于增强玻璃质感与液体效果 */
+  --tube-highlight-right: rgba(255, 255, 255, 0.22);
+  --tube-bottom-reflection: rgba(255, 255, 255, 0.12);
+  --meniscus-shine: rgba(255, 255, 255, 0.5);
+  --meniscus-shadow: rgba(0, 0, 0, 0.1);
+  --glass-rim: rgba(255, 255, 255, 0.35);
+  --bg-atmosphere: radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.08) 0%, transparent 60%);
+  /* 主题切换时的平滑过渡时长 */
+  --theme-transition: 0.4s ease;
 }
 
 body {
@@ -42,6 +51,23 @@ body {
   user-select: none;
   /* 字体渲染优化：数字等宽对齐 */
   font-feature-settings: 'tnum' on, 'cv11' on;
+  /* 主题切换时背景与文字平滑过渡，避免突兀闪烁 */
+  transition: background var(--theme-transition), color var(--theme-transition);
+}
+
+/* 背景氛围层：在背景渐变之上叠加柔和光晕，增加空间纵深感 */
+.app::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: var(--bg-atmosphere);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.app > * {
+  position: relative;
+  z-index: 1;
 }
 
 #root {
@@ -231,7 +257,7 @@ body {
   height: 28px;
   border: none;
   border-radius: 6px;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
   color: #fff;
   font-size: 16px;
   cursor: pointer;
@@ -302,7 +328,7 @@ body {
 }
 
 .level-btn.current {
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
   color: #fff;
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.4), 0 4px 12px rgba(102, 126, 234, 0.35);
   animation: current-pulse 2s ease-in-out infinite;
@@ -363,7 +389,7 @@ body {
   padding: 4px 10px;
   border: none;
   border-radius: 6px;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
   color: #fff;
   font-size: 12px;
   cursor: pointer;
@@ -496,7 +522,7 @@ body {
 
 .progress-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, #4ECDC4, #667eea);
+  background: linear-gradient(90deg, var(--success), var(--primary));
   border-radius: 6px;
   transition: width 0.5s ease;
   box-shadow: 0 0 10px rgba(78, 205, 196, 0.4);
@@ -686,6 +712,14 @@ body {
   align-items: center;
   padding: 12px 16px;
   color: var(--text-light);
+  /* 半透明背景 + 毛玻璃模糊，提升头部在渐变背景上的可读性 */
+  background: rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 20;
 }
 
 .btn-back, .btn-hint {
@@ -701,6 +735,12 @@ body {
 
 .btn-back:hover, .btn-hint:hover {
   background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.btn-back:active, .btn-hint:active {
+  transform: translateY(0) scale(0.97);
+  transition: transform 0.08s;
 }
 
 /* 关卡信息条 */
@@ -709,11 +749,14 @@ body {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 6px 16px;
-  background: rgba(0, 0, 0, 0.1);
+  padding: 8px 16px;
+  background: rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   color: var(--text-light);
   font-size: 13px;
   font-weight: 500;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 .level-info-item {
   white-space: nowrap;
@@ -747,6 +790,8 @@ body {
   box-shadow: var(--shadow-lg);
   /* 顶部高光线条增强卡片质感 */
   position: relative;
+  /* 主题切换时卡片背景平滑过渡 */
+  transition: background var(--theme-transition), box-shadow 0.3s ease;
 }
 
 .game-board::before {
@@ -773,10 +818,17 @@ body {
   border-radius: 16px;
   font-size: 13px;
   font-weight: 600;
+  /* 徽章增加轻微的内高光，让小元素也有质感 */
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transition: transform 0.15s ease;
+}
+
+.level-badge:hover, .difficulty-badge:hover {
+  transform: translateY(-1px);
 }
 
 .level-badge {
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
   color: #fff;
 }
 
@@ -957,9 +1009,13 @@ body {
   flex-wrap: wrap;
   justify-content: center;
   gap: 12px;
-  padding: 16px 4px;
+  padding: 20px 8px;
   min-height: 300px;
   align-items: flex-end;
+  /* 试管区域增加柔和的内嵌背景，营造"桌面"的沉浸感 */
+  background: radial-gradient(ellipse at center bottom, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
+  border-radius: 12px;
+  position: relative;
 }
 
 /* 滑动手势包装层 */
@@ -975,7 +1031,8 @@ body {
   flex-direction: column;
   align-items: center;
   cursor: pointer;
-  transition: transform 0.2s;
+  /* 过渡曲线更弹性，让选中/悬停反馈更生动 */
+  transition: transform 0.25s cubic-bezier(0.34, 1.3, 0.64, 1);
   will-change: transform;
   position: relative;
 }
@@ -984,18 +1041,39 @@ body {
   transform: translateY(-4px);
 }
 
+.tube-container:hover .tube {
+  /* 悬停时试管边框略微增亮，提示可交互 */
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
 .tube-container.selected {
   transform: translateY(-8px);
 }
 
+/* 选中试管下方增加一个柔和的投影圆，强化"被抬起"的视觉感 */
+.tube-container.selected::after {
+  content: '';
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 36px;
+  height: 6px;
+  background: radial-gradient(ellipse, rgba(0, 0, 0, 0.25) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: -1;
+}
+
 .tube-container.selected .tube {
-  box-shadow: 0 0 0 3px var(--primary), 0 0 24px rgba(102, 126, 234, 0.5), 0 4px 20px rgba(102, 126, 234, 0.4);
+  /* 使用 color-mix 让发光颜色随主题 --primary 自适应，不再硬编码紫色 */
+  box-shadow: 0 0 0 3px var(--primary), 0 0 24px color-mix(in srgb, var(--primary) 50%, transparent), 0 4px 20px color-mix(in srgb, var(--primary) 40%, transparent);
   animation: selected-glow 1.5s ease-in-out infinite;
 }
 
 @keyframes selected-glow {
-  0%, 100% { box-shadow: 0 0 0 3px var(--primary), 0 0 20px rgba(102, 126, 234, 0.4), 0 4px 20px rgba(102, 126, 234, 0.3); }
-  50% { box-shadow: 0 0 0 3px var(--primary), 0 0 30px rgba(102, 126, 234, 0.6), 0 4px 25px rgba(102, 126, 234, 0.5); }
+  0%, 100% { box-shadow: 0 0 0 3px var(--primary), 0 0 20px color-mix(in srgb, var(--primary) 40%, transparent), 0 4px 20px color-mix(in srgb, var(--primary) 30%, transparent); }
+  50% { box-shadow: 0 0 0 3px var(--primary), 0 0 30px color-mix(in srgb, var(--primary) 60%, transparent), 0 4px 25px color-mix(in srgb, var(--primary) 50%, transparent); }
 }
 
 .tube-container.hinted .tube {
@@ -1040,9 +1118,13 @@ body {
   background: var(--tube-bg);
   overflow: hidden;
   backdrop-filter: blur(4px);
-  transition: box-shadow 0.2s;
-  /* 玻璃质感：左侧高光 + 内阴影增强立体感 */
-  box-shadow: inset 2px 0 4px rgba(255, 255, 255, 0.25), inset -2px 0 4px var(--tube-shadow-inner);
+  /* 过渡包含背景与边框，主题切换时平滑变化 */
+  transition: box-shadow 0.2s, background var(--theme-transition), border-color var(--theme-transition);
+  /* 玻璃质感：左侧主高光 + 右侧次高光 + 内阴影增强立体感 + 底部反光 */
+  box-shadow:
+    inset 2px 0 4px rgba(255, 255, 255, 0.25),
+    inset -2px 0 4px var(--tube-shadow-inner),
+    inset 0 -3px 6px var(--tube-bottom-reflection);
 }
 
 /* 试管左侧高光线条，模拟玻璃反光 */
@@ -1055,6 +1137,20 @@ body {
   bottom: 8px;
   background: linear-gradient(180deg, var(--tube-highlight) 0%, rgba(255, 255, 255, 0.1) 100%);
   border-radius: 2px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* 试管右侧次高光，与左侧主高光呼应，形成立体玻璃管效果 */
+.tube::after {
+  content: '';
+  position: absolute;
+  top: 6px;
+  right: 4px;
+  width: 1.5px;
+  bottom: 10px;
+  background: linear-gradient(180deg, var(--tube-highlight-right) 0%, transparent 100%);
+  border-radius: 1px;
   z-index: 2;
   pointer-events: none;
 }
@@ -1087,12 +1183,12 @@ body {
   /* 仅过渡 transform 和 opacity，避免过渡 background 引发重绘 */
   transition: transform 0.3s cubic-bezier(0.34, 1.2, 0.64, 1), opacity 0.3s ease;
   will-change: transform, opacity;
-  /* 多层阴影营造立体感：顶部内高光、底部内阴影、左右渐变 */
+  /* 多层阴影营造立体感：顶部内高光（液体表面光泽）、底部内阴影（液体沉降感）、左右渐变（球体弧度） */
   box-shadow:
-    inset 0 2px 3px var(--color-layer-shine),
-    inset 0 -2px 3px rgba(0, 0, 0, 0.15),
-    inset 2px 0 3px rgba(255, 255, 255, 0.15),
-    inset -2px 0 3px rgba(0, 0, 0, 0.08);
+    inset 0 2px 4px var(--color-layer-shine),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.18),
+    inset 2px 0 4px rgba(255, 255, 255, 0.18),
+    inset -2px 0 4px rgba(0, 0, 0, 0.1);
 }
 
 /* 颜色层左侧高光，让球体/液体更有光泽 */
@@ -1108,11 +1204,138 @@ body {
   pointer-events: none;
 }
 
+/* 液体表面弯月面效果：仅顶层颜色层显示，模拟液体表面弧形反光 */
+.tube-inner > .color-layer:last-child::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(180deg, var(--meniscus-shine) 0%, transparent 100%);
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ========== 色弱友好模式：每种颜色叠加不同纹理图案 ========== */
+.cb-pattern-red::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(0,0,0,0.35) 4px, rgba(0,0,0,0.35) 6px);
+  pointer-events: none;
+}
+.cb-pattern-blue::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(-45deg, transparent, transparent 4px, rgba(0,0,0,0.35) 4px, rgba(0,0,0,0.35) 6px);
+  pointer-events: none;
+}
+.cb-pattern-yellow::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 4px, rgba(0,0,0,0.4) 4px, rgba(0,0,0,0.4) 6px);
+  pointer-events: none;
+}
+.cb-pattern-green::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(90deg, transparent, transparent 4px, rgba(0,0,0,0.35) 4px, rgba(0,0,0,0.35) 6px);
+  pointer-events: none;
+}
+.cb-pattern-purple::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(0,0,0,0.4) 2px, transparent 3px);
+  background-size: 8px 8px;
+  pointer-events: none;
+}
+.cb-pattern-orange::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(45deg, transparent, transparent 6px, rgba(0,0,0,0.35) 6px, rgba(0,0,0,0.35) 8px);
+  pointer-events: none;
+}
+.cb-pattern-pink::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, transparent 2px, rgba(0,0,0,0.35) 3px, transparent 4px);
+  background-size: 8px 8px;
+  pointer-events: none;
+}
+.cb-pattern-cyan::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 6px, rgba(0,0,0,0.35) 6px, rgba(0,0,0,0.35) 8px);
+  pointer-events: none;
+}
+.cb-pattern-brown::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: 
+    repeating-linear-gradient(45deg, transparent, transparent 8px, rgba(0,0,0,0.3) 8px, rgba(0,0,0,0.3) 10px),
+    repeating-linear-gradient(-45deg, transparent, transparent 8px, rgba(0,0,0,0.3) 8px, rgba(0,0,0,0.3) 10px);
+  pointer-events: none;
+}
+.cb-pattern-gray::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(circle, rgba(0,0,0,0.4) 1.5px, transparent 2px),
+    radial-gradient(circle, rgba(0,0,0,0.4) 1.5px, transparent 2px);
+  background-size: 6px 6px;
+  background-position: 0 0, 3px 3px;
+  pointer-events: none;
+}
+
 .tube-index {
   margin-top: 6px;
   font-size: 11px;
   color: #999;
 }
+
+/* ========== 色弱模式：颜色名称标签 ========== */
+.tube-color-labels {
+  margin-top: 4px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2px;
+  max-width: 60px;
+}
+
+.color-label {
+  font-size: 9px;
+  font-weight: 600;
+  padding: 1px 3px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.7);
+  color: #333;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+/* 各颜色标签用对应颜色的浅色背景区分 */
+.cb-label-red { background: rgba(255, 107, 107, 0.2); border-left: 2px solid #FF6B6B; }
+.cb-label-blue { background: rgba(78, 205, 196, 0.2); border-left: 2px solid #4ECDC4; }
+.cb-label-yellow { background: rgba(255, 230, 109, 0.25); border-left: 2px solid #FFE66D; }
+.cb-label-green { background: rgba(149, 225, 163, 0.2); border-left: 2px solid #95E1A3; }
+.cb-label-purple { background: rgba(197, 137, 232, 0.2); border-left: 2px solid #C589E8; }
+.cb-label-orange { background: rgba(255, 160, 122, 0.2); border-left: 2px solid #FFA07A; }
+.cb-label-pink { background: rgba(255, 182, 193, 0.2); border-left: 2px solid #FFB6C1; }
+.cb-label-cyan { background: rgba(135, 206, 235, 0.2); border-left: 2px solid #87CEEB; }
+.cb-label-brown { background: rgba(212, 165, 116, 0.2); border-left: 2px solid #D4A574; }
+.cb-label-gray { background: rgba(176, 176, 176, 0.2); border-left: 2px solid #B0B0B0; }
 
 /* 游戏控制按钮 */
 .game-controls {
@@ -1153,13 +1376,14 @@ body {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: #fff;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  /* 使用主题变量 --primary/--secondary，按钮配色随主题自适应 */
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: var(--text-light);
+  box-shadow: 0 4px 15px color-mix(in srgb, var(--primary) 40%, transparent);
 }
 
 .btn-primary:hover {
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+  box-shadow: 0 6px 20px color-mix(in srgb, var(--primary) 50%, transparent);
 }
 
 .btn-secondary {
@@ -1338,6 +1562,287 @@ body {
 .info-page p {
   font-size: 14px;
   margin-bottom: 8px;
+}
+
+/* ========== 色彩百科页面样式 ========== */
+.color-encyclopedia-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.encyclopedia-progress-bar {
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  background: rgba(102, 126, 234, 0.06);
+  border-radius: 10px;
+}
+
+.encyclopedia-progress-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.encyclopedia-progress-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text, #333);
+}
+
+.encyclopedia-progress-count {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--primary, #667eea);
+}
+
+.encyclopedia-progress-track {
+  height: 8px;
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.encyclopedia-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+.encyclopedia-progress-complete {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: #4CAF50;
+  font-weight: 600;
+}
+
+html[style*="1a1a2e"] .encyclopedia-progress-bar {
+  background: rgba(255, 255, 255, 0.04);
+}
+html[style*="1a1a2e"] .encyclopedia-progress-track {
+  background: rgba(255, 255, 255, 0.08);
+}
+@media (prefers-color-scheme: dark) {
+  .encyclopedia-progress-bar {
+    background: rgba(255, 255, 255, 0.04);
+  }
+  .encyclopedia-progress-track {
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
+
+.color-encyclopedia-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  box-shadow: var(--shadow-sm);
+  color: var(--text);
+  cursor: pointer;
+  transition: box-shadow 0.25s ease, transform 0.2s ease, border-color 0.2s;
+  overflow: hidden;
+}
+
+.color-encyclopedia-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.color-encyclopedia-card.card-expanded {
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+}
+
+.color-encyclopedia-detail {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.35s ease, opacity 0.25s ease, margin-top 0.3s ease;
+}
+
+.color-encyclopedia-card.card-expanded .color-encyclopedia-detail {
+  max-height: 300px;
+  opacity: 1;
+  margin-top: 8px;
+}
+
+.card-expand-icon {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--text-light, #999);
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.color-encyclopedia-card.card-expanded .card-expand-icon {
+  transform: rotate(90deg);
+}
+
+.encyclopedia-recent-colors {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 14px;
+  padding: 10px 12px;
+  background: rgba(102, 126, 234, 0.06);
+  border-radius: 8px;
+}
+
+.recent-colors-label {
+  font-size: 13px;
+  color: var(--text-light, #666);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.recent-color-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  font-size: 12px;
+  border-radius: 16px;
+  background: var(--card-bg);
+  border: 1px solid var(--tube-border, rgba(0,0,0,0.06));
+  color: var(--text, #333);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+  white-space: nowrap;
+}
+
+.recent-color-chip:hover {
+  background: rgba(102, 126, 234, 0.15);
+  transform: translateY(-1px);
+}
+
+.recent-colors-clear {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--text-light, #999);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px 6px;
+  opacity: 0.7;
+}
+
+.recent-colors-clear:hover {
+  color: #e74c3c;
+  opacity: 1;
+}
+
+.color-encyclopedia-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 8px;
+  margin-bottom: 8px;
+}
+
+.color-encyclopedia-emoji {
+  font-size: 28px;
+  line-height: 1;
+}
+
+.color-encyclopedia-name {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.color-encyclopedia-hex {
+  font-size: 12px;
+  color: var(--text-light, #888);
+  font-family: monospace;
+  opacity: 0.8;
+}
+
+.color-encyclopedia-keywords {
+  font-size: 13px;
+  color: var(--primary);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.color-encyclopedia-desc {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text, #555);
+  margin-bottom: 8px;
+}
+
+.color-encyclopedia-tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-light, #666);
+  background: rgba(255, 230, 109, 0.15);
+  padding: 8px 10px;
+  border-radius: 8px;
+}
+
+.color-encyclopedia-tip .tip-icon {
+  flex-shrink: 0;
+}
+
+.color-theory-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.color-theory-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  box-shadow: var(--shadow-sm);
+  color: var(--text);
+}
+
+.color-theory-card h4 {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: var(--primary);
+}
+
+.color-theory-card p {
+  font-size: 13px;
+  line-height: 1.7;
+  color: #555;
+}
+
+.color-trivia-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.color-trivia-item {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  box-shadow: var(--shadow-sm);
+  color: var(--text);
+}
+
+.color-trivia-item h4 {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: var(--secondary);
+}
+
+.color-trivia-item p {
+  font-size: 13px;
+  line-height: 1.7;
+  color: #555;
 }
 
 .version {
@@ -1993,7 +2498,7 @@ body {
   display: flex;
   align-items: center;
   gap: 14px;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
   color: #fff;
   padding: 16px 24px;
   border-radius: 16px;
@@ -2042,11 +2547,19 @@ body {
   justify-content: space-between;
   padding: 14px 20px;
   cursor: pointer;
-  transition: background 0.2s;
+  /* 悬停过渡更平滑，增加左边框指示器 */
+  transition: background 0.2s, padding-left 0.2s;
+  border-left: 3px solid transparent;
 }
 
 .setting-item:hover {
   background: rgba(0, 0, 0, 0.03);
+  border-left-color: var(--primary);
+  padding-left: 17px;
+}
+
+.setting-item:active {
+  background: rgba(0, 0, 0, 0.06);
 }
 
 .setting-item-static {
@@ -2112,7 +2625,7 @@ body {
 }
 
 .toggle-switch.on {
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
 }
 
 .toggle-knob {
@@ -2123,12 +2636,14 @@ body {
   position: absolute;
   top: 2px;
   left: 2px;
-  transition: transform 0.3s;
+  /* 过渡曲线带弹性，让开关切换更有"咔哒"的触感 */
+  transition: transform 0.3s cubic-bezier(0.34, 1.5, 0.64, 1), box-shadow 0.2s;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 .toggle-switch.on .toggle-knob {
   transform: translateX(22px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25), 0 0 0 2px rgba(255, 255, 255, 0.3);
 }
 
 /* ============ 星级评价 ============ */
@@ -2268,7 +2783,7 @@ body {
   width: 40px;
   height: 40px;
   border: 4px solid #e0e0e0;
-  border-top-color: #667eea;
+  border-top-color: var(--primary);
   border-radius: 50%;
   margin: 0 auto 12px;
   animation: spin 0.8s linear infinite;
@@ -2370,6 +2885,8 @@ body {
   /* 顶部高光增强卡片质感 */
   position: relative;
   overflow: hidden;
+  /* 卡片悬停时增加轻微的边框高亮 */
+  border: 1px solid transparent;
 }
 
 .stat-card::before {
@@ -2385,6 +2902,7 @@ body {
 .stat-card:hover {
   transform: translateY(-3px);
   box-shadow: var(--shadow-lg);
+  border-color: rgba(102, 126, 234, 0.2);
 }
 
 .stat-card-icon {
@@ -2611,7 +3129,7 @@ body {
 }
 
 .pwa-install-btn {
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -2850,7 +3368,7 @@ body {
 
 .progress-overall-bar {
   height: 100%;
-  background: linear-gradient(90deg, #667eea, #764ba2);
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
   border-radius: 12px;
   transition: width 0.6s ease;
 }
@@ -3112,7 +3630,7 @@ body {
 }
 
 .calendar-day-checked {
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
   color: #fff;
   font-weight: 600;
 }
@@ -3156,7 +3674,7 @@ body {
 .trend-bar {
   width: 100%;
   max-width: 20px;
-  background: linear-gradient(180deg, #667eea, #764ba2);
+  background: linear-gradient(180deg, var(--primary), var(--secondary));
   border-radius: 4px 4px 0 0;
   min-height: 4px;
   transition: height 0.3s ease;
@@ -3331,6 +3849,77 @@ body {
   .weekly-banner-icon { font-size: 26px; }
   .weekly-banner-title { font-size: 14px; }
   .weekly-banner-sub { font-size: 12px; }
+}
+
+/* 周末奖励横幅 */
+.weekend-bonus-banner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, rgba(255, 105, 180, 0.12), rgba(255, 182, 193, 0.12));
+  border: 1px solid rgba(255, 105, 180, 0.3);
+  border-left: 4px solid #FF69B4;
+  border-radius: 14px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.weekend-bonus-banner:hover {
+  background: linear-gradient(135deg, rgba(255, 105, 180, 0.18), rgba(255, 182, 193, 0.18));
+  border-color: rgba(255, 105, 180, 0.45);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 105, 180, 0.15);
+}
+
+.weekend-bonus-banner.weekend-claimed {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.weekend-banner-icon {
+  font-size: 32px;
+  flex-shrink: 0;
+}
+
+.weekend-banner-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.weekend-banner-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #FF69B4;
+}
+
+.weekend-banner-sub {
+  font-size: 13px;
+  color: #888;
+}
+
+.weekend-banner-arrow {
+  font-size: 20px;
+  color: #FF69B4;
+  flex-shrink: 0;
+  transition: transform 0.2s;
+}
+
+.weekend-bonus-banner:hover .weekend-banner-arrow {
+  transform: translateX(4px);
+}
+
+@media (max-width: 480px) {
+  .weekend-bonus-banner {
+    padding: 12px 14px;
+    gap: 10px;
+  }
+  .weekend-banner-icon { font-size: 26px; }
+  .weekend-banner-title { font-size: 14px; }
+  .weekend-banner-sub { font-size: 12px; }
 }
 
 .daily-tip-icon {
@@ -4089,7 +4678,7 @@ body {
 }
 
 .capacity-btn.capacity-selected {
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
   border-color: transparent;
   color: #fff;
   box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
@@ -4879,4 +5468,1662 @@ html {
   font-weight: 600;
   white-space: nowrap;
   box-shadow: 0 2px 6px rgba(255, 165, 0, 0.3);
+}
+
+/* ============ 色彩记忆配对游戏 ============ */
+.color-pair-match {
+  background: var(--card-bg, #fff);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 12px 0 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+.cpm-intro {
+  margin-bottom: 16px;
+}
+.cpm-intro p {
+  font-size: 13px;
+  color: var(--text, #333);
+  line-height: 1.5;
+  opacity: 0.8;
+}
+.cpm-best {
+  font-size: 13px;
+  color: var(--primary, #667eea);
+  font-weight: 600;
+  margin-top: 6px;
+}
+.cpm-start-btn {
+  display: block;
+  margin: 0 auto;
+  padding: 10px 28px;
+  background: var(--primary, #667eea);
+  color: #fff;
+  border: none;
+  border-radius: 24px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.cpm-start-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+}
+.cpm-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text, #333);
+}
+.cpm-score {
+  color: var(--primary, #667eea);
+}
+.cpm-moves {
+  color: var(--text, #333);
+  opacity: 0.7;
+}
+.cpm-card-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  max-width: 360px;
+  margin: 0 auto;
+}
+.cpm-card {
+  aspect-ratio: 1;
+  border-radius: 10px;
+  border: 2px solid var(--tube-border, rgba(255,255,255,0.3));
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--text, #333);
+  opacity: 0.7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cpm-card:hover:not(:disabled) {
+  opacity: 1;
+  transform: scale(1.05);
+}
+.cpm-card.cpm-flipped {
+  opacity: 1;
+  border-color: var(--text, #333);
+}
+.cpm-card.cpm-matched {
+  opacity: 0.5;
+  cursor: default;
+  animation: cpmMatchPulse 0.5s ease;
+}
+@keyframes cpmMatchPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+.cpm-result {
+  font-size: 48px;
+  text-align: center;
+  margin-bottom: 8px;
+}
+.cpm-final-score {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text, #333);
+  text-align: center;
+  margin: 8px 0;
+}
+.cpm-rating {
+  font-size: 14px;
+  color: var(--text, #333);
+  opacity: 0.7;
+  text-align: center;
+}
+.cpm-new-best {
+  font-size: 13px;
+  color: var(--primary, #667eea);
+  font-weight: 600;
+  text-align: center;
+  margin-top: 4px;
+}
+@media (max-width: 375px) {
+  .cpm-card-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+  }
+  .cpm-card {
+    font-size: 18px;
+    border-radius: 8px;
+  }
+}
+
+/* 配对难度选择器 */
+.cpm-difficulty-select {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin: 12px 0;
+  flex-wrap: wrap;
+}
+.cpm-difficulty-btn {
+  padding: 6px 14px;
+  border: 1.5px solid var(--tube-border, rgba(255,255,255,0.3));
+  background: transparent;
+  color: var(--text, #333);
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  opacity: 0.7;
+}
+.cpm-difficulty-btn:hover {
+  opacity: 1;
+}
+.cpm-difficulty-btn.cpm-difficulty-active {
+  background: var(--primary, #667eea);
+  color: #fff;
+  border-color: var(--primary, #667eea);
+  opacity: 1;
+}
+.cpm-mode-toggle {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin: 10px 0;
+}
+.cpm-mode-btn {
+  padding: 6px 14px;
+  border-radius: 16px;
+  border: 1.5px solid var(--tube-border, rgba(255,255,255,0.3));
+  background: transparent;
+  color: var(--text, #333);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+  opacity: 0.6;
+}
+.cpm-mode-btn.cpm-mode-active {
+  background: var(--primary, #667eea);
+  color: #fff;
+  border-color: var(--primary, #667eea);
+  opacity: 1;
+}
+.cpm-timer {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--primary, #667eea);
+}
+.cpm-timer.cpm-timer-urgent {
+  color: #ff4444;
+  animation: cpm-timer-pulse 0.5s infinite;
+}
+@keyframes cpm-timer-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ============ 色彩序列记忆游戏 ============ */
+.color-sequence-game {
+  background: var(--card-bg, #fff);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 12px 0 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+.csg-intro {
+  margin-bottom: 16px;
+}
+.csg-intro p {
+  font-size: 13px;
+  color: var(--text, #333);
+  line-height: 1.5;
+  opacity: 0.8;
+}
+.csg-best {
+  font-size: 13px;
+  color: var(--primary, #667eea);
+  font-weight: 600;
+  margin-top: 6px;
+}
+.csg-start-btn {
+  display: block;
+  margin: 0 auto;
+  padding: 10px 28px;
+  background: var(--primary, #667eea);
+  color: #fff;
+  border: none;
+  border-radius: 24px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.csg-start-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+}
+.csg-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text, #333);
+}
+.csg-level {
+  color: var(--primary, #667eea);
+}
+.csg-status {
+  color: var(--text, #333);
+  opacity: 0.7;
+}
+.csg-color-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  max-width: 280px;
+  margin: 0 auto 16px;
+}
+.csg-color-btn {
+  aspect-ratio: 1.5;
+  border-radius: 16px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+.csg-color-btn:disabled {
+  cursor: default;
+}
+.csg-color-btn.csg-active {
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+}
+.csg-progress {
+  text-align: center;
+  font-size: 13px;
+  color: var(--text, #333);
+  opacity: 0.6;
+}
+.csg-result {
+  font-size: 48px;
+  text-align: center;
+  margin-bottom: 8px;
+}
+.csg-final-level {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text, #333);
+  text-align: center;
+  margin: 8px 0;
+}
+.csg-rating {
+  font-size: 14px;
+  color: var(--text, #333);
+  opacity: 0.7;
+  text-align: center;
+}
+.csg-new-best {
+  font-size: 13px;
+  color: var(--primary, #667eea);
+  font-weight: 600;
+  text-align: center;
+  margin-top: 4px;
+}
+@media (max-width: 375px) {
+  .csg-color-grid {
+    max-width: 240px;
+    gap: 8px;
+  }
+  .csg-color-btn {
+    border-radius: 12px;
+  }
+}
+
+/* ============ 色彩反应力测试 ============ */
+.color-reaction-test {
+  background: var(--card-bg, #fff);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 12px 0;
+}
+.color-reaction-test.idle {
+  text-align: center;
+}
+.crt-intro {
+  margin-bottom: 16px;
+}
+.crt-intro p {
+  font-size: 14px;
+  color: var(--text, #333);
+  line-height: 1.6;
+  margin: 4px 0;
+}
+.crt-best, .crt-avg {
+  font-size: 13px !important;
+  opacity: 0.7;
+}
+.crt-start-btn {
+  padding: 10px 28px;
+  border-radius: 20px;
+  border: none;
+  background: var(--primary, #667eea);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.crt-start-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+.crt-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  font-size: 14px;
+  color: var(--text, #333);
+  font-weight: 600;
+}
+.crt-waiting {
+  text-align: center;
+  padding: 40px 0;
+}
+.crt-wait-text {
+  font-size: 20px;
+  color: var(--text, #333);
+  opacity: 0.6;
+}
+.crt-target {
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 16px;
+  background: var(--tube-bg, rgba(255,255,255,0.1));
+  border-radius: 12px;
+}
+.crt-target-text {
+  font-size: 16px;
+  color: var(--text, #333);
+  opacity: 0.7;
+}
+.crt-target-color {
+  font-size: 28px;
+  font-weight: 800;
+  margin-left: 8px;
+}
+.crt-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  max-width: 280px;
+  margin: 0 auto;
+}
+.crt-color-btn {
+  aspect-ratio: 1.5;
+  border-radius: 16px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+.crt-color-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+.crt-color-btn:active {
+  transform: scale(0.95);
+}
+.crt-feedback {
+  text-align: center;
+  font-size: 14px;
+  color: var(--text, #333);
+  margin-top: 12px;
+  font-weight: 600;
+}
+.crt-result {
+  font-size: 48px;
+  text-align: center;
+  margin-bottom: 8px;
+}
+.crt-final-score {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text, #333);
+  text-align: center;
+  margin: 8px 0;
+}
+.crt-rating {
+  font-size: 14px;
+  color: var(--text, #333);
+  opacity: 0.7;
+  text-align: center;
+}
+.crt-new-best {
+  font-size: 13px;
+  color: var(--primary, #667eea);
+  font-weight: 600;
+  text-align: center;
+  margin-top: 4px;
+}
+@media (max-width: 375px) {
+  .crt-options {
+    max-width: 240px;
+    gap: 8px;
+  }
+  .crt-color-btn {
+    border-radius: 12px;
+  }
+  .crt-target-color {
+    font-size: 22px;
+  }
+}
+
+/* ============ 交互式颜色混合器 ============ */
+.color-mixer-container {
+  background: var(--card-bg, #fff);
+  border-radius: 12px;
+  padding: 16px;
+  margin: 12px 0 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+.color-mixer-intro {
+  margin-bottom: 12px;
+}
+.color-mixer-intro p {
+  font-size: 13px;
+  color: var(--text, #333);
+  line-height: 1.5;
+  opacity: 0.8;
+}
+.color-mixer-palette {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.mixer-color-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 10px 6px;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  opacity: 0.6;
+  min-height: 64px;
+}
+.mixer-color-btn:hover {
+  opacity: 0.85;
+  transform: scale(1.05);
+}
+.mixer-color-btn.mixer-color-active {
+  opacity: 1;
+  border-color: var(--text, #333);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transform: scale(1.05);
+}
+.mixer-color-emoji {
+  font-size: 20px;
+}
+.mixer-color-name-text {
+  font-size: 11px;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  font-weight: 500;
+}
+.color-mixer-result {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: var(--tube-bg, rgba(255,255,255,0.1));
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+.mixer-result-circle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 3px solid var(--tube-border, rgba(255,255,255,0.4));
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: var(--card-bg, #fff);
+}
+.mixer-placeholder {
+  font-size: 28px;
+  color: var(--text, #333);
+  opacity: 0.4;
+  font-weight: bold;
+}
+.mixer-result-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+.mixer-result-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text, #333);
+}
+.mixer-result-rgb {
+  font-size: 13px;
+  color: var(--text, #333);
+  opacity: 0.6;
+  font-family: monospace;
+}
+.mixer-result-formula {
+  font-size: 12px;
+  color: var(--text, #333);
+  opacity: 0.5;
+}
+.mixer-counter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: var(--tube-bg, rgba(255,255,255,0.1));
+  border: 1px solid var(--tube-border, rgba(255,255,255,0.2));
+  flex-shrink: 0;
+}
+.mixer-counter-num {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--primary, #667eea);
+}
+.mixer-counter-label {
+  font-size: 10px;
+  color: var(--text, #333);
+  opacity: 0.6;
+}
+.mixer-milestone-toast {
+  text-align: center;
+  padding: 10px 16px;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.15));
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text, #333);
+  cursor: pointer;
+  animation: milestoneFadeIn 0.4s ease;
+}
+@keyframes milestoneFadeIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.mixer-clear-btn {
+  display: block;
+  margin: 0 auto;
+  padding: 6px 16px;
+  background: var(--tube-bg, rgba(255,255,255,0.1));
+  border: 1px solid var(--tube-border, rgba(255,255,255,0.2));
+  border-radius: 8px;
+  font-size: 12px;
+  cursor: pointer;
+  color: var(--text, #333);
+  opacity: 0.7;
+  transition: all 0.2s;
+}
+.mixer-clear-btn:hover {
+  background: var(--primary, #667eea);
+  color: #fff;
+  opacity: 1;
+}
+.mixer-tips {
+  margin-top: 12px;
+  padding: 10px 12px;
+  background: rgba(102, 126, 234, 0.08);
+  border-radius: 8px;
+  border-left: 3px solid var(--primary, #667eea);
+}
+.mixer-tips p {
+  font-size: 12px;
+  color: var(--text, #333);
+  opacity: 0.7;
+  line-height: 1.5;
+}
+
+/* ============ 统计分享 ============ */
+.stats-share-bar {
+  text-align: center;
+  margin-bottom: 16px;
+}
+.btn-share {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 24px;
+  border-radius: 24px;
+  font-size: 14px;
+}
+
+/* ============ 色彩辨识测试 ============ */
+.color-perception-test {
+  background: var(--card-bg, #fff);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 12px 0 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+.color-perception-test.idle {
+  text-align: center;
+}
+.cpt-intro {
+  margin-bottom: 16px;
+}
+.cpt-intro p {
+  font-size: 14px;
+  color: var(--text-light, #666);
+  line-height: 1.6;
+  margin: 4px 0;
+}
+.cpt-best {
+  font-weight: 600;
+  color: var(--text, #333);
+}
+.cpt-start-btn {
+  display: inline-block;
+  padding: 10px 28px;
+  background: var(--primary, #667eea);
+  color: #fff;
+  border: none;
+  border-radius: 24px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 8px;
+}
+.cpt-start-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+.cpt-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text, #333);
+}
+.cpt-instruction {
+  font-size: 13px;
+  color: var(--text-light, #888);
+  text-align: center;
+  margin-bottom: 12px;
+}
+.cpt-target-color {
+  width: 120px;
+  height: 120px;
+  border-radius: 16px;
+  margin: 0 auto 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 3px solid var(--text-light, #fff);
+}
+.cpt-options-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  max-width: 320px;
+  margin: 0 auto;
+}
+.cpt-option-btn {
+  height: 72px;
+  border: 3px solid transparent;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.cpt-option-btn:hover:not(:disabled) {
+  transform: scale(1.03);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+.cpt-option-btn:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+.cpt-option-btn.cpt-correct {
+  border-color: #4CAF50;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.3);
+}
+.cpt-option-btn.cpt-wrong {
+  border-color: #f44336;
+  box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.3);
+}
+.cpt-feedback {
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 12px;
+  min-height: 24px;
+}
+.color-perception-test.finished {
+  text-align: center;
+}
+.cpt-result {
+  font-size: 48px;
+  margin-bottom: 8px;
+}
+.cpt-final-score {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text, #333);
+}
+.cpt-rating {
+  font-size: 14px;
+  color: var(--text-light, #888);
+  margin: 8px 0 4px;
+}
+.cpt-new-best {
+  font-size: 14px;
+  font-weight: 600;
+  color: #FFD700;
+}
+
+/* ============ 每日色彩知识卡片 ============ */
+.daily-color-knowledge-card {
+  background: linear-gradient(135deg, #f0f4ff 0%, #fdf0ff 100%);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin: 12px 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-left: 4px solid #667eea;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.daily-color-knowledge-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+}
+.daily-color-knowledge-card:active {
+  transform: translateY(0);
+}
+.daily-color-knowledge-emoji {
+  font-size: 32px;
+  flex-shrink: 0;
+}
+.daily-color-knowledge-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.daily-color-knowledge-label {
+  font-size: 11px;
+  color: #667eea;
+  font-weight: 600;
+}
+.daily-color-knowledge-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary, #333);
+}
+.daily-color-knowledge-text {
+  font-size: 12px;
+  color: var(--text-light, #888);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.daily-color-knowledge-arrow {
+  font-size: 18px;
+  color: #667eea;
+  flex-shrink: 0;
+}
+
+/* 每日色彩问答入口卡片 */
+.daily-quiz-entry-card {
+  background: linear-gradient(135deg, #f0fff4 0%, #fffbeb 100%);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin: 12px 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-left: 4px solid #10b981;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.daily-quiz-entry-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+}
+.daily-quiz-entry-card:active {
+  transform: translateY(0);
+}
+/* 未答题时的脉冲提醒动画 */
+.daily-quiz-entry-card.quiz-unanswered {
+  animation: quiz-pulse 2s ease-in-out infinite;
+  border-left-color: #f59e0b;
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+}
+@keyframes quiz-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(245, 158, 11, 0);
+  }
+}
+.daily-quiz-entry-card.quiz-unanswered .daily-quiz-entry-icon {
+  animation: quiz-bounce 1.5s ease-in-out infinite;
+}
+@keyframes quiz-bounce {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+}
+.daily-quiz-entry-icon {
+  font-size: 32px;
+  flex-shrink: 0;
+}
+.daily-quiz-entry-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.daily-quiz-entry-label {
+  font-size: 11px;
+  color: #10b981;
+  font-weight: 600;
+}
+.daily-quiz-entry-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary, #333);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.daily-quiz-entry-sub {
+  font-size: 12px;
+  color: var(--text-light, #888);
+}
+.daily-quiz-entry-arrow {
+  font-size: 18px;
+  color: #10b981;
+  flex-shrink: 0;
+}
+@media (max-width: 375px) {
+  .daily-quiz-entry-card {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+  .daily-quiz-entry-icon {
+    font-size: 26px;
+  }
+  .daily-quiz-entry-title {
+    font-size: 13px;
+  }
+}
+
+/* ============================================================ */
+/* ============ 2026-07-13 样式优化增强（第二批） ============ */
+/* ============================================================ */
+/* 本区块为追加的视觉与交互增强，不修改已有功能逻辑，仅提升表现力 */
+
+/* 1. 移动端按钮统一触摸反馈：按下时缩放 + 轻微透明度变化 */
+@media (hover: none) and (pointer: coarse) {
+  .btn:active {
+    transform: scale(0.96);
+    opacity: 0.9;
+    transition: transform 0.08s ease, opacity 0.08s ease;
+  }
+  .checkin-btn:active {
+    transform: scale(0.96);
+    transition: transform 0.08s ease;
+  }
+  .fab-nav-btn:active {
+    transform: scale(0.9);
+  }
+  .mode-grid-btn:active {
+    transform: scale(0.97);
+    filter: brightness(0.95);
+  }
+}
+
+/* 2. 加载占位组件：呼吸光晕环绕，比纯缩放更有"等待感" */
+.page-loading-emoji {
+  position: relative;
+}
+.page-loading-emoji::after {
+  content: '';
+  position: absolute;
+  inset: -12px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--primary, #667eea) 0%, transparent 70%);
+  opacity: 0.25;
+  z-index: -1;
+  animation: loading-aura 1.6s ease-in-out infinite;
+}
+@keyframes loading-aura {
+  0%, 100% { transform: scale(0.9); opacity: 0.2; }
+  50% { transform: scale(1.15); opacity: 0.35; }
+}
+
+/* 3. 胜利弹窗：内容元素交错入场，增强庆祝层次感 */
+.win-card .star-rating .star {
+  animation-fill-mode: both;
+}
+.win-card h2 {
+  animation: win-title-enter 0.5s cubic-bezier(0.34, 1.4, 0.64, 1) both;
+}
+.win-card p {
+  animation: win-text-enter 0.5s ease 0.2s both;
+}
+.win-card .win-efficiency-bar {
+  animation: win-text-enter 0.5s ease 0.35s both;
+}
+.win-card .win-actions {
+  animation: win-text-enter 0.5s ease 0.5s both;
+}
+@keyframes win-title-enter {
+  0% { opacity: 0; transform: translateY(-12px) scale(0.9); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes win-text-enter {
+  0% { opacity: 0; transform: translateY(8px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* 4. 成就卡片：悬停时强化已解锁状态的光晕 */
+.achievement-card.unlocked {
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+.achievement-card.unlocked:hover {
+  box-shadow: var(--shadow), 0 0 0 1px rgba(78, 205, 196, 0.35), 0 0 16px rgba(78, 205, 196, 0.15);
+}
+
+/* 5. 关卡按钮：已完成关卡悬停时星标轻微浮动 */
+.level-btn.completed {
+  position: relative;
+}
+.level-btn.completed:hover {
+  filter: brightness(1.05);
+}
+
+/* 6. 进度条填充：增加流光扫过动效，让进度变化更醒目 */
+.progress-bar-fill {
+  position: relative;
+  overflow: hidden;
+}
+.progress-bar-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+  animation: progress-shimmer 2s ease-in-out infinite;
+}
+@keyframes progress-shimmer {
+  0% { left: -50%; }
+  100% { left: 100%; }
+}
+
+/* 7. 每日挑战/周挑战横幅：箭头悬停时更明显的位移 */
+.daily-challenge-banner:hover .daily-banner-icon,
+.weekly-challenge-banner:hover .weekly-banner-icon {
+  transform: scale(1.1);
+  transition: transform 0.3s ease;
+}
+
+/* 8. FAB 导航按钮：悬停时增加轻微旋转，提升趣味性 */
+.fab-nav-btn {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, rotate 0.3s ease;
+}
+.fab-nav-btn:hover {
+  rotate: -8deg;
+}
+
+/* 9. 模态弹窗：内容区滚动条美化（webkit 浏览器） */
+.tutorial-card .changelog-content::-webkit-scrollbar,
+.help-modal-body::-webkit-scrollbar,
+.tips-list::-webkit-scrollbar {
+  width: 6px;
+}
+.tutorial-card .changelog-content::-webkit-scrollbar-thumb,
+.help-modal-body::-webkit-scrollbar-thumb,
+.tips-list::-webkit-scrollbar-thumb {
+  background: rgba(102, 126, 234, 0.3);
+  border-radius: 3px;
+}
+.tutorial-card .changelog-content::-webkit-scrollbar-thumb:hover,
+.help-modal-body::-webkit-scrollbar-thumb:hover,
+.tips-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(102, 126, 234, 0.5);
+}
+
+/* 10. 颜色选择器色块：选中时的脉冲确认动效 */
+.color-swatch.color-selected {
+  animation: swatch-selected-pulse 0.4s ease-out;
+}
+@keyframes swatch-selected-pulse {
+  0% { transform: scale(1.1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1.1); }
+}
+
+/* 11. 无障碍：减少动画偏好下禁用装饰性动画 */
+@media (prefers-reduced-motion: reduce) {
+  .progress-bar-fill::after,
+  .page-loading-emoji::after,
+  .daily-challenge-banner::before,
+  .mode-grid-btn::after,
+  .mode-entry .btn::after,
+  .recent-play-card::before,
+  .recommend-card::before {
+    animation: none !important;
+  }
+  .logo,
+  .streak-badge,
+  .timer-badge.timer-danger,
+  .daily-banner-icon {
+    animation: none !important;
+  }
+  * {
+    scroll-behavior: auto !important;
+  }
+}
+
+/* 12. 大屏桌面：试管网格居中限制最大宽度，避免过度拉伸 */
+@media (min-width: 1025px) {
+  .tubes-grid {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+}
+
+/* 13. 死局预警：增加持续的边框脉冲，比一次性动画更能引起注意 */
+.deadlock-warning-tip {
+  animation: deadlock-warning-pulse 0.6s ease, deadlock-border-pulse 1.5s ease-in-out infinite 0.6s;
+}
+@keyframes deadlock-border-pulse {
+  0%, 100% { box-shadow: 0 2px 12px rgba(255, 193, 7, 0.2); }
+  50% { box-shadow: 0 2px 16px rgba(255, 193, 7, 0.45); }
+}
+
+/* ============ 每日色彩问答 ============ */
+.daily-quiz-container {
+  background: var(--card-bg, #fff);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 12px 0;
+  border: 1px solid var(--tube-border, rgba(0,0,0,0.1));
+}
+
+/* 暗色主题下百科页迷你游戏增强 */
+@media (prefers-color-scheme: dark) {
+  .cpm-card {
+    background: rgba(255, 255, 255, 0.12) !important;
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+  .crt-waiting, .crt-feedback {
+    color: var(--text-light, #e0e0e0);
+  }
+  .csg-progress, .csg-status {
+    color: var(--text-light, #e0e0e0);
+  }
+  .cpt-instruction, .cpt-feedback {
+    color: var(--text-light, #e0e0e0);
+  }
+  .mixer-tips {
+    background: rgba(255, 255, 255, 0.06);
+  }
+  .daily-quiz-option {
+    background: rgba(255, 255, 255, 0.06);
+  }
+  .daily-quiz-option:hover:not(:disabled) {
+    background: rgba(102, 126, 234, 0.15);
+  }
+  .daily-quiz-result {
+    background: rgba(255, 255, 255, 0.06);
+  }
+  .mixer-color-emoji {
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+  }
+  .color-encyclopedia-tip {
+    background: rgba(255, 230, 109, 0.1);
+  }
+  .color-theory-card, .color-trivia-item {
+    background: rgba(255, 255, 255, 0.04);
+  }
+  .encyclopedia-recent-colors {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .recent-color-chip {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+  .recent-color-chip:hover {
+    background: rgba(102, 126, 234, 0.2);
+  }
+  .color-encyclopedia-card.card-expanded {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  }
+}
+
+/* 当通过 JS 设置暗色主题时也应用增强（主题不依赖 prefers-color-scheme） */
+:root[style*="dark"] .cpm-card,
+html[style*="1a1a2e"] .cpm-card {
+  background: rgba(255, 255, 255, 0.12) !important;
+}
+html[style*="1a1a2e"] .daily-quiz-option {
+  background: rgba(255, 255, 255, 0.06);
+}
+html[style*="1a1a2e"] .mixer-tips,
+html[style*="1a1a2e"] .daily-quiz-result,
+html[style*="1a1a2e"] .color-encyclopedia-tip,
+html[style*="1a1a2e"] .color-theory-card,
+html[style*="1a1a2e"] .color-trivia-item {
+  background: rgba(255, 255, 255, 0.06);
+}
+/* 暗色主题下最近浏览和卡片展开适配 */
+html[style*="1a1a2e"] .encyclopedia-recent-colors {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+html[style*="1a1a2e"] .recent-color-chip {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+html[style*="1a1a2e"] .recent-color-chip:hover {
+  background: rgba(233, 69, 96, 0.2);
+}
+html[style*="1a1a2e"] .color-encyclopedia-card.card-expanded {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+html[style*="1a1a2e"] .color-encyclopedia-tip {
+  background: rgba(255, 230, 109, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+}
+.daily-quiz-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.daily-quiz-badge {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.daily-quiz-stats {
+  font-size: 12px;
+  color: var(--text-light, #666);
+}
+
+.daily-quiz-streak-badge {
+  background: linear-gradient(135deg, #ff9800, #ff5722);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 16px;
+  margin-bottom: 10px;
+  display: inline-block;
+  animation: quiz-streak-glow 2s ease-in-out infinite;
+}
+
+@keyframes quiz-streak-glow {
+  0%, 100% { box-shadow: 0 0 4px rgba(255, 87, 34, 0.3); }
+  50% { box-shadow: 0 0 12px rgba(255, 87, 34, 0.5); }
+}
+
+/* 色彩知识专题卡片 */
+.color-topics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.color-topic-card {
+  background: var(--card-bg, rgba(255,255,255,0.06));
+  border: 1px solid var(--border-color, rgba(0,0,0,0.08));
+  border-radius: 14px;
+  padding: 16px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.color-topic-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.15);
+}
+
+.color-topic-icon {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.color-topic-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0 0 6px 0;
+  color: var(--text-primary, #333);
+}
+
+.color-topic-desc {
+  font-size: 12px;
+  color: var(--text-light, #666);
+  margin: 0 0 10px 0;
+  line-height: 1.5;
+}
+
+.color-topic-colors {
+  display: flex;
+  gap: 4px;
+}
+
+.color-topic-chip {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  border: 2px solid rgba(255,255,255,0.3);
+}
+
+.daily-quiz-difficulty {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 12px;
+  margin-left: 4px;
+}
+
+.daily-quiz-difficulty-easy {
+  background: rgba(76, 175, 80, 0.15);
+  color: #4CAF50;
+}
+
+.daily-quiz-difficulty-medium {
+  background: rgba(255, 193, 7, 0.15);
+  color: #FFA000;
+}
+
+.daily-quiz-difficulty-hard {
+  background: rgba(244, 67, 54, 0.15);
+  color: #F44336;
+}
+
+html[style*="1a1a2e"] .daily-quiz-difficulty-easy {
+  color: #81C784;
+}
+html[style*="1a1a2e"] .daily-quiz-difficulty-medium {
+  color: #FFD54F;
+}
+html[style*="1a1a2e"] .daily-quiz-difficulty-hard {
+  color: #EF5350;
+}
+.daily-quiz-question {
+  margin-bottom: 16px;
+}
+.daily-quiz-q-text {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text, #333);
+  line-height: 1.5;
+}
+.daily-quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.daily-quiz-option {
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 2px solid var(--tube-border, rgba(0,0,0,0.15));
+  background: transparent;
+  color: var(--text, #333);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+}
+.daily-quiz-option:hover:not(:disabled) {
+  border-color: var(--primary, #667eea);
+  background: rgba(102, 126, 234, 0.08);
+}
+.daily-quiz-option:disabled {
+  cursor: default;
+  opacity: 0.7;
+}
+.daily-quiz-option.dq-correct {
+  border-color: #4caf50;
+  background: rgba(76, 175, 80, 0.15);
+  color: #4caf50;
+  font-weight: 600;
+  opacity: 1;
+}
+.daily-quiz-option.dq-wrong {
+  border-color: #f44336;
+  background: rgba(244, 67, 54, 0.15);
+  color: #f44336;
+  opacity: 1;
+}
+.daily-quiz-result {
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 8px;
+  background: rgba(102, 126, 234, 0.08);
+}
+.daily-quiz-result-text {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.daily-quiz-explanation {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  font-size: 13px;
+  color: var(--text-light, #666);
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+.dq-explanation-icon {
+  flex-shrink: 0;
+}
+.daily-quiz-comeback {
+  font-size: 12px;
+  color: var(--text-light, #999);
+  text-align: center;
+  margin-top: 8px;
+}
+.daily-quiz-already {
+  text-align: center;
+  color: var(--text-light, #999);
+  font-size: 14px;
+  margin-top: 8px;
+}
+.daily-quiz-share-btn {
+  display: block;
+  width: 100%;
+  padding: 10px 16px;
+  margin-top: 10px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, opacity 0.2s;
+}
+.daily-quiz-share-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+.daily-quiz-share-btn:active {
+  transform: translateY(0);
+}
+.daily-quiz-share-toast {
+  text-align: center;
+  font-size: 12px;
+  color: #10b981;
+  margin-top: 6px;
+}
+
+/* 百科搜索框 */
+.encyclopedia-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 16px 0 8px;
+  position: relative;
+}
+.encyclopedia-search-input {
+  flex: 1;
+  padding: 10px 14px;
+  font-size: 14px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  outline: none;
+  transition: border-color 0.2s;
+  background: #fff;
+  color: #333;
+}
+.encyclopedia-search-input:focus {
+  border-color: #667eea;
+}
+.encyclopedia-search-clear {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #e0e0e0;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  transition: background 0.2s;
+}
+.encyclopedia-search-clear:hover {
+  background: #ccc;
+}
+.encyclopedia-search-result-count {
+  font-size: 12px;
+  color: var(--text-light, #888);
+  margin-bottom: 12px;
+}
+
+/* 百科分类导航标签 */
+.encyclopedia-category-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0 20px;
+}
+.encyclopedia-category-tag {
+  padding: 6px 12px;
+  background: #f0f4ff;
+  border: 1px solid #d6e0ff;
+  border-radius: 20px;
+  font-size: 13px;
+  color: #667eea;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.encyclopedia-category-tag:hover {
+  background: #667eea;
+  color: #fff;
+  border-color: #667eea;
+}
+.encyclopedia-category-tag:active {
+  transform: scale(0.95);
+}
+/* 导航标签错点滚动偏移修正 */
+.info-page h3[id] {
+  scroll-margin-top: 60px;
+}
+@media (max-width: 375px) {
+  .encyclopedia-category-tag {
+    font-size: 12px;
+    padding: 5px 10px;
+  }
+}
+@media (max-width: 375px) {
+  .daily-quiz-container { padding: 14px; }
+  .daily-quiz-q-text { font-size: 14px; }
+  .daily-quiz-option { padding: 10px 12px; font-size: 13px; }
+}
+
+/* ============================================================ */
+/* ============ 2026-07-14 样式优化增强（第三批） ============ */
+/* ============================================================ */
+/* 本次聚焦：首屏视觉冲击力、信息页可读性、庆祝动效、主题选择反馈 */
+/* 约束延续：不修改会被 themeManager 覆盖的 8 个核心 :root 变量   */
+/* 所有新增色彩通过 var(--primary/--secondary) + color-mix 自适应 */
+
+/* 1. 首页标题：主题色渐变文字，替代纯白，增强品牌识别度 */
+.title {
+  /* 渐变剪裁到文字，配合原有阴影叠加立体感 */
+  background: linear-gradient(135deg, #ffffff 0%, color-mix(in srgb, var(--primary) 55%, #ffffff) 60%, #ffffff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  /* 兜底：不支持 background-clip 的环境仍可读 */
+  filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.25)) drop-shadow(0 1px 2px rgba(0, 0, 0, 0.15));
+}
+
+/* 2. 首页 logo：多层主题色光晕，让首屏视觉焦点更突出 */
+.logo {
+  /* 在原有 drop-shadow 之上叠加主题色辉光，形成"发光 emoji"效果 */
+  filter:
+    drop-shadow(0 6px 12px rgba(0, 0, 0, 0.25))
+    drop-shadow(0 0 18px color-mix(in srgb, var(--primary) 45%, transparent));
+}
+
+/* 3. 首页统计数字：主题色渐变文字，与标题呼应，数字更具分量 */
+.stat-value {
+  /* 渐变剪裁，让纯白数字带上主题色高光 */
+  background: linear-gradient(180deg, #ffffff 0%, color-mix(in srgb, var(--secondary) 40%, #ffffff) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* 4. 模式网格按钮：增强立体感与主题色融入 */
+.mode-grid-btn {
+  /* 顶部内高光让按钮有"玻璃按键"质感 */
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.12),
+    0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.mode-grid-btn:hover {
+  /* hover 时叠加主题色辉光，预示可交互 */
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    0 4px 14px color-mix(in srgb, var(--primary) 30%, transparent);
+}
+
+/* 5. 关卡选择卡片：顶部高光线，与 .game-board 风格统一 */
+.level-select {
+  position: relative;
+}
+.level-select::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 16px;
+  right: 16px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--primary) 50%, transparent), transparent);
+  pointer-events: none;
+}
+
+/* 6. 信息页链接：专门样式，替代浏览器默认蓝色下划线 */
+.info-page a {
+  color: color-mix(in srgb, var(--primary) 70%, #ffffff);
+  text-decoration: none;
+  border-bottom: 1px dashed color-mix(in srgb, var(--primary) 50%, transparent);
+  transition: color 0.2s, border-color 0.2s;
+  padding-bottom: 1px;
+}
+.info-page a:hover {
+  color: #ffffff;
+  border-bottom-color: #ffffff;
+  border-bottom-style: solid;
+}
+
+/* 7. 信息页列表项：自定义标记颜色，与小标题左边框呼应 */
+.info-page li::marker {
+  /* 用主题色渲染默认圆点标记，提升视觉一致性 */
+  color: color-mix(in srgb, var(--primary) 70%, #ffffff);
+}
+
+/* 8. 胜利 emoji：旋转+缩放组合庆祝动效，比单纯 bounce 更有仪式感 */
+.win-emoji {
+  animation: win-emoji-celebrate 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes win-emoji-celebrate {
+  0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+  60% { transform: scale(1.25) rotate(10deg); opacity: 1; }
+  80% { transform: scale(0.95) rotate(-5deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+
+/* 9. 主题选择按钮：选中态融入主题色辉光，反馈更明确 */
+.theme-btn.theme-active {
+  /* 在原有描边基础上叠加主题色外发光 */
+  box-shadow:
+    0 0 0 2px var(--primary),
+    0 4px 15px rgba(0, 0, 0, 0.15),
+    0 0 18px color-mix(in srgb, var(--primary) 35%, transparent);
+}
+
+/* 10. 平板尺寸（401-768px）首页头部紧凑化，避免首屏空间浪费 */
+@media (min-width: 401px) and (max-width: 768px) {
+  .home-header {
+    padding: 28px 16px 14px;
+  }
+  .logo {
+    font-size: 52px;
+  }
+  .title {
+    font-size: 28px;
+  }
+}
+
+/* 11. 信息页 feature-section：分区卡片化，提升长内容可读性 */
+.feature-section {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin: 10px 0;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+.feature-section h4 {
+  margin-bottom: 8px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+/* 12. 无障碍：减少动画偏好下禁用本次新增的装饰性动画 */
+@media (prefers-reduced-motion: reduce) {
+  .win-emoji {
+    animation: none !important;
+  }
 }

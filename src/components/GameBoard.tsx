@@ -33,9 +33,11 @@ interface GameBoardProps {
   onDeadlockRecover?: () => void;
   onHint?: () => void;
   hintItems?: number; // 提示道具数量
+  colorBlindMode?: boolean; // 色弱友好模式
+  colorLabels?: boolean; // 颜色名称标签
 }
 
-export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, timedScore = 0, timedDuration = 120, bestScore = 0, onWin, onMove, onReset, hintPair, clearHint, onNextLevel, onPrevLevel, onGoHome, onShare, onReplayShare, onExportVideo, onTimeUp, tubesRef, onDeadlockRecover, onHint, hintItems = 0 }) => {
+export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, timedScore = 0, timedDuration = 120, bestScore = 0, onWin, onMove, onReset, hintPair, clearHint, onNextLevel, onPrevLevel, onGoHome, onShare, onReplayShare, onExportVideo, onTimeUp, tubesRef, onDeadlockRecover, onHint, hintItems = 0, colorBlindMode = false, colorLabels = false }) => {
   const [levelData, setLevelData] = useState<Level>(() =>
     level === -1 ? generateDailyChallenge() : level === -2 ? generateEndlessLevel(endlessScore) : level === -3 ? generateTimedLevel(timedScore) : level === -4 ? generateWeeklyChallenge() : generateLevel(level)
   );
@@ -138,8 +140,10 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
     setHadDeadlock(false);
     setElapsedTime(0);
     setSettledTubes(new Set());
+    setTimeLeft(timedDuration); // 重置限时模式倒计时
+    setIsTimeUp(false); // 重置时间到标志
     gameStartTime.current = Date.now(); // 重置计时器
-  }, [level, endlessScore, timedScore]);
+  }, [level, endlessScore, timedScore, timedDuration]);
 
   // 实时计时器（非限时模式也显示已用时间）
   // 使用 requestAnimationFrame 替代 setInterval，减少不必要的重渲染
@@ -161,7 +165,12 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
   }, [isWon, isTimeUp, level]);
 
   const handleTubeClick = useCallback((index: number) => {
-    if (isWon) return;
+    // [临时调试日志] 定位"点击不能倒"问题
+    console.log('[debug] handleTubeClick', { index, isWon, selectedTube, tubesLen: tubes.length, tubes: tubes.map(t => t.layers.length) });
+    if (isWon) {
+      console.log('[debug] 提前返回：isWon 为 true');
+      return;
+    }
     SoundEngine.resume();
 
     if (selectedTube === null) {
@@ -182,9 +191,12 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
     // 尝试倾倒
     const fromTube = tubes[selectedTube];
     const toTube = tubes[index];
+    const canPourResult = canPour(fromTube, toTube);
+    console.log('[debug] 尝试倾倒', { selectedTube, index, fromLayers: fromTube?.layers.length, toLayers: toTube?.layers.length, canPour: canPourResult });
 
-    if (!canPour(fromTube, toTube)) {
+    if (!canPourResult) {
       // 不能倒，切换选中
+      console.log('[debug] 不能倒，切换选中');
       SoundEngine.error();
       if (tubes[index].layers.length > 0) {
         setSelectedTube(index);
@@ -197,13 +209,13 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
 
     // 执行倾倒
     const { from: newFrom, to: newTo } = pour(fromTube, toTube);
-    // 优化：只替换被修改的两个试管，其他保持原引用
-    // 修复：原 cloneTubes 深拷贝所有试管，导致所有 TubeView 的 React.memo 失效
-    const newTubes = tubes.map((t, i) =>
-      i === selectedTube ? newFrom : i === index ? newTo : t
-    );
+    console.log('[debug] 执行倾倒成功', { newFromLayers: newFrom.layers.length, newToLayers: newTo.layers.length });
+    // 回滚优化：cloneTubes 深拷贝所有试管，确保 React.memo 检测到引用变化
+    const newTubes = cloneTubes(tubes);
+    newTubes[selectedTube] = newFrom;
+    newTubes[index] = newTo;
 
-    // 保存历史（深拷贝当前 tubes，因为后续状态会继续修改）
+    // 保存历史
     setHistory(prev => [...prev, cloneTubes(tubes)]);
     setMoveHistory(prev => [...prev, { from: selectedTube, to: index }]);
     setTubes(newTubes);
@@ -335,11 +347,13 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
     setMoveHistory([]);
     setIsWon(false);
     setHadDeadlock(false);
+    setTimeLeft(timedDuration); // 重置限时模式倒计时
+    setIsTimeUp(false); // 重置时间到标志
     gameStartTime.current = Date.now(); // 重置计时器
     SoundEngine.reset();
     onReset();
     StatsTracker.breakStreak(); // 重置关卡中断连胜
-  }, [levelData, onReset]);
+  }, [levelData, onReset, timedDuration]);
 
   // stable 版本的 handleUndo / handleReset
   // 修复：键盘事件和 onLongPress 若直接捕获 handleUndo/handleReset，
@@ -473,6 +487,8 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
             isHinted={hintPair !== null && (hintPair[0] === i || hintPair[1] === i)}
             isPouring={pouringTo === i}
             isSettled={settledTubes.has(i)}
+            colorBlindMode={colorBlindMode}
+            colorLabels={colorLabels}
             onClick={stableHandleTubeClick}
             onLongPress={stableHandleUndo}
           />

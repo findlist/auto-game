@@ -255,6 +255,134 @@ export const ACHIEVEMENT_DEFS = [
     description: '体验所有游戏模式（闯关/每日/无尽/限时/周挑战）',
     icon: '🎮',
   },
+  // 色彩知识成就
+  {
+    id: 'encyclopedia_visitor',
+    name: '色彩学家',
+    description: '访问色彩百科页面',
+    icon: '📚',
+  },
+  {
+    id: 'color_master_all',
+    name: '色彩百科全书',
+    description: '通关100关并访问色彩百科',
+    icon: '📖',
+  },
+  // 色彩辨识与混合成就
+  {
+    id: 'color_perception_8',
+    name: '色彩辨识者',
+    description: '色彩辨识测试得分8分以上',
+    icon: '👁️',
+  },
+  {
+    id: 'color_mixer_10',
+    name: '混合大师',
+    description: '使用颜色混合器10次',
+    icon: '🎭',
+  },
+  // 色彩序列记忆成就
+  {
+    id: 'sequence_memory_5',
+    name: '序列记忆者',
+    description: '色彩序列记忆到达第5关',
+    icon: '🎵',
+  },
+  {
+    id: 'sequence_memory_10',
+    name: '记忆大师',
+    description: '色彩序列记忆到达第10关',
+    icon: '🧠',
+  },
+  // 色彩配对成就
+  {
+    id: 'pair_match_master',
+    name: '配对达人',
+    description: '困难模式配对完成',
+    icon: '🃏',
+  },
+  // 色彩反应力测试成就
+  {
+    id: 'reaction_perfect',
+    name: '反应大师',
+    description: '色彩反应力测试全部正确',
+    icon: '⚡',
+  },
+  {
+    id: 'reaction_sharp',
+    name: '反应敏捷',
+    description: '色彩反应力测试正确6个以上',
+    icon: '🎯',
+  },
+  // 配对计时模式成就
+  {
+    id: 'pair_speed_easy',
+    name: '闪电配对',
+    description: '计时模式简单难度完成配对',
+    icon: '⏱️',
+  },
+  {
+    id: 'pair_speed_hard',
+    name: '极速配对',
+    description: '计时模式困难难度完成配对',
+    icon: '🚀',
+  },
+  // 统计成就
+  {
+    id: 'stats_viewer',
+    name: '数据控',
+    description: '查看游戏统计页面',
+    icon: '📊',
+  },
+  // 每日问答成就
+  {
+    id: 'quiz_first',
+    name: '色彩学徒',
+    description: '完成首次每日色彩问答',
+    icon: '📝',
+  },
+  {
+    id: 'quiz_streak_7',
+    name: '好学不倦',
+    description: '累计完成7次每日色彩问答',
+    icon: '📚',
+  },
+  {
+    id: 'quiz_streak_30',
+    name: '色彩学者',
+    description: '累计完成30次每日色彩问答',
+    icon: '🎓',
+  },
+  {
+    id: 'knowledge_explorer',
+    name: '知识探索者',
+    description: '在色彩百科中使用搜索功能',
+    icon: '🔍',
+  },
+  {
+    id: 'quiz_sharer',
+    name: '知识传播者',
+    description: '分享每日色彩问答结果',
+    icon: '📤',
+  },
+  {
+    id: 'encyclopedia_explorer',
+    name: '百科探索者',
+    description: '在色彩百科中浏览5种以上颜色详解',
+    icon: '📖',
+  },
+  {
+    id: 'quiz_expert',
+    name: '答题高手',
+    description: '每日问答累计正确10题',
+    icon: '🎓',
+  },
+  {
+    id: 'all_encyclopedia_games',
+    name: '全能玩家',
+    description: '体验色彩百科中所有小游戏',
+    icon: '🏅',
+  },
 ];
 
 import { STORAGE_KEYS } from './storageKeys';
@@ -279,7 +407,19 @@ function getLocalDateString(d: Date): string {
 function loadState(): AchievementState {
   try {
     const data = localStorage.getItem(ACHIEVEMENT_KEY);
-    if (data) return JSON.parse(data);
+    if (data) {
+      const parsed = JSON.parse(data);
+      // 修复 P1：JSON.parse("null")/数字/字符串均不抛错，但后续 state.unlocked 会抛 TypeError
+      // 此处校验返回结构，非对象或缺少 unlocked 字段则回退到默认值
+      if (parsed && typeof parsed === 'object' && parsed.unlocked && typeof parsed.unlocked === 'object') {
+        return {
+          unlocked: parsed.unlocked,
+          consecutiveNoHint: typeof parsed.consecutiveNoHint === 'number' ? parsed.consecutiveNoHint : 0,
+          dailyStreak: typeof parsed.dailyStreak === 'number' ? parsed.dailyStreak : 0,
+          lastDailyDate: typeof parsed.lastDailyDate === 'string' ? parsed.lastDailyDate : null,
+        };
+      }
+    }
   } catch (e) { /* 忽略 */ }
   return { unlocked: {}, consecutiveNoHint: 0, dailyStreak: 0, lastDailyDate: null };
 }
@@ -562,6 +702,145 @@ export const AchievementManager = {
     const hasAll = allModes.every(m => modesPlayed.includes(m));
     if (hasAll && !('all_round' in loadState().unlocked)) {
       return this.unlock('all_round');
+    }
+    return [];
+  },
+
+  // 检查色彩知识成就
+  checkEncyclopediaAchievements(level100Completed: boolean): Achievement[] {
+    const newlyUnlocked: Achievement[] = [];
+    if (!('encyclopedia_visitor' in loadState().unlocked)) {
+      newlyUnlocked.push(...this.unlock('encyclopedia_visitor'));
+    }
+    if (level100Completed && !('color_master_all' in loadState().unlocked)) {
+      newlyUnlocked.push(...this.unlock('color_master_all'));
+    }
+    return newlyUnlocked;
+  },
+
+  // 检查色彩辨识测试成就
+  checkColorPerceptionAchievements(score: number): Achievement[] {
+    if (score >= 8 && !('color_perception_8' in loadState().unlocked)) {
+      return this.unlock('color_perception_8');
+    }
+    return [];
+  },
+
+  // 检查颜色混合器使用成就
+  checkColorMixerAchievements(useCount: number): Achievement[] {
+    if (useCount >= 10 && !('color_mixer_10' in loadState().unlocked)) {
+      return this.unlock('color_mixer_10');
+    }
+    return [];
+  },
+
+  // 检查色彩序列记忆成就
+  checkSequenceMemoryAchievements(level: number): Achievement[] {
+    const newlyUnlocked: Achievement[] = [];
+    if (level >= 5 && !('sequence_memory_5' in loadState().unlocked)) {
+      newlyUnlocked.push(...this.unlock('sequence_memory_5'));
+    }
+    if (level >= 10 && !('sequence_memory_10' in loadState().unlocked)) {
+      newlyUnlocked.push(...this.unlock('sequence_memory_10'));
+    }
+    return newlyUnlocked;
+  },
+
+  // 检查色彩配对成就
+  checkPairMatchAchievements(difficulty: string, moves: number, timedCompleted: boolean = false): Achievement[] {
+    const newlyUnlocked: Achievement[] = [];
+    // 困难模式完成即解锁
+    if (difficulty === 'hard' && moves > 0 && !('pair_match_master' in loadState().unlocked)) {
+      newlyUnlocked.push(...this.unlock('pair_match_master'));
+    }
+    // 计时模式完成成就
+    if (timedCompleted) {
+      if (difficulty === 'easy' && !('pair_speed_easy' in loadState().unlocked)) {
+        newlyUnlocked.push(...this.unlock('pair_speed_easy'));
+      }
+      if (difficulty === 'hard' && !('pair_speed_hard' in loadState().unlocked)) {
+        newlyUnlocked.push(...this.unlock('pair_speed_hard'));
+      }
+    }
+    return newlyUnlocked;
+  },
+
+  // 检查色彩反应力测试成就
+  checkReactionTestAchievements(score: number, totalRounds: number): Achievement[] {
+    const newlyUnlocked: Achievement[] = [];
+    if (score >= 6 && !('reaction_sharp' in loadState().unlocked)) {
+      newlyUnlocked.push(...this.unlock('reaction_sharp'));
+    }
+    if (score >= totalRounds && !('reaction_perfect' in loadState().unlocked)) {
+      newlyUnlocked.push(...this.unlock('reaction_perfect'));
+    }
+    return newlyUnlocked;
+  },
+
+  // 检查统计页面查看成就
+  checkStatsViewerAchievements(): Achievement[] {
+    if (!('stats_viewer' in loadState().unlocked)) {
+      return this.unlock('stats_viewer');
+    }
+    return [];
+  },
+
+  // 检查每日问答成就（传入累计完成次数）
+  checkDailyQuizAchievements(totalCompleted: number): Achievement[] {
+    const newlyUnlocked: Achievement[] = [];
+    if (totalCompleted >= 1 && !('quiz_first' in loadState().unlocked)) {
+      newlyUnlocked.push(...this.unlock('quiz_first'));
+    }
+    if (totalCompleted >= 7 && !('quiz_streak_7' in loadState().unlocked)) {
+      newlyUnlocked.push(...this.unlock('quiz_streak_7'));
+    }
+    if (totalCompleted >= 30 && !('quiz_streak_30' in loadState().unlocked)) {
+      newlyUnlocked.push(...this.unlock('quiz_streak_30'));
+    }
+    return newlyUnlocked;
+  },
+
+  // 检查知识探索者成就（百科搜索）
+  checkKnowledgeExplorerAchievement(): Achievement[] {
+    const newlyUnlocked: Achievement[] = [];
+    if (!('knowledge_explorer' in loadState().unlocked)) {
+      newlyUnlocked.push(...this.unlock('knowledge_explorer'));
+    }
+    return newlyUnlocked;
+  },
+
+  // 检查知识传播者成就（分享每日问答）
+  checkQuizSharerAchievement(): Achievement[] {
+    const newlyUnlocked: Achievement[] = [];
+    if (!('quiz_sharer' in loadState().unlocked)) {
+      newlyUnlocked.push(...this.unlock('quiz_sharer'));
+    }
+    return newlyUnlocked;
+  },
+
+  // 检查百科探索者成就（浏览5种以上颜色详解）
+  checkEncyclopediaExplorerAchievement(viewedCount: number): Achievement[] {
+    if (viewedCount >= 5 && !('encyclopedia_explorer' in loadState().unlocked)) {
+      return this.unlock('encyclopedia_explorer');
+    }
+    return [];
+  },
+
+  // 检查答题高手成就（累计正确10题）
+  checkQuizExpertAchievement(correctCount: number): Achievement[] {
+    if (correctCount >= 10 && !('quiz_expert' in loadState().unlocked)) {
+      return this.unlock('quiz_expert');
+    }
+    return [];
+  },
+
+  // 检查全能玩家成就（体验所有百科小游戏）
+  checkAllEncyclopediaGamesAchievement(playedGames: string[]): Achievement[] {
+    // 需要体验的百科小游戏列表
+    const requiredGames = ['perception', 'sequence', 'pair', 'reaction', 'mixer'];
+    const allPlayed = requiredGames.every(g => playedGames.includes(g));
+    if (allPlayed && !('all_encyclopedia_games' in loadState().unlocked)) {
+      return this.unlock('all_encyclopedia_games');
     }
     return [];
   },

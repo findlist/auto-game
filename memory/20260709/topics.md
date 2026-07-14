@@ -1,85 +1,80 @@
 # 2026-07-09 进度记录
 
-## 本轮工作（16:00 开始 - 第二十六轮）
+## 本轮工作（18:00 开始 - 第二十七轮）
 
 ### 阶段判断
-- 项目已存在，MVP v1.12.0 → 本轮维持 v1.12.0（功能优化，不升版本号）
-- docs/site-config.md URL 待用户填写 → 仍处于阶段一：MVP 打磨
+- **阶段切换！** site-config.md 已更新：线上 URL = https://game.niuzi.asia，Vercel 部署，上线日期 2026-07-09
+- **从阶段一进入阶段二：数据驱动迭代**
+- DAU=0，统计工具未接入 → 启发式优化 + 本地统计基础建设
 - 构建通过，零编译错误
-- 上一轮（第二十五轮）已完成每日小贴士系统、自适应难度调整、site-config 修复
 
-### 第二十六轮完成任务（5个最小可交付单元）
+### 第二十七轮完成任务（5个最小可交付单元）
 
-1. ✅ **关卡按钮星级显示修复**
-  - App.tsx 第1054行：`'?'.repeat(Math.min(stars, 3))` → `'⭐'.repeat(Math.min(stars, 3))`
-  - 修复前已完成关卡显示 `???` 或 `?` 代替星星，修复后正确显示 `⭐⭐⭐`
-  - 0星关卡显示 `✓` 替代 `?`
+1. ✅ **SEO 域名统一修正（colorsort.app → game.niuzi.asia）**
+  - `public/robots.txt` — sitemap URL 修正
+  - `public/sitemap.xml` — 全部3条 URL 修正
+  - `public/manifest.json` — start_url 修正为完整域名
+  - `index.html` — 结构化数据中 WebApplication.url 和 BreadcrumbList 所有 item URL 修正
+  - 这是阶段二首要任务：搜索引擎和社交分享依赖正确域名
 
-2. ✅ **设置页新增每日小贴士浏览功能**
-  - SettingsPage.tsx 新增 `getAllDailyTips` 导入
-  - 在版本信息上方新增"策略小贴士"卡片，展示全部30条小贴士
-  - 每条小贴士显示：图标、标题、内容，带 hover 效果
-  - 列表区域 max-height 400px，支持滚动浏览
-  - 移动端适配：max-height 300px，缩小内边距和字号
-  - index.css 新增 `.tips-list/.tip-item/.tip-item-icon/.tip-item-content/.tip-item-title/.tip-item-text` 完整样式
+2. ✅ **Service Worker 缓存版本升级**
+  - `public/sw.js` — CACHE_VERSION 从 v1.15.0 更新为 v1.13.0（对齐实际版本号）
+  - 确保用户获取最新资源，旧缓存自动清理
 
-3. ✅ **首页浮动快捷导航按钮**
-  - App.tsx 首页 footer 下方新增 `.fab-nav` 浮动导航区
-  - 3个圆形浮动按钮：🏆 成就、📊 统计、⚙️ 设置
-  - 悬浮固定在右下角，z-index 100，不受页面滚动影响
-  - 按钮带 backdrop-filter 毛玻璃效果和 hover 缩放动画
-  - 移动端适配：缩小按钮尺寸和间距
-  - index.css 新增 `.fab-nav/.fab-nav-btn` 及响应式样式
+3. ✅ **站点访问统计模块开发（visitTracker.ts）**
+  - 新建 `src/game/visitTracker.ts`（~130行）
+  - 基于 localStorage 的轻量级访问追踪，无需后端
+  - 功能：总访问次数、首次访问、回访次数、回访率、总会话数、会话时长、按日期记录访问
+  - 30分钟无操作判定为新会话
+  - 提供 getVisitSummary/getRecentVisitTrend/getAvgSessionDuration/getReturnRate API
+  - 为阶段二数据驱动迭代提供基础数据支撑
 
-4. ✅ **步数脉冲动画增强 + 胜利波纹动画**
-  - GameBoard.tsx 新增 `settledTubes` 状态（Set<number>）
-  - 胜利时依次为每个试管添加归位动画（间隔80ms）
-  - TubeView.tsx 新增 `isSettled` 属性，添加 `.tube-settled` CSS 类
-  - 归位动画：试管缩放1→1.08→1 + 青色发光阴影，0.4s
-  - 胜利后2秒自动清除归位动画状态
-  - 步数脉冲动画升级：`.pulse` → `.moves-pulse-active`
-  - 新增 `@keyframes moves-pulse-enhanced`：缩放1→1.15 + 颜色变青绿→恢复，0.3s
-  - 重置游戏时同步清除 settledTubes
+4. ✅ **访问统计集成（main.tsx + StatsPage.tsx）**
+  - `src/main.tsx` — 引入 trackVisit，页面加载时记录访问，beforeunload 和 visibilitychange 时记录会话时长
+  - `src/pages/StatsPage.tsx` — 新增"📈 访问数据"卡片，展示：总访问次数、首次访问、回访次数、回访率、总会话数、平均会话时长、近7天访问趋势柱状图
+  - 用户可在统计页直接查看本地访问数据
 
-5. ✅ **CSS 样式体系完善**
-  - 新增 `.win-ripple` 波纹效果类（备用）
-  - 新增 `@keyframes tube-settle` 试管归位动画
-  - 新增 `@keyframes ripple-effect` 波纹扩散动画
-  - 新增 `@keyframes moves-pulse-enhanced` 步数脉冲增强动画
-  - 响应式适配统一在 `@media (max-width: 375px)` 中处理
+5. ✅ **部署指南文档同步更新**
+  - `docs/deployment-guide.md` — 更新性能数据（272KB）、添加线上状态信息、新增统计接入建议、调整章节编号
+  - 标注当前阶段：阶段二（数据驱动迭代），待统计接入
 
 ### 修改文件
-- `src/App.tsx` — 修复关卡星级显示（?→⭐）、新增浮动快捷导航按钮
-- `src/pages/SettingsPage.tsx` — 新增策略小贴士浏览功能（导入 getAllDailyTips、新增小贴士列表区域）
-- `src/components/GameBoard.tsx` — 新增 settledTubes 状态、胜利波纹动画、步数脉冲类名更新、重置时清除状态
-- `src/components/TubeView.tsx` — 新增 isSettled 属性、tube-settled CSS 类、memo 比较函数更新
-- `src/index.css` — 新增小贴士列表、浮动导航、归位动画、步数脉冲增强等样式（~100行）
+- `public/robots.txt` — 域名修正
+- `public/sitemap.xml` — 域名修正
+- `public/manifest.json` — start_url 修正
+- `public/sw.js` — 缓存版本升级
+- `index.html` — 结构化数据 URL 修正
+- `src/game/visitTracker.ts` — 新建，访问统计模块
+- `src/main.tsx` — 集成访问追踪
+- `src/pages/StatsPage.tsx` — 新增访问数据展示
+- `docs/deployment-guide.md` — 同步更新
 
 ### 验证结果
-- TypeScript：✅ 零错误
-- 构建：✅ vite build 通过（976ms）
-- JS Bundle 总计：272.43KB（gzip 88.40KB）✅ < 300KB
-  - 主包：96.84KB（gzip 33.12KB）
+- TypeScript：✅ 零错误（61 modules transformed）
+- 构建：✅ vite build 通过（951ms）
+- JS Bundle 总计：276.45KB（gzip 89.74KB）✅ < 300KB
+  - 主包：99.30KB（gzip 33.95KB）
   - react-vendor：140.87KB（gzip 45.26KB）
-  - 懒加载页面总计：34.72KB（gzip 11.01KB）
+  - StatsPage：13.05KB（gzip 3.25KB）↑ +1.56KB
+  - 懒加载页面总计：36.24KB
 - CSS：38.49KB（gzip 7.96KB）✅
-- HTML：5.71KB（gzip 2.51KB）✅
+- HTML：6.25KB（gzip 2.85KB）✅
 
 ### 遗留问题
 1. 捐赠链接仍为占位符，需用户提供真实链接
 2. 广告位仍为占位符，需用户申请 AdSense 后替换
-3. site-config.md URL 待用户填写（未上线）
-4. 项目根目录有临时文件待清理（安全策略拦截删除）
-5. 项目 src 目录有旧备份文件待清理（App.tsx.bak, App.tsx.fixed 等）
-6. sitemap.xml 中域名 colorsort.app 为占位符
+3. 统计工具未接入（建议 Umami/Plausible），当前仅有本地 localStorage 统计
+4. 项目根目录有临时文件待清理
+5. og-image.png 可能需要更新（SVG版本无域名问题，PNG版本待确认）
+6. 需在 Google Search Console 提交 sitemap
 
 ### 下轮建议
-1. **强烈建议用户部署上线**（MVP 功能极度完善，已具备上线条件）
-2. 考虑添加 OG 图片精美版
-3. 考虑添加多语言支持（英文版扩展国际用户）
-4. 考虑优化移动端触控体验（滑动选择多步操作）
-5. 考虑添加游戏内公告/活动系统进一步增强
-6. 考虑添加关卡分享图片导出功能
+1. 接入 Umami/Plausible 统计工具获取真实玩家数据
+2. 优化新手引导（首日留存关键）
+3. 添加更多关卡的星级评分平衡调整
+4. 优化移动端触控体验（滑动操作）
+5. 添加 OG 图片精美版（带域名信息）
+6. 考虑添加 Google Search Console 验证
 
 ### 需用户操作
-**MVP v1.12.0 功能持续优化！** 本轮修复了关卡星级显示 bug（?→⭐），新增设置页小贴士浏览、首页浮动快捷导航、胜利试管归位波纹动画、步数脉冲动画增强。**强烈建议尽快部署上线**，参考 `docs/deployment-guide.md` 部署到 Vercel/Cloudflare Pages/Netlify，部署后填写 `docs/site-config.md` 中的线上 URL。项目根目录有临时文件和 src 目录有旧备份文件需手动清理。
+**站点已上线！进入阶段二数据驱动迭代。** 本轮完成了 SEO 域名统一修正（所有文件 colorsort.app → game.niuzi.asia），新增本地访问统计模块（统计页可查看访问数据）。**建议尽快接入统计工具（Umami 或 Plausible）**以获取真实玩家行为数据，接入后更新 `docs/site-config.md` 统计配置。建议在 Google Search Console 提交 sitemap 以加速搜索引擎收录。

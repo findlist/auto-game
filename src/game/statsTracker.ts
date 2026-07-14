@@ -1,7 +1,9 @@
 // 游戏统计追踪器
 // 记录玩家的全局游戏数据，用于统计页面展示
 
-const STATS_KEY = 'color-sort-stats';
+import { STORAGE_KEYS } from './storageKeys';
+
+const STATS_KEY = STORAGE_KEYS.STATS;
 
 export interface GameRecord {
   level: number;

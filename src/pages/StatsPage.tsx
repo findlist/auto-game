@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { StatsTracker } from '../game/statsTracker';
 import { DailyCheckin } from '../game/dailyCheckin';
 import { getTodayLeaderboard, getDailyStats } from '../game/dailyLeaderboard';
 import { getVisitSummary, getRecentVisitTrend, getAvgSessionDuration, getReturnRate } from '../game/visitTracker';
+import { getWeeklyStreak, getWeeklyRecord, getWeeklyInfo, getWeeklyHistory } from '../game/weeklyChallenge';
 
 interface StatsPageProps {
   onBack: () => void;
@@ -15,6 +16,118 @@ export const StatsPage: React.FC<StatsPageProps> = ({ onBack, timedHighScore }) 
   const avgMoves = stats.totalWins > 0 ? Math.round(stats.totalMoves / stats.totalWins) : 0;
   const completedLevels = Object.keys(stats.levelStats).length;
   const perfectRate = stats.totalWins > 0 ? Math.round(stats.perfectLevels / stats.totalWins * 100) : 0;
+  const [shareImgUrl, setShareImgUrl] = useState('');
+  const [showShareModal, setShowShareModal] = useState(false);
+
+  const generateStatsShareImage = useCallback(() => {
+    const canvas = document.createElement('canvas');
+    const W = 600, H = 420;
+    canvas.width = W;
+    canvas.height = H;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // 背景渐变
+    const bgGrad = ctx.createLinearGradient(0, 0, W, H);
+    bgGrad.addColorStop(0, '#667eea');
+    bgGrad.addColorStop(1, '#764ba2');
+    ctx.fillStyle = bgGrad;
+    ctx.fillRect(0, 0, W, H);
+
+    // 装饰色点
+    ctx.globalAlpha = 0.08;
+    const dotColors = ['#FF6B6B', '#4ECDC4', '#FFE66D', '#95E1A3', '#C589E8'];
+    for (let i = 0; i < 15; i++) {
+      ctx.fillStyle = dotColors[i % dotColors.length];
+      ctx.beginPath();
+      ctx.arc(Math.random() * W, Math.random() * H, 10 + Math.random() * 25, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+
+    // 标题
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 26px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('🎨 色彩排序 · 战绩', W / 2, 45);
+
+    ctx.font = '13px sans-serif';
+    ctx.globalAlpha = 0.7;
+    ctx.fillText(new Date().toLocaleDateString('zh-CN'), W / 2, 68);
+    ctx.globalAlpha = 1;
+
+    // 核心数据网格
+    const items = [
+      { label: '总通关', value: `${stats.totalWins}`, icon: '🎮' },
+      { label: '总星数', value: `${stats.totalStars}`, icon: '⭐' },
+      { label: '完美通关', value: `${stats.perfectLevels}`, icon: '💎' },
+      { label: '已过关卡', value: `${completedLevels}/100`, icon: '🎯' },
+      { label: '无尽记录', value: `${stats.bestEndlessScore}`, icon: '∞' },
+      { label: '限时记录', value: `${timedHighScore}`, icon: '⚡' },
+    ];
+    const cols = 3;
+    const cellW = 160, cellH = 72;
+    const startX = (W - cols * cellW) / 2;
+    const startY = 90;
+    items.forEach((item, i) => {
+      const col = i % cols;
+      const row = Math.floor(i / cols);
+      const x = startX + col * cellW;
+      const y = startY + row * cellH;
+      ctx.fillStyle = 'rgba(255,255,255,0.12)';
+      ctx.beginPath();
+      ctx.roundRect(x + 6, y + 4, cellW - 12, cellH - 8, 10);
+      ctx.fill();
+      ctx.font = 'bold 24px sans-serif';
+      ctx.fillStyle = '#fff';
+      ctx.textAlign = 'center';
+      ctx.fillText(item.value, x + cellW / 2, y + 34);
+      ctx.font = '11px sans-serif';
+      ctx.globalAlpha = 0.7;
+      ctx.fillText(`${item.icon} ${item.label}`, x + cellW / 2, y + 54);
+      ctx.globalAlpha = 1;
+    });
+
+    // 底部信息
+    ctx.font = '13px sans-serif';
+    ctx.fillStyle = '#fff';
+    ctx.globalAlpha = 0.85;
+    ctx.fillText(`平均${avgStars}⭐ · 完美率${perfectRate}% · 用时${StatsTracker.formatTime(stats.totalPlayTime)}`, W / 2, 260);
+    ctx.globalAlpha = 1;
+
+    // 试管装饰
+    const tubeY = 300;
+    const tubeColors = ['#FF6B6B', '#4ECDC4', '#FFE66D', '#95E1A3'];
+    tubeColors.forEach((color, i) => {
+      const x = 80 + i * 50 + (W - 80 * 2 - 3 * 50) / 2;
+      ctx.strokeStyle = 'rgba(255,255,255,0.4)';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(x, tubeY);
+      ctx.lineTo(x, tubeY + 50);
+      ctx.quadraticCurveTo(x, tubeY + 56, x + 24/2, tubeY + 56);
+      ctx.quadraticCurveTo(x + 24, tubeY + 56, x + 24, tubeY + 50);
+      ctx.lineTo(x + 24, tubeY);
+      ctx.stroke();
+      ctx.fillStyle = color;
+      ctx.globalAlpha = 0.8;
+      ctx.fillRect(x + 2, tubeY + 18, 20, 30);
+      ctx.beginPath();
+      ctx.arc(x + 12, tubeY + 50, 10, 0, Math.PI);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    });
+
+    // 底部引导
+    ctx.fillStyle = '#fff';
+    ctx.font = '12px sans-serif';
+    ctx.globalAlpha = 0.6;
+    ctx.fillText('来挑战我吧！ game.niuzi.asia', W / 2, 390);
+    ctx.globalAlpha = 1;
+
+    setShareImgUrl(canvas.toDataURL('image/png'));
+    setShowShareModal(true);
+  }, [stats, avgStars, perfectRate, completedLevels, timedHighScore]);
 
   return (
     <div className="app">
@@ -24,6 +137,9 @@ export const StatsPage: React.FC<StatsPageProps> = ({ onBack, timedHighScore }) 
         <div className="header-spacer" />
       </header>
       <main className="info-page">
+        <div className="stats-share-bar">
+          <button className="btn btn-primary btn-share" onClick={generateStatsShareImage}>📤 分享我的战绩</button>
+        </div>
         <div className="stats-grid">
           <div className="stat-card">
             <div className="stat-card-icon">🎮</div>
@@ -401,7 +517,71 @@ export const StatsPage: React.FC<StatsPageProps> = ({ onBack, timedHighScore }) 
             );
           })()}
         </div>
+
+        {/* 周挑战统计 */}
+        <div className="stats-detail">
+          <h3>🏆 周挑战统计</h3>
+          {(() => {
+            const streak = getWeeklyStreak();
+            const record = getWeeklyRecord();
+            const info = getWeeklyInfo();
+            if (streak.totalCompletions === 0 && !record) {
+              return <p style={{ color: '#999', fontSize: '13px' }}>还未完成周挑战，每周日更新新关卡！</p>;
+            }
+            return (
+              <>
+                <div className="stats-row"><span>当前周数</span><span>📅 第{info.week}周</span></div>
+                <div className="stats-row"><span>本周成绩</span><span>{record ? `${record.moves}步 · {'⭐'.repeat(record.stars)} · ${record.playTimeSec}秒` : '未完成'}</span></div>
+                <div className="stats-row"><span>当前连胜</span><span>🔥 {streak.currentStreak}周</span></div>
+                <div className="stats-row"><span>最长连胜</span><span>💎 {streak.bestStreak}周</span></div>
+                <div className="stats-row"><span>总完成次数</span><span>🎮 {streak.totalCompletions}次</span></div>
+                {/* 周挑战历史记录 */}
+                {(() => {
+                  const history = getWeeklyHistory();
+                  if (history.length === 0) return null;
+                  const sorted = [...history].sort((a, b) => b.year * 100 + b.week - a.year * 100 - a.week);
+                  return (
+                    <>
+                      <h4 style={{ marginTop: '12px', color: '#667eea' }}>📜 历史成绩</h4>
+                      <div className="weekly-history-list">
+                        {sorted.slice(0, 10).map((h, i) => (
+                          <div key={i} className="stats-row weekly-history-row">
+                            <span>📅 第{h.week}周</span>
+                            <span>{h.moves}步 · {'⭐'.repeat(h.stars)} · {h.playTimeSec}秒</span>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  );
+                })()}
+              </>
+            );
+          })()}
+        </div>
       </main>
+
+      {showShareModal && shareImgUrl && (
+        <div className="tutorial-overlay" onClick={() => setShowShareModal(false)}>
+          <div className="tutorial-card" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '420px' }}>
+            <h2 style={{ textAlign: 'center', marginBottom: '12px' }}>📊 我的战绩</h2>
+            <img src={shareImgUrl} alt="战绩分享图" style={{ width: '100%', borderRadius: '12px' }} />
+            <div className="modal-actions" style={{ flexDirection: 'column', gap: '8px' }}>
+              <a href={shareImgUrl} download="color-sort-stats.png" className="btn btn-primary">💾 保存图片</a>
+              <button className="btn btn-secondary" onClick={() => {
+                navigator.clipboard.writeText('🎨 色彩排序战绩分享\n' +
+                  `总通关${stats.totalWins}次 · 总星数${stats.totalStars} · 完美${stats.perfectLevels}关\n` +
+                  `已过关卡${completedLevels}/100 · 无尽记录${stats.bestEndlessScore} · 限时记录${timedHighScore}\n` +
+                  `平均${avgStars}⭐ · 完美率${perfectRate}% · 用时${StatsTracker.formatTime(stats.totalPlayTime)}\n` +
+                  '来挑战我吧！ game.niuzi.asia'
+                ).then(() => {
+                  setShowShareModal(false);
+                });
+              }}>📋 复制战绩文字</button>
+              <button className="btn btn-secondary" onClick={() => setShowShareModal(false)}>关闭</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

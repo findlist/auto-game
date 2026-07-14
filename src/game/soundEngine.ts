@@ -221,6 +221,11 @@ export const SoundEngine = {
     playTone(800, 0.05, 'sine', 0.15);
   },
 
+  // 播放指定频率音调（供序列记忆等场景使用）
+  playTone(frequency: number, duration: number, type: OscillatorType = 'sine', volume: number = 0.2) {
+    playTone(frequency, duration, type, volume);
+  },
+
   // 关卡完成星星音效
   star() {
     playTone(1318.51, 0.15, 'sine', 0.25); // E6
