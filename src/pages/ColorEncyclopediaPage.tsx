@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { SoundEngine } from '../game/soundEngine';
 import { getTodayColorQuiz, saveDailyQuizResult, getDailyQuizHistory, getQuizStreak, getQuizDifficultyStats } from '../game/announcements';
+import { ParticleEffect } from '../components/ParticleEffect';
 
 interface ColorEncyclopediaPageProps {
   onBack: () => void;
@@ -900,6 +901,8 @@ export const ColorEncyclopediaPage: React.FC<ColorEncyclopediaPageProps> = ({ on
     } catch (e) { return 0; }
   });
   const totalColors = COLOR_KNOWLEDGE.length;
+  // 全浏览完成时的庆祝动画触发
+  const [showCelebration, setShowCelebration] = useState(false);
 
   const recordColorView = useCallback((colorName: string) => {
     setRecentColors(prev => {
@@ -917,9 +920,18 @@ export const ColorEncyclopediaPage: React.FC<ColorEncyclopediaPageProps> = ({ on
         localStorage.setItem(viewedKey, JSON.stringify([...viewedSet]));
         setViewedColorsCount(viewedSet.size);
         onColorView(viewedSet.size);
+        // 全部颜色浏览完成时触发庆祝动画和音效
+        if (viewedSet.size === totalColors && !showCelebration) {
+          setShowCelebration(true);
+          SoundEngine.star();
+          setTimeout(() => SoundEngine.star(), 200);
+          setTimeout(() => SoundEngine.click(), 400);
+          // 3秒后自动关闭庆祝动画
+          setTimeout(() => setShowCelebration(false), 3000);
+        }
       } catch (e) { /* 忽略 */ }
     }
-  }, [onColorView]);
+  }, [onColorView, showCelebration, totalColors]);
 
   const trimmedQuery = searchQuery.trim().toLowerCase();
   const filteredKnowledge = trimmedQuery
@@ -962,6 +974,7 @@ export const ColorEncyclopediaPage: React.FC<ColorEncyclopediaPageProps> = ({ on
 
   return (
     <div className="app">
+      <ParticleEffect trigger={showCelebration} />
       <header className="game-header">
         <button className="btn-back" onClick={onBack}>← 返回</button>
         <h1 className="game-title">🎨 色彩百科</h1>
