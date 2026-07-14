@@ -126,6 +126,43 @@ const DailyColorQuiz: React.FC<{ onComplete?: (totalCompleted: number) => void; 
               </div>
             );
           })()}
+          {/* 最近7天答题趋势 - 可视化正确率变化 */}
+          {(() => {
+            const history = getDailyQuizHistory();
+            if (history.length === 0) return null;
+            // 按日期分组，取最近7天有记录的日期
+            const byDate: Record<string, { correct: boolean; difficulty?: string }> = {};
+            for (const h of history) {
+              byDate[h.date] = { correct: h.correct, difficulty: h.difficulty };
+            }
+            const dates = Object.keys(byDate).sort().slice(-7);
+            if (dates.length < 2) return null; // 少于2天不显示趋势
+            return (
+              <div className="quiz-trend-chart">
+                <span className="quiz-trend-label">📈 最近{dates.length}天趋势</span>
+                <div className="quiz-trend-bars">
+                  {dates.map(date => {
+                    const entry = byDate[date];
+                    const isCorrect = entry.correct;
+                    const diffColor = entry.difficulty === 'easy' ? '#4CAF50' : entry.difficulty === 'hard' ? '#f44336' : '#FF9800';
+                    const dateLabel = date.slice(5); // MM-DD
+                    return (
+                      <div key={date} className="quiz-trend-bar-item">
+                        <div
+                          className={`quiz-trend-bar ${isCorrect ? 'quiz-trend-correct' : 'quiz-trend-wrong'}`}
+                          style={{ borderLeftColor: diffColor }}
+                          title={`${dateLabel} ${isCorrect ? '✅ 正确' : '❌ 错误'}`}
+                        >
+                          {isCorrect ? '✅' : '❌'}
+                        </div>
+                        <span className="quiz-trend-date">{dateLabel}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })()}
           {!answeredToday && (
             <button className="daily-quiz-share-btn" onClick={handleShare}>
               📤 分享结果

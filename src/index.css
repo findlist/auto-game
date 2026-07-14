@@ -7026,6 +7026,56 @@ html[style*="1a1a2e"] .daily-quiz-difficulty-hard {
   background: rgba(239, 68, 68, 0.12);
   color: #b91c1c;
 }
+/* 每日问答7天趋势图 */
+.quiz-trend-chart {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.03);
+}
+.quiz-trend-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-light, #666);
+  margin-bottom: 8px;
+}
+.quiz-trend-bars {
+  display: flex;
+  gap: 6px;
+  align-items: flex-end;
+  justify-content: center;
+}
+.quiz-trend-bar-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+.quiz-trend-bar {
+  width: 100%;
+  max-width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  border-left: 3px solid transparent;
+}
+.quiz-trend-correct {
+  background: rgba(34, 197, 94, 0.15);
+}
+.quiz-trend-wrong {
+  background: rgba(239, 68, 68, 0.15);
+}
+.quiz-trend-date {
+  font-size: 10px;
+  color: var(--text-light, #999);
+  white-space: nowrap;
+}
 .daily-quiz-comeback {
   font-size: 12px;
   color: var(--text-light, #999);
