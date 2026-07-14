@@ -258,7 +258,7 @@ export default function App() {
 
     // 新版本更新，显示更新日志
     const CHANGELOG_KEY = STORAGE_KEYS.CHANGELOG_VERSION;
-    const currentVersion = '1.29.0';
+    const currentVersion = '1.30.0';
     try {
       const lastVersion = localStorage.getItem(CHANGELOG_KEY);
       if (lastVersion !== currentVersion) {
@@ -1437,6 +1437,18 @@ export default function App() {
                   <div className="faq-question">💡 小贴士可以手动切换吗？</div>
                   <div className="faq-answer">可以！首页小贴士卡片右侧有上/下箭头按钮，点击可手动浏览全部30条策略小贴士，不再只限于每天看一条。</div>
                 </div>
+                <div className="faq-item">
+                  <div className="faq-question">🏆 色彩辨识测试有最佳记录吗？</div>
+                  <div className="faq-answer">有！色彩辨识测试会自动记录历史最佳分数，结算页展示新纪录提示或历史最佳对比，激励不断提升色觉辨识能力。</div>
+                </div>
+                <div className="faq-item">
+                  <div className="faq-question">📈 每日问答可以看到答题趋势吗？</div>
+                  <div className="faq-answer">可以！答题后结算页展示最近7天的答题趋势图，每个日期显示正确或错误状态，并用颜色区分难度，直观了解近期表现。</div>
+                </div>
+                <div className="faq-item">
+                  <div className="faq-question">🎉 序列记忆游戏有关卡奖励吗？</div>
+                  <div className="faq-answer">有！序列记忆游戏在第5关、第10关、第15关达成时触发彩带庆祝动画和音效，为你的记忆里程碑喝彩！</div>
+                </div>
               </div>
             </div>
           </div>
@@ -1683,6 +1695,15 @@ export default function App() {
               <div className="tutorial-emoji">📋</div>
               <h2>色彩排序更新日志</h2>
               <div className="changelog-content">
+                <div className="changelog-item">
+                  <h3>🎉 v1.30.0</h3>
+                  <ul>
+                    <li>🏆 色彩辨识测试记录最佳分数，结算页展示新纪录与历史最佳</li>
+                    <li>📈 每日问答新增最近7天答题趋势图，可视化正确率变化</li>
+                    <li>🎉 序列记忆游戏5/10/15关里程碑彩带庆祝效果</li>
+                    <li>🌙 暗色主题下小贴士导航、辨识测试、趋势图、里程碑样式全面适配</li>
+                  </ul>
+                </div>
                 <div className="changelog-item">
                   <h3>🎉 v1.29.0</h3>
                   <ul>
