@@ -495,6 +495,8 @@ const ColorSequenceGame: React.FC<{ onComplete?: (level: number) => void }> = ({
     { hex: '#FFE66D', name: '黄', freq: 783.99 },   // G5
     { hex: '#95E1A3', name: '绿', freq: 1046.50 },  // C6
   ];
+  // 进度保存键：序列记忆游戏中断后可恢复
+  const SAVE_KEY = 'color_sequence_save';
   const [sequence, setSequence] = useState<number[]>([]);
   const [playerIdx, setPlayerIdx] = useState(0);
   const [gameState, setGameState] = useState<'idle' | 'showing' | 'playing' | 'finished'>('idle');
@@ -502,7 +504,33 @@ const ColorSequenceGame: React.FC<{ onComplete?: (level: number) => void }> = ({
   const [activeColor, setActiveColor] = useState<number | null>(null);
   // 里程碑庆祝效果：到达5/10/15关时触发
   const [showMilestone, setShowMilestone] = useState<string | null>(null);
+  // 是否有可恢复的存档
+  const [hasSave, setHasSave] = useState(false);
   const bestScore = (() => { try { return parseInt(localStorage.getItem('color_sequence_best') || '0', 10); } catch (e) { return 0; } })();
+
+  // 检查是否有未完成的存档
+  useEffect(() => {
+    try {
+      const save = localStorage.getItem(SAVE_KEY);
+      if (save) {
+        const data = JSON.parse(save);
+        if (data.sequence && data.sequence.length > 1 && data.level > 1) {
+          setHasSave(true);
+        }
+      }
+    } catch (e) { /* 忽略 */ }
+  }, []);
+
+  // 游戏进行中自动保存进度（showing/playing 状态时保存，idle/finished 时清除）
+  useEffect(() => {
+    try {
+      if ((gameState === 'showing' || gameState === 'playing') && sequence.length > 1) {
+        localStorage.setItem(SAVE_KEY, JSON.stringify({ sequence, level }));
+      } else if (gameState === 'idle' || gameState === 'finished') {
+        localStorage.removeItem(SAVE_KEY);
+      }
+    } catch (e) { /* 忽略 */ }
+  }, [sequence, level, gameState]);
 
   const startGame = useCallback(() => {
     const first = Math.floor(Math.random() * 4);
@@ -510,6 +538,23 @@ const ColorSequenceGame: React.FC<{ onComplete?: (level: number) => void }> = ({
     setLevel(1);
     setPlayerIdx(0);
     setGameState('showing');
+    setHasSave(false);
+  }, []);
+
+  // 恢复存档：从中断处继续，重新展示当前序列
+  const resumeGame = useCallback(() => {
+    try {
+      const save = localStorage.getItem(SAVE_KEY);
+      if (!save) return;
+      const data = JSON.parse(save);
+      if (data.sequence && data.level) {
+        setSequence(data.sequence);
+        setLevel(data.level);
+        setPlayerIdx(0);
+        setGameState('showing');
+        setHasSave(false);
+      }
+    } catch (e) { /* 忽略 */ }
   }, []);
 
   useEffect(() => {
@@ -582,7 +627,13 @@ const ColorSequenceGame: React.FC<{ onComplete?: (level: number) => void }> = ({
       {gameState === 'idle' && (
         <div className="csg-start">
           <p className="csg-intro">观察颜色亮起的顺序，然后按相同顺序点击！每过一关序列增加一个颜色。</p>
-          <button className="csg-start-btn" onClick={startGame}>🚀 开始游戏</button>
+          <div className="csg-start-buttons">
+            <button className="csg-start-btn" onClick={startGame}>🚀 开始游戏</button>
+            {hasSave && (
+              <button className="csg-resume-btn" onClick={resumeGame}>📂 恢复进度</button>
+            )}
+          </div>
+          {hasSave && <p className="csg-save-hint">检测到未完成的游戏进度，可恢复继续挑战</p>}
           {bestScore > 0 && <p className="csg-best">最高记录：第 {bestScore} 关</p>}
         </div>
       )}
