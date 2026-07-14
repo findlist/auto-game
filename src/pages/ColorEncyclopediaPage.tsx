@@ -566,12 +566,18 @@ const ColorReactionTest: React.FC<{ onComplete?: (score: number) => void }> = ({
     { hex: '#FFA07A', name: '橙', emoji: '🟠' },
   ];
   const TOTAL_ROUNDS = 8;
+  // 反应测试最佳分数存储键
+  const BEST_SCORE_KEY = 'color_reaction_best_score';
   const [round, setRound] = useState(0);
   const [score, setScore] = useState(0);
   const [gameState, setGameState] = useState<'idle' | 'waiting' | 'showing' | 'finished'>('idle');
   const [targetColor, setTargetColor] = useState(0);
   const [options, setOptions] = useState<number[]>([]);
   const [feedback, setFeedback] = useState('');
+  // 读取历史最佳分数，初始化时读取 localStorage
+  const [bestScore, setBestScore] = useState<number>(() => {
+    try { return parseInt(localStorage.getItem(BEST_SCORE_KEY) || '0', 10); } catch (e) { return 0; }
+  });
 
   const startGame = useCallback(() => {
     setRound(0);
@@ -608,14 +614,20 @@ const ColorReactionTest: React.FC<{ onComplete?: (score: number) => void }> = ({
     setTimeout(() => {
       setFeedback('');
       if (round + 1 >= TOTAL_ROUNDS) {
+        const finalScore = score + (idx === targetColor ? 1 : 0);
         setGameState('finished');
-        if (onComplete) onComplete(score + (idx === targetColor ? 1 : 0));
+        // 保存最佳分数
+        if (finalScore > bestScore && finalScore > 0) {
+          setBestScore(finalScore);
+          try { localStorage.setItem(BEST_SCORE_KEY, String(finalScore)); } catch (e) { /* 忽略 */ }
+        }
+        if (onComplete) onComplete(finalScore);
       } else {
         setRound(r => r + 1);
         setGameState('waiting');
       }
     }, 600);
-  }, [gameState, targetColor, round, score, onComplete, REACTION_COLORS]);
+  }, [gameState, targetColor, round, score, onComplete, REACTION_COLORS, bestScore, BEST_SCORE_KEY]);
 
   return (
     <div className="crt-container">
@@ -623,6 +635,7 @@ const ColorReactionTest: React.FC<{ onComplete?: (score: number) => void }> = ({
         <div className="crt-start">
           <p className="crt-intro">屏幕显示颜色名称后，快速点击对应色块！共 {TOTAL_ROUNDS} 轮挑战。</p>
           <button className="crt-start-btn" onClick={startGame}>🚀 开始测试</button>
+          {bestScore > 0 && <p className="crt-best-hint">🏆 历史最佳：{bestScore}/{TOTAL_ROUNDS}</p>}
         </div>
       )}
       {gameState !== 'idle' && gameState !== 'finished' && (
@@ -662,6 +675,9 @@ const ColorReactionTest: React.FC<{ onComplete?: (score: number) => void }> = ({
       {gameState === 'finished' && (
         <div className="crt-result">
           <p className="crt-result-score">🎉 你答对了 {score}/{TOTAL_ROUNDS} 题！</p>
+          {/* 最佳分数展示 */}
+          {score >= bestScore && score > 0 && <p className="crt-new-record">🌟 新纪录！</p>}
+          {bestScore > 0 && bestScore > score && <p className="crt-best-score">🏆 历史最佳：{bestScore}/{TOTAL_ROUNDS}</p>}
           {score >= TOTAL_ROUNDS && <p className="crt-rating">🏆 反应力满分！</p>}
           {score >= 6 && score < TOTAL_ROUNDS && <p className="crt-rating">🌟 反应迅捷！</p>}
           {score < 6 && <p className="crt-rating">💪 多练习，反应力会更好！</p>}

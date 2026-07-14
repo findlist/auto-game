@@ -5962,6 +5962,26 @@ html {
   text-align: center;
   margin-top: 4px;
 }
+/* 反应测试最佳分数样式 */
+.crt-new-record {
+  font-size: 15px;
+  color: #f59e0b;
+  font-weight: 700;
+  text-align: center;
+  margin: 6px 0;
+}
+.crt-best-score {
+  font-size: 13px;
+  color: var(--text-light, #888);
+  text-align: center;
+  margin: 4px 0;
+}
+.crt-best-hint {
+  font-size: 13px;
+  color: var(--text-light, #888);
+  text-align: center;
+  margin-top: 8px;
+}
 @media (max-width: 375px) {
   .crt-options {
     max-width: 240px;
