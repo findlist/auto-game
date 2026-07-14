@@ -6793,6 +6793,37 @@ html[style*="1a1a2e"] .encyclopedia-recent-colors {
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
+/* 暗色主题下小贴士导航按钮适配 */
+html[style*="1a1a2e"] .daily-tip-nav-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.8);
+}
+html[style*="1a1a2e"] .daily-tip-nav-btn:hover {
+  background: var(--primary, #667eea);
+  color: #fff;
+  border-color: var(--primary, #667eea);
+}
+/* 暗色主题下辨识测试新纪录和最佳分数适配 */
+html[style*="1a1a2e"] .cpt-new-record {
+  color: #FFB084;
+}
+html[style*="1a1a2e"] .cpt-best-score {
+  color: rgba(255, 255, 255, 0.5);
+}
+/* 暗色主题下问答趋势图适配 */
+html[style*="1a1a2e"] .quiz-trend-chart,
+html[style*="1a1a2e"] .quiz-difficulty-stats {
+  background: rgba(255, 255, 255, 0.04);
+}
+html[style*="1a1a2e"] .quiz-trend-date {
+  color: rgba(255, 255, 255, 0.4);
+}
+/* 暗色主题下序列记忆里程碑适配 */
+html[style*="1a1a2e"] .csg-milestone-text {
+  color: #FFB084;
+  text-shadow: 0 0 10px rgba(255, 176, 132, 0.3);
+}
 html[style*="1a1a2e"] .recent-color-chip {
   background: rgba(255, 255, 255, 0.08);
   border-color: rgba(255, 255, 255, 0.15);
