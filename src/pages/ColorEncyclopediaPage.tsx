@@ -500,6 +500,8 @@ const ColorSequenceGame: React.FC<{ onComplete?: (level: number) => void }> = ({
   const [gameState, setGameState] = useState<'idle' | 'showing' | 'playing' | 'finished'>('idle');
   const [level, setLevel] = useState(0);
   const [activeColor, setActiveColor] = useState<number | null>(null);
+  // 里程碑庆祝效果：到达5/10/15关时触发
+  const [showMilestone, setShowMilestone] = useState<string | null>(null);
   const bestScore = (() => { try { return parseInt(localStorage.getItem('color_sequence_best') || '0', 10); } catch (e) { return 0; } })();
 
   const startGame = useCallback(() => {
@@ -542,6 +544,12 @@ const ColorSequenceGame: React.FC<{ onComplete?: (level: number) => void }> = ({
       const nextIdx = playerIdx + 1;
       if (nextIdx >= sequence.length) {
         setPlayerIdx(0);
+        // 里程碑庆祝：到达5/10/15关时触发彩带和音效
+        if (level === 5 || level === 10 || level === 15) {
+          setShowMilestone(`🎉 第${level}关达成！`);
+          SoundEngine.star();
+          setTimeout(() => setShowMilestone(null), 2000);
+        }
         if (level >= 15) {
           setGameState('finished');
           if (onComplete) onComplete(level);
@@ -564,6 +572,13 @@ const ColorSequenceGame: React.FC<{ onComplete?: (level: number) => void }> = ({
 
   return (
     <div className="csg-container">
+      {/* 里程碑庆祝提示 */}
+      {showMilestone && (
+        <div className="csg-milestone">
+          <ParticleEffect trigger={true} />
+          <p className="csg-milestone-text">{showMilestone}</p>
+        </div>
+      )}
       {gameState === 'idle' && (
         <div className="csg-start">
           <p className="csg-intro">观察颜色亮起的顺序，然后按相同顺序点击！每过一关序列增加一个颜色。</p>

@@ -5856,6 +5856,19 @@ html {
   text-align: center;
   margin-top: 4px;
 }
+/* 里程碑庆祝提示 */
+.csg-milestone {
+  position: relative;
+  text-align: center;
+  padding: 8px 0;
+  animation: bounce-in 0.5s ease;
+}
+.csg-milestone-text {
+  font-size: 18px;
+  font-weight: 700;
+  color: #FF6B6B;
+  text-shadow: 0 0 10px rgba(255, 107, 107, 0.3);
+}
 @media (max-width: 375px) {
   .csg-color-grid {
     max-width: 240px;
