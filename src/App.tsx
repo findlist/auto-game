@@ -258,7 +258,7 @@ export default function App() {
 
     // 新版本更新，显示更新日志
     const CHANGELOG_KEY = STORAGE_KEYS.CHANGELOG_VERSION;
-    const currentVersion = '1.28.0';
+    const currentVersion = '1.29.0';
     try {
       const lastVersion = localStorage.getItem(CHANGELOG_KEY);
       if (lastVersion !== currentVersion) {
@@ -1429,6 +1429,14 @@ export default function App() {
                   <div className="faq-question">🧭 首页快捷导航怎么用？</div>
                   <div className="faq-answer">首页底部「探索更多」区域提供6个功能入口卡片，包括色彩百科、成就大厅、游戏统计、关卡编辑器、每日挑战和玩法教程，一键直达想要的功能页面！</div>
                 </div>
+                <div className="faq-item">
+                  <div className="faq-question">📊 每日问答有难度统计吗？</div>
+                  <div className="faq-answer">有！答题后结算页展示简单、中等、困难三个难度的分别正确率，帮助你了解薄弱环节。问答历史保存最近90天记录。</div>
+                </div>
+                <div className="faq-item">
+                  <div className="faq-question">💡 小贴士可以手动切换吗？</div>
+                  <div className="faq-answer">可以！首页小贴士卡片右侧有上/下箭头按钮，点击可手动浏览全部30条策略小贴士，不再只限于每天看一条。</div>
+                </div>
               </div>
             </div>
           </div>
@@ -1675,6 +1683,16 @@ export default function App() {
               <div className="tutorial-emoji">📋</div>
               <h2>色彩排序更新日志</h2>
               <div className="changelog-content">
+                <div className="changelog-item">
+                  <h3>🎉 v1.29.0</h3>
+                  <ul>
+                    <li>📊 每日问答结算页新增难度分级统计，展示简单/中等/困难正确率</li>
+                    <li>🏆 色彩反应力测试记录最佳分数，历史最佳对比激励进步</li>
+                    <li>🎉 百科全浏览完成触发彩带庆祝动画，增强成就感</li>
+                    <li>💡 首页小贴士支持手动切换浏览，30条贴士随时查看</li>
+                    <li>📝 SEO更新+FAQ补充4条问答+版本号同步</li>
+                  </ul>
+                </div>
                 <div className="changelog-item">
                   <h3>🎉 v1.28.0</h3>
                   <ul>
