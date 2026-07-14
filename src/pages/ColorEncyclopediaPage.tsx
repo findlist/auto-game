@@ -884,6 +884,37 @@ const ColorMixer: React.FC<{ onMixerUse?: (useCount: number) => void }> = ({ onM
   const mixedColor = getMixedColor();
   const closestName = getClosestColorName();
 
+  // 保存配方到本地并生成分享文本
+  const saveAndShareRecipe = useCallback(() => {
+    if (selectedColors.length < 2) return;
+    const recipe = {
+      colors: selectedColors.map(k => COLOR_RGB[k].name),
+      result: closestName,
+      rgb: mixedColor,
+      date: new Date().toLocaleDateString('zh-CN'),
+    };
+    // 保存到本地配方列表
+    try {
+      const list = JSON.parse(localStorage.getItem('color_mixer_recipes') || '[]');
+      list.unshift(recipe);
+      // 最多保存20条配方
+      if (list.length > 20) list.length = 20;
+      localStorage.setItem('color_mixer_recipes', JSON.stringify(list));
+    } catch (e) { /* 忽略 */ }
+    // 生成分享文本
+    const shareText = `🎨 色彩混合配方：${recipe.colors.join(' + ')} = ${recipe.result}（${recipe.rgb}）\n来自色彩排序解谜游戏 game.niuzi.asia`;
+    // 尝试使用原生分享，不支持则复制到剪贴板
+    if (navigator.share) {
+      navigator.share({ title: '色彩混合配方', text: shareText }).catch(() => {
+        navigator.clipboard?.writeText(shareText);
+      });
+    } else {
+      navigator.clipboard?.writeText(shareText);
+    }
+    setShowMilestone('📋 配方已保存并复制到剪贴板！');
+    setTimeout(() => setShowMilestone(null), 2000);
+  }, [selectedColors, closestName, mixedColor, COLOR_RGB]);
+
   return (
     <div className="color-mixer-container">
       <div className="color-mixer-intro">
@@ -928,7 +959,12 @@ const ColorMixer: React.FC<{ onMixerUse?: (useCount: number) => void }> = ({ onM
         </div>
       )}
       {selectedColors.length > 0 && (
-        <button className="mixer-clear-btn" onClick={clearColors}>🔄 清除重选</button>
+        <div className="mixer-action-buttons">
+          <button className="mixer-clear-btn" onClick={clearColors}>🔄 清除重选</button>
+          {selectedColors.length >= 2 && (
+            <button className="mixer-share-btn" onClick={saveAndShareRecipe}>📋 保存配方</button>
+          )}
+        </div>
       )}
       <div className="mixer-tips">
         <p>💡 小知识：光的三原色（红绿蓝）等量混合得到白色，颜料三原色（青品红黄）等量混合得到黑色。</p>

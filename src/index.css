@@ -6256,6 +6256,31 @@ html {
   color: #fff;
   opacity: 1;
 }
+/* 混合器操作按钮组 */
+.mixer-action-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.mixer-action-buttons .mixer-clear-btn {
+  margin: 0;
+}
+.mixer-share-btn {
+  padding: 6px 16px;
+  background: rgba(102, 126, 234, 0.15);
+  border: 1px solid rgba(102, 126, 234, 0.3);
+  border-radius: 8px;
+  font-size: 12px;
+  cursor: pointer;
+  color: var(--primary, #667eea);
+  font-weight: 600;
+  transition: all 0.2s;
+}
+.mixer-share-btn:hover {
+  background: var(--primary, #667eea);
+  color: #fff;
+}
 .mixer-tips {
   margin-top: 12px;
   padding: 10px 12px;
