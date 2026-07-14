@@ -1103,6 +1103,60 @@ export default function App() {
             );
           })()}
 
+          {/* 智能推荐游玩模式 — 基于历史游玩模式和时间推荐不同玩法 */}
+          {(() => {
+            // 基于已玩游戏模式和当前状态推荐游玩内容
+            const hour = new Date().getHours();
+            const stats = StatsTracker.get();
+            let recommendGame = { icon: '🎨', label: '今日推荐游玩', title: '色彩百科', desc: '探索色彩知识，玩迷你游戏', target: 'encyclopedia' as Page };
+            // 根据时段和游玩历史智能推荐
+            if (hour >= 6 && hour < 12) {
+              // 早上：推荐每日问答或签到
+              if (!checkinDone) {
+                recommendGame = { icon: '📅', label: '今日推荐游玩', title: '每日签到', desc: '签到领取提示道具奖励', target: 'home' as Page };
+              } else {
+                recommendGame = { icon: '📚', label: '今日推荐游玩', title: '每日色彩问答', desc: '每天一题，涨色彩知识', target: 'encyclopedia' as Page };
+              }
+            } else if (hour >= 12 && hour < 18) {
+              // 下午：推荐闯关或无尽模式
+              if (stats.totalWins < 5) {
+                recommendGame = { icon: '🎯', label: '今日推荐游玩', title: '经典闯关', desc: '挑战100关色彩排序', target: 'game' as Page };
+              } else {
+                recommendGame = { icon: '∞', label: '今日推荐游玩', title: '无尽模式', desc: '难度无限递增，挑战极限', target: 'home' as Page };
+              }
+            } else if (hour >= 18 && hour < 23) {
+              // 晚上：推荐百科小游戏或每日挑战
+              if (!dailyCompletedToday) {
+                recommendGame = { icon: '📅', label: '今日推荐游玩', title: '每日挑战', desc: '今天还没做每日挑战哦', target: 'home' as Page };
+              } else {
+                recommendGame = { icon: '🧠', label: '今日推荐游玩', title: '色彩记忆配对', desc: '翻开卡片找到相同颜色', target: 'encyclopedia' as Page };
+              }
+            } else {
+              // 深夜：推荐序列记忆或辨识测试
+              recommendGame = { icon: '🎵', label: '今日推荐游玩', title: '色彩序列记忆', desc: '安静时段适合锻炼记忆力', target: 'encyclopedia' as Page };
+            }
+            // 如果推荐目标不是当前页面，则显示卡片
+            if (recommendGame.target === 'home' && recommendGame.title === '每日签到' && checkinDone) return null;
+            if (recommendGame.target === 'home' && recommendGame.title === '每日挑战' && dailyCompletedToday) return null;
+            return (
+              <div className="smart-recommend-card" onClick={() => {
+                if (recommendGame.target === 'game') handleStartGame();
+                else if (recommendGame.target === 'encyclopedia') setPage('encyclopedia');
+                else if (recommendGame.title === '无尽模式') handleEndlessMode();
+                else if (recommendGame.title === '每日挑战') handleDailyChallenge();
+              }} role="button" tabIndex={0}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (recommendGame.target === 'game') handleStartGame(); else if (recommendGame.target === 'encyclopedia') setPage('encyclopedia'); else if (recommendGame.title === '无尽模式') handleEndlessMode(); else if (recommendGame.title === '每日挑战') handleDailyChallenge(); } }}>
+                <span className="smart-rec-icon">{recommendGame.icon}</span>
+                <div className="smart-rec-info">
+                  <span className="smart-rec-label">{recommendGame.label}</span>
+                  <span className="smart-rec-title">{recommendGame.title}</span>
+                  <span className="smart-rec-desc">{recommendGame.desc}</span>
+                </div>
+                <span className="smart-rec-arrow">→</span>
+              </div>
+            );
+          })()}
+
           {/* 智能推荐关卡 */}
           {(() => {
             const recommend = getAdaptiveRecommendation(progress.completedLevels, levelStars, progress.currentLevel);

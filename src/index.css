@@ -4070,6 +4070,57 @@ html[style*="1a1a2e"] .encyclopedia-progress-track {
 }
 
 /* 智能推荐关卡卡片 */
+/* 今日推荐游玩智能卡片 — 根据时段和游玩历史推荐不同玩法 */
+.smart-recommend-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(255, 160, 122, 0.08));
+  border: 1px solid rgba(255, 107, 107, 0.2);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 12px;
+}
+.smart-recommend-card:hover {
+  background: linear-gradient(135deg, rgba(255, 107, 107, 0.14), rgba(255, 160, 122, 0.14));
+  border-color: rgba(255, 107, 107, 0.4);
+  transform: translateY(-1px);
+}
+.smart-recommend-card:active {
+  transform: translateY(0);
+}
+.smart-rec-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+}
+.smart-rec-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+.smart-rec-label {
+  font-size: 11px;
+  color: rgba(255, 107, 107, 0.7);
+  font-weight: 600;
+}
+.smart-rec-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text, #333);
+}
+.smart-rec-desc {
+  font-size: 12px;
+  color: var(--text, #666);
+  opacity: 0.7;
+}
+.smart-rec-arrow {
+  font-size: 18px;
+  color: rgba(255, 107, 107, 0.5);
+}
+
 .recommend-card {
   display: flex;
   align-items: center;
