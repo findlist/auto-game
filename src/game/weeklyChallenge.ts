@@ -5,9 +5,10 @@
 import { SeededRandom } from './seededRandom';
 import { Tube, Level, ColorLayer, COLOR_KEYS } from './types';
 import { isSolvable } from './solver';
+import { STORAGE_KEYS } from './storageKeys';
 
-const WEEKLY_RECORD_KEY = 'color-sort-weekly-record';
-const WEEKLY_STREAK_KEY = 'color-sort-weekly-streak';
+const WEEKLY_RECORD_KEY = STORAGE_KEYS.WEEKLY_RECORD;
+const WEEKLY_STREAK_KEY = STORAGE_KEYS.WEEKLY_STREAK;
 
 // 获取当前年份的第几周
 function getWeekNumber(date: Date): { year: number; week: number } {
@@ -156,9 +157,18 @@ export function saveWeeklyRecord(moves: number, playTimeSec: number, stars: numb
     }
     streakData.lastSeed = seed;
     streakData.bestStreak = Math.max(streakData.bestStreak || 0, streakData.currentStreak);
-    streakData.totalCompletions = (streakData.totalCompletions || 0) + 1;
+    // 仅在本周首次完成时累加，避免重复调用导致 totalCompletions 虚高
+    if (lastWeekSeed !== seed) {
+      streakData.totalCompletions = (streakData.totalCompletions || 0) + 1;
+    }
 
     localStorage.setItem(WEEKLY_STREAK_KEY, JSON.stringify(streakData));
+
+    // 保存到历史记录
+    const { year, week } = getWeekNumber(new Date());
+    saveWeeklyHistory({
+      year, week, seed, moves, playTimeSec, stars, completedAt: Date.now(),
+    });
   } catch (e) {
     // 忽略存储错误
   }
@@ -174,7 +184,11 @@ interface WeeklyStreak {
 function loadWeeklyStreak(): WeeklyStreak {
   try {
     const data = localStorage.getItem(WEEKLY_STREAK_KEY);
-    if (data) return JSON.parse(data);
+    if (data) {
+      const parsed = JSON.parse(data);
+      // 修复 P1：JSON.parse("null") 返回 null，调用方访问属性会抛 TypeError
+      if (parsed && typeof parsed === 'object') return parsed;
+    }
   } catch (e) { /* 忽略 */ }
   return { currentStreak: 0, bestStreak: 0, totalCompletions: 0, lastSeed: null };
 }
@@ -200,4 +214,49 @@ export function getWeeklyRecord(): { moves: number; playTimeSec: number; stars: 
 export function getWeeklyInfo(): { year: number; week: number; seed: string } {
   const { year, week } = getWeekNumber(new Date());
   return { year, week, seed: getWeeklySeedString() };
+}
+
+const WEEKLY_HISTORY_KEY = STORAGE_KEYS.WEEKLY_HISTORY;
+
+export interface WeeklyHistoryEntry {
+  year: number;
+  week: number;
+  seed: string;
+  moves: number;
+  playTimeSec: number;
+  stars: number;
+  completedAt: number;
+}
+
+// 保存周挑战成绩到历史（在 saveWeeklyRecord 中调用）
+function saveWeeklyHistory(entry: WeeklyHistoryEntry): void {
+  try {
+    const data = localStorage.getItem(WEEKLY_HISTORY_KEY);
+    const parsed = data ? JSON.parse(data) : [];
+    // 修复 P1：JSON.parse 可能返回非数组（null/对象等），findIndex/push 会抛 TypeError
+    const history: WeeklyHistoryEntry[] = Array.isArray(parsed) ? parsed : [];
+    // 避免重复记录同一周
+    const existingIdx = history.findIndex(h => h.seed === entry.seed);
+    if (existingIdx >= 0) {
+      history[existingIdx] = entry;
+    } else {
+      history.push(entry);
+    }
+    // 保留最近 52 周记录
+    if (history.length > 52) history.shift();
+    localStorage.setItem(WEEKLY_HISTORY_KEY, JSON.stringify(history));
+  } catch (e) { /* 忽略 */ }
+}
+
+// 获取周挑战历史记录
+export function getWeeklyHistory(): WeeklyHistoryEntry[] {
+  try {
+    const data = localStorage.getItem(WEEKLY_HISTORY_KEY);
+    if (data) {
+      const parsed = JSON.parse(data);
+      // 修复 P1：校验返回数组，非数组则回退到空数组，避免调用方崩溃
+      return Array.isArray(parsed) ? parsed : [];
+    }
+  } catch (e) { /* 忽略 */ }
+  return [];
 }
