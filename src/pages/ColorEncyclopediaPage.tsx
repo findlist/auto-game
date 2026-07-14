@@ -1358,7 +1358,7 @@ export const ColorEncyclopediaPage: React.FC<ColorEncyclopediaPageProps> = ({ on
           </>
         )}
 
-        <p className="version">色彩百科 | 色彩排序 v1.30.0 | 2026</p>
+        <p className="version">色彩百科 | 色彩排序 v1.31.0 | 2026</p>
 
         {/* SEO 结构化数据 */}
         <script type="application/ld+json" dangerouslySetInnerHTML={{

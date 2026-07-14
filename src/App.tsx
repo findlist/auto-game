@@ -258,7 +258,7 @@ export default function App() {
 
     // 新版本更新，显示更新日志
     const CHANGELOG_KEY = STORAGE_KEYS.CHANGELOG_VERSION;
-    const currentVersion = '1.30.0';
+    const currentVersion = '1.31.0';
     try {
       const lastVersion = localStorage.getItem(CHANGELOG_KEY);
       if (lastVersion !== currentVersion) {
@@ -1511,6 +1511,18 @@ export default function App() {
                   <div className="faq-question">🎉 序列记忆游戏有关卡奖励吗？</div>
                   <div className="faq-answer">有！序列记忆游戏在第5关、第10关、第15关达成时触发彩带庆祝动画和音效，为你的记忆里程碑喝彩！</div>
                 </div>
+                <div className="faq-item">
+                  <div className="faq-question">🔊 音效可以快捷开关吗？</div>
+                  <div className="faq-answer">可以！首页右上角有悬浮音效切换按钮，点击即可快速开启或关闭音效，无需进入设置页面。关闭音效时会同时停止背景音乐。</div>
+                </div>
+                <div className="faq-item">
+                  <div className="faq-question">💾 序列记忆进度可以保存吗？</div>
+                  <div className="faq-answer">可以！序列记忆游戏会自动保存当前进度，中途中断后下次进入时会提示恢复，从中断的关卡继续挑战。</div>
+                </div>
+                <div className="faq-item">
+                  <div className="faq-question">📋 颜色混合配方可以分享吗？</div>
+                  <div className="faq-answer">可以！在色彩混合器中选择2-3种颜色后，点击“保存配方”按钮，配方会保存到本地并自动复制分享文案到剪贴板。</div>
+                </div>
               </div>
             </div>
           </div>
@@ -1757,6 +1769,15 @@ export default function App() {
               <div className="tutorial-emoji">📋</div>
               <h2>色彩排序更新日志</h2>
               <div className="changelog-content">
+                <div className="changelog-item">
+                  <h3>🎉 v1.31.0</h3>
+                  <ul>
+                    <li>🔊 首页新增悬浮音效快捷开关按钮，一键静音无需进设置</li>
+                    <li>💾 序列记忆游戏自动保存进度，中断后可恢复继续挑战</li>
+                    <li>📋 色彩混合器新增配方保存与分享功能，支持复制和原生分享</li>
+                    <li>🧠 首页新增今日推荐游玩智能卡片，根据时段推荐不同玩法</li>
+                  </ul>
+                </div>
                 <div className="changelog-item">
                   <h3>🎉 v1.30.0</h3>
                   <ul>
