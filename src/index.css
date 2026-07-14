@@ -87,6 +87,37 @@ body {
   text-align: center;
   padding: 40px 20px 20px;
   color: var(--text-light);
+  position: relative;
+}
+
+/* 首页悬浮音效切换按钮 — 无需进入设置页即可快速静音 */
+.sound-toggle-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.sound-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.35);
+  transform: scale(1.1);
+}
+
+.sound-toggle-btn:active {
+  transform: scale(0.95);
 }
 
 .logo {
@@ -6823,6 +6854,13 @@ html[style*="1a1a2e"] .quiz-trend-date {
 html[style*="1a1a2e"] .csg-milestone-text {
   color: #FFB084;
   text-shadow: 0 0 10px rgba(255, 176, 132, 0.3);
+}
+/* 暗色主题下音效切换按钮适配 */
+html[style*="1a1a2e"] .sound-toggle-btn {
+  background: rgba(255, 255, 255, 0.1);
+}
+html[style*="1a1a2e"] .sound-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
 html[style*="1a1a2e"] .recent-color-chip {
   background: rgba(255, 255, 255, 0.08);

@@ -856,6 +856,14 @@ export default function App() {
       <div className="app">
         <a href="#main-content" className="sr-only">跳转到主要内容</a>
         <header className="home-header">
+          <button className="sound-toggle-btn" onClick={() => {
+            const newSound = GameSettings.toggleSound();
+            if (newSound) SoundEngine.click();
+            // 关闭音效时同时停止背景音乐
+            if (!newSound) SoundEngine.stopBGM();
+          }} aria-label={GameSettings.getSound() ? '关闭音效' : '开启音效'} title={GameSettings.getSound() ? '关闭音效' : '开启音效'}>
+            {GameSettings.getSound() ? '🔊' : '🔇'}
+          </button>
           <div className="logo">🎨</div>
           <h1 className="title">色彩排序</h1>
           <p className="subtitle">经典好玩的颜色游戏</p>
