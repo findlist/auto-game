@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { SoundEngine } from '../game/soundEngine';
-import { getTodayColorQuiz, saveDailyQuizResult, getDailyQuizHistory, getQuizStreak } from '../game/announcements';
+import { getTodayColorQuiz, saveDailyQuizResult, getDailyQuizHistory, getQuizStreak, getQuizDifficultyStats } from '../game/announcements';
 
 interface ColorEncyclopediaPageProps {
   onBack: () => void;
@@ -45,7 +45,7 @@ const DailyColorQuiz: React.FC<{ onComplete?: (totalCompleted: number) => void; 
     } else {
       SoundEngine.error();
     }
-    saveDailyQuizResult(quiz.dayIndex, correct);
+    saveDailyQuizResult(quiz.dayIndex, correct, quiz.difficulty);
     setAnsweredToday(true);
     const history = getDailyQuizHistory();
     const correctCount = history.filter(h => h.correct).length;
@@ -109,6 +109,22 @@ const DailyColorQuiz: React.FC<{ onComplete?: (totalCompleted: number) => void; 
       {showResult && (
         <div className="daily-quiz-result">
           <p className="daily-quiz-explanation">{quiz.explanation}</p>
+          {/* 难度分级统计 - 展示各难度正确率，帮助玩家了解薄弱环节 */}
+          {(() => {
+            const diffStats = getQuizDifficultyStats();
+            const hasData = diffStats.easy.total + diffStats.medium.total + diffStats.hard.total > 0;
+            if (!hasData) return null;
+            return (
+              <div className="quiz-difficulty-stats">
+                <span className="quiz-diff-stats-label">📊 难度统计</span>
+                <div className="quiz-diff-stats-row">
+                  <span className="quiz-diff-stat quiz-diff-easy">🟢 简单 {diffStats.easy.correct}/{diffStats.easy.total}</span>
+                  <span className="quiz-diff-stat quiz-diff-medium">🟡 中等 {diffStats.medium.correct}/{diffStats.medium.total}</span>
+                  <span className="quiz-diff-stat quiz-diff-hard">🔴 困难 {diffStats.hard.correct}/{diffStats.hard.total}</span>
+                </div>
+              </div>
+            );
+          })()}
           {!answeredToday && (
             <button className="daily-quiz-share-btn" onClick={handleShare}>
               📤 分享结果

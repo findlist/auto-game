@@ -247,8 +247,9 @@ export function getTodayColorQuiz(): { question: string; options: string[]; answ
 
 /**
  * 获取每日色彩问答历史记录
+ * 兼容旧数据：difficulty 字段可能不存在（旧记录默认为 'easy'）
  */
-export function getDailyQuizHistory(): Array<{ dayIndex: number; correct: boolean; date: string }> {
+export function getDailyQuizHistory(): Array<{ dayIndex: number; correct: boolean; date: string; difficulty?: 'easy' | 'medium' | 'hard' }> {
   try {
     const data = localStorage.getItem('daily_quiz_history');
     if (data) {
@@ -260,19 +261,44 @@ export function getDailyQuizHistory(): Array<{ dayIndex: number; correct: boolea
 }
 
 /**
- * 保存每日色彩问答结果
+ * 保存每日色彩问答结果（含难度等级）
  */
-export function saveDailyQuizResult(dayIndex: number, correct: boolean): void {
+export function saveDailyQuizResult(dayIndex: number, correct: boolean, difficulty?: 'easy' | 'medium' | 'hard'): void {
   try {
     const history = getDailyQuizHistory();
     const today = new Date();
     const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
     if (!history.find(h => h.dayIndex === dayIndex && h.date === todayStr)) {
-      history.push({ dayIndex, correct, date: todayStr });
+      history.push({ dayIndex, correct, date: todayStr, difficulty });
       if (history.length > 90) history.shift();
       localStorage.setItem('daily_quiz_history', JSON.stringify(history));
     }
   } catch (e) { /* 忽略 */ }
+}
+
+/**
+ * 获取每日问答难度分级统计
+ * 返回各难度的答题数和正确数
+ */
+export function getQuizDifficultyStats(): { 
+  easy: { total: number; correct: number };
+  medium: { total: number; correct: number };
+  hard: { total: number; correct: number };
+} {
+  const history = getDailyQuizHistory();
+  const stats = {
+    easy: { total: 0, correct: 0 },
+    medium: { total: 0, correct: 0 },
+    hard: { total: 0, correct: 0 },
+  };
+  for (const h of history) {
+    // 旧记录无 difficulty 字段，根据 dayIndex 查题库获取难度
+    const diff = h.difficulty || DAILY_COLOR_QUIZ[h.dayIndex]?.difficulty || 'easy';
+    if (diff === 'easy') { stats.easy.total++; if (h.correct) stats.easy.correct++; }
+    else if (diff === 'medium') { stats.medium.total++; if (h.correct) stats.medium.correct++; }
+    else if (diff === 'hard') { stats.hard.total++; if (h.correct) stats.hard.correct++; }
+  }
+  return stats;
 }
 
 /**
