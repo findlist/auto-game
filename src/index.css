@@ -6347,6 +6347,22 @@ html {
   font-size: 11px;
   color: #10b981;
   font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+/* 连续答题天数徽章 */
+.quiz-streak-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #f59e0b, #f97316);
+  color: #fff;
+  font-weight: 700;
+  white-space: nowrap;
 }
 .daily-quiz-entry-title {
   font-size: 14px;

@@ -14,7 +14,7 @@ import { generateReplayUrl, parseReplayFromUrl, formatReplayShareText, ReplayDat
 import { getAdaptiveRecommendation } from './game/adaptiveDifficulty';
 import { getDailyRecommend } from './game/dailyRecommend';
 import { hasCompletedWeeklyThisWeek, saveWeeklyRecord, getWeeklyStreak, getWeeklyInfo, getWeeklyRecord } from './game/weeklyChallenge';
-import { getUnreadAnnouncements, markAnnouncementRead, Announcement, getTodayTip, getTodayColorKnowledge, getTodayColorQuiz, getDailyQuizHistory } from './game/announcements';
+import { getUnreadAnnouncements, markAnnouncementRead, Announcement, getTodayTip, getTodayColorKnowledge, getTodayColorQuiz, getDailyQuizHistory, getQuizStreak } from './game/announcements';
 import { getCustomLevels, saveCustomLevel, deleteCustomLevel, importLevelCode, CustomLevel } from './game/levelEditor';
 import { generateReplayVideo, generateReplayThumbnail } from './game/replayVideo';
 import { STORAGE_KEYS } from './game/storageKeys';
@@ -1037,14 +1037,18 @@ export default function App() {
             const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
             const answeredToday = history.some(h => h.dayIndex === quiz.dayIndex && h.date === todayStr);
             const correctCount = history.filter(h => h.correct).length;
+            const quizStreak = getQuizStreak();
+            // 连续答题里程碑提示
+            const nextMilestone = quizStreak < 3 ? 3 : quizStreak < 7 ? 7 : quizStreak < 14 ? 14 : quizStreak < 30 ? 30 : quizStreak < 50 ? 50 : null;
+            const milestoneEmoji = quizStreak >= 30 ? '🏆' : quizStreak >= 14 ? '💎' : quizStreak >= 7 ? '🔥' : quizStreak >= 3 ? '⭐' : '';
             return (
               <div className={`daily-quiz-entry-card ${!answeredToday ? 'quiz-unanswered' : ''}`} onClick={() => setPage('encyclopedia')} role="button" tabIndex={0}
                 onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setPage('encyclopedia'); } }}>
                 <span className="daily-quiz-entry-icon">{answeredToday ? '✅' : '📝'}</span>
                 <div className="daily-quiz-entry-content">
-                  <span className="daily-quiz-entry-label">📚 每日色彩问答</span>
+                  <span className="daily-quiz-entry-label">📚 每日色彩问答 {quizStreak > 0 && <span className="quiz-streak-badge">{milestoneEmoji} 连续{quizStreak}天</span>}</span>
                   <span className="daily-quiz-entry-title">{answeredToday ? '今日已答题' : quiz.question}</span>
-                  <span className="daily-quiz-entry-sub">{answeredToday ? `累计正确 ${correctCount}/${history.length} 题` : '点击进入答题，每天一题涨知识！'}</span>
+                  <span className="daily-quiz-entry-sub">{answeredToday ? `累计正确 ${correctCount}/${history.length} 题${nextMilestone ? ` · 再答${nextMilestone - quizStreak}天解锁新徽章` : ''}` : '点击进入答题，每天一题涨知识！'}</span>
                 </div>
                 <span className="daily-quiz-entry-arrow">→</span>
               </div>
