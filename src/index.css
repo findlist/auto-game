@@ -7508,6 +7508,102 @@ html[style*="1a1a2e"] .daily-quiz-difficulty-hard {
 [data-theme="dark"] .quiz-wrongbook-explanation { background: #1e3a5f; color: #93c5fd; }
 [data-theme="dark"] .daily-quiz-wrongbook-btn { background: linear-gradient(135deg, #422006, #78350f); color: #fcd34d; border-color: #92400e; }
 
+/* 色彩辨识测试错题本专属样式 */
+.cpt-wrongbook-btn {
+  display: block;
+  margin: 12px auto 0;
+  padding: 8px 18px;
+  font-size: 13px;
+  color: #6b7280;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.cpt-wrongbook-btn:hover {
+  background: #e5e7eb;
+  color: #4b5563;
+}
+.cpt-wrongbook-btn:active {
+  transform: scale(0.97);
+}
+.perception-wrong-item {
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+.perception-wrong-item:last-child {
+  border-bottom: none;
+}
+.perception-wrong-date {
+  font-size: 11px;
+  color: #999;
+  margin-bottom: 6px;
+}
+.perception-wrong-colors {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.perception-wrong-color-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.perception-wrong-label {
+  font-size: 11px;
+  color: #6b7280;
+}
+.perception-wrong-label.wrong {
+  color: #ef4444;
+}
+.perception-wrong-swatch {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 2px solid #ddd;
+  display: inline-block;
+}
+.perception-wrong-name {
+  font-size: 12px;
+  color: #374151;
+  font-weight: 500;
+}
+.perception-wrong-name.wrong {
+  color: #ef4444;
+}
+.perception-wrong-arrow {
+  font-size: 18px;
+  color: #d1d5db;
+}
+.quiz-wrongbook-clear {
+  display: block;
+  margin: 12px auto 4px;
+  padding: 6px 14px;
+  font-size: 12px;
+  color: #9ca3af;
+  background: none;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.quiz-wrongbook-clear:hover {
+  color: #ef4444;
+  border-color: #fca5a5;
+}
+/* 暗色主题适配 */
+[data-theme="dark"] .cpt-wrongbook-btn { background: #374151; color: #9ca3af; border-color: #4b5563; }
+[data-theme="dark"] .cpt-wrongbook-btn:hover { background: #4b5563; color: #d1d5db; }
+[data-theme="dark"] .perception-wrong-item { border-color: #333; }
+[data-theme="dark"] .perception-wrong-date { color: #666; }
+[data-theme="dark"] .perception-wrong-label { color: #9ca3af; }
+[data-theme="dark"] .perception-wrong-swatch { border-color: #444; }
+[data-theme="dark"] .perception-wrong-name { color: #d1d5db; }
+[data-theme="dark"] .quiz-wrongbook-clear { color: #666; border-color: #333; }
+[data-theme="dark"] .quiz-wrongbook-clear:hover { color: #fca5a5; border-color: #7f1d1d; }
+
 .daily-quiz-share-toast {
   text-align: center;
   font-size: 12px;

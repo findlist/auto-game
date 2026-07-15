@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { SoundEngine } from '../game/soundEngine';
-import { getTodayColorQuiz, saveDailyQuizResult, getDailyQuizHistory, getQuizStreak, getQuizDifficultyStats, getQuizWrongAnswers, saveQuizUserAnswer } from '../game/announcements';
+import { getTodayColorQuiz, saveDailyQuizResult, getDailyQuizHistory, getQuizStreak, getQuizDifficultyStats, getQuizWrongAnswers, saveQuizUserAnswer, savePerceptionWrongAnswer, getPerceptionWrongAnswers, clearPerceptionWrongAnswers } from '../game/announcements';
 import { ParticleEffect } from '../components/ParticleEffect';
 
 interface ColorEncyclopediaPageProps {
@@ -253,6 +253,8 @@ const ColorPerceptionTest: React.FC<{ onComplete?: (score: number) => void }> = 
   const [score, setScore] = useState(0);
   const [round, setRound] = useState(0);
   const [finished, setFinished] = useState(false);
+  // 错题本弹窗状态
+  const [showWrongBook, setShowWrongBook] = useState(false);
   // 读取历史最佳分数
   const [bestScore, setBestScore] = useState<number>(() => {
     try { return parseInt(localStorage.getItem(BEST_SCORE_KEY) || '0', 10); } catch (e) { return 0; }
@@ -277,6 +279,16 @@ const ColorPerceptionTest: React.FC<{ onComplete?: (score: number) => void }> = 
     } else {
       setFeedback(`❌ 正确答案：${COLORS[targetIdx].name}`);
       SoundEngine.error();
+      // 保存错题记录，用于后续回顾练习
+      savePerceptionWrongAnswer({
+        targetColor: COLORS[targetIdx].name,
+        targetHex: COLORS[targetIdx].hex,
+        userColor: COLORS[idx].name,
+        userHex: COLORS[idx].hex,
+        options: options.map(i => COLORS[i].name),
+        date: new Date().toLocaleDateString('zh-CN'),
+        timestamp: Date.now(),
+      });
     }
     setTimeout(() => {
       setFeedback('');
@@ -352,8 +364,60 @@ const ColorPerceptionTest: React.FC<{ onComplete?: (score: number) => void }> = 
           {score >= 5 && score < 8 && <p className="cpt-result-rating">👍 不错的色觉！</p>}
           {score < 5 && <p className="cpt-result-rating">💪 多练习，色觉会更好！</p>}
           <button className="cpt-restart-btn" onClick={restart}>🔄 再来一次</button>
+          {/* 错题本入口：仅有错题记录时显示 */}
+          {(() => {
+            const wrongList = getPerceptionWrongAnswers();
+            return wrongList.length > 0 ? (
+              <button className="cpt-wrongbook-btn" onClick={() => setShowWrongBook(true)}>
+                📋 查看错题本（{wrongList.length}题）
+              </button>
+            ) : null;
+          })()}
         </div>
       )}
+      {/* 错题本弹窗 */}
+      {showWrongBook && (() => {
+        const wrongList = getPerceptionWrongAnswers();
+        return (
+          <div className="quiz-wrongbook-overlay" onClick={() => setShowWrongBook(false)}>
+            <div className="quiz-wrongbook-modal" onClick={(e) => e.stopPropagation()}>
+              <div className="quiz-wrongbook-header">
+                <h3>🔍 色彩辨识错题本</h3>
+                <button className="quiz-wrongbook-close" onClick={() => setShowWrongBook(false)}>✕</button>
+              </div>
+              {wrongList.length === 0 ? (
+                <p className="quiz-wrongbook-empty">还没有错题记录，继续加油！</p>
+              ) : (
+                <>
+                  <div className="quiz-wrongbook-list">
+                    {wrongList.map((w, i) => (
+                      <div key={i} className="perception-wrong-item">
+                        <div className="perception-wrong-date">{w.date}</div>
+                        <div className="perception-wrong-colors">
+                          <div className="perception-wrong-color-block">
+                            <span className="perception-wrong-label">正确</span>
+                            <span className="perception-wrong-swatch" style={{ background: w.targetHex }} />
+                            <span className="perception-wrong-name">{w.targetColor}</span>
+                          </div>
+                          <span className="perception-wrong-arrow">←</span>
+                          <div className="perception-wrong-color-block">
+                            <span className="perception-wrong-label wrong">你选了</span>
+                            <span className="perception-wrong-swatch" style={{ background: w.userHex }} />
+                            <span className="perception-wrong-name wrong">{w.userColor}</span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <button className="quiz-wrongbook-clear" onClick={() => { clearPerceptionWrongAnswers(); setShowWrongBook(false); }}>
+                    🗑️ 清空错题记录
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+        );
+      })()}
     </div>
   );
 };

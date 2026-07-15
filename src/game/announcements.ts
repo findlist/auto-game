@@ -387,6 +387,55 @@ export function getQuizWrongAnswers(): Array<{
 }
 
 /**
+ * 色彩辨识测试错题存储
+ * 记录辨识测试中答错的题目，支持回顾练习
+ */
+const PERCEPTION_WRONG_KEY = 'color_perception_wrong_answers';
+
+export interface PerceptionWrongAnswer {
+  targetColor: string;   // 正确颜色名称
+  targetHex: string;     // 正确颜色色值
+  userColor: string;     // 用户选择的颜色名称
+  userHex: string;       // 用户选择的颜色色值
+  options: string[];     // 本轮所有选项颜色名称
+  date: string;          // 错题日期
+  timestamp: number;     // 时间戳
+}
+
+/**
+ * 保存色彩辨识测试错题
+ */
+export function savePerceptionWrongAnswer(record: PerceptionWrongAnswer): void {
+  try {
+    const list = getPerceptionWrongAnswers();
+    list.unshift(record);
+    // 最多保留 50 条错题记录
+    if (list.length > 50) list.length = 50;
+    localStorage.setItem(PERCEPTION_WRONG_KEY, JSON.stringify(list));
+  } catch (e) { /* 忽略 */ }
+}
+
+/**
+ * 获取色彩辨识测试错题列表
+ */
+export function getPerceptionWrongAnswers(): PerceptionWrongAnswer[] {
+  try {
+    const raw = localStorage.getItem(PERCEPTION_WRONG_KEY);
+    if (!raw) return [];
+    return JSON.parse(raw) as PerceptionWrongAnswer[];
+  } catch (e) { return []; }
+}
+
+/**
+ * 清除色彩辨识测试错题记录
+ */
+export function clearPerceptionWrongAnswers(): void {
+  try {
+    localStorage.removeItem(PERCEPTION_WRONG_KEY);
+  } catch (e) { /* 忽略 */ }
+}
+
+/**
  * 保存用户答题时选择的答案（用于错题本展示）
  */
 export function saveQuizUserAnswer(dayIndex: number, date: string, userAnswer: number): void {
