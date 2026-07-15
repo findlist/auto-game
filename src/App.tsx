@@ -320,6 +320,23 @@ export default function App() {
     return () => clearInterval(interval);
   }, [showPWAInstall]);
 
+  // 修复 P1：原代码在 render 阶段调用 setNewAchievements，违反 React 纯渲染原则
+  // 可能导致 "Cannot update a component while rendering" 警告甚至无限重渲染
+  // 改为在 useEffect 中根据 page 变化触发成就检查
+  useEffect(() => {
+    if (page === 'stats') {
+      const statsAchievements = AchievementManager.checkStatsViewerAchievements();
+      if (statsAchievements.length > 0) {
+        setNewAchievements(prev => [...prev, ...statsAchievements]);
+      }
+    } else if (page === 'encyclopedia') {
+      const encyclopediaAchievements = AchievementManager.checkEncyclopediaAchievements(progress.completedLevels.includes(100));
+      if (encyclopediaAchievements.length > 0) {
+        setNewAchievements(prev => [...prev, ...encyclopediaAchievements]);
+      }
+    }
+  }, [page, progress.completedLevels]);
+
   // 自动保存当前游戏状态
   const autoSaveGame = useCallback((level: number, mode: string, moves: number, isWon: boolean, extra?: Record<string, number>) => {
     if (moves > 0 && !isWon) {
@@ -739,8 +756,16 @@ export default function App() {
   // 回放分享：生成回放链接和导出视频的处理
   const handleReplayShare = useCallback(async (moveHistory: Array<{ from: number; to: number }>, level: number, stars: number, stepsUsed: number) => {
     const replayData: ReplayData = { level, moves: moveHistory, starRating: stars, stepsUsed };
-    const url = generateReplayUrl(replayData);
-    const text = formatReplayShareText(replayData) + `\n${url}`;
+    // 修复 P0：encodeReplay 在 from/to 越界（>=36）时会抛错，需捕获降级，避免 UI 崩溃
+    let url = '';
+    let text = '';
+    try {
+      url = generateReplayUrl(replayData);
+      text = formatReplayShareText(replayData) + `\n${url}`;
+    } catch (e) {
+      // 编码失败（步骤索引越界），仅使用文案分享
+      text = formatReplayShareText(replayData);
+    }
     try {
       if (navigator.share) {
         await navigator.share({ title: '色彩排序回放', text, url });
@@ -2340,11 +2365,7 @@ export default function App() {
 
   // 统计页
   if (page === 'stats') {
-    // 检查数据控成就
-    const statsAchievements = AchievementManager.checkStatsViewerAchievements();
-    if (statsAchievements.length > 0) {
-      setNewAchievements(prev => [...prev, ...statsAchievements]);
-    }
+    // 成就检查已移至 useEffect（避免 render 阶段 setState）
     return <Suspense fallback={<PageLoading />}><StatsPage onBack={() => setPage('home')} timedHighScore={timedHighScore} /></Suspense>;
   }
 
@@ -2417,11 +2438,7 @@ export default function App() {
 
   // 色彩百科页
   if (page === 'encyclopedia') {
-    // 检查色彩学家成就
-    const encyclopediaAchievements = AchievementManager.checkEncyclopediaAchievements(progress.completedLevels.includes(100));
-    if (encyclopediaAchievements.length > 0) {
-      setNewAchievements(prev => [...prev, ...encyclopediaAchievements]);
-    }
+    // 色彩学家成就检查已移至 useEffect（避免 render 阶段 setState）
     return <Suspense fallback={<PageLoading />}><ColorEncyclopediaPage onBack={() => setPage('home')} onTestComplete={(score: number) => {
       const testAchievements = AchievementManager.checkColorPerceptionAchievements(score);
       if (testAchievements.length > 0) {

@@ -34,7 +34,20 @@ export const CHECKIN_REWARDS = [
 function loadRecord(): CheckinRecord {
   try {
     const data = localStorage.getItem(CHECKIN_KEY);
-    if (data) return { ...DEFAULT_RECORD, ...JSON.parse(data) };
+    if (data) {
+      const parsed = JSON.parse(data);
+      // 修复 P0：history/rewards 可能为 null 或非数组，后续 push/includes 会抛 TypeError
+      // 此处统一校验，确保返回安全的数组
+      if (parsed && typeof parsed === 'object') {
+        if (!Array.isArray(parsed.history)) parsed.history = [];
+        if (!Array.isArray(parsed.rewards)) parsed.rewards = [];
+        // 修复 P1：totalCheckins/bestStreak/currentStreak 可能为字符串，+=1 会拼接
+        if (!Number.isFinite(parsed.totalCheckins)) parsed.totalCheckins = 0;
+        if (!Number.isFinite(parsed.bestStreak)) parsed.bestStreak = 0;
+        if (!Number.isFinite(parsed.currentStreak)) parsed.currentStreak = 0;
+        return { ...DEFAULT_RECORD, ...parsed };
+      }
+    }
   } catch (e) { /* 忽略 */ }
   return { ...DEFAULT_RECORD };
 }

@@ -104,10 +104,20 @@ export function LevelEditorPage({ onBack, customLevels, onPlay, onDelete, onSave
   const handleExport = (level: CustomLevel) => {
     const code = exportLevelCode(level);
     const text = `色彩排序关卡「${level.name}」\n关卡码：${code}`;
-    navigator.clipboard.writeText(text).then(() => {
-      setImportMsg('📋 关卡码已复制到剪贴板！');
+    // 修复 P1：clipboard API 在非 HTTPS/非 localhost 环境会 reject，未 catch 会产生未捕获异常
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => {
+        setImportMsg('📋 关卡码已复制到剪贴板！');
+        setTimeout(() => setImportMsg(''), 3000);
+      }).catch(() => {
+        // 降级：clipboard 不可用时提示关卡码供手动复制
+        setImportMsg('📋 复制失败，请手动复制关卡码');
+        setTimeout(() => setImportMsg(''), 3000);
+      });
+    } else {
+      setImportMsg('📋 当前环境不支持自动复制，请手动复制关卡码');
       setTimeout(() => setImportMsg(''), 3000);
-    });
+    }
   };
 
   const handleImport = () => {
@@ -398,6 +408,9 @@ export function CustomLevelPlayer({ level, onWin, onShare, onGoHome }: CustomLev
     setMoves(0);
     setHistory([]);
     setIsWon(false);
+    // 修复 P1：未重置 pouringTo/showParticles，胜利后重玩会残留动画状态
+    setPouringTo(null);
+    setShowParticles(false);
     SoundEngine.reset();
   };
 

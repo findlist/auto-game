@@ -22,7 +22,9 @@ export function getDailyLeaderboard(): DailyLeaderboardEntry[] {
   try {
     const data = localStorage.getItem(LEADERBOARD_KEY);
     if (data) {
-      const entries = JSON.parse(data) as DailyLeaderboardEntry[];
+      const entries = JSON.parse(data);
+      // 修复 P0：JSON.parse 结果可能不是数组（null/对象/字符串），sort 会抛 TypeError
+      if (!Array.isArray(entries)) return [];
       // 按步数升序排序（步数少的排前面）
       return entries.sort((a, b) => {
         if (a.date !== b.date) return b.date.localeCompare(a.date); // 日期新的排前面

@@ -17,6 +17,14 @@ export interface ReplayData {
  */
 export function encodeReplay(data: ReplayData): string {
   const { level, moves, starRating, stepsUsed } = data;
+  // 修复 P0：from/to >= 36 时 toString(36) 产生多字符（如 36→"10"），
+  // 与解码端固定每步 2 字符的假设不符，导致后续所有步骤错位、回放数据损坏
+  // 编码前校验范围，越界则抛错，由调用方决定降级策略，避免静默损坏
+  for (const m of moves) {
+    if (m.from < 0 || m.from > 35 || m.to < 0 || m.to > 35) {
+      throw new Error(`回放步骤越界：from=${m.from}, to=${m.to}，超出 0-35 编码范围`);
+    }
+  }
   const encodedMoves = moves.map(m => m.from.toString(36) + m.to.toString(36)).join('');
   return `L${level}M${stepsUsed}S${starRating}D${encodedMoves}`;
 }

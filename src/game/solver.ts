@@ -100,8 +100,10 @@ export function solveBFS(tubes: Tube[], maxNodes: number = 5000): { solvable: bo
     }
   }
   
-  // 如果因为达到节点上限而停止，倾向于认为有解但无法确定最少步数
-  if (nodeCount >= maxNodes) return { solvable: true, minSteps: -1 };
+  // 修复 P0：达到节点上限时搜索不完整，既未找到解也未穷尽所有状态
+  // 原代码乐观返回 solvable: true，与各生成器兜底逻辑叠加导致不可解关卡被采纳
+  // 改为保守返回 solvable: false，宁可让生成器重试也不输出可能无解的关卡
+  if (nodeCount >= maxNodes) return { solvable: false, minSteps: -1 };
   return { solvable: false, minSteps: -1 };
 }
 

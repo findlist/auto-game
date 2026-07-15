@@ -98,7 +98,9 @@ export function importLevelCode(code: string): CustomLevel | null {
       // 校验 capacity 为正整数，layers 为字符串数组
       const capacity = Number(t.c);
       if (!Number.isFinite(capacity) || capacity <= 0) throw new Error('容量非法');
-      const layers = Array.isArray(t.l) ? t.l.map((color: string) => ({ color })) : [];
+      const rawLayers = Array.isArray(t.l) ? t.l : [];
+      // 修复 P1：层数超过容量时截断，否则 canPour 的 to.layers.length >= to.capacity 判断失真
+      const layers = rawLayers.slice(0, capacity).map((color: string) => ({ color }));
       return { id: i, capacity, layers };
     });
     // 至少需要 2 个试管才可游玩

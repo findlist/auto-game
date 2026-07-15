@@ -134,7 +134,12 @@ export function getAllDailyTips(): Array<{ title: string; content: string; icon:
 function getReadIds(): Set<string> {
   try {
     const data = localStorage.getItem(ANNOUNCEMENTS_KEY);
-    if (data) return new Set(JSON.parse(data));
+    if (data) {
+      // 修复 P0：JSON.parse 结果可能是字符串/数字/对象，new Set(字符串) 会按字符拆分
+      // 导致已读状态完全错乱，必须校验为数组后再构造 Set
+      const parsed = JSON.parse(data);
+      return new Set(Array.isArray(parsed) ? parsed : []);
+    }
   } catch (e) { /* 忽略 */ }
   return new Set();
 }

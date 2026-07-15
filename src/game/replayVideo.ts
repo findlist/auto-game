@@ -66,7 +66,9 @@ function drawHeader(ctx: CanvasRenderingContext2D, level: number, step: number, 
   // 星级
   ctx.textAlign = 'right';
   ctx.font = '16px sans-serif';
-  const starText = '⭐'.repeat(stars) + '☆'.repeat(3 - stars);
+  // 修复 P1：stars 越界（>3 或 <0）时 repeat(负数) 会抛 RangeError 导致渲染崩溃
+  const safeStars = Math.max(0, Math.min(3, Math.floor(Number(stars) || 0)));
+  const starText = '⭐'.repeat(safeStars) + '☆'.repeat(3 - safeStars);
   ctx.fillText(starText, FRAME_WIDTH - 15, 30);
 }
 
@@ -148,6 +150,9 @@ export async function generateReplayVideo(options: RenderOptions): Promise<strin
 
   return new Promise<string>((resolve, reject) => {
     recorder.onstop = () => {
+      // 修复 P0：录制正常结束时也必须释放 stream tracks，避免 CanvasCaptureMediaStreamTrack
+      // 持续占用 canvas 和 GPU 资源（onerror 和 catch 路径已释放，唯独正常路径遗漏）
+      stream.getTracks().forEach(t => t.stop());
       const blob = new Blob(chunks, { type: 'video/webm' });
       const url = URL.createObjectURL(blob);
       resolve(url);

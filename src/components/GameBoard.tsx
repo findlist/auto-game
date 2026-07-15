@@ -349,6 +349,19 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
     setHadDeadlock(false);
     setTimeLeft(timedDuration); // 重置限时模式倒计时
     setIsTimeUp(false); // 重置时间到标志
+    // 修复 P1：胜利后点击"再来一局"时，以下状态未重置，导致新关卡残留旧关卡的动画/状态
+    setShowParticles(false);
+    setSettledTubes(new Set());
+    setPouringTo(null);
+    setMovesPulse(false);
+    setStarRating(0);
+    setShowReplay(false);
+    setShowShareImage(false);
+    // 清理回放定时器，避免卸载后仍触发 setState
+    if (replayTimerRef.current) {
+      clearTimeout(replayTimerRef.current);
+      replayTimerRef.current = null;
+    }
     gameStartTime.current = Date.now(); // 重置计时器
     SoundEngine.reset();
     onReset();
@@ -432,6 +445,16 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
       SoundEngine.deadlock();
     }
   }, [isDeadlock]);
+
+  // 修复 P1：组件卸载时清理回放定时器，避免在已卸载组件上触发 setState
+  useEffect(() => {
+    return () => {
+      if (replayTimerRef.current) {
+        clearTimeout(replayTimerRef.current);
+        replayTimerRef.current = null;
+      }
+    };
+  }, []);
 
   return (
     <div className="game-board" role="region" aria-label="游戏区域" aria-live="polite">
