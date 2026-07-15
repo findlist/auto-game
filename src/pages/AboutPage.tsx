@@ -38,7 +38,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onBack }) => {
         <div className="feature-section">
           <h4>🏆 成就系统</h4>
           <ul>
-            <li>59个成就，记录玩家的不断进步</li>
+            <li>61个成就，记录玩家的不断进步</li>
             <li>星级评价（1-3星），追求三星通关</li>
             <li>连胜系统，不使用提示/撤销连续通关</li>
             <li>每日签到，连续签到奖励递增</li>
@@ -89,7 +89,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onBack }) => {
         <h3>技术栈</h3>
         <p>React 18 + Vite 5 + TypeScript，纯前端实现，无后端依赖。所有美术资源使用 CSS/SVG/Emoji 生成，音效使用 Web Audio API 合成，零外部素材依赖。</p>
 
-        <p className="version">版本: v1.31.0 | 2026</p>
+        <p className="version">版本: v1.32.0 | 2026</p>
         {/* SEO 友好的详细问答内容 */}
         <div className="faq-section">
           <h3>❓ 常见问题</h3>

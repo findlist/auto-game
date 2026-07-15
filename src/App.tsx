@@ -276,7 +276,7 @@ export default function App() {
 
     // 新版本更新，显示更新日志
     const CHANGELOG_KEY = STORAGE_KEYS.CHANGELOG_VERSION;
-    const currentVersion = '1.31.0';
+    const currentVersion = '1.32.0';
     try {
       const lastVersion = localStorage.getItem(CHANGELOG_KEY);
       if (lastVersion !== currentVersion) {
@@ -1541,6 +1541,22 @@ export default function App() {
                   <div className="faq-question">📋 颜色混合配方可以分享吗？</div>
                   <div className="faq-answer">可以！在色彩混合器中选择2-3种颜色后，点击“保存配方”按钮，配方会保存到本地并自动复制分享文案到剪贴板。</div>
                 </div>
+                <div className="faq-item">
+                  <div className="faq-question">🏆 连续答题有什么特殊成就？</div>
+                  <div className="faq-answer">每日色彩问答连续答题30天可解锁「色彩智者」成就，连续100天可解锁「色彩圣贤」成就！坚持每天答题，成为色彩知识达人！</div>
+                </div>
+                <div className="faq-item">
+                  <div className="faq-question">📂 保存的配方在哪里查看？</div>
+                  <div className="faq-answer">保存混合配方后，首页会自动显示「我的混合配方」入口卡片，点击即可弹窗查看所有已保存的配色配方，包括颜色组合、结果名称和RGB值。</div>
+                </div>
+                <div className="faq-item">
+                  <div className="faq-question">📊 色彩能力档案是什么？</div>
+                  <div className="faq-answer">色彩百科页面新增色彩能力档案卡片，展示辨识测试、反应测试、序列记忆和配对游戏四项最佳成绩的对比进度条，帮助你了解色彩能力的强弱项。</div>
+                </div>
+                <div className="faq-item">
+                  <div className="faq-question">🎨 成就可以按百科游戏筛选吗？</div>
+                  <div className="faq-answer">可以！成就页面新增「百科游戏」分类筛选标签，包含色彩辨识、序列记忆、配对、反应力、混合器、问答等相关成就，每个分类显示独立解锁进度条。</div>
+                </div>
               </div>
             </div>
           </div>
@@ -1803,6 +1819,15 @@ export default function App() {
               <div className="tutorial-emoji">📋</div>
               <h2>色彩排序更新日志</h2>
               <div className="changelog-content">
+                <div className="changelog-item">
+                  <h3>🎉 v1.32.0</h3>
+                  <ul>
+                    <li>🏆 每日问答连续30天/100天解锁「色彩智者」「色彩圣贤」成就</li>
+                    <li>📋 首页新增已保存混合配方快速查看入口，一键查看配色收藏</li>
+                    <li>📊 百科页新增色彩能力档案，四项小游戏成绩对比一目了然</li>
+                    <li>🎨 成就页新增百科游戏分类筛选，已解锁成就按时间排列</li>
+                  </ul>
+                </div>
                 <div className="changelog-item">
                   <h3>🎉 v1.31.0</h3>
                   <ul>
