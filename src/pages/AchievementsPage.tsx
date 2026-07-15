@@ -12,8 +12,10 @@ const CATEGORIES = [
   { id: 'skill', name: '技巧挑战', icon: '⚡', match: (id: string) => ['speed_run', 'efficient', 'no_hint_5', 'streak_3', 'streak_5', 'streak_10'].includes(id) },
   { id: 'speed', name: '速度成就', icon: '🏃', match: (id: string) => id.startsWith('speed_') },
   { id: 'endless', name: '无尽/限时', icon: '∞', match: (id: string) => id.startsWith('endless_') || id.startsWith('timed_') },
-  { id: 'daily', name: '每日/签到', icon: '📅', match: (id: string) => id.startsWith('daily_') || id.startsWith('checkin_') },
-  { id: 'collection', name: '收集成就', icon: '⭐', match: (id: string) => id.startsWith('perfect_') || id.startsWith('total_') },
+  { id: 'daily', name: '每日/签到', icon: '📅', match: (id: string) => id.startsWith('daily_') || id.startsWith('checkin_') || id.startsWith('weekly_') },
+  { id: 'collection', name: '收集成就', icon: '⭐', match: (id: string) => id.startsWith('perfect_') || id.startsWith('total_') || id.startsWith('explorer_') || id.startsWith('color_master_') },
+  // 百科小游戏分类：色彩知识、辨识测试、记忆游戏、反应测试等相关成就
+  { id: 'encyclopedia', name: '百科游戏', icon: '🎨', match: (id: string) => id.startsWith('quiz_') || id.startsWith('color_perception_') || id.startsWith('sequence_memory_') || id.startsWith('pair_') || id.startsWith('reaction_') || id.startsWith('color_mixer_') || id.startsWith('encyclopedia_') || id.startsWith('knowledge_') || id === 'all_encyclopedia_games' },
 ];
 
 export const AchievementsPage: React.FC<AchievementsPageProps> = ({ onBack }) => {
@@ -30,6 +32,14 @@ export const AchievementsPage: React.FC<AchievementsPageProps> = ({ onBack }) =>
         const cat = CATEGORIES.find(c => c.id === activeCategory);
         return cat?.match ? cat.match(a.id) : false;
       });
+
+  // 排序方式：已解锁在前，未解锁按原始顺序；已解锁按解锁时间降序（最近解锁在前）
+  const sortedFiltered = [...filtered].sort((a, b) => {
+    if (a.unlocked && !b.unlocked) return -1;
+    if (!a.unlocked && b.unlocked) return 1;
+    if (a.unlocked && b.unlocked) return (b.unlockedAt || 0) - (a.unlockedAt || 0);
+    return 0;
+  });
 
   // 计算各分类解锁数
   const categoryStats = CATEGORIES.map(cat => {
@@ -98,7 +108,7 @@ export const AchievementsPage: React.FC<AchievementsPageProps> = ({ onBack }) =>
 
         {/* 成就列表 */}
         <div className="achievement-list">
-          {filtered.map(ach => (
+          {sortedFiltered.map(ach => (
             <div key={ach.id} className={`achievement-card ${ach.unlocked ? 'unlocked' : 'locked'}`}>
               <div className="achievement-icon">{ach.unlocked ? ach.icon : '🔒'}</div>
               <div className="achievement-info">

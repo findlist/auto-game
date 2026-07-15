@@ -1573,7 +1573,7 @@ export default function App() {
               <button className="quick-nav-card" onClick={() => setPage('achievements')}>
                 <span className="quick-nav-icon">🏆</span>
                 <span className="quick-nav-label">成就大厅</span>
-                <span className="quick-nav-desc">59个成就等你解锁</span>
+                <span className="quick-nav-desc">61个成就等你解锁</span>
               </button>
               <button className="quick-nav-card" onClick={() => setPage('stats')}>
                 <span className="quick-nav-icon">📊</span>
