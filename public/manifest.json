@@ -1,8 +1,8 @@
 {
   "name": "色彩排序 - 免费在线解谜游戏",
   "short_name": "色彩排序",
-  "description": "经典液体排序解谜游戏，100关卡通关、每日挑战、无尽模式、限时挑战、成就系统，支持手机和电脑，即开即玩",
-  "start_url": "/",
+  "description": "经典液体排序解谜游戏，100关卡通关、每日挑战、周挑战、无尽模式、限时挑战、成就系统、色彩百科，支持手机和电脑，即开即玩",
+  "start_url": "https://game.niuzi.asia/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#667eea",

@@ -56,8 +56,10 @@ export function LevelEditorPage({ onBack, customLevels, onPlay, onDelete, onSave
 
   const handleRemoveTube = (index: number) => {
     if (editTubes.length <= 2) return;
-    const newTubes = editTubes.filter((_, i) => i !== index);
-    newTubes.forEach((t, i) => t.id = i);
+    // 修复 M15：filter 返回的元素仍是原对象引用，直接修改 id 会突变 state
+    const newTubes = editTubes
+      .filter((_, i) => i !== index)
+      .map((t, i) => ({ ...t, id: i }));
     setEditTubes(newTubes);
   };
 
@@ -128,7 +130,7 @@ export function LevelEditorPage({ onBack, customLevels, onPlay, onDelete, onSave
       <header className="game-header">
         <button className="btn-back" onClick={onBack}>← 返回</button>
         <h1 className="game-title">🔧 关卡编辑器</h1>
-        <div style={{ width: '40px' }} />
+        <div className="header-spacer" />
       </header>
       <main className="info-page">
         {importMsg && <div className="share-toast">{importMsg}</div>}
@@ -244,6 +246,8 @@ export function LevelEditorPage({ onBack, customLevels, onPlay, onDelete, onSave
                               style={{
                                 height: `${layerHeight}%`,
                                 backgroundColor: colorMap[layer.color] || layer.color,
+                                // 纵向渐变增强立体球体感，与主游戏保持一致
+                                backgroundImage: 'linear-gradient(180deg, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0.05) 40%, rgba(0,0,0,0.12) 100%)',
                                 bottom: `${j * layerHeight}%`,
                               }}
                             />
@@ -426,6 +430,8 @@ export function CustomLevelPlayer({ level, onWin, onShare, onGoHome }: CustomLev
                       style={{
                         height: `${layerHeight}%`,
                         backgroundColor: colorMap[layer.color] || layer.color,
+                        // 纵向渐变增强立体球体感，与主游戏保持一致
+                        backgroundImage: 'linear-gradient(180deg, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0.05) 40%, rgba(0,0,0,0.12) 100%)',
                         bottom: `${j * layerHeight}%`,
                       }}
                     />

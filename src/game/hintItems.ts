@@ -2,15 +2,21 @@
 // 签到奖励获得的提示道具，用于游戏中获取提示
 // 初始3次，签到奖励可增加，每日首次登录赠送1次（最多累积10次）
 
-const HINT_ITEMS_KEY = 'color-sort-hint-items';
+import { STORAGE_KEYS } from './storageKeys';
+
+const HINT_ITEMS_KEY = STORAGE_KEYS.HINT_ITEMS;
 const MAX_HINT_ITEMS = 10;
-const DAILY_BONUS_KEY = 'color-sort-hint-daily-bonus';
+const DAILY_BONUS_KEY = STORAGE_KEYS.HINT_DAILY_BONUS;
 
 /** 获取当前提示道具数量 */
 export function getHintItems(): number {
   try {
     const data = localStorage.getItem(HINT_ITEMS_KEY);
-    return data ? parseInt(data, 10) || 0 : 3; // 初始3次
+    // 修复 P1：原代码 parseInt(data, 10) || 0 在数据损坏（如 "abc"）时返回 0 而非初始值 3
+    // 导致新用户或数据损坏的用户丢失初始道具
+    if (!data) return 3; // 初始3次
+    const n = parseInt(data, 10);
+    return isNaN(n) ? 3 : n;
   } catch {
     return 3;
   }

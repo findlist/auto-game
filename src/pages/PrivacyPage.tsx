@@ -10,7 +10,7 @@ export const PrivacyPage: React.FC<PrivacyPageProps> = ({ onBack }) => {
       <header className="game-header">
         <button className="btn-back" onClick={onBack}>← 返回</button>
         <h1 className="game-title">隐私政策</h1>
-        <div style={{ width: '40px' }} />
+        <div className="header-spacer" />
       </header>
       <main className="info-page">
         <h2>隐私政策</h2>

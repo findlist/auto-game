@@ -6,4 +6,4 @@ Disallow: /src/
 Disallow: /node_modules/
 Disallow: /docs/
 
-Sitemap: https://colorsort.app/sitemap.xml
+Sitemap: https://game.niuzi.asia/sitemap.xml

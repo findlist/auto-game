@@ -1,7 +1,9 @@
 // 游戏设置管理
 // 管理音效、振动、主题等本地设置
 
-const SETTINGS_KEY = 'color-sort-settings';
+import { STORAGE_KEYS } from './storageKeys';
+
+const SETTINGS_KEY = STORAGE_KEYS.SETTINGS;
 
 // 主题类型
 export type ThemeName = 'classic' | 'dark' | 'pastel' | 'neon' | 'forest' | 'ocean';
@@ -138,6 +140,9 @@ export interface Settings {
   vibration: boolean;
   theme: ThemeName;
   bgm: boolean; // 背景音乐开关
+  colorBlindMode: boolean; // 色弱友好模式
+  autoDarkMode: boolean; // 暗色主题自动跟随系统
+  colorLabels: boolean; // 色弱模式下显示颜色名称标签
 }
 
 const DEFAULT_SETTINGS: Settings = {
@@ -145,6 +150,9 @@ const DEFAULT_SETTINGS: Settings = {
   vibration: true,
   theme: 'classic',
   bgm: false, // 默认关闭，用户可手动开启
+  colorBlindMode: false, // 默认关闭
+  autoDarkMode: false, // 默认关闭
+  colorLabels: false, // 默认关闭
 };
 
 function loadSettings(): Settings {
@@ -168,7 +176,8 @@ export const GameSettings = {
 
   get(): Settings {
     if (!this._cache) this._cache = loadSettings();
-    return this._cache;
+    // 返回副本，避免外部直接修改污染缓存
+    return { ...this._cache };
   },
 
   set(settings: Partial<Settings>): Settings {
@@ -213,5 +222,29 @@ export const GameSettings = {
 
   toggleBGM(): boolean {
     return this.set({ bgm: !this.get().bgm }).bgm;
+  },
+
+  getColorBlindMode(): boolean {
+    return this.get().colorBlindMode;
+  },
+
+  toggleColorBlindMode(): boolean {
+    return this.set({ colorBlindMode: !this.get().colorBlindMode }).colorBlindMode;
+  },
+
+  getAutoDarkMode(): boolean {
+    return this.get().autoDarkMode;
+  },
+
+  toggleAutoDarkMode(): boolean {
+    return this.set({ autoDarkMode: !this.get().autoDarkMode }).autoDarkMode;
+  },
+
+  getColorLabels(): boolean {
+    return this.get().colorLabels;
+  },
+
+  toggleColorLabels(): boolean {
+    return this.set({ colorLabels: !this.get().colorLabels }).colorLabels;
   },
 };

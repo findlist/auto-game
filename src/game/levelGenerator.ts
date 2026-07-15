@@ -1,8 +1,9 @@
 import { Tube, Level, ColorLayer, COLOR_KEYS } from './types';
 import { isSolvable, getMinSteps } from './solver';
+import { STORAGE_KEYS } from './storageKeys';
 
 // 无尽模式存档键
-const ENDLESS_KEY = 'color-sort-endless';
+const ENDLESS_KEY = STORAGE_KEYS.ENDLESS;
 
 // 无尽模式最高分
 export function getEndlessHighScore(): number {
@@ -20,29 +21,31 @@ export function saveEndlessScore(score: number) {
   } catch (e) { /* 忽略 */ }
 }
 
-// 关卡难度配置（扩展至100关）
+// 关卡难度配置（扩展至100关）- 前期更平滑的难度曲线
 const LEVEL_CONFIGS = [
-  { tubes: 4, colors: 2, capacity: 4, difficulty: '入门' },   // 1-3关
-  { tubes: 5, colors: 3, capacity: 4, difficulty: '简单' },   // 4-6关
-  { tubes: 6, colors: 4, capacity: 4, difficulty: '普通' },   // 7-12关
-  { tubes: 7, colors: 5, capacity: 4, difficulty: '中等' },   // 13-20关
-  { tubes: 8, colors: 6, capacity: 4, difficulty: '困难' },   // 21-30关
-  { tubes: 9, colors: 7, capacity: 5, difficulty: '挑战' },   // 31-50关
-  { tubes: 10, colors: 8, capacity: 5, difficulty: '高级' },   // 51-70关
-  { tubes: 11, colors: 9, capacity: 5, difficulty: '专家' },   // 71-90关
-  { tubes: 12, colors: 10, capacity: 5, difficulty: '大师' },  // 91-100关
+  { tubes: 3, colors: 2, capacity: 4, difficulty: '入门' },   // 第1关 - 极简热身
+  { tubes: 4, colors: 2, capacity: 4, difficulty: '入门' },   // 第2-3关 - 基础玩法
+  { tubes: 5, colors: 3, capacity: 4, difficulty: '简单' },   // 第4-6关 - 多色引入
+  { tubes: 6, colors: 4, capacity: 4, difficulty: '普通' },   // 第7-12关 - 进阶
+  { tubes: 7, colors: 5, capacity: 4, difficulty: '中等' },   // 第13-20关 - 中级
+  { tubes: 8, colors: 6, capacity: 4, difficulty: '困难' },   // 第21-30关 - 困难
+  { tubes: 9, colors: 7, capacity: 5, difficulty: '挑战' },   // 第31-50关 - 挑战
+  { tubes: 10, colors: 8, capacity: 5, difficulty: '高级' },   // 第51-70关 - 高级
+  { tubes: 11, colors: 9, capacity: 5, difficulty: '专家' },   // 第71-90关 - 专家
+  { tubes: 12, colors: 10, capacity: 5, difficulty: '大师' },  // 第91-100关 - 大师
 ];
 
 function getLevelConfig(level: number) {
-  if (level <= 3) return LEVEL_CONFIGS[0];
-  if (level <= 6) return LEVEL_CONFIGS[1];
-  if (level <= 12) return LEVEL_CONFIGS[2];
-  if (level <= 20) return LEVEL_CONFIGS[3];
-  if (level <= 30) return LEVEL_CONFIGS[4];
-  if (level <= 50) return LEVEL_CONFIGS[5];
-  if (level <= 70) return LEVEL_CONFIGS[6];
-  if (level <= 90) return LEVEL_CONFIGS[7];
-  return LEVEL_CONFIGS[8];
+  if (level <= 1) return LEVEL_CONFIGS[0];
+  if (level <= 3) return LEVEL_CONFIGS[1];
+  if (level <= 6) return LEVEL_CONFIGS[2];
+  if (level <= 12) return LEVEL_CONFIGS[3];
+  if (level <= 20) return LEVEL_CONFIGS[4];
+  if (level <= 30) return LEVEL_CONFIGS[5];
+  if (level <= 50) return LEVEL_CONFIGS[6];
+  if (level <= 70) return LEVEL_CONFIGS[7];
+  if (level <= 90) return LEVEL_CONFIGS[8];
+  return LEVEL_CONFIGS[9];
 }
 
 // 洗牌算法
@@ -98,6 +101,7 @@ export function generateLevel(level: number): Level {
   finalTubes.forEach((t, i) => { t.id = i; });
 
   // 验证可解性，最多重试 5 次
+  // 修复：原代码兜底用最后一次（可能不可解），现改为仅接受可解结果，不可解则保留初始 finalTubes
   let solvableTubes = finalTubes;
   if (!isSolvable(solvableTubes)) {
     for (let retry = 0; retry < 5; retry++) {
@@ -120,7 +124,7 @@ export function generateLevel(level: number): Level {
         solvableTubes = shuffledRetry;
         break;
       }
-      solvableTubes = shuffledRetry; // 兜底使用最后一次
+      // 不覆盖 solvableTubes，保留初始 finalTubes 作为兜底
     }
   }
 
@@ -189,6 +193,7 @@ export function generateEndlessLevel(score: number): Level {
   finalTubes.forEach((t, i) => { t.id = i; });
 
   // 验证可解性
+  // 修复：不可解时保留初始 finalTubes，不用可能不可解的最后一次覆盖
   let solvableTubes = finalTubes;
   if (!isSolvable(solvableTubes)) {
     for (let retry = 0; retry < 5; retry++) {
@@ -211,7 +216,6 @@ export function generateEndlessLevel(score: number): Level {
         solvableTubes = shuffledRetry;
         break;
       }
-      solvableTubes = shuffledRetry;
     }
   }
 
@@ -271,6 +275,7 @@ export function generateTimedLevel(score: number): Level {
   finalTubes.forEach((t, i) => { t.id = i; });
 
   // 验证可解性
+  // 修复：不可解时保留初始 finalTubes，不用可能不可解的最后一次覆盖
   let solvableTubes = finalTubes;
   if (!isSolvable(solvableTubes)) {
     for (let retry = 0; retry < 5; retry++) {
@@ -293,7 +298,6 @@ export function generateTimedLevel(score: number): Level {
         solvableTubes = shuffledRetry;
         break;
       }
-      solvableTubes = shuffledRetry;
     }
   }
 

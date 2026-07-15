@@ -4,6 +4,7 @@
 import { Tube, Level, ColorLayer, COLOR_KEYS } from './types';
 import { SeededRandom, getDailySeed } from './seededRandom';
 import { isSolvable, getMinSteps } from './solver';
+import { STORAGE_KEYS } from './storageKeys';
 
 // 每日挑战难度配置（随天数变化难度）
 function getDailyConfig(seed: number) {
@@ -125,7 +126,7 @@ export function generateDailyChallenge(): Level {
 }
 
 // 每日挑战的本地存储键
-const DAILY_KEY = 'color-sort-daily';
+const DAILY_KEY = STORAGE_KEYS.DAILY;
 
 export interface DailyRecord {
   date: string; // YYYY-MM-DD

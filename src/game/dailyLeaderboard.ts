@@ -1,7 +1,9 @@
 // 每日挑战本地排行榜
 // 记录每次每日挑战的通关成绩，按步数排序
 
-const LEADERBOARD_KEY = 'color-sort-daily-leaderboard';
+import { STORAGE_KEYS } from './storageKeys';
+
+const LEADERBOARD_KEY = STORAGE_KEYS.DAILY_LEADERBOARD;
 const MAX_ENTRIES = 30; // 最多保留30条记录
 
 export interface DailyLeaderboardEntry {
@@ -96,14 +98,17 @@ export function getDailyStats(): {
     return { totalDays: 0, totalCompletions: 0, bestMoves: null, avgMoves: 0, perfectDays: 0 };
   }
   const uniqueDates = new Set(entries.map(e => e.date));
-  const totalMoves = entries.reduce((sum, e) => sum + e.moves, 0);
-  const bestMoves = Math.min(...entries.map(e => e.moves));
+  // 修复 P1：原代码 reduce/Math.min 未校验数字，数据损坏时 e.moves 为 undefined 会产生 NaN 污染
+  // 此处过滤掉非有限数字的 moves，避免 bestMoves/avgMoves 变成 NaN
+  const validMoves = entries.map(e => e.moves).filter(m => Number.isFinite(m));
+  const totalMoves = validMoves.reduce((sum, m) => sum + m, 0);
+  const bestMoves = validMoves.length > 0 ? Math.min(...validMoves) : null;
   const perfectDays = new Set(entries.filter(e => e.stars === 3).map(e => e.date)).size;
   return {
     totalDays: uniqueDates.size,
     totalCompletions: entries.length,
     bestMoves,
-    avgMoves: Math.round(totalMoves / entries.length),
+    avgMoves: validMoves.length > 0 ? Math.round(totalMoves / validMoves.length) : 0,
     perfectDays,
   };
 }

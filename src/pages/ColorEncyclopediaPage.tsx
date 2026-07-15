@@ -495,8 +495,17 @@ const ColorSequenceGame: React.FC<{ onComplete?: (level: number) => void }> = ({
     { hex: '#FFE66D', name: '黄', freq: 783.99 },   // G5
     { hex: '#95E1A3', name: '绿', freq: 1046.50 },  // C6
   ];
+  // 难度配置：控制颜色展示时长和间隔时长（毫秒）
+  const DIFFICULTY_CONFIG = {
+    easy:   { label: '慢速', showTime: 800, gapTime: 350, initialDelay: 900 },
+    normal: { label: '标准', showTime: 500, gapTime: 200, initialDelay: 600 },
+    hard:   { label: '快速', showTime: 300, gapTime: 100, initialDelay: 400 },
+  };
+  type SeqDifficulty = keyof typeof DIFFICULTY_CONFIG;
   // 进度保存键：序列记忆游戏中断后可恢复
   const SAVE_KEY = 'color_sequence_save';
+  // 难度偏好存储键
+  const DIFFICULTY_KEY = 'color_sequence_difficulty';
   const [sequence, setSequence] = useState<number[]>([]);
   const [playerIdx, setPlayerIdx] = useState(0);
   const [gameState, setGameState] = useState<'idle' | 'showing' | 'playing' | 'finished'>('idle');
@@ -506,7 +515,15 @@ const ColorSequenceGame: React.FC<{ onComplete?: (level: number) => void }> = ({
   const [showMilestone, setShowMilestone] = useState<string | null>(null);
   // 是否有可恢复的存档
   const [hasSave, setHasSave] = useState(false);
+  // 难度选择：从 localStorage 读取上次偏好
+  const [difficulty, setDifficulty] = useState<SeqDifficulty>(() => {
+    try { return (localStorage.getItem(DIFFICULTY_KEY) as SeqDifficulty) || 'normal'; } catch (e) { return 'normal'; }
+  });
   const bestScore = (() => { try { return parseInt(localStorage.getItem('color_sequence_best') || '0', 10); } catch (e) { return 0; } })();
+  // 各难度最佳记录
+  const bestScoreByDiff = (diff: SeqDifficulty) => {
+    try { return parseInt(localStorage.getItem(`color_sequence_best_${diff}`) || '0', 10); } catch (e) { return 0; }
+  };
 
   // 检查是否有未完成的存档
   useEffect(() => {
@@ -539,7 +556,9 @@ const ColorSequenceGame: React.FC<{ onComplete?: (level: number) => void }> = ({
     setPlayerIdx(0);
     setGameState('showing');
     setHasSave(false);
-  }, []);
+    // 保存难度偏好
+    try { localStorage.setItem(DIFFICULTY_KEY, difficulty); } catch (e) { /* 忽略 */ }
+  }, [difficulty]);
 
   // 恢复存档：从中断处继续，重新展示当前序列
   const resumeGame = useCallback(() => {
@@ -559,6 +578,7 @@ const ColorSequenceGame: React.FC<{ onComplete?: (level: number) => void }> = ({
 
   useEffect(() => {
     if (gameState !== 'showing') return;
+    const config = DIFFICULTY_CONFIG[difficulty];
     let i = 0;
     const showNext = () => {
       if (i >= sequence.length) {
@@ -573,12 +593,12 @@ const ColorSequenceGame: React.FC<{ onComplete?: (level: number) => void }> = ({
         setTimeout(() => {
           i++;
           showNext();
-        }, 200);
-      }, 500);
+        }, config.gapTime);
+      }, config.showTime);
     };
-    const timer = setTimeout(showNext, 600);
+    const timer = setTimeout(showNext, config.initialDelay);
     return () => clearTimeout(timer);
-  }, [gameState, sequence]);
+  }, [gameState, sequence, difficulty]);
 
   const handleColorClick = useCallback((idx: number) => {
     if (gameState !== 'playing') return;
@@ -597,6 +617,11 @@ const ColorSequenceGame: React.FC<{ onComplete?: (level: number) => void }> = ({
         }
         if (level >= 15) {
           setGameState('finished');
+          // 保存当前难度最佳记录
+          const diffBest = bestScoreByDiff(difficulty);
+          if (level > diffBest) {
+            try { localStorage.setItem(`color_sequence_best_${difficulty}`, String(level)); } catch (e) { /* 忽略 */ }
+          }
           if (onComplete) onComplete(level);
           return;
         }
@@ -611,9 +636,14 @@ const ColorSequenceGame: React.FC<{ onComplete?: (level: number) => void }> = ({
     } else {
       SoundEngine.error();
       setGameState('finished');
+      // 失败时也保存当前难度最佳记录
+      const diffBest = bestScoreByDiff(difficulty);
+      if (level > diffBest) {
+        try { localStorage.setItem(`color_sequence_best_${difficulty}`, String(level)); } catch (e) { /* 忽略 */ }
+      }
       if (onComplete) onComplete(level);
     }
-  }, [gameState, sequence, playerIdx, level, onComplete]);
+  }, [gameState, sequence, playerIdx, level, onComplete, difficulty]);
 
   return (
     <div className="csg-container">
@@ -627,6 +657,18 @@ const ColorSequenceGame: React.FC<{ onComplete?: (level: number) => void }> = ({
       {gameState === 'idle' && (
         <div className="csg-start">
           <p className="csg-intro">观察颜色亮起的顺序，然后按相同顺序点击！每过一关序列增加一个颜色。</p>
+          {/* 难度选择：控制颜色展示速度，满足不同水平玩家需求 */}
+          <div className="csg-difficulty-select">
+            {(Object.keys(DIFFICULTY_CONFIG) as SeqDifficulty[]).map(d => (
+              <button
+                key={d}
+                className={`cpm-difficulty-btn ${difficulty === d ? 'cpm-difficulty-active' : ''}`}
+                onClick={() => setDifficulty(d)}
+              >
+                {DIFFICULTY_CONFIG[d].label}
+              </button>
+            ))}
+          </div>
           <div className="csg-start-buttons">
             <button className="csg-start-btn" onClick={startGame}>🚀 开始游戏</button>
             {hasSave && (
@@ -635,6 +677,15 @@ const ColorSequenceGame: React.FC<{ onComplete?: (level: number) => void }> = ({
           </div>
           {hasSave && <p className="csg-save-hint">检测到未完成的游戏进度，可恢复继续挑战</p>}
           {bestScore > 0 && <p className="csg-best">最高记录：第 {bestScore} 关</p>}
+          {/* 各难度最佳记录展示 */}
+          <div className="csg-diff-bests">
+            {(Object.keys(DIFFICULTY_CONFIG) as SeqDifficulty[]).map(d => {
+              const bs = bestScoreByDiff(d);
+              return bs > 0 ? (
+                <span key={d} className="csg-diff-best">{DIFFICULTY_CONFIG[d].label}：第{bs}关</span>
+              ) : null;
+            })}
+          </div>
         </div>
       )}
       {gameState !== 'idle' && (

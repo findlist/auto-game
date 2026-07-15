@@ -1,7 +1,9 @@
 // 每日签到系统
 // 记录签到天数，连续签到奖励，增强日活留存
 
-const CHECKIN_KEY = 'color-sort-checkin';
+import { STORAGE_KEYS } from './storageKeys';
+
+const CHECKIN_KEY = STORAGE_KEYS.CHECKIN;
 
 export interface CheckinRecord {
   lastCheckinDate: string | null;     // 上次签到日期 YYYY-MM-DD
@@ -80,6 +82,9 @@ export const DailyCheckin = {
 
     // 判断是否连续
     const yesterday = getYesterday();
+    // 修复 P1：currentStreak 可能因数据损坏为 undefined/字符串，+= 1 会得到 NaN 或字符串拼接
+    // 此处校验为有限数字，否则视为断签重新从 1 开始
+    if (!Number.isFinite(record.currentStreak)) record.currentStreak = 0;
     if (record.lastCheckinDate === yesterday) {
       record.currentStreak += 1;
     } else {

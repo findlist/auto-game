@@ -24,7 +24,7 @@ interface ParticleEffectProps {
 const DEFAULT_COLORS = ['#FF6B6B', '#4ECDC4', '#FFE66D', '#95E1A3', '#C589E8', '#FFA07A'];
 const CONFETTI_EMOJIS = ['🎉', '🎊', '✨', '⭐', '🌟', '💫'];
 
-export const ParticleEffect: React.FC<ParticleEffectProps> = ({ trigger, colors = DEFAULT_COLORS }) => {
+export const ParticleEffect: React.FC<ParticleEffectProps> = React.memo(({ trigger, colors = DEFAULT_COLORS }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particlesRef = useRef<Particle[]>([]);
   const animationRef = useRef<number>(0);
@@ -117,13 +117,16 @@ export const ParticleEffect: React.FC<ParticleEffectProps> = ({ trigger, colors 
           ctx.fillRect(-p.size, -p.size * 0.4, p.size * 2, p.size * 0.8);
           ctx.restore();
         } else {
-          // 圆形粒子
+          // 圆形粒子 - 添加发光效果让粒子更绚丽
+          ctx.shadowBlur = p.size * 2;
+          ctx.shadowColor = p.color;
           ctx.fillStyle = p.color;
           ctx.beginPath();
           ctx.arc(p.x, p.y, p.size * alpha, 0, Math.PI * 2);
           ctx.fill();
 
           // 拖尾效果
+          ctx.shadowBlur = 0;
           ctx.globalAlpha = alpha * 0.3;
           ctx.beginPath();
           ctx.arc(p.x - p.vx, p.y - p.vy, p.size * alpha * 0.6, 0, Math.PI * 2);
@@ -132,6 +135,7 @@ export const ParticleEffect: React.FC<ParticleEffectProps> = ({ trigger, colors 
       }
 
       ctx.globalAlpha = 1;
+      ctx.shadowBlur = 0;
 
       if (particlesRef.current.length > 0) {
         animationRef.current = requestAnimationFrame(animate);
@@ -163,4 +167,7 @@ export const ParticleEffect: React.FC<ParticleEffectProps> = ({ trigger, colors 
       aria-hidden="true"
     />
   );
-};
+}, (prev, next) => {
+  // 只在 trigger 变化时重渲染
+  return prev.trigger === next.trigger;
+});
