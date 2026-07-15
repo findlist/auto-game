@@ -1391,6 +1391,52 @@ export const ColorEncyclopediaPage: React.FC<ColorEncyclopediaPageProps> = ({ on
               if (onGamePlayed) onGamePlayed('reaction');
             }} />
 
+            {/* 色彩能力对比统计 - 展示辨识与反应测试历史最佳，激励玩家提升色觉能力 */}
+            <div className="color-skill-compare">
+              <h4>📊 色彩能力档案</h4>
+              {(() => {
+                const perceptionBest = (() => { try { return parseInt(localStorage.getItem('color_perception_best_score') || '0', 10); } catch (e) { return 0; } })();
+                const reactionBest = (() => { try { return parseInt(localStorage.getItem('color_reaction_best_score') || '0', 10); } catch (e) { return 0; } })();
+                const sequenceBest = (() => { try { return parseInt(localStorage.getItem('color_sequence_best') || '0', 10); } catch (e) { return 0; } })();
+                const pairEasyBest = (() => { try { return parseInt(localStorage.getItem('color_pair_best_easy') || '0', 10); } catch (e) { return 0; } })();
+                const pairNormalBest = (() => { try { return parseInt(localStorage.getItem('color_pair_best_normal') || '0', 10); } catch (e) { return 0; } })();
+                const pairHardBest = (() => { try { return parseInt(localStorage.getItem('color_pair_best_hard') || '0', 10); } catch (e) { return 0; } })();
+                const totalScore = perceptionBest + reactionBest + sequenceBest;
+                const hasAnyScore = totalScore > 0 || pairEasyBest > 0 || pairNormalBest > 0 || pairHardBest > 0;
+                if (!hasAnyScore) {
+                  return <p className="skill-compare-empty">完成上方的小游戏后，这里会展示你的色彩能力档案！</p>;
+                }
+                return (
+                  <div className="skill-compare-grid">
+                    <div className="skill-compare-item">
+                      <span className="skill-icon">👁️</span>
+                      <span className="skill-name">辨识测试</span>
+                      <span className="skill-score">{perceptionBest}/8</span>
+                      <div className="skill-bar"><div className="skill-bar-fill" style={{ width: `${perceptionBest / 8 * 100}%`, background: '#4ECDC4' }} /></div>
+                    </div>
+                    <div className="skill-compare-item">
+                      <span className="skill-icon">⚡</span>
+                      <span className="skill-name">反应测试</span>
+                      <span className="skill-score">{reactionBest}/8</span>
+                      <div className="skill-bar"><div className="skill-bar-fill" style={{ width: `${reactionBest / 8 * 100}%`, background: '#FF6B6B' }} /></div>
+                    </div>
+                    <div className="skill-compare-item">
+                      <span className="skill-icon">🎵</span>
+                      <span className="skill-name">序列记忆</span>
+                      <span className="skill-score">第{sequenceBest}关</span>
+                      <div className="skill-bar"><div className="skill-bar-fill" style={{ width: `${Math.min(sequenceBest / 15 * 100, 100)}%`, background: '#95E1A3' }} /></div>
+                    </div>
+                    <div className="skill-compare-item">
+                      <span className="skill-icon">🃏</span>
+                      <span className="skill-name">配对最佳</span>
+                      <span className="skill-score">{Math.min(pairEasyBest || 999, pairNormalBest || 999, pairHardBest || 999) || 0}步</span>
+                      <div className="skill-bar"><div className="skill-bar-fill" style={{ width: `${pairHardBest > 0 ? 100 : pairNormalBest > 0 ? 66 : pairEasyBest > 0 ? 33 : 0}%`, background: '#C589E8' }} /></div>
+                    </div>
+                  </div>
+                );
+              })()}
+            </div>
+
             <h3 id="section-mixer">🎨 交互式颜色混合器</h3>
             <ColorMixer onMixerUse={(useCount: number) => {
               if (onMixerUse) onMixerUse(useCount);
