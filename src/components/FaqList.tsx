@@ -164,6 +164,18 @@ const FaqList: React.FC = () => {
         <div className="faq-question">⚡ 网站加载速度快吗？</div>
         <div className="faq-answer">色彩排序网站经过性能优化，首屏加载不到3秒，单页JS体积控制在300KB以内。更新日志和FAQ等非首屏内容采用懒加载技术，确保快速加载体验。</div>
       </div>
+      <div className="faq-item">
+        <div className="faq-question">🔍 色彩辨识测试有错题本吗？</div>
+        <div className="faq-answer">有！色彩辨识测试答错后会自动记录到错题本，结算页点击查看错题本可以回顾所有答错的颜色对比，包括正确颜色和你选择的颜色，支持清空记录重新开始。</div>
+      </div>
+      <div className="faq-item">
+        <div className="faq-question">🕒 成就页面有时间线视图吗？</div>
+        <div className="faq-answer">有！成就页面新增时间线视图，按日期分组展示最近解锁的20个成就，包括解锁时间，方便回顾你的成就解锁历程。</div>
+      </div>
+      <div className="faq-item">
+        <div className="faq-question">📅 色彩百科有季节推荐吗？</div>
+        <div className="faq-answer">有！色彩百科页面根据当前季节和节日动态推荐应景色彩专题，如春季推荐嫩绿花色、夏季推荐阳光海洋色、秋季推荐丰收落叶色、冬季推荐白雪红绿色，春节和情人节也有专属推荐。</div>
+      </div>
     </div>
   );
 };

@@ -13,6 +13,16 @@ const ChangelogModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         <h2>色彩排序更新日志</h2>
         <div className="changelog-content">
           <div className="changelog-item">
+            <h3>🎉 v1.34.0</h3>
+            <ul>
+              <li>🔍 色彩辨识测试新增错题回顾功能，可查看历史错题对比</li>
+              <li>🕒 成就页面新增时间线视图，按日期分组展示最近解锁成就</li>
+              <li>📅 色彩百科新增季节/节日动态推荐，应景色彩专题自动切换</li>
+              <li>⚡ 首页弹窗提取为懒加载组件，首屏体积降至281KB</li>
+              <li>📝 SEO更新+FAQ补充4条问答+版本号同步</li>
+            </ul>
+          </div>
+          <div className="changelog-item">
             <h3>🎉 v1.33.0</h3>
             <ul>
               <li>📖 每日问答新增错题本功能，自动记录答错的题目可随时回顾</li>
