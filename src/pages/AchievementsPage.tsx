@@ -24,6 +24,8 @@ export const AchievementsPage: React.FC<AchievementsPageProps> = ({ onBack }) =>
   const totalCount = achievements.length;
   const unlockPct = totalCount > 0 ? Math.round(unlockedCount / totalCount * 100) : 0;
   const [activeCategory, setActiveCategory] = useState('all');
+  // 视图模式切换：列表视图 / 时间线视图
+  const [viewMode, setViewMode] = useState<'list' | 'timeline'>('list');
 
   // 按分类过滤
   const filtered = activeCategory === 'all' 
@@ -40,6 +42,22 @@ export const AchievementsPage: React.FC<AchievementsPageProps> = ({ onBack }) =>
     if (a.unlocked && b.unlocked) return (b.unlockedAt || 0) - (a.unlockedAt || 0);
     return 0;
   });
+
+  // 最近解锁时间线：按解锁时间倒序，最多展示20条
+  const timelineAchievements = achievements
+    .filter(a => a.unlocked && a.unlockedAt)
+    .sort((a, b) => (b.unlockedAt || 0) - (a.unlockedAt || 0))
+    .slice(0, 20);
+
+  // 按日期分组时间线
+  const timelineGroups: Array<{ date: string; items: typeof achievements }> = [];
+  const dateMap = new Map<string, typeof achievements>();
+  timelineAchievements.forEach(a => {
+    const dateStr = new Date(a.unlockedAt!).toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
+    if (!dateMap.has(dateStr)) dateMap.set(dateStr, []);
+    dateMap.get(dateStr)!.push(a);
+  });
+  dateMap.forEach((items, date) => timelineGroups.push({ date, items }));
 
   // 计算各分类解锁数
   const categoryStats = CATEGORIES.map(cat => {
@@ -69,6 +87,61 @@ export const AchievementsPage: React.FC<AchievementsPageProps> = ({ onBack }) =>
           </div>
         </div>
 
+        {/* 视图切换按钮 */}
+        <div className="achievement-view-toggle">
+          <button 
+            className={`ach-view-btn ${viewMode === 'list' ? 'active' : ''}`}
+            onClick={() => setViewMode('list')}
+          >
+            📋 列表
+          </button>
+          <button 
+            className={`ach-view-btn ${viewMode === 'timeline' ? 'active' : ''}`}
+            onClick={() => setViewMode('timeline')}
+          >
+            🕒 时间线
+          </button>
+        </div>
+
+        {viewMode === 'timeline' ? (
+          /* 时间线视图：按日期分组展示最近解锁的成就 */
+          <div className="achievement-timeline">
+            {timelineGroups.length === 0 ? (
+              <div className="achievement-empty-hint">
+                <span>🎮 还没有解锁任何成就，开始游戏吧！</span>
+              </div>
+            ) : (
+              timelineGroups.map((group, gi) => (
+                <div key={gi} className="timeline-group">
+                  <div className="timeline-date-header">
+                    <span className="timeline-date-icon">📅</span>
+                    <span className="timeline-date-text">{group.date}</span>
+                    <span className="timeline-date-count">{group.items.length} 个成就</span>
+                  </div>
+                  <div className="timeline-items">
+                    {group.items.map((ach, ii) => (
+                      <div key={ach.id} className="timeline-item">
+                        <div className="timeline-item-line">
+                          {ii < group.items.length - 1 && <span className="timeline-connector" />}
+                        </div>
+                        <div className="timeline-item-dot">{ach.icon}</div>
+                        <div className="timeline-item-content">
+                          <div className="timeline-item-name">{ach.name}</div>
+                          <div className="timeline-item-desc">{ach.description}</div>
+                          <div className="timeline-item-time">
+                            {new Date(ach.unlockedAt!).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })}
+                          </div>
+                        </div>
+                        <span className="achievement-check">✅</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        ) : (
+        <>
         {/* 分类筛选标签 */}
         <div className="achievement-category-filter">
           {categoryStats.map(cat => (
@@ -130,6 +203,8 @@ export const AchievementsPage: React.FC<AchievementsPageProps> = ({ onBack }) =>
           <div className="achievement-empty-hint">
             <span>🎮 开始游戏，解锁你的第一个成就吧！</span>
           </div>
+        )}
+        </>
         )}
       </main>
     </div>
