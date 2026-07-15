@@ -205,6 +205,24 @@ export default function App() {
 
   // 更新日志、公告状态
   const [showChangelog, setShowChangelog] = useState(false);
+  // 已保存的色彩混合配方快速查看
+  const [showSavedRecipes, setShowSavedRecipes] = useState(false);
+  const [savedRecipes, setSavedRecipes] = useState<Array<{colors: string[]; result: string; rgb: string; date: string}>>([]);
+
+  // 加载已保存的混合配方
+  const loadSavedRecipes = useCallback(() => {
+    try {
+      const list = JSON.parse(localStorage.getItem('color_mixer_recipes') || '[]');
+      setSavedRecipes(list);
+    } catch (e) { setSavedRecipes([]); }
+  }, []);
+
+  // 打开配方查看弹窗
+  const openSavedRecipes = useCallback(() => {
+    loadSavedRecipes();
+    setShowSavedRecipes(true);
+    SoundEngine.click();
+  }, [loadSavedRecipes]);
   // 回放查看状态（从 URL 哈希打开）
   const [viewReplayData, setViewReplayData] = useState<ReplayData | null>(null);
   const [showViewReplay, setShowViewReplay] = useState(false);
@@ -1527,6 +1545,22 @@ export default function App() {
             </div>
           </div>
 
+          {/* 已保存混合配方快速查看入口 - 方便用户从首页直接查看配色收藏 */}
+          {(() => {
+            let recipeCount = 0;
+            try { recipeCount = JSON.parse(localStorage.getItem('color_mixer_recipes') || '[]').length; } catch (e) { /* 忽略 */ }
+            return recipeCount > 0 ? (
+              <div className="saved-recipes-entry" onClick={openSavedRecipes} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openSavedRecipes(); } }}>
+                <span className="saved-recipes-icon">📋</span>
+                <div className="saved-recipes-info">
+                  <span className="saved-recipes-title">我的混合配方</span>
+                  <span className="saved-recipes-count">已保存 {recipeCount} 个配色配方</span>
+                </div>
+                <span className="saved-recipes-arrow">→</span>
+              </div>
+            ) : null;
+          })()}
+
           {/* 快捷功能导航区 - 提升功能发现率与 SEO 内链 */}
           <div className="quick-nav-section">
             <h3>🧭 探索更多</h3>
@@ -2046,6 +2080,45 @@ export default function App() {
                     还有 {announcements.length - 1} 条公告
                   </p>
                 )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* 已保存混合配方查看弹窗 */}
+        {showSavedRecipes && (
+          <div className="tutorial-overlay" onClick={() => setShowSavedRecipes(false)}>
+            <div className="tutorial-card" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '420px' }}>
+              <h2>📋 我的混合配方</h2>
+              {savedRecipes.length === 0 ? (
+                <p className="modal-body-text-announcement">还没有保存任何配方。前往色彩百科的混合器试试吧！</p>
+              ) : (
+                <div className="saved-recipes-list">
+                  {savedRecipes.map((r, i) => (
+                    <div key={i} className="saved-recipe-item">
+                      <div className="saved-recipe-colors">
+                        {r.colors.map((c, ci) => (
+                          <span key={ci} className="saved-recipe-color-name">{c}</span>
+                        )).reduce((acc: React.ReactNode[], el, ci) => {
+                          if (ci > 0) acc.push(<span key={`plus-${ci}`} className="saved-recipe-plus">+</span>);
+                          acc.push(el);
+                          return acc;
+                        }, [])}
+                        <span className="saved-recipe-equal">=</span>
+                        <span className="saved-recipe-swatch" style={{ background: r.rgb }} />
+                      </div>
+                      <div className="saved-recipe-info">
+                        <span className="saved-recipe-result">{r.result}</span>
+                        <span className="saved-recipe-rgb">{r.rgb}</span>
+                      </div>
+                      <span className="saved-recipe-date">{r.date}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+              <div className="modal-actions-sm">
+                <button className="btn btn-primary btn-large" onClick={() => setShowSavedRecipes(false)}>关闭</button>
+                <button className="btn btn-secondary" onClick={() => { setShowSavedRecipes(false); setPage('encyclopedia'); }}>前往混合器</button>
               </div>
             </div>
           </div>
