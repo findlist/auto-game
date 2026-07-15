@@ -363,14 +363,20 @@ const ColorPairMatch: React.FC<{ onComplete?: (moves: number) => void }> = ({ on
   const PAIR_COLORS = [
     '#FF6B6B', '#4ECDC4', '#FFE66D', '#95E1A3', '#C589E8',
     '#FFA07A', '#FFB6C1', '#87CEEB', '#D4A574', '#B0B0B0',
+    '#9333EA', '#06B6D4',
   ];
   const DIFFICULTY_CONFIG = {
     easy: { pairs: 6, label: '简单', timeLimit: 60 },
     normal: { pairs: 8, label: '普通', timeLimit: 90 },
     hard: { pairs: 10, label: '困难', timeLimit: 120 },
   };
-  type Difficulty = keyof typeof DIFFICULTY_CONFIG;
+  type Difficulty = keyof typeof DIFFICULTY_CONFIG | 'custom';
   const [difficulty, setDifficulty] = useState<Difficulty>('normal');
+  const [customPairs, setCustomPairs] = useState(8);
+  // 获取当前难度对应的配对数
+  const getCurrentPairs = () => difficulty === 'custom' ? customPairs : DIFFICULTY_CONFIG[difficulty as keyof typeof DIFFICULTY_CONFIG].pairs;
+  // 获取当前难度标签
+  const getCurrentLabel = () => difficulty === 'custom' ? `自定义(${customPairs}对)` : DIFFICULTY_CONFIG[difficulty as keyof typeof DIFFICULTY_CONFIG].label;
   const [timedMode, setTimedMode] = useState(false);
   const [cards, setCards] = useState<{ color: string; flipped: boolean; matched: boolean }[]>([]);
   const [flippedIndices, setFlippedIndices] = useState<number[]>([]);
@@ -382,8 +388,8 @@ const ColorPairMatch: React.FC<{ onComplete?: (moves: number) => void }> = ({ on
   const [startTime, setStartTime] = useState(0);
 
   const initGame = useCallback((diff: Difficulty, useTimed: boolean = false) => {
-    const config = DIFFICULTY_CONFIG[diff];
-    const colors = PAIR_COLORS.slice(0, config.pairs);
+    const pairs = diff === 'custom' ? customPairs : DIFFICULTY_CONFIG[diff as keyof typeof DIFFICULTY_CONFIG].pairs;
+    const colors = PAIR_COLORS.slice(0, pairs);
     const deck = [...colors, ...colors].sort(() => Math.random() - 0.5);
     setCards(deck.map(color => ({ color, flipped: false, matched: false })));
     setFlippedIndices([]);
@@ -393,7 +399,9 @@ const ColorPairMatch: React.FC<{ onComplete?: (moves: number) => void }> = ({ on
     setElapsedTime(0);
     setStartTime(Date.now());
     if (useTimed) {
-      setTimeLeft(config.timeLimit);
+      // 自定义难度按配对数等比缩放限时
+      const baseTime = diff === 'custom' ? customPairs * 12 : DIFFICULTY_CONFIG[diff as keyof typeof DIFFICULTY_CONFIG].timeLimit;
+      setTimeLeft(baseTime);
     } else {
       setTimeLeft(0);
     }
@@ -446,7 +454,7 @@ const ColorPairMatch: React.FC<{ onComplete?: (moves: number) => void }> = ({ on
           setFlippedIndices([]);
           const newMatched = matchedPairs + 1;
           setMatchedPairs(newMatched);
-          if (newMatched >= DIFFICULTY_CONFIG[difficulty].pairs) {
+          if (newMatched >= getCurrentPairs()) {
             setGameState('finished');
             if (onComplete) onComplete(moves + 1);
           }
@@ -480,7 +488,7 @@ const ColorPairMatch: React.FC<{ onComplete?: (moves: number) => void }> = ({ on
         <div className="cpm-start">
           <p className="cpm-intro">翻开卡片找到相同颜色的配对，用最少步数完成！</p>
           <div className="cpm-difficulty-select">
-            {(Object.keys(DIFFICULTY_CONFIG) as Difficulty[]).map(d => (
+            {(Object.keys(DIFFICULTY_CONFIG) as (keyof typeof DIFFICULTY_CONFIG)[]).map(d => (
               <button
                 key={d}
                 className={`cpm-difficulty-btn ${difficulty === d ? 'cpm-difficulty-active' : ''}`}
@@ -489,7 +497,29 @@ const ColorPairMatch: React.FC<{ onComplete?: (moves: number) => void }> = ({ on
                 {DIFFICULTY_CONFIG[d].label}
               </button>
             ))}
+            <button
+              className={`cpm-difficulty-btn ${difficulty === 'custom' ? 'cpm-difficulty-active' : ''}`}
+              onClick={() => setDifficulty('custom')}
+            >
+              自定义
+            </button>
           </div>
+          {difficulty === 'custom' && (
+            <div className="cpm-custom-pairs">
+              <label className="cpm-custom-label">卡牌对数：{customPairs}对</label>
+              <input
+                type="range"
+                min={4}
+                max={12}
+                value={customPairs}
+                onChange={(e) => setCustomPairs(parseInt(e.target.value, 10))}
+                className="cpm-custom-slider"
+              />
+              <div className="cpm-custom-range-labels">
+                <span>4对</span><span>12对</span>
+              </div>
+            </div>
+          )}
           <button className="cpm-start-btn" onClick={() => initGame(difficulty)}>🚀 开始游戏</button>
           {bestScore > 0 && <p className="cpm-best">最佳记录：{bestScore} 步{bestTime > 0 ? ` · 最快 ${bestTime} 秒` : ''}</p>}
         </div>
@@ -498,8 +528,8 @@ const ColorPairMatch: React.FC<{ onComplete?: (moves: number) => void }> = ({ on
         <>
           <div className="cpm-header">
             <span className="cpm-moves">步数：{moves}</span>
-            <span className="cpm-pairs">配对：{matchedPairs}/{DIFFICULTY_CONFIG[difficulty].pairs}</span>
-            <span className="cpm-difficulty-label">{DIFFICULTY_CONFIG[difficulty].label}</span>
+            <span className="cpm-pairs">配对：{matchedPairs}/{getCurrentPairs()}</span>
+            <span className="cpm-difficulty-label">{getCurrentLabel()}</span>
           </div>
           <div className="cpm-cards">
             {cards.map((card, idx) => (
@@ -525,7 +555,7 @@ const ColorPairMatch: React.FC<{ onComplete?: (moves: number) => void }> = ({ on
             <p className="cpm-best-compare">{isNewBestTime ? '⚡ 最快用时纪录！' : bestTime > 0 ? `最快用时：${bestTime} 秒` : ''}</p>
           )}
           <div className="cpm-difficulty-select">
-            {(Object.keys(DIFFICULTY_CONFIG) as Difficulty[]).map(d => (
+            {(Object.keys(DIFFICULTY_CONFIG) as (keyof typeof DIFFICULTY_CONFIG)[]).map(d => (
               <button
                 key={d}
                 className={`cpm-difficulty-btn ${difficulty === d ? 'cpm-difficulty-active' : ''}`}
@@ -534,7 +564,29 @@ const ColorPairMatch: React.FC<{ onComplete?: (moves: number) => void }> = ({ on
                 {DIFFICULTY_CONFIG[d].label}
               </button>
             ))}
+            <button
+              className={`cpm-difficulty-btn ${difficulty === 'custom' ? 'cpm-difficulty-active' : ''}`}
+              onClick={() => setDifficulty('custom')}
+            >
+              自定义
+            </button>
           </div>
+          {difficulty === 'custom' && (
+            <div className="cpm-custom-pairs">
+              <label className="cpm-custom-label">卡牌对数：{customPairs}对</label>
+              <input
+                type="range"
+                min={4}
+                max={12}
+                value={customPairs}
+                onChange={(e) => setCustomPairs(parseInt(e.target.value, 10))}
+                className="cpm-custom-slider"
+              />
+              <div className="cpm-custom-range-labels">
+                <span>4对</span><span>12对</span>
+              </div>
+            </div>
+          )}
           <button className="cpm-restart-btn" onClick={() => initGame(difficulty)}>🔄 再来一局</button>
         </div>
       )}
