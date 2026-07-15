@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect, lazy, Suspense } from 'react';
+﻿import { useState, useCallback, useRef, useEffect, lazy, Suspense } from 'react';
 import { GameBoard } from './components/GameBoard';
 import { canPour } from './game/levelGenerator';
 import { SoundEngine } from './game/soundEngine';
@@ -21,13 +21,16 @@ import { STORAGE_KEYS } from './game/storageKeys';
 import { recordPlayedMode, getPlayedModes } from './game/playedModes';
 import { claimWeekendBonus, getWeekendBonusInfo } from './game/weekendBonus';
 import { GameSettings } from './game/settings';
-// 懒加载非首屏页面组件，减小首屏 bundle 大小
+// 懒加载非首屏页面组件,减小首屏 bundle 大小
 const AboutPage = lazy(() => import('./pages/AboutPage').then(m => ({ default: m.AboutPage })));
 const AchievementsPage = lazy(() => import('./pages/AchievementsPage').then(m => ({ default: m.AchievementsPage })));
 const StatsPage = lazy(() => import('./pages/StatsPage').then(m => ({ default: m.StatsPage })));
 const PrivacyPage = lazy(() => import('./pages/PrivacyPage').then(m => ({ default: m.PrivacyPage })));
 const SettingsPage = lazy(() => import('./pages/SettingsPage').then(m => ({ default: m.SettingsPage })));
 const LevelEditorPage = lazy(() => import('./pages/LevelEditorPage').then(m => ({ default: m.LevelEditorPage })));
+// 懒加载更新日志和FAQ组件,降低首屏 bundle 体积
+const ChangelogModal = lazy(() => import('./components/ChangelogModal'));
+const FaqList = lazy(() => import('./components/FaqList'));
 const CustomLevelPlayer = lazy(() => import('./pages/LevelEditorPage').then(m => ({ default: m.CustomLevelPlayer })));
 const ColorEncyclopediaPage = lazy(() => import('./pages/ColorEncyclopediaPage').then(m => ({ default: m.ColorEncyclopediaPage })));
 
@@ -44,10 +47,10 @@ const PageLoading = () => (
 type Page = 'home' | 'game' | 'about' | 'privacy' | 'achievements' | 'settings' | 'stats' | 'editor' | 'editor-play' | 'encyclopedia';
 
 // 限时模式配置
-const TIMED_DURATION = 120; // 限时模式时长（秒）
+const TIMED_DURATION = 120; // 限时模式时长(秒)
 const LEVELS_PER_PAGE = 20; // 关卡选择每页显示数量
 
-// 本地存储键 - 统一使用 STORAGE_KEYS 管理（src/game/storageKeys.ts）
+// 本地存储键 - 统一使用 STORAGE_KEYS 管理(src/game/storageKeys.ts)
 const STORAGE_KEY = STORAGE_KEYS.PROGRESS;
 const BEST_SCORES_KEY = STORAGE_KEYS.BEST_SCORES;
 const TUTORIAL_KEY = STORAGE_KEYS.TUTORIAL;
@@ -223,7 +226,7 @@ export default function App() {
     setShowSavedRecipes(true);
     SoundEngine.click();
   }, [loadSavedRecipes]);
-  // 回放查看状态（从 URL 哈希打开）
+  // 回放查看状态(从 URL 哈希打开)
   const [viewReplayData, setViewReplayData] = useState<ReplayData | null>(null);
   const [showViewReplay, setShowViewReplay] = useState(false);
 
@@ -246,14 +249,14 @@ export default function App() {
   const [levelSelectCollapsed, setLevelSelectCollapsed] = useState(false);
   const [faqCollapsed, setFaqCollapsed] = useState(true);
   const [difficultyFilter, setDifficultyFilter] = useState<string>('all'); // 关卡难度筛选
-  // 每日贴士手动浏览：支持点击切换上一篇/下一篇
+  // 每日贴士手动浏览:支持点击切换上一篇/下一篇
   const ALL_TIPS = getAllDailyTips();
   const [tipIndex, setTipIndex] = useState(() => {
     const todayTip = getTodayTip();
     return ALL_TIPS.findIndex(t => t.title === todayTip.title);
   });
 
-  // 内部提示功能：获取当前游戏状态
+  // 内部提示功能:获取当前游戏状态
   const currentTubesRef = useRef<Tube[] | null>(null);
 
   // 初始化时检查是否有自动存档
@@ -274,7 +277,7 @@ export default function App() {
       }
     } catch (e) { /* 忽略 */ }
 
-    // 新版本更新，显示更新日志
+    // 新版本更新,显示更新日志
     const CHANGELOG_KEY = STORAGE_KEYS.CHANGELOG_VERSION;
     const currentVersion = '1.32.0';
     try {
@@ -300,7 +303,7 @@ export default function App() {
     }
   }, []);
 
-  // 延迟检测 PWA 可安装性，页面加载3秒后
+  // 延迟检测 PWA 可安装性,页面加载3秒后
   useEffect(() => {
     const timer = setTimeout(() => {
       if (canInstallPWA() && !isPWAInstallDismissed()) {
@@ -320,7 +323,7 @@ export default function App() {
     return () => clearInterval(interval);
   }, [showPWAInstall]);
 
-  // 修复 P1：原代码在 render 阶段调用 setNewAchievements，违反 React 纯渲染原则
+  // 修复 P1:原代码在 render 阶段调用 setNewAchievements,违反 React 纯渲染原则
   // 可能导致 "Cannot update a component while rendering" 警告甚至无限重渲染
   // 改为在 useEffect 中根据 page 变化触发成就检查
   useEffect(() => {
@@ -380,7 +383,7 @@ export default function App() {
     }
   }, []);
 
-  // 提示功能：从当前游戏状态找到一对可操作试管
+  // 提示功能:从当前游戏状态找到一对可操作试管
   const handleHint = useCallback(() => {
     // 检查提示道具数量
     const currentItems = getHintItems();
@@ -430,7 +433,7 @@ export default function App() {
   }, []);
 
   const handleWin = useCallback((winMoves: number, minSteps: number, stars: number, playTimeSec: number) => {
-    // 仅普通模式（currentLevel > 0）更新通关进度和最佳成绩，避免写入 bestScores[-1/-2/-3/-4] 污染数据
+    // 仅普通模式(currentLevel > 0)更新通关进度和最佳成绩,避免写入 bestScores[-1/-2/-3/-4] 污染数据
     const newCompleted = [...progress.completedLevels];
     if (currentLevel > 0) {
       if (!newCompleted.includes(currentLevel)) {
@@ -446,7 +449,7 @@ export default function App() {
       setBestScores(loadBestScores());
     }
 
-    // 保存星级数据（周挑战不保存星级，避免写入 stars[-4]）
+    // 保存星级数据(周挑战不保存星级,避免写入 stars[-4])
     if (!isDailyMode && !isEndlessMode && !isTimedMode && !isWeeklyMode) {
       saveStars(currentLevel, stars);
       setLevelStars(loadStars());
@@ -463,11 +466,11 @@ export default function App() {
       setNewAchievements(prev => [...prev, ...newlyUnlocked]);
     }
 
-    // 记录统计：检查是否使用撒销/提示等辅助通关判定
+    // 记录统计:检查是否使用撒销/提示等辅助通关判定
     StatsTracker.recordWin(currentLevel, winMoves, stars, isDailyMode, isEndlessMode, isTimedMode, playTimeSec, usedHintThisLevel || recoveredFromDeadlock, usedHintThisLevel);
 
-    // 非胜利成就：仅普通模式胜利才累计普通连胜
-    // 修复：原条件未排除 isWeeklyMode，周挑战通关会误触发普通连胜/里程碑/探索者/色彩成就
+    // 非胜利成就:仅普通模式胜利才累计普通连胜
+    // 修复:原条件未排除 isWeeklyMode,周挑战通关会误触发普通连胜/里程碑/探索者/色彩成就
     if (!isDailyMode && !isEndlessMode && !isTimedMode && !isWeeklyMode) {
       const currentStreak = StatsTracker.get().currentStreak;
       const streakAchievements = AchievementManager.checkStreakAchievements(currentStreak);
@@ -484,7 +487,7 @@ export default function App() {
       if (explorerAchievements.length > 0) {
         setNewAchievements(prev => [...prev, ...explorerAchievements]);
       }
-      // 色彩收藏家成就（根据关卡配置推断颜色数）
+      // 色彩收藏家成就(根据关卡配置推断颜色数)
       const colorCount = currentLevel <= 3 ? 2 : currentLevel <= 6 ? 3 : currentLevel <= 12 ? 4 : currentLevel <= 20 ? 5 : currentLevel <= 30 ? 6 : currentLevel <= 50 ? 7 : currentLevel <= 70 ? 8 : currentLevel <= 90 ? 9 : 10;
       const colorAchievements = AchievementManager.checkColorMasterAchievements(colorCount);
       if (colorAchievements.length > 0) {
@@ -498,8 +501,8 @@ export default function App() {
     if (moveAchievements.length > 0) {
       setNewAchievements(prev => [...prev, ...moveAchievements]);
     }
-    // 检查速度成就（仅普通模式、步数 > 0 且用时 > 0）
-    // 修复：原条件未排除 isWeeklyMode，周挑战会误触发速度成就
+    // 检查速度成就(仅普通模式、步数 > 0 且用时 > 0)
+    // 修复:原条件未排除 isWeeklyMode,周挑战会误触发速度成就
     if (!isDailyMode && !isEndlessMode && !isTimedMode && !isWeeklyMode && playTimeSec > 0) {
       const speedAchievements = AchievementManager.checkSpeedAchievements(playTimeSec);
       if (speedAchievements.length > 0) {
@@ -543,7 +546,7 @@ export default function App() {
         setNewAchievements(prev => [...prev, ...weeklyAchievements]);
       }
     }
-    // 全能玩家成就检查：体验所有5种模式
+    // 全能玩家成就检查:体验所有5种模式
     const allRoundAchievements = AchievementManager.checkAllRoundAchievements(getPlayedModes());
     if (allRoundAchievements.length > 0) {
       setNewAchievements(prev => [...prev, ...allRoundAchievements]);
@@ -561,9 +564,9 @@ export default function App() {
     // 限时模式完成处理
     if (isTimedMode) {
       const newScore = timedScore + 1;
-      // 修复：原代码在此 setTimedScore(newScore)，timedScore 是 GameBoard 的 prop 且在其 useEffect 依赖中，
-      // timedScore 变化触发 GameBoard 重新生成关卡（setIsWon(false)），胜利弹窗 500ms 后消失
-      // 现仅更新最高分，timedScore 累加交给用户点击"下一关"时的 handleNextLevelAction
+      // 修复:原代码在此 setTimedScore(newScore),timedScore 是 GameBoard 的 prop 且在其 useEffect 依赖中,
+      // timedScore 变化触发 GameBoard 重新生成关卡(setIsWon(false)),胜利弹窗 500ms 后消失
+      // 现仅更新最高分,timedScore 累加交给用户点击"下一关"时的 handleNextLevelAction
       try {
         const current = parseInt(localStorage.getItem(TIMED_KEY) || '0', 10);
         if (newScore > current) {
@@ -579,10 +582,10 @@ export default function App() {
   }, [progress, currentLevel, usedHintThisLevel, recoveredFromDeadlock, isDailyMode, isEndlessMode, endlessScore, isTimedMode, timedScore, isWeeklyMode]);
 
   // 胜利时清除自动存档
-  // 由handleWin 内部处理，不需要在游戏页面渲染时对 onWin 回调做额外处理
+  // 由handleWin 内部处理,不需要在游戏页面渲染时对 onWin 回调做额外处理
 
 
-  // 注释: playTimeSec 不依赖步数变化，由回调参数获取
+  // 注释: playTimeSec 不依赖步数变化,由回调参数获取
 
   const handleSelectLevel = (level: number) => {
     setCurrentLevel(level);
@@ -611,7 +614,7 @@ export default function App() {
     setRecoveredFromDeadlock(false);
   };
 
-  // 返回上一关（仅普通模式可减小关卡1）
+  // 返回上一关(仅普通模式可减小关卡1)
   const handlePrevLevel = useCallback(() => {
     if (isDailyMode || isEndlessMode || isTimedMode || isWeeklyMode) return;
     setCurrentLevel(l => Math.max(1, l - 1));
@@ -633,10 +636,10 @@ export default function App() {
     try { localStorage.removeItem(AUTOSAVE_KEY); } catch (e) { /* 忽略 */ }
   };
 
-  // 确认的返回首页：防止误退出
+  // 确认的返回首页:防止误退出
   const handleGoHomeWithConfirm = () => {
     if (currentMoves > 0 && !isDailyMode && !isEndlessMode && !isTimedMode && !isWeeklyMode) {
-      if (!confirm('当前关卡进度将丢失，确认返回首页？')) return;
+      if (!confirm('当前关卡进度将丢失,确认返回首页?')) return;
       StatsTracker.breakStreak();
     }
     handleGoHome();
@@ -695,23 +698,23 @@ export default function App() {
     setRecoveredFromDeadlock(true);
   }, []);
 
-  // 下一关：每日/周挑战返回首页，无尽模式累加关，限时模式过下一关，普通模式过下一关
+  // 下一关:每日/周挑战返回首页,无尽模式累加关,限时模式过下一关,普通模式过下一关
   const handleNextLevelAction = useCallback(() => {
     if (isDailyMode || isWeeklyMode) {
-      // 每日挑战和周挑战为单局模式，通关后返回首页
-      // 修复：原代码缺少 isWeeklyMode 分支，周挑战通关后会走 else 调用 handleNextLevel，
-      // 导致 currentLevel 从 -4 递增为 -3（限时模式标识），引发状态混乱
+      // 每日挑战和周挑战为单局模式,通关后返回首页
+      // 修复:原代码缺少 isWeeklyMode 分支,周挑战通关后会走 else 调用 handleNextLevel,
+      // 导致 currentLevel 从 -4 递增为 -3(限时模式标识),引发状态混乱
       handleGoHome();
     } else if (isEndlessMode) {
-      // 无尽模式关数+1，生成下一关，难度递增
-      // 依赖 endlessScore 变化触发 GameBoard 的 useEffect 重置（无需改 level）
-      // 注意：原代码 setCurrentLevel(l => l - 1) 会把 -2 递减成 -3，误触发限时模式逻辑
+      // 无尽模式关数+1,生成下一关,难度递增
+      // 依赖 endlessScore 变化触发 GameBoard 的 useEffect 重置(无需改 level)
+      // 注意:原代码 setCurrentLevel(l => l - 1) 会把 -2 递减成 -3,误触发限时模式逻辑
       setEndlessScore(s => s + 1);
       setHintPair(null);
       setUsedHintThisLevel(false);
       setRecoveredFromDeadlock(false);
     } else if (isTimedMode) {
-      // 限时模式过下一关，依赖 timedScore 变化触发重置
+      // 限时模式过下一关,依赖 timedScore 变化触发重置
       setTimedScore(s => s + 1);
       setHintPair(null);
       setUsedHintThisLevel(false);
@@ -727,14 +730,14 @@ export default function App() {
 
   const handleShare = useCallback(async (moves: number, level: number) => {
     const text = level === -1
-      ? `🎉《色彩排序》每日挑战只用${moves}步完成，来挑战这个关卡吧！👏`
+      ? `🎉《色彩排序》每日挑战只用${moves}步完成,来挑战这个关卡吧!👏`
       : level === -2
-      ? `🎉《色彩排序》无尽模式连过${endlessScore + 1}关，来挑战吧！🔥🔥`
+      ? `🎉《色彩排序》无尽模式连过${endlessScore + 1}关,来挑战吧!🔥🔥`
       : level === -3
-      ? `🎉《色彩排序》限时模式${TIMED_DURATION}秒连过${timedScore + 1}关，来挑战吧！🔥🔥`
+      ? `🎉《色彩排序》限时模式${TIMED_DURATION}秒连过${timedScore + 1}关,来挑战吧!🔥🔥`
       : level === -4
-      ? `🎉《色彩排序》本周周挑战只用${moves}步完成，来挑战吧！🏆`
-      : `🎉《色彩排序》第${level}关只用${moves}步完成，来挑战吧！👏`
+      ? `🎉《色彩排序》本周周挑战只用${moves}步完成,来挑战吧!🏆`
+      : `🎉《色彩排序》第${level}关只用${moves}步完成,来挑战吧!👏`
     try {
       if (navigator.share) {
         await navigator.share({ title: '色彩排序', text });
@@ -744,7 +747,7 @@ export default function App() {
         setTimeout(() => setShowShareToast(false), 2000);
       }
     } catch (e) {
-      // 用户取消或分享失败，尝试备用方案
+      // 用户取消或分享失败,尝试备用方案
       try {
         await navigator.clipboard.writeText(text);
         setShowShareToast(true);
@@ -753,17 +756,17 @@ export default function App() {
     }
   }, [endlessScore, timedScore]);
 
-  // 回放分享：生成回放链接和导出视频的处理
+  // 回放分享:生成回放链接和导出视频的处理
   const handleReplayShare = useCallback(async (moveHistory: Array<{ from: number; to: number }>, level: number, stars: number, stepsUsed: number) => {
     const replayData: ReplayData = { level, moves: moveHistory, starRating: stars, stepsUsed };
-    // 修复 P0：encodeReplay 在 from/to 越界（>=36）时会抛错，需捕获降级，避免 UI 崩溃
+    // 修复 P0:encodeReplay 在 from/to 越界(>=36)时会抛错,需捕获降级,避免 UI 崩溃
     let url = '';
     let text = '';
     try {
       url = generateReplayUrl(replayData);
       text = formatReplayShareText(replayData) + `\n${url}`;
     } catch (e) {
-      // 编码失败（步骤索引越界），仅使用文案分享
+      // 编码失败(步骤索引越界),仅使用文案分享
       text = formatReplayShareText(replayData);
     }
     try {
@@ -791,7 +794,7 @@ export default function App() {
       // 先生成缩略图
       const thumb = generateReplayThumbnail({
         tubes: levelData.tubes,
-        
+
         moves: moveHistory,
         level,
         stars,
@@ -802,7 +805,7 @@ export default function App() {
       // 生成视频
       const url = await generateReplayVideo({
         tubes: levelData.tubes,
-        
+
         moves: moveHistory,
         level,
         stars,
@@ -813,7 +816,7 @@ export default function App() {
       // 视频失败时使用缩略图
       const thumb = generateReplayThumbnail({
         tubes: levelData.tubes,
-        
+
         moves: moveHistory,
         level,
         stars,
@@ -910,7 +913,7 @@ export default function App() {
           <div className="logo">🎨</div>
           <h1 className="title">色彩排序</h1>
           <p className="subtitle">经典好玩的颜色游戏</p>
-          <p className="tagline">动动手指排列颜色吧！</p>
+          <p className="tagline">动动手指排列颜色吧!</p>
         </header>
 
         <main className="home-main" id="main-content">
@@ -979,8 +982,8 @@ export default function App() {
               <span className="mode-grid-label">{progress.currentLevel > 1 ? `继续游戏` : "开始游戏"}</span>
               <span className="mode-grid-sub">{progress.currentLevel > 1 ? `第${progress.currentLevel}关` : '100关闯关'}</span>
             </button>
-            <button 
-              className={`btn mode-grid-btn ${dailyCompletedToday ? 'btn-daily-done' : 'btn-daily'}`} 
+            <button
+              className={`btn mode-grid-btn ${dailyCompletedToday ? 'btn-daily-done' : 'btn-daily'}`}
               onClick={handleDailyChallenge}
             >
               <span className="mode-grid-icon">📅</span>
@@ -1017,7 +1020,7 @@ export default function App() {
                 <div className="weekly-banner-content">
                   <span className="weekly-banner-title">{weeklyCompleted ? '本周挑战已完成' : `第${weeklyInfo.week}周挑战`}</span>
                   <span className="weekly-banner-sub">
-                    {weeklyCompleted && weeklyRecord ? `✅ ${weeklyRecord.moves}步 · ${'⭐'.repeat(weeklyRecord.stars)}` : '高难度关卡，等你来战！'}
+                    {weeklyCompleted && weeklyRecord ? `✅ ${weeklyRecord.moves}步 · ${'⭐'.repeat(weeklyRecord.stars)}` : '高难度关卡,等你来战!'}
                     {weeklyStreak.currentStreak > 0 ? ` · 🔥${weeklyStreak.currentStreak}周连续` : ''}
                   </span>
                 </div>
@@ -1039,7 +1042,7 @@ export default function App() {
               <div className="weekend-banner-content">
                 <span className="weekend-banner-title">{weekendBonusInfo.claimed ? '周末奖励已领取' : '周末免费提示道具'}</span>
                 <span className="weekend-banner-sub">
-                  {weekendBonusInfo.claimed ? '明天再来吧～' : '点击领取 1 个提示道具'}
+                  {weekendBonusInfo.claimed ? '明天再来吧~' : '点击领取 1 个提示道具'}
                   {weekendBonusInfo.totalClaimed > 0 ? ` · 累计领取${weekendBonusInfo.totalClaimed}次` : ''}
                 </span>
               </div>
@@ -1109,7 +1112,7 @@ export default function App() {
                 <div className="daily-quiz-entry-content">
                   <span className="daily-quiz-entry-label">📚 每日色彩问答 {quizStreak > 0 && <span className="quiz-streak-badge">{milestoneEmoji} 连续{quizStreak}天</span>}</span>
                   <span className="daily-quiz-entry-title">{answeredToday ? '今日已答题' : quiz.question}</span>
-                  <span className="daily-quiz-entry-sub">{answeredToday ? `累计正确 ${correctCount}/${history.length} 题${nextMilestone ? ` · 再答${nextMilestone - quizStreak}天解锁新徽章` : ''}` : '点击进入答题，每天一题涨知识！'}</span>
+                  <span className="daily-quiz-entry-sub">{answeredToday ? `累计正确 ${correctCount}/${history.length} 题${nextMilestone ? ` · 再答${nextMilestone - quizStreak}天解锁新徽章` : ''}` : '点击进入答题,每天一题涨知识!'}</span>
                 </div>
                 <span className="daily-quiz-entry-arrow">→</span>
               </div>
@@ -1123,7 +1126,7 @@ export default function App() {
               <div className="daily-banner-icon">📅</div>
               <div className="daily-banner-content">
                 <span className="daily-banner-title">今日挑战未完成</span>
-                <span className="daily-banner-sub">每天一题，等你来解！</span>
+                <span className="daily-banner-sub">每天一题,等你来解!</span>
               </div>
               <span className="daily-banner-arrow">→</span>
             </div>
@@ -1146,39 +1149,39 @@ export default function App() {
             );
           })()}
 
-          {/* 智能推荐游玩模式 — 基于历史游玩模式和时间推荐不同玩法 */}
+          {/* 智能推荐游玩模式 - 基于历史游玩模式和时间推荐不同玩法 */}
           {(() => {
             // 基于已玩游戏模式和当前状态推荐游玩内容
             const hour = new Date().getHours();
             const stats = StatsTracker.get();
-            let recommendGame = { icon: '🎨', label: '今日推荐游玩', title: '色彩百科', desc: '探索色彩知识，玩迷你游戏', target: 'encyclopedia' as Page };
+            let recommendGame = { icon: '🎨', label: '今日推荐游玩', title: '色彩百科', desc: '探索色彩知识,玩迷你游戏', target: 'encyclopedia' as Page };
             // 根据时段和游玩历史智能推荐
             if (hour >= 6 && hour < 12) {
-              // 早上：推荐每日问答或签到
+              // 早上:推荐每日问答或签到
               if (!checkinDone) {
                 recommendGame = { icon: '📅', label: '今日推荐游玩', title: '每日签到', desc: '签到领取提示道具奖励', target: 'home' as Page };
               } else {
-                recommendGame = { icon: '📚', label: '今日推荐游玩', title: '每日色彩问答', desc: '每天一题，涨色彩知识', target: 'encyclopedia' as Page };
+                recommendGame = { icon: '📚', label: '今日推荐游玩', title: '每日色彩问答', desc: '每天一题,涨色彩知识', target: 'encyclopedia' as Page };
               }
             } else if (hour >= 12 && hour < 18) {
-              // 下午：推荐闯关或无尽模式
+              // 下午:推荐闯关或无尽模式
               if (stats.totalWins < 5) {
                 recommendGame = { icon: '🎯', label: '今日推荐游玩', title: '经典闯关', desc: '挑战100关色彩排序', target: 'game' as Page };
               } else {
-                recommendGame = { icon: '∞', label: '今日推荐游玩', title: '无尽模式', desc: '难度无限递增，挑战极限', target: 'home' as Page };
+                recommendGame = { icon: '∞', label: '今日推荐游玩', title: '无尽模式', desc: '难度无限递增,挑战极限', target: 'home' as Page };
               }
             } else if (hour >= 18 && hour < 23) {
-              // 晚上：推荐百科小游戏或每日挑战
+              // 晚上:推荐百科小游戏或每日挑战
               if (!dailyCompletedToday) {
                 recommendGame = { icon: '📅', label: '今日推荐游玩', title: '每日挑战', desc: '今天还没做每日挑战哦', target: 'home' as Page };
               } else {
                 recommendGame = { icon: '🧠', label: '今日推荐游玩', title: '色彩记忆配对', desc: '翻开卡片找到相同颜色', target: 'encyclopedia' as Page };
               }
             } else {
-              // 深夜：推荐序列记忆或辨识测试
+              // 深夜:推荐序列记忆或辨识测试
               recommendGame = { icon: '🎵', label: '今日推荐游玩', title: '色彩序列记忆', desc: '安静时段适合锻炼记忆力', target: 'encyclopedia' as Page };
             }
-            // 如果推荐目标不是当前页面，则显示卡片
+            // 如果推荐目标不是当前页面,则显示卡片
             if (recommendGame.target === 'home' && recommendGame.title === '每日签到' && checkinDone) return null;
             if (recommendGame.target === 'home' && recommendGame.title === '每日挑战' && dailyCompletedToday) return null;
             return (
@@ -1384,7 +1387,7 @@ export default function App() {
                       key={lvl}
                       className={`level-btn ${diffClass} ${progress.completedLevels.includes(lvl) ? 'completed' : ''} ${lvl === progress.currentLevel ? 'current' : ''}`}
                       onClick={() => handleSelectLevel(lvl)}
-                      aria-label={`第${lvl}关${progress.completedLevels.includes(lvl) ? `，已完成，最佳${best || '?'}步，${stars}星！` : ''}`}
+                      aria-label={`第${lvl}关${progress.completedLevels.includes(lvl) ? `,已完成,最佳${best || '?'}步,${stars}星!` : ''}`}
                       title={progress.completedLevels.includes(lvl) ? `第${lvl}关 | 最佳: ${best || '?'}步 | ${'⭐'.repeat(stars) || '未评级'}` : `第${lvl}关`}
                     >
                       <span className="level-diff-dot" data-diff={diffClass} />
@@ -1424,7 +1427,7 @@ export default function App() {
 
           {/* 忽略 */}
           <div className="donate-section">
-            <p>喜欢这个游戏？</p>
+            <p>喜欢这个游戏?</p>
             <a href="#" className="donate-link" onClick={(e) => e.preventDefault()}>
               👍 支持开发者
             </a>
@@ -1437,152 +1440,9 @@ export default function App() {
               <span className={`collapse-toggle ${faqCollapsed ? 'collapsed' : ''}`}>▼</span>
             </div>
             <div className={`collapse-content ${faqCollapsed ? 'collapsed' : ''}`}>
-              <div className="faq-list">
-                <div className="faq-item">
-                  <div className="faq-question">🎨 色彩排序是什么游戏？</div>
-                  <div className="faq-answer">色彩排序是一款经典的液体排序解谜游戏，玩家需要将不同颜色的液体倒入试管中，使每种颜色归到同一个试管即可过关。游戏包含100关、每日挑战、周挑战、无尽模式和限时挑战。</div>
-                </div>
-                <div className="faq-item">
-                  <div className="faq-question">💰 色彩排序游戏免费吗？</div>
-                  <div className="faq-answer">完全免费！无需注册、无需登录，打开网页即可游玩。所有关卡和模式均免费开放。</div>
-                </div>
-                <div className="faq-item">
-                  <div className="faq-question">📱 支持手机游玩吗？</div>
-                  <div className="faq-answer">支持！色彩排序完美适配手机、平板和桌面端，移动端支持触摸操作，长按试管可撤销上一步。</div>
-                </div>
-                <div className="faq-item">
-                  <div className="faq-question">📡 可以离线游玩吗？</div>
-                  <div className="faq-answer">可以！色彩排序是PWA应用，支持离线游玩。游戏进度和成绩保存在本地，刷新不丢失。</div>
-                </div>
-                <div className="faq-item">
-                  <div className="faq-question">⭐ 星级评价怎么计算？</div>
-                  <div className="faq-answer">三星：达到或超过最优步数；二星：步数不超过最优的1.5倍；一星：超过1.5倍但通关。追求三星通关吧！</div>
-                </div>
-                <div className="faq-item">
-                  <div className="faq-question">💡 提示道具怎么获取？</div>
-                  <div className="faq-answer">每日登录自动领取1个提示道具，每日签到也可获得。提示道具上限为5个，合理使用哦！</div>
-                </div>
-                <div className="faq-item">
-                  <div className="faq-question">🎮 色彩排序有哪些游戏模式？</div>
-                  <div className="faq-answer">色彩排序包含五种模式：100关闯关模式、每天一题的每日挑战、每周一题的周挑战、难度无限递增的无尽模式、120秒极限的限时挑战模式。每种模式都有独特的乐趣！</div>
-                </div>
-                <div className="faq-item">
-                  <div className="faq-question">🏆 成就系统怎么玩？</div>
-                  <div className="faq-answer">色彩排序拥有丰富的成就系统，包含通关进度、技巧挑战、速度成就、每日签到、收集成就等多个分类。在首页点击🏆成就按钮查看所有成就和进度。</div>
-                </div>
-                <div className="faq-item">
-                  <div className="faq-question">🔧 有关卡编辑器吗？</div>
-                  <div className="faq-answer">有！色彩排序内置关卡编辑器，玩家可以自创关卡、导入和导出关卡码、验证关卡合法性。在首页点击🔧编辑器按钮即可使用。</div>
-                </div>
-                <div className="faq-item">
-                  <div className="faq-question">🏆 什么是周挑战？</div>
-                  <div className="faq-answer">周挑战是每周更新一次的高难度关卡，使用7色+3空管配置。完成周挑战可累积连胜记录，连续完成多周可解锁专属成就。每周一更新新关卡！</div>
-                </div>
-                <div className="faq-item">
-                  <div className="faq-question">🎁 周末奖励怎么领？</div>
-                  <div className="faq-answer">周六和周日登录游戏，首页会出现「周末免费提示道具」横幅，点击即可免费领取1个提示道具。每个周末只能领取一次哦！</div>
-                </div>
-                <div className="faq-item">
-                  <div className="faq-question">🧠 色彩记忆配对怎么玩？</div>
-                  <div className="faq-answer">在色彩百科页面可以找到色彩记忆配对小游戏，翻开卡片找到相同颜色的配对，用最少步数完成所有配对即可获胜，锻炼你的记忆力和色彩辨识能力！</div>
-                </div>
-                <div className="faq-item">
-                  <div className="faq-question">🎵 色彩序列记忆怎么玩？</div>
-                  <div className="faq-answer">在色彩百科页面可以找到色彩序列记忆游戏，类似 Simon Says 玩法。观察颜色亮起的顺序，然后按相同顺序点击，每过一关序列增加一个颜色，到达第5关和第10关可解锁专属成就！</div>
-                </div>
-                <div className="faq-item">
-                  <div className="faq-question">⚡ 色彩反应力测试怎么玩？</div>
-                  <div className="faq-answer">在色彩百科页面可以找到色彩反应力测试，屏幕显示颜色名称后快速点击对应色块，共8轮挑战，测试你的反应速度和色彩辨识力！</div>
-                </div>
-                <div className="faq-item">
-                  <div className="faq-question">⏱️ 配对游戏有计时模式吗？</div>
-                  <div className="faq-answer">有！色彩记忆配对游戏新增计时模式，简单60秒、普通90秒、困难120秒内完成所有配对，挑战你的记忆力和速度极限！</div>
-                </div>
-                <div className="faq-item">
-                  <div className="faq-question">👶 适合儿童游玩吗？</div>
-                  <div className="faq-answer">非常适合！色彩排序操作简单直观，能锻炼儿童的逻辑思维能力和颜色辨识能力。游戏无暴力内容、无内购，是儿童益智教育的理想选择。</div>
-                </div>
-                <div className="faq-item">
-                  <div className="faq-question">🎭 颜色混合器有什么用？</div>
-                  <div className="faq-answer">在色彩百科页面可以体验交互式颜色混合器，选择1-3种颜色实时查看混合结果，了解色彩混合原理。使用10次以上可解锁「混合大师」成就！</div>
-                </div>
-                <div className="faq-item">
-                  <div className="faq-question">🔍 百科页怎么搜索内容？</div>
-                  <div className="faq-answer">色彩百科页面顶部新增搜索框，输入关键词即可快速查找颜色知识、色彩理论和趣味问答，还提供分类导航标签一键跳转到对应板块。</div>
-                </div>
-                <div className="faq-item">
-                  <div className="faq-question">📤 每日问答可以分享吗？</div>
-                  <div className="faq-answer">可以！答题完成后点击分享按钮，可将答题结果和累计成绩生成分享文案，支持复制到剪贴板或原生分享，方便分享给朋友！</div>
-                </div>
-                <div className="faq-item">
-                  <div className="faq-question">👁 百科页有浏览记录吗？</div>
-                  <div className="faq-answer">有！色彩百科页面会自动记录你点击查看过的颜色，在颜色详解区域顶部显示「最近浏览」色块，方便快速回看。浏览5种以上颜色可解锁「百科探索者」成就！</div>
-                </div>
-                <div className="faq-item">
-                  <div className="faq-question">📚 每日问答题库有多少题？</div>
-                  <div className="faq-answer">每日色彩问答现已扩充至50题，涵盖颜色科学、色彩心理学、自然现象、历史文化等丰富知识，50天循环不重复，每天一题涨知识！</div>
-                </div>
-                <div className="faq-item">
-                  <div className="faq-question">🔥 连续答题有什么奖励？</div>
-                  <div className="faq-answer">每日问答连续答题会显示天数徽章！连续3天获得⭐，7天获得🔥，14天获得💎，30天获得🏆。坚持每天答题，解锁更高等级徽章！</div>
-                </div>
-                <div className="faq-item">
-                  <div className="faq-question">⏱️ 配对游戏怎么记录最佳用时？</div>
-                  <div className="faq-answer">色彩记忆配对游戏在非计时模式下会自动记录最佳用时！完成游戏后结算页显示用时和最快记录对比，不同难度分别记录，挑战自己的速度极限！</div>
-                </div>
-                <div className="faq-item">
-                  <div className="faq-question">🧭 首页快捷导航怎么用？</div>
-                  <div className="faq-answer">首页底部「探索更多」区域提供6个功能入口卡片，包括色彩百科、成就大厅、游戏统计、关卡编辑器、每日挑战和玩法教程，一键直达想要的功能页面！</div>
-                </div>
-                <div className="faq-item">
-                  <div className="faq-question">📊 每日问答有难度统计吗？</div>
-                  <div className="faq-answer">有！答题后结算页展示简单、中等、困难三个难度的分别正确率，帮助你了解薄弱环节。问答历史保存最近90天记录。</div>
-                </div>
-                <div className="faq-item">
-                  <div className="faq-question">💡 小贴士可以手动切换吗？</div>
-                  <div className="faq-answer">可以！首页小贴士卡片右侧有上/下箭头按钮，点击可手动浏览全部30条策略小贴士，不再只限于每天看一条。</div>
-                </div>
-                <div className="faq-item">
-                  <div className="faq-question">🏆 色彩辨识测试有最佳记录吗？</div>
-                  <div className="faq-answer">有！色彩辨识测试会自动记录历史最佳分数，结算页展示新纪录提示或历史最佳对比，激励不断提升色觉辨识能力。</div>
-                </div>
-                <div className="faq-item">
-                  <div className="faq-question">📈 每日问答可以看到答题趋势吗？</div>
-                  <div className="faq-answer">可以！答题后结算页展示最近7天的答题趋势图，每个日期显示正确或错误状态，并用颜色区分难度，直观了解近期表现。</div>
-                </div>
-                <div className="faq-item">
-                  <div className="faq-question">🎉 序列记忆游戏有关卡奖励吗？</div>
-                  <div className="faq-answer">有！序列记忆游戏在第5关、第10关、第15关达成时触发彩带庆祝动画和音效，为你的记忆里程碑喝彩！</div>
-                </div>
-                <div className="faq-item">
-                  <div className="faq-question">🔊 音效可以快捷开关吗？</div>
-                  <div className="faq-answer">可以！首页右上角有悬浮音效切换按钮，点击即可快速开启或关闭音效，无需进入设置页面。关闭音效时会同时停止背景音乐。</div>
-                </div>
-                <div className="faq-item">
-                  <div className="faq-question">💾 序列记忆进度可以保存吗？</div>
-                  <div className="faq-answer">可以！序列记忆游戏会自动保存当前进度，中途中断后下次进入时会提示恢复，从中断的关卡继续挑战。</div>
-                </div>
-                <div className="faq-item">
-                  <div className="faq-question">📋 颜色混合配方可以分享吗？</div>
-                  <div className="faq-answer">可以！在色彩混合器中选择2-3种颜色后，点击“保存配方”按钮，配方会保存到本地并自动复制分享文案到剪贴板。</div>
-                </div>
-                <div className="faq-item">
-                  <div className="faq-question">🏆 连续答题有什么特殊成就？</div>
-                  <div className="faq-answer">每日色彩问答连续答题30天可解锁「色彩智者」成就，连续100天可解锁「色彩圣贤」成就！坚持每天答题，成为色彩知识达人！</div>
-                </div>
-                <div className="faq-item">
-                  <div className="faq-question">📂 保存的配方在哪里查看？</div>
-                  <div className="faq-answer">保存混合配方后，首页会自动显示「我的混合配方」入口卡片，点击即可弹窗查看所有已保存的配色配方，包括颜色组合、结果名称和RGB值。</div>
-                </div>
-                <div className="faq-item">
-                  <div className="faq-question">📊 色彩能力档案是什么？</div>
-                  <div className="faq-answer">色彩百科页面新增色彩能力档案卡片，展示辨识测试、反应测试、序列记忆和配对游戏四项最佳成绩的对比进度条，帮助你了解色彩能力的强弱项。</div>
-                </div>
-                <div className="faq-item">
-                  <div className="faq-question">🎨 成就可以按百科游戏筛选吗？</div>
-                  <div className="faq-answer">可以！成就页面新增「百科游戏」分类筛选标签，包含色彩辨识、序列记忆、配对、反应力、混合器、问答等相关成就，每个分类显示独立解锁进度条。</div>
-                </div>
-              </div>
+              <Suspense fallback={<div style={{padding:'20px',textAlign:'center',color:'#999'}}>加载中...</div>}>
+                <FaqList />
+              </Suspense>
             </div>
           </div>
 
@@ -1719,7 +1579,7 @@ export default function App() {
           <div className="tutorial-overlay" onClick={handleTutorialClose}>
             <div className="tutorial-card" onClick={(e) => e.stopPropagation()}>
               <div className="tutorial-emoji">🎨</div>
-              <h2>欢迎来到色彩排序！</h2>
+              <h2>欢迎来到色彩排序!</h2>
               <div className="tutorial-steps">
                 <div className="tutorial-step">
                   <span className="step-icon">1️⃣</span>
@@ -1727,7 +1587,7 @@ export default function App() {
                 </div>
                 <div className="tutorial-step">
                   <span className="step-icon">2️⃣</span>
-                  <span>再点击一个试管，颜色会倒过去</span>
+                  <span>再点击一个试管,颜色会倒过去</span>
                 </div>
                 <div className="tutorial-step">
                   <span className="step-icon">3️⃣</span>
@@ -1735,11 +1595,11 @@ export default function App() {
                 </div>
                 <div className="tutorial-step">
                   <span className="step-icon">4️⃣</span>
-                  <span>把每种颜色归到一个试管就赢了！</span>
+                  <span>把每种颜色归到一个试管就赢了!</span>
                 </div>
               </div>
               <button className="btn btn-primary btn-large" onClick={handleTutorialClose}>
-                知道了，开始玩！
+                知道了,开始玩!
               </button>
             </div>
           </div>
@@ -1747,7 +1607,7 @@ export default function App() {
 
         {/* 分享成功提示 */}
         {showShareToast && (
-          <div className="share-toast">📋 战绩已复制到剪贴板！</div>
+          <div className="share-toast">📋 战绩已复制到剪贴板!</div>
         )}
 
         {/* 成就解锁通知 */}
@@ -1756,7 +1616,7 @@ export default function App() {
             <div className="achievement-notif-card">
               <div className="achievement-notif-icon">{newAchievements[0].icon}</div>
               <div className="achievement-notif-text">
-                <div className="achievement-notif-title">🏆 成就解锁！</div>
+                <div className="achievement-notif-title">🏆 成就解锁!</div>
                 <div className="achievement-notif-name">{newAchievements[0].name}</div>
                 <div className="achievement-notif-desc">{newAchievements[0].description}</div>
               </div>
@@ -1771,7 +1631,7 @@ export default function App() {
               <span className="pwa-install-icon">📱</span>
               <div className="pwa-install-text">
                 <div className="pwa-install-title">安装到桌面</div>
-                <div className="pwa-install-desc">离线也能玩，更流畅</div>
+                <div className="pwa-install-desc">离线也能玩,更流畅</div>
               </div>
               <button className="pwa-install-btn" onClick={async () => {
                 const ok = await triggerPWAInstall();
@@ -1797,7 +1657,7 @@ export default function App() {
               </div>
               <div className="help-modal-step">
                 <span className="step-icon">2️⃣</span>
-                <span>再点击一个试管，颜色会倒过去</span>
+                <span>再点击一个试管,颜色会倒过去</span>
               </div>
               <div className="help-modal-step">
                 <span className="step-icon">3️⃣</span>
@@ -1805,11 +1665,11 @@ export default function App() {
               </div>
               <div className="help-modal-step">
                 <span className="step-icon">4️⃣</span>
-                <span>把每种颜色归到一个试管就赢了！</span>
+                <span>把每种颜色归到一个试管就赢了!</span>
               </div>
               <div className="help-modal-step">
                 <span className="step-icon">⭐</span>
-                <span>关卡越后星级越高，追求三星通关！</span>
+                <span>关卡越后星级越高,追求三星通关!</span>
               </div>
               <button className="btn btn-primary help-modal-close" onClick={() => setShowHelpModal(false)}>
                 知道了
@@ -1831,258 +1691,20 @@ export default function App() {
                 连续签到 {checkinStreak} 天
               </p>
               <button className="btn btn-primary btn-large" onClick={() => setShowCheckinReward(null)}>
-                🎉 太棒了！
+                🎉 太棒了!
               </button>
             </div>
           </div>
         )}
 
-        {/* 更新日志弹窗 */}
+        {/* 更新日志弹窗 - 懒加载以降低首屏 bundle */}
         {showChangelog && (
-          <div className="tutorial-overlay" onClick={() => setShowChangelog(false)}>
-            <div className="tutorial-card" onClick={(e) => e.stopPropagation()}>
-              <div className="tutorial-emoji">📋</div>
-              <h2>色彩排序更新日志</h2>
-              <div className="changelog-content">
-                <div className="changelog-item">
-                  <h3>🎉 v1.32.0</h3>
-                  <ul>
-                    <li>🏆 每日问答连续30天/100天解锁「色彩智者」「色彩圣贤」成就</li>
-                    <li>📋 首页新增已保存混合配方快速查看入口，一键查看配色收藏</li>
-                    <li>📊 百科页新增色彩能力档案，四项小游戏成绩对比一目了然</li>
-                    <li>🎨 成就页新增百科游戏分类筛选，已解锁成就按时间排列</li>
-                  </ul>
-                </div>
-                <div className="changelog-item">
-                  <h3>🎉 v1.31.0</h3>
-                  <ul>
-                    <li>🔊 首页新增悬浮音效快捷开关按钮，一键静音无需进设置</li>
-                    <li>💾 序列记忆游戏自动保存进度，中断后可恢复继续挑战</li>
-                    <li>📋 色彩混合器新增配方保存与分享功能，支持复制和原生分享</li>
-                    <li>🧠 首页新增今日推荐游玩智能卡片，根据时段推荐不同玩法</li>
-                  </ul>
-                </div>
-                <div className="changelog-item">
-                  <h3>🎉 v1.30.0</h3>
-                  <ul>
-                    <li>🏆 色彩辨识测试记录最佳分数，结算页展示新纪录与历史最佳</li>
-                    <li>📈 每日问答新增最近7天答题趋势图，可视化正确率变化</li>
-                    <li>🎉 序列记忆游戏5/10/15关里程碑彩带庆祝效果</li>
-                    <li>🌙 暗色主题下小贴士导航、辨识测试、趋势图、里程碑样式全面适配</li>
-                  </ul>
-                </div>
-                <div className="changelog-item">
-                  <h3>🎉 v1.29.0</h3>
-                  <ul>
-                    <li>📊 每日问答结算页新增难度分级统计，展示简单/中等/困难正确率</li>
-                    <li>🏆 色彩反应力测试记录最佳分数，历史最佳对比激励进步</li>
-                    <li>🎉 百科全浏览完成触发彩带庆祝动画，增强成就感</li>
-                    <li>💡 首页小贴士支持手动切换浏览，30条贴士随时查看</li>
-                    <li>📝 SEO更新+FAQ补充4条问答+版本号同步</li>
-                  </ul>
-                </div>
-                <div className="changelog-item">
-                  <h3>🎉 v1.28.0</h3>
-                  <ul>
-                    <li>🔥 每日问答显示连续答题天数徽章，里程碑解锁新标识</li>
-                    <li>⏱️ 色彩配对游戏记录最佳用时，结算页展示耗时对比</li>
-                    <li>🧭 首页新增「探索更多」快捷导航区，一键直达各功能</li>
-                    <li>📝 FAQ 补充连续答题与配对计时相关问答</li>
-                  </ul>
-                </div>
-                <div className="changelog-item">
-                  <h3>🎉 v1.27.0</h3>
-                  <ul>
-                    <li>🏷️ 每日问答新增难度标签（简单/中等/困难）</li>
-                    <li>🎵 序列记忆游戏每个颜色配备独特音高，听音辨色</li>
-                    <li>✨ 颜色卡片展开/折叠平滑过渡动画</li>
-                    <li>📊 百科页新增「浏览进度」指示器，追踪学习进度</li>
-                    <li>🌙 暗色主题下百科页样式全面适配</li>
-                  </ul>
-                </div>
-                <div className="changelog-item">
-                  <h3>🎉 v1.26.0</h3><ul>
-                    <li>📚 每日问答题库扩充至50题，更多色彩知识等你看</li>
-                    <li>👁 百科页新增「最近浏览」记录功能，快速回看已浏览的颜色</li>
-                    <li>📝 颜色详解卡片改为点击展开，页面更整洁</li>
-                    <li>✨ 首页未答题时每日问答卡片显示脉冲提醒动画</li>
-                    <li>🏆 新增3个成就：百科探索者、答题高手、全能玩家</li>
-                  </ul>
-                </div>
-                <div className="changelog-version">
-                  <h3>🎉 v1.25.0</h3>
-                  <ul>
-                    <li>📝 首页新增每日色彩问答入口卡片，一键直达每日答题</li>
-                    <li>📤 每日问答结果分享功能，支持复制和原生分享</li>
-                    <li>🔍 百科页搜索功能，快速查找颜色知识和趣味问答</li>
-                    <li>🏷️ 百科页快速导航标签，一键跳转到对应板块</li>
-                    <li>🏆 新增2个成就：知识探索者、知识传播者</li>
-                  </ul>
-                </div>
-                <div className="changelog-version">
-                  <h3>🎉 v1.24.0</h3>
-                  <ul>
-                    <li>📅 每日色彩问答：百科页新增每日一题，30天循环，增加回访理由</li>
-                    <li>🏆 新增3个成就：色彩学徒、好学不倦、色彩学者</li>
-                    <li>🌙 暗色主题百科页样式优化：增强迷你游戏在暗色背景下的可见性</li>
-                    <li>🔍 SEO扩展：新增每日问答、色彩问答、知识问答等长尾关键词</li>
-                    <li>📝 AboutPage更新：成就数量修正为54个，新增色彩百科入口</li>
-                  </ul>
-                </div>
-                <div className="changelog-version">
-                  <h3>🎉 v1.23.0</h3>
-                  <ul>
-                    <li>⚡ 色彩反应力测试：百科页新增反应力小游戏，8轮快速辨识挑战</li>
-                    <li>⏱️ 配对计时模式：记忆配对新增限时模式，简单60秒/普通90秒/困难120秒</li>
-                    <li>🎵 序列记忆音效升级：四种颜色对应不同音高，增强听觉反馈</li>
-                    <li>🏆 新增4个成就：反应大师、反应敏捷、闪电配对、极速配对</li>
-                    <li>🔍 SEO扩展：新增反应力测试、计时配对等长尾关键词</li>
-                  </ul>
-                </div>
-                <div className="changelog-version">
-                  <h3>🎉 v1.22.0</h3>
-                  <ul>
-                    <li>🎵 色彩序列记忆：百科页新增 Simon Says 类型记忆游戏，4色序列闯关</li>
-                    <li>🧠 记忆配对难度升级：新增简单/普通/困难三档难度（6/8/10对卡片）</li>
-                    <li>🏆 新增3个成就：序列记忆者、记忆大师、配对达人</li>
-                    <li>📊 各难度独立记录最佳步数，支持难度切换</li>
-                    <li>🔍 SEO优化：新增序列记忆、Simon Says 等长尾关键词</li>
-                  </ul>
-                </div>
-                <div className="changelog-version">
-                  <h3>🎉 v1.21.0</h3>
-                  <ul>
-                    <li>🧠 色彩记忆配对：百科页新增记忆翻牌小游戏，锻炼记忆力</li>
-                    <li>🎨 颜色混合器升级：使用计数+里程碑提示+成就联动</li>
-                    <li>🏆 混合大师成就解锁：使用混合器10次自动解锁</li>
-                    <li>🌙 暗色主题适配：修复混合器在暗色主题下的对比度问题</li>
-                    <li>🔍 SEO增强：新增记忆配对、儿童益智、减压游戏等长尾词</li>
-                  </ul>
-                </div>
-                <div className="changelog-version">
-                  <h3>🎉 v1.20.0</h3>
-                  <ul>
-                    <li>🎯 色彩辨识测试：百科页面新增色觉测试小游戏，10题辨识挑战</li>
-                    <li>📊 战绩分享图片：统计页可生成战绩分享图，保存或复制分享</li>
-                    <li>🏆 新增3个成就：色彩辨识者、混合大师、数据控</li>
-                    <li>🎨 颜色混合器暗色主题适配：修复暗色主题下显示异常</li>
-                    <li>🔍 SEO优化：新增色彩辨识、色觉测试、战绩分享等关键词</li>
-                  </ul>
-                </div>
-                <div className="changelog-version">
-                  <h3>🎉 v1.19.0</h3>
-                  <ul>
-                    <li>🎨 交互式颜色混合器：在色彩百科页面混合1-3种颜色查看效果</li>
-                    <li>📅 每日色彩知识卡片：首页展示一条色彩小知识，点击进入百科</li>
-                    <li>📜 周挑战历史成绩：统计页展示最近10次周挑战记录</li>
-                    <li>🏆 新增2个成就：色彩学家、色彩百科全书</li>
-                    <li>🔍 SEO优化：新增颜色混合器、色弱模式等长尾关键词</li>
-                  </ul>
-                </div>
-                <div className="changelog-version">
-                  <h3>🎉 v1.18.0</h3>
-                  <ul>
-                    <li>🌙 暗色主题跟随系统：设置中开启后自动检测系统暗色模式切换主题</li>
-                    <li>🏷️ 颜色名称标签：色弱模式下在试管下方显示颜色文字，辅助辨识</li>
-                    <li>🎨 新增色彩知识小百科页面：10种颜色详解、色彩理论、趣味问答</li>
-                    <li>📈 关卡难度曲线优化：修复前期关卡重复问题，第4-6关更早引入3色</li>
-                    <li>📖 FAQ新增色弱玩法、色彩百科相关问答</li>
-                  </ul>
-                </div>
-                <div className="changelog-version">
-                  <h3>🎉 v1.17.0</h3>
-                  <ul>
-                    <li>🏆 新增周挑战模式：每周一题高难度关卡，7色+3空管配置，连胜记录专属成就</li>
-                    <li>🎁 周末奖励系统：周六周日登录可免费领取提示道具</li>
-                    <li>🏅 新增9个成就：周挑战系列、探索者系列、色彩收藏家系列、全能玩家</li>
-                    <li>📊 统计页新增周挑战统计模块和关卡效率分析面板</li>
-                    <li>📖 FAQ内容大幅扩充，SEO长尾关键词覆盖优化</li>
-                    <li>🔍 SEO全面优化：关键词扩展、sitemap更新、结构化数据增强</li>
-                  </ul>
-                </div>
-                <div className="changelog-version">
-                  <h3>🎉 v1.15.0</h3>
-                  <ul>
-                    <li>🔧 修复重置进度清理不完整问题：统一管理所有本地存储键名，确保数据彻底清理</li>
-                    <li>📖 帮助弹窗新增SVG可视化图示：三步图解基本玩法，新手更易上手</li>
-                    <li>⭐ 胜利结算星星弹出动画：星星逐个弹出并旋转，增强成就感</li>
-                    <li>🔄 胜利弹窗新增“再来一局”按钮：方便刷最佳记录，提升重复游玩动力</li>
-                    <li>🏆 游戏中新增个人最佳步数徽章：实时展示历史最佳记录，激发挑战欲</li>
-                  </ul>
-                </div>
-                <div className="changelog-version">
-                  <h3>🎉 v1.14.0</h3>
-                  <ul>
-                    <li>⚠️ 新增死局预警系统：当可行操作≤2时自动提示玩家注意规划路线</li>
-                    <li>📊 胜利结算页新增步数效率可视化条：直观展示与最优步数的差距</li>
-                    <li>▶️ 首页“继续上次"卡片增强：支持显示上次游玩模式（每日/无尽/限时/普通）</li>
-                    <li>🎨 关卡选择新增难度小圆点指示器，更直观展示关卡难度</li>
-                    <li>🔍 SEO优化：新增VideoGame结构化数据、扩充FAQ内容至7个问题</li>
-                  </ul>
-                </div>
-                <div className="changelog-version">
-                  <h3>🎉 v1.13.0</h3>
-                  <ul>
-                    <li>🏆 成就页大改版：新增分类筛选标签、总体进度条、分类进度条、解锁日期显示</li>
-                    <li>💡 游戏内智能上下文提示：根据当前局面分析，提供针对性策略建议</li>
-                    <li>🔥 游戏内新增连胜指示器，实时显示当前连胜次数</li>
-                    <li>🖼️ 新增品牌 OG 图片，社交分享更精美</li>
-                    <li>📝 修复统计页文字拼写错误</li>
-                  </ul>
-                </div>
-                <div className="changelog-version">
-                  <h3>🎉 v1.12.0</h3>
-                  <ul>
-                    <li>🔧 新增关卡编辑器，可自创关卡、导入/导出关卡码、验证合法性</li>
-                    <li>🎯 新增游戏内公告系统，首次进入展示欢迎公告</li>
-                    <li>🎥 新增回放视频导出功能，可将操作回放导出为 WebM 视频文件</li>
-                    <li>💻 首页新增自定关卡快速入口</li>
-                  </ul>
-                </div>
-                <div className="changelog-version">
-                  <h3>🎨 v1.12.0</h3>
-                  <ul>
-                    <li>📣 新增回放分享功能，通关后可生成回放链接，支持好友查看和导入回放</li>
-                    <li>🏆 新增8个成就：签到大师/千步行者/速度狂人/满星达人/满星大师/色彩专家/色彩王者/等等</li>
-                    <li>📄 新增版本更新日志，新版本更新后自动展示更新内容</li>
-                    <li>🎯 关卡难度自适应优化，根据玩家表现推荐合适关卡</li>
-                  </ul>
-                </div>
-                <div className="changelog-version">
-                  <h3>📊 v1.10.0</h3>
-                  <ul>
-                    <li>📊 统计页新增步数分布图、通关时间趋势图</li>
-                    <li>💻 首页新增智能推荐关卡</li>
-                    <li>✨ 加入获胜提示音效 + 粒子特效</li>
-                    <li>📢 公告系统上线展示</li>
-                  </ul>
-                </div>
-                <div className="changelog-version">
-                  <h3>📅 v1.9.0 - v1.9.1</h3>
-                  <ul>
-                    <li>📅 每日签到系统，签到可获得奖励，连续签到额外奖励</li>
-                    <li>🎵 背景音乐（Web Audio API 合成循环音乐）</li>
-                    <li>💡 提示道具系统，签到可领取提示道具，实际效果优化</li>
-                    <li>🎁 签到奖励加倍发放</li>
-                  </ul>
-                </div>
-                <div className="changelog-version">
-                  <h3>🌈 v1.8.0</h3>
-                  <ul>
-                    <li>🌈 新增2个新主题颜色排序 + 孔雀绿主题</li>
-                    <li>📊 统计页新增星级分布图、通关进度热力图</li>
-                    <li>∞ 无尽/限时模式自动存档恢复</li>
-                  </ul>
-                </div>
-              </div>
-              <button className="btn btn-primary btn-large" onClick={() => setShowChangelog(false)}>
-                知道了
-              </button>
-            </div>
-          </div>
+          <Suspense fallback={<div className="tutorial-overlay"><div className="tutorial-card"><p style={{padding:'40px',textAlign:'center'}}>加载中...</p></div></div>}>
+            <ChangelogModal onClose={() => setShowChangelog(false)} />
+          </Suspense>
         )}
 
-        {/* 回放查看弹窗（从分享链接打开） */}
+        {/* 回放查看弹窗(从分享链接打开) */}
         {showViewReplay && viewReplayData && (
           <div className="tutorial-overlay" onClick={() => { setShowViewReplay(false); setViewReplayData(null); window.location.hash = ''; }}>
             <div className="tutorial-card" onClick={(e) => e.stopPropagation()}>
@@ -2095,7 +1717,7 @@ export default function App() {
               <p className="replay-actions-hint">点击下方按钮在游戏中查看完整回放</p>
               <div className="replay-view-actions">
                 <button className="btn btn-primary" onClick={() => {
-                  // 跳转到对应关卡，自动加载回放
+                  // 跳转到对应关卡,自动加载回放
                   if (viewReplayData.level > 0) {
                     handleSelectLevel(viewReplayData.level);
                   }
@@ -2106,7 +1728,7 @@ export default function App() {
                 <button className="btn btn-secondary" onClick={() => { setShowViewReplay(false); setViewReplayData(null); window.location.hash = ''; }}>关闭</button>
               </div>
               <p className="replay-detail-moves">
-                操作序列：{viewReplayData.moves.map(m => `${m.from + 1}→${m.to + 1}`).join(', ')}
+                操作序列:{viewReplayData.moves.map(m => `${m.from + 1}→${m.to + 1}`).join(', ')}
               </p>
             </div>
           </div>
@@ -2141,7 +1763,7 @@ export default function App() {
             <div className="tutorial-card" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '420px' }}>
               <h2>📋 我的混合配方</h2>
               {savedRecipes.length === 0 ? (
-                <p className="modal-body-text-announcement">还没有保存任何配方。前往色彩百科的混合器试试吧！</p>
+                <p className="modal-body-text-announcement">还没有保存任何配方。前往色彩百科的混合器试试吧!</p>
               ) : (
                 <div className="saved-recipes-list">
                   {savedRecipes.map((r, i) => (
@@ -2262,7 +1884,7 @@ export default function App() {
               </div>
               <div className="help-modal-step">
                 <span className="step-icon">2️⃣</span>
-                <span>再点击一个试管，颜色会倒过去</span>
+                <span>再点击一个试管,颜色会倒过去</span>
               </div>
               <div className="help-modal-step">
                 <span className="step-icon">3️⃣</span>
@@ -2270,11 +1892,11 @@ export default function App() {
               </div>
               <div className="help-modal-step">
                 <span className="step-icon">4️⃣</span>
-                <span>把每种颜色归到一个试管就赢了！</span>
+                <span>把每种颜色归到一个试管就赢了!</span>
               </div>
               <div className="help-modal-step">
                 <span className="step-icon">⌨️</span>
-                <span>快捷键：数字键选管 · Z撤销 · R重置 · H提示 · PageDown下一关</span>
+                <span>快捷键:数字键选管 · Z撤销 · R重置 · H提示 · PageDown下一关</span>
               </div>
               <button className="btn btn-primary help-modal-close" onClick={() => setShowHelpModal(false)}>
                 知道了
@@ -2285,7 +1907,7 @@ export default function App() {
 
         {/* 分享成功提示 */}
         {showShareToast && (
-          <div className="share-toast">📋 战绩已复制到剪贴板！</div>
+          <div className="share-toast">📋 战绩已复制到剪贴板!</div>
         )}
 
         {/* 成就解锁通知 */}
@@ -2294,7 +1916,7 @@ export default function App() {
             <div className="achievement-notif-card">
               <div className="achievement-notif-icon">{newAchievements[0].icon}</div>
               <div className="achievement-notif-text">
-                <div className="achievement-notif-title">🏆 成就解锁！</div>
+                <div className="achievement-notif-title">🏆 成就解锁!</div>
                 <div className="achievement-notif-name">{newAchievements[0].name}</div>
                 <div className="achievement-notif-desc">{newAchievements[0].description}</div>
               </div>
@@ -2310,7 +1932,7 @@ export default function App() {
               {generatingVideo && (
                 <div className="loading-indicator">
                   <div className="loading-spinner" />
-                  <p>请稍候，正在逐帧渲染操作回放...</p>
+                  <p>请稍候,正在逐帧渲染操作回放...</p>
                 </div>
               )}
               {!generatingVideo && replayVideoUrl && (
@@ -2327,9 +1949,9 @@ export default function App() {
                       const blob = await fetch(replayVideoUrl).then(r => r.blob());
                       if (navigator.share) {
                         const file = new File([blob], 'color-sort-replay.webm', { type: 'video/webm' });
-                        await navigator.share({ files: [file], title: '色彩排序回放', text: '看看我的操作回放！' });
+                        await navigator.share({ files: [file], title: '色彩排序回放', text: '看看我的操作回放!' });
                       } else {
-                        await navigator.clipboard.writeText('回放视频已生成，请点击保存视频下载');
+                        await navigator.clipboard.writeText('回放视频已生成,请点击保存视频下载');
                         alert('请点击保存视频下载回放');
                       }
                     } catch (e) { /* 忽略 */ }
@@ -2338,7 +1960,7 @@ export default function App() {
                 </div>
               )}
               {!generatingVideo && !replayVideoUrl && replayThumbnail && (
-                <p className="video-fallback-hint">⚠️ 当前浏览器不支持视频录制，已生成回放缩略图</p>
+                <p className="video-fallback-hint">⚠️ 当前浏览器不支持视频录制,已生成回放缩略图</p>
               )}
               {!generatingVideo && !replayVideoUrl && replayThumbnail && (
                 <div className="share-image-actions">
@@ -2365,7 +1987,7 @@ export default function App() {
 
   // 统计页
   if (page === 'stats') {
-    // 成就检查已移至 useEffect（避免 render 阶段 setState）
+    // 成就检查已移至 useEffect(避免 render 阶段 setState)
     return <Suspense fallback={<PageLoading />}><StatsPage onBack={() => setPage('home')} timedHighScore={timedHighScore} /></Suspense>;
   }
 
@@ -2376,8 +1998,8 @@ export default function App() {
 
   // 关卡编辑器页
   if (page === 'editor') {
-    return <Suspense fallback={<PageLoading />}><LevelEditorPage 
-      onBack={() => setPage('home')} 
+    return <Suspense fallback={<PageLoading />}><LevelEditorPage
+      onBack={() => setPage('home')}
       customLevels={customLevels}
       onPlay={handlePlayCustomLevel}
       onDelete={handleDeleteCustomLevel}
@@ -2397,7 +2019,7 @@ export default function App() {
         </header>
         <main className="game-main">
           <Suspense fallback={<PageLoading />}>
-          <CustomLevelPlayer 
+          <CustomLevelPlayer
             level={playingCustomLevel}
             onWin={(moves: number) => {
               // 更新自定关卡的通关状态
@@ -2407,10 +2029,10 @@ export default function App() {
               setPlayingCustomLevel(updated);
             }}
             onShare={(code: string) => {
-              // 剥离端口，避免经反向代理时泄漏内部端口
+              // 剥离端口,避免经反向代理时泄漏内部端口
               const host = window.location.host.split(':')[0];
               const shareUrl = `${window.location.protocol}//${host}${window.location.pathname}#level=${code}`;
-              const text = `🏆《色彩排序》编辑器创建了关卡「${playingCustomLevel.name}」，来挑战吧！\n关卡码：${code}\n或直接打开链接：${shareUrl}`;
+              const text = `🏆《色彩排序》编辑器创建了关卡「${playingCustomLevel.name}」,来挑战吧!\n关卡码:${code}\n或直接打开链接:${shareUrl}`;
               if (navigator.share) {
                 navigator.share({ title: '色彩排序自定关卡', text });
               } else {
@@ -2425,7 +2047,7 @@ export default function App() {
           </Suspense>
         </main>
         {showShareToast && (
-          <div className="share-toast">📋 关卡码信息已复制到剪贴板！</div>
+          <div className="share-toast">📋 关卡码信息已复制到剪贴板!</div>
         )}
       </div>
     );
@@ -2438,7 +2060,7 @@ export default function App() {
 
   // 色彩百科页
   if (page === 'encyclopedia') {
-    // 色彩学家成就检查已移至 useEffect（避免 render 阶段 setState）
+    // 色彩学家成就检查已移至 useEffect(避免 render 阶段 setState)
     return <Suspense fallback={<PageLoading />}><ColorEncyclopediaPage onBack={() => setPage('home')} onTestComplete={(score: number) => {
       const testAchievements = AchievementManager.checkColorPerceptionAchievements(score);
       if (testAchievements.length > 0) {
@@ -2455,7 +2077,7 @@ export default function App() {
         setNewAchievements(prev => [...prev, ...seqAchievements]);
       }
     }} onPairMatchComplete={(moves: number) => {
-      // 配对完成时检查成就（统一检查所有难度）
+      // 配对完成时检查成就(统一检查所有难度)
       const pairAchievements = AchievementManager.checkPairMatchAchievements('hard', moves);
       if (pairAchievements.length > 0) {
         setNewAchievements(prev => [...prev, ...pairAchievements]);
@@ -2466,7 +2088,7 @@ export default function App() {
         setNewAchievements(prev => [...prev, ...reactionAchievements]);
       }
     }} onQuizComplete={(totalCompleted: number) => {
-      // 传入连续答题天数，用于检查连续答题里程碑成就
+      // 传入连续答题天数,用于检查连续答题里程碑成就
       const quizAchievements = AchievementManager.checkDailyQuizAchievements(totalCompleted, getQuizStreak());
       if (quizAchievements.length > 0) {
         setNewAchievements(prev => [...prev, ...quizAchievements]);
@@ -2494,7 +2116,7 @@ export default function App() {
         setNewAchievements(prev => [...prev, ...explorerAchievements]);
       }
     }} onGamePlayed={(gameId: string) => {
-      // 记录已玩的游戏，检查全能玩家成就
+      // 记录已玩的游戏,检查全能玩家成就
       try {
         const data = localStorage.getItem('encyclopedia_played_games');
         const played: string[] = data ? JSON.parse(data) : [];
