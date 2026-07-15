@@ -1,4 +1,4 @@
-﻿import { useState, useCallback, useRef, useEffect, lazy, Suspense } from 'react';
+import { useState, useCallback, useRef, useEffect, lazy, Suspense } from 'react';
 import { GameBoard } from './components/GameBoard';
 import { canPour } from './game/levelGenerator';
 import { SoundEngine } from './game/soundEngine';
@@ -31,6 +31,8 @@ const LevelEditorPage = lazy(() => import('./pages/LevelEditorPage').then(m => (
 // 懒加载更新日志和FAQ组件,降低首屏 bundle 体积
 const ChangelogModal = lazy(() => import('./components/ChangelogModal'));
 const FaqList = lazy(() => import('./components/FaqList'));
+// 首页弹窗（签到奖励、公告、配方查看）懒加载，降低首屏 bundle 体积
+const HomeModals = lazy(() => import('./components/HomeModals'));
 const CustomLevelPlayer = lazy(() => import('./pages/LevelEditorPage').then(m => ({ default: m.CustomLevelPlayer })));
 const ColorEncyclopediaPage = lazy(() => import('./pages/ColorEncyclopediaPage').then(m => ({ default: m.ColorEncyclopediaPage })));
 
@@ -1678,23 +1680,24 @@ export default function App() {
           </div>
         )}
 
-        {/* 签到奖励弹窗 */}
-        {showCheckinReward && (
-          <div className="tutorial-overlay" onClick={() => setShowCheckinReward(null)}>
-            <div className="tutorial-card" onClick={(e) => e.stopPropagation()}>
-              <div className="tutorial-emoji">🎁</div>
-              <h2>签到奖励已发放</h2>
-              <p className="modal-body-text-lg">
-                {showCheckinReward}
-              </p>
-              <p className="modal-hint-text">
-                连续签到 {checkinStreak} 天
-              </p>
-              <button className="btn btn-primary btn-large" onClick={() => setShowCheckinReward(null)}>
-                🎉 太棒了!
-              </button>
-            </div>
-          </div>
+        {/* 首页弹窗集合（签到奖励、公告、配方查看）— 懒加载以降低首屏 bundle */}
+        {(showCheckinReward || (showAnnouncements && announcements.length > 0) || showSavedRecipes) && (
+          <Suspense fallback={null}>
+            <HomeModals
+              checkinReward={showCheckinReward}
+              checkinStreak={checkinStreak}
+              announcements={announcements}
+              savedRecipes={savedRecipes}
+              showCheckinReward={!!showCheckinReward}
+              showAnnouncements={showAnnouncements}
+              showSavedRecipes={showSavedRecipes}
+              onCheckinRewardClose={() => setShowCheckinReward(null)}
+              onAnnouncementDismiss={handleDismissAnnouncement}
+              onAnnouncementClose={() => setShowAnnouncements(false)}
+              onSavedRecipesClose={() => setShowSavedRecipes(false)}
+              onGoToMixer={() => setPage('encyclopedia')}
+            />
+          </Suspense>
         )}
 
         {/* 更新日志弹窗 - 懒加载以降低首屏 bundle */}
@@ -1734,67 +1737,6 @@ export default function App() {
           </div>
         )}
 
-        {/* 公告弹窗 */}
-        {showAnnouncements && announcements.length > 0 && (
-          <div className="tutorial-overlay" onClick={() => setShowAnnouncements(false)}>
-            <div className="tutorial-card" onClick={(e) => e.stopPropagation()}>
-              <div className="tutorial-emoji">{announcements[0].icon}</div>
-              <h2>{announcements[0].title}</h2>
-              <p className="modal-body-text-announcement">
-                {announcements[0].content}
-              </p>
-              <div className="modal-actions-sm">
-                <button className="btn btn-primary btn-large" onClick={() => handleDismissAnnouncement(announcements[0].id)}>
-                知道了
-                </button>
-                {announcements.length > 1 && (
-                  <p className="modal-hint-text-sm">
-                    还有 {announcements.length - 1} 条公告
-                  </p>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* 已保存混合配方查看弹窗 */}
-        {showSavedRecipes && (
-          <div className="tutorial-overlay" onClick={() => setShowSavedRecipes(false)}>
-            <div className="tutorial-card" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '420px' }}>
-              <h2>📋 我的混合配方</h2>
-              {savedRecipes.length === 0 ? (
-                <p className="modal-body-text-announcement">还没有保存任何配方。前往色彩百科的混合器试试吧!</p>
-              ) : (
-                <div className="saved-recipes-list">
-                  {savedRecipes.map((r, i) => (
-                    <div key={i} className="saved-recipe-item">
-                      <div className="saved-recipe-colors">
-                        {r.colors.map((c, ci) => (
-                          <span key={ci} className="saved-recipe-color-name">{c}</span>
-                        )).reduce((acc: React.ReactNode[], el, ci) => {
-                          if (ci > 0) acc.push(<span key={`plus-${ci}`} className="saved-recipe-plus">+</span>);
-                          acc.push(el);
-                          return acc;
-                        }, [])}
-                        <span className="saved-recipe-equal">=</span>
-                        <span className="saved-recipe-swatch" style={{ background: r.rgb }} />
-                      </div>
-                      <div className="saved-recipe-info">
-                        <span className="saved-recipe-result">{r.result}</span>
-                        <span className="saved-recipe-rgb">{r.rgb}</span>
-                      </div>
-                      <span className="saved-recipe-date">{r.date}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-              <div className="modal-actions-sm">
-                <button className="btn btn-primary btn-large" onClick={() => setShowSavedRecipes(false)}>关闭</button>
-                <button className="btn btn-secondary" onClick={() => { setShowSavedRecipes(false); setPage('encyclopedia'); }}>前往混合器</button>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     );
   }
