@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { SoundEngine } from '../game/soundEngine';
-import { getTodayColorQuiz, saveDailyQuizResult, getDailyQuizHistory, getQuizStreak, getQuizDifficultyStats } from '../game/announcements';
+import { getTodayColorQuiz, saveDailyQuizResult, getDailyQuizHistory, getQuizStreak, getQuizDifficultyStats, getQuizWrongAnswers, saveQuizUserAnswer } from '../game/announcements';
 import { ParticleEffect } from '../components/ParticleEffect';
 
 interface ColorEncyclopediaPageProps {
@@ -23,6 +23,7 @@ const DailyColorQuiz: React.FC<{ onComplete?: (totalCompleted: number) => void; 
   const [showResult, setShowResult] = useState(false);
   const quiz = useState(() => getTodayColorQuiz())[0];
   const [shareToast, setShareToast] = useState('');
+  const [showWrongBook, setShowWrongBook] = useState(false);
   const [answeredToday, setAnsweredToday] = useState(() => {
     const history = getDailyQuizHistory();
     const today = new Date();
@@ -47,6 +48,10 @@ const DailyColorQuiz: React.FC<{ onComplete?: (totalCompleted: number) => void; 
       SoundEngine.error();
     }
     saveDailyQuizResult(quiz.dayIndex, correct, quiz.difficulty);
+    // 保存用户选择的答案用于错题本
+    const today = new Date();
+    const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    saveQuizUserAnswer(quiz.dayIndex, todayStr, idx);
     setAnsweredToday(true);
     const history = getDailyQuizHistory();
     const correctCount = history.filter(h => h.correct).length;
@@ -168,7 +173,57 @@ const DailyColorQuiz: React.FC<{ onComplete?: (totalCompleted: number) => void; 
               📤 分享结果
             </button>
           )}
+          {/* 错题本入口 - 仅在有答错记录时显示 */}
+          {(() => {
+            const wrongList = getQuizWrongAnswers();
+            if (wrongList.length === 0) return null;
+            return (
+              <button className="daily-quiz-wrongbook-btn" onClick={() => setShowWrongBook(true)}>
+                📖 查看错题本（{wrongList.length}题）
+              </button>
+            );
+          })()}
           {shareToast && <p className="daily-quiz-toast">{shareToast}</p>}
+          {/* 错题本弹窗 */}
+          {showWrongBook && (
+            <div className="quiz-wrongbook-overlay" onClick={() => setShowWrongBook(false)}>
+              <div className="quiz-wrongbook-modal" onClick={(e) => e.stopPropagation()}>
+                <div className="quiz-wrongbook-header">
+                  <h3>📖 色彩问答错题本</h3>
+                  <button className="quiz-wrongbook-close" onClick={() => setShowWrongBook(false)}>✕</button>
+                </div>
+                <div className="quiz-wrongbook-list">
+                  {(() => {
+                    const wrongList = getQuizWrongAnswers();
+                    if (wrongList.length === 0) {
+                      return <p className="quiz-wrongbook-empty">还没有错题记录，继续加油！</p>;
+                    }
+                    return wrongList.slice().reverse().map((w) => (
+                      <div key={`${w.dayIndex}-${w.date}`} className="quiz-wrongbook-item">
+                        <div className="quiz-wrongbook-item-header">
+                          <span className={`quiz-wrongbook-difficulty quiz-wrongbook-diff-${w.difficulty}`}>
+                            {w.difficulty === 'easy' ? '🟢 简单' : w.difficulty === 'medium' ? '🟡 中等' : '🔴 困难'}
+                          </span>
+                          <span className="quiz-wrongbook-date">{w.date.slice(5)}</span>
+                        </div>
+                        <p className="quiz-wrongbook-question">{w.question}</p>
+                        <div className="quiz-wrongbook-options">
+                          {w.options.map((opt, oi) => (
+                            <div key={oi} className={`quiz-wrongbook-option ${oi === w.correctAnswer ? 'qw-correct' : ''} ${oi === w.userAnswer && oi !== w.correctAnswer ? 'qw-wrong' : ''}`}>
+                              {opt}
+                              {oi === w.correctAnswer && ' ✅'}
+                              {oi === w.userAnswer && oi !== w.correctAnswer && ' ❌'}
+                            </div>
+                          ))}
+                        </div>
+                        <p className="quiz-wrongbook-explanation">💡 {w.explanation}</p>
+                      </div>
+                    ));
+                  })()}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
       {answeredToday && !showResult && (

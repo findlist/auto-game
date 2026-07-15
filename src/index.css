@@ -7294,6 +7294,163 @@ html[style*="1a1a2e"] .daily-quiz-difficulty-hard {
 .daily-quiz-share-btn:active {
   transform: translateY(0);
 }
+
+/* 错题本入口按钮 */
+.daily-quiz-wrongbook-btn {
+  display: block;
+  width: 100%;
+  padding: 10px 16px;
+  margin-top: 8px;
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  color: #92400e;
+  border: 1px solid #f59e0b;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.daily-quiz-wrongbook-btn:hover {
+  background: linear-gradient(135deg, #fde68a, #fcd34d);
+  transform: translateY(-1px);
+}
+.daily-quiz-wrongbook-btn:active {
+  transform: translateY(0);
+}
+
+/* 错题本弹窗 */
+.quiz-wrongbook-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.quiz-wrongbook-modal {
+  background: #fff;
+  border-radius: 14px;
+  max-width: 480px;
+  width: 100%;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+.quiz-wrongbook-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid #eee;
+}
+.quiz-wrongbook-header h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #333;
+}
+.quiz-wrongbook-close {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #999;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+.quiz-wrongbook-close:hover {
+  background: #f5f5f5;
+}
+.quiz-wrongbook-list {
+  overflow-y: auto;
+  padding: 12px 20px 20px;
+  flex: 1;
+}
+.quiz-wrongbook-empty {
+  text-align: center;
+  color: #999;
+  padding: 40px 0;
+}
+.quiz-wrongbook-item {
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+.quiz-wrongbook-item:last-child {
+  border-bottom: none;
+}
+.quiz-wrongbook-item-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+.quiz-wrongbook-difficulty {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+.quiz-wrongbook-diff-easy { background: #dcfce7; color: #166534; }
+.quiz-wrongbook-diff-medium { background: #fef3c7; color: #92400e; }
+.quiz-wrongbook-diff-hard { background: #fee2e2; color: #991b1b; }
+.quiz-wrongbook-date {
+  font-size: 12px;
+  color: #999;
+}
+.quiz-wrongbook-question {
+  font-size: 14px;
+  color: #333;
+  margin: 0 0 8px;
+  font-weight: 500;
+}
+.quiz-wrongbook-options {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+.quiz-wrongbook-option {
+  font-size: 13px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: #f9fafb;
+  color: #666;
+}
+.quiz-wrongbook-option.qw-correct {
+  background: #dcfce7;
+  color: #166534;
+  font-weight: 600;
+}
+.quiz-wrongbook-option.qw-wrong {
+  background: #fee2e2;
+  color: #991b1b;
+  text-decoration: line-through;
+}
+.quiz-wrongbook-explanation {
+  font-size: 12px;
+  color: #6b7280;
+  margin: 0;
+  padding: 8px 10px;
+  background: #f0f9ff;
+  border-radius: 6px;
+  line-height: 1.5;
+}
+/* 错题本暗色主题适配 */
+[data-theme="dark"] .quiz-wrongbook-modal { background: #1e1e1e; }
+[data-theme="dark"] .quiz-wrongbook-header { border-color: #333; }
+[data-theme="dark"] .quiz-wrongbook-header h3 { color: #eee; }
+[data-theme="dark"] .quiz-wrongbook-close { color: #888; }
+[data-theme="dark"] .quiz-wrongbook-close:hover { background: #333; }
+[data-theme="dark"] .quiz-wrongbook-item { border-color: #333; }
+[data-theme="dark"] .quiz-wrongbook-question { color: #ddd; }
+[data-theme="dark"] .quiz-wrongbook-option { background: #2a2a2a; color: #aaa; }
+[data-theme="dark"] .quiz-wrongbook-option.qw-correct { background: #14532d; color: #86efac; }
+[data-theme="dark"] .quiz-wrongbook-option.qw-wrong { background: #7f1d1d; color: #fca5a5; }
+[data-theme="dark"] .quiz-wrongbook-explanation { background: #1e3a5f; color: #93c5fd; }
+[data-theme="dark"] .daily-quiz-wrongbook-btn { background: linear-gradient(135deg, #422006, #78350f); color: #fcd34d; border-color: #92400e; }
+
 .daily-quiz-share-toast {
   text-align: center;
   font-size: 12px;
@@ -8005,5 +8162,412 @@ canvas[aria-hidden="true"] {
 @media (max-width: 480px) {
   .skill-compare-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================================ */
+/* ============ 2026-07-16 样式优化增强（第四批） ============ */
+/* ============================================================ */
+/* 本批次聚焦：胜利/死局卡片戏剧化、游戏徽章层次、关卡按钮难度光晕、
+   进度条流光、成就通知、弹窗模糊、页脚与FAQ交互、试管口精修 */
+
+/* 1. 胜利/死局遮罩：增强背景模糊，让弹窗更聚焦 */
+.win-overlay, .deadlock-overlay,
+.tutorial-overlay, .help-modal-overlay,
+.share-image-overlay, .replay-overlay {
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  background: rgba(0, 0, 0, 0.55);
+}
+
+/* 2. 胜利卡片：渐变光晕背景 + 更戏剧化的弹入动画 */
+.win-card {
+  background: linear-gradient(160deg, #ffffff 0%, #f8fbff 100%);
+  box-shadow:
+    0 12px 48px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+  animation: win-card-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  overflow: hidden;
+}
+/* 卡片顶部柔和光晕，增加庆祝氛围 */
+.win-card::before {
+  content: '';
+  position: absolute;
+  top: -60%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120%;
+  height: 60%;
+  background: radial-gradient(ellipse at center, rgba(255, 230, 109, 0.18) 0%, transparent 70%);
+  pointer-events: none;
+}
+@keyframes win-card-pop {
+  0% { transform: scale(0.6) translateY(20px); opacity: 0; }
+  60% { transform: scale(1.04) translateY(-4px); opacity: 1; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+/* 3. 胜利 emoji：旋转 + 弹跳，更有庆祝感 */
+.win-emoji {
+  animation: win-emoji-celebrate 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes win-emoji-celebrate {
+  0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+  60% { transform: scale(1.3) rotate(10deg); opacity: 1; }
+  80% { transform: scale(0.95) rotate(-5deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+
+/* 4. 星星弹出：更戏剧化的星形动画，带光晕扩散 */
+.star.star-pop {
+  filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
+}
+.star.star-filled.star-pop {
+  animation: star-burst 0.6s cubic-bezier(0.34, 1.8, 0.64, 1) both;
+}
+@keyframes star-burst {
+  0% { transform: scale(0) rotate(-90deg); opacity: 0; }
+  50% { transform: scale(1.4) rotate(15deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0); opacity: 1; }
+}
+
+/* 5. 死局卡片：黄色警告色调，与胜利卡片视觉区分 */
+.deadlock-card {
+  background: linear-gradient(160deg, #fffde7 0%, #fff8e1 100%);
+  border-top: 4px solid #ffc107;
+  animation: deadlock-card-shake 0.5s ease;
+}
+@keyframes deadlock-card-shake {
+  0% { transform: scale(0.7) translateX(0); opacity: 0; }
+  20% { transform: scale(1.02) translateX(-6px); opacity: 1; }
+  40% { transform: scale(1.02) translateX(6px); }
+  60% { transform: scale(1.02) translateX(-4px); }
+  80% { transform: scale(1.02) translateX(4px); }
+  100% { transform: scale(1) translateX(0); }
+}
+.deadlock-emoji {
+  animation: deadlock-wobble 1.2s ease-in-out infinite;
+}
+@keyframes deadlock-wobble {
+  0%, 100% { transform: rotate(0); }
+  25% { transform: rotate(-8deg); }
+  75% { transform: rotate(8deg); }
+}
+
+/* 6. 游戏信息徽章：增强视觉层次与微交互 */
+.level-badge {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 2px 6px rgba(102, 126, 234, 0.25);
+}
+.difficulty-badge {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+.moves-badge {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 3px rgba(46, 125, 50, 0.12);
+}
+/* 步数徽章脉冲时增强反馈 */
+.moves-badge.moves-pulse-active {
+  animation: moves-pulse-enhanced 0.3s ease-out;
+}
+@keyframes moves-pulse-enhanced {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.25); box-shadow: 0 0 12px rgba(78, 205, 196, 0.5); }
+  100% { transform: scale(1); }
+}
+/* 效率徽章各自带轻微光晕 */
+.efficiency-badge.eff-perfect {
+  box-shadow: 0 0 8px rgba(78, 205, 196, 0.4);
+}
+.efficiency-badge.eff-good {
+  box-shadow: 0 0 6px rgba(102, 126, 234, 0.3);
+}
+.efficiency-badge.eff-warn {
+  box-shadow: 0 0 6px rgba(255, 152, 0, 0.3);
+}
+/* 限时模式倒计时危险态增强 */
+.timer-badge.timer-danger {
+  box-shadow: 0 0 10px rgba(198, 40, 40, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* 7. 关卡按钮：hover 时显示对应难度的彩色光晕 */
+.level-btn.diff-easy:hover { box-shadow: 0 4px 14px rgba(78, 205, 196, 0.4); }
+.level-btn.diff-normal:hover { box-shadow: 0 4px 14px rgba(102, 126, 234, 0.4); }
+.level-btn.diff-medium:hover { box-shadow: 0 4px 14px rgba(255, 160, 122, 0.4); }
+.level-btn.diff-hard:hover { box-shadow: 0 4px 14px rgba(255, 107, 107, 0.4); }
+.level-btn.diff-expert:hover { box-shadow: 0 4px 14px rgba(197, 137, 232, 0.4); }
+.level-btn.diff-master:hover { box-shadow: 0 4px 14px rgba(51, 51, 51, 0.4); }
+/* 已通关按钮 hover 时增加光泽扫过 */
+.level-btn.completed {
+  position: relative;
+  overflow: hidden;
+}
+.level-btn.completed::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  transition: left 0.6s ease;
+  pointer-events: none;
+}
+.level-btn.completed:hover::after {
+  left: 150%;
+}
+
+/* 8. 通关进度条：填充部分增加流光动画 */
+.progress-bar-fill {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  position: relative;
+  overflow: hidden;
+  transition: width 0.6s cubic-bezier(0.34, 1.2, 0.64, 1);
+}
+.progress-bar-fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  animation: progress-shimmer 2.5s ease-in-out infinite;
+}
+@keyframes progress-shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+/* 难度分段进度条也增加流光 */
+.diff-progress-fill {
+  transition: width 0.6s cubic-bezier(0.34, 1.2, 0.64, 1);
+  position: relative;
+  overflow: hidden;
+}
+.diff-progress-fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: progress-shimmer 3s ease-in-out infinite;
+}
+
+/* 9. 成就解锁通知：更戏剧化的滑入 + 缩放 */
+.achievement-notification {
+  animation: achievement-slide-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes achievement-slide-in {
+  0% { transform: translateX(120%) scale(0.8); opacity: 0; }
+  60% { transform: translateX(-8%) scale(1.03); opacity: 1; }
+  100% { transform: translateX(0) scale(1); opacity: 1; }
+}
+.achievement-notif-icon {
+  animation: achievement-icon-spin 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes achievement-icon-spin {
+  0% { transform: rotate(-360deg) scale(0); }
+  100% { transform: rotate(0) scale(1); }
+}
+
+/* 10. 弹窗卡片：统一增强内阴影与圆角质感 */
+.tutorial-card, .help-modal-card {
+  box-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(255, 255, 255, 0.3) inset;
+}
+
+/* 11. 游戏控制按钮：悬停时图标轻微弹跳 */
+.game-controls .btn {
+  transition: transform 0.18s cubic-bezier(0.34, 1.3, 0.64, 1),
+              box-shadow 0.2s ease, filter 0.2s ease;
+}
+.game-controls .btn:hover:not(:disabled) {
+  transform: translateY(-3px) scale(1.04);
+}
+.game-controls .btn:active:not(:disabled) {
+  transform: translateY(0) scale(0.96);
+  transition: transform 0.06s ease;
+}
+/* 提示按钮的道具计数徽章增强 */
+.hint-count {
+  box-shadow: 0 1px 4px rgba(255, 152, 0, 0.4);
+  transition: transform 0.2s ease;
+}
+.btn-hint:hover:not(:disabled) .hint-count {
+  transform: scale(1.15);
+}
+
+/* 12. 页脚链接：悬停时下划线滑入动画 */
+.footer-link {
+  position: relative;
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+.footer-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--text-light);
+  border-radius: 1px;
+  transition: width 0.25s ease, left 0.25s ease;
+}
+.footer-link:hover {
+  opacity: 1;
+}
+.footer-link:hover::after {
+  width: 100%;
+  left: 0;
+}
+
+/* 13. FAQ 列表项：悬停时背景变化，提升可读性 */
+.faq-item {
+  transition: background 0.2s ease, padding-left 0.2s ease;
+  border-radius: 8px;
+  padding: 8px 10px;
+  margin-bottom: 4px;
+}
+.faq-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  padding-left: 14px;
+}
+.faq-question {
+  transition: color 0.2s ease;
+}
+.faq-item:hover .faq-question {
+  color: var(--text-light);
+}
+
+/* 14. 签到卡片：完成态勾选动画 + 未签到脉动引导 */
+.checkin-card-compact.checkin-done {
+  opacity: 0.85;
+}
+.checkin-btn {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s cubic-bezier(0.34, 1.3, 0.64, 1), box-shadow 0.2s ease;
+  box-shadow: 0 2px 8px rgba(255, 152, 0, 0.3);
+}
+.checkin-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 14px rgba(255, 152, 0, 0.45);
+}
+.checkin-btn:active {
+  transform: scale(0.96);
+  transition: transform 0.06s ease;
+}
+.checkin-checked {
+  animation: checkin-pop 0.4s cubic-bezier(0.34, 1.8, 0.64, 1);
+}
+@keyframes checkin-pop {
+  0% { transform: scale(0); }
+  60% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+/* 15. 难度筛选按钮：激活态更明显，带底部指示条 */
+.diff-filter-btn {
+  position: relative;
+  transition: all 0.2s ease;
+}
+.diff-filter-btn.active {
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+.diff-filter-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 20%;
+  width: 60%;
+  height: 2px;
+  background: var(--primary);
+  border-radius: 1px;
+}
+.diff-filter-btn.diff-easy.active { box-shadow: 0 2px 8px rgba(78, 205, 196, 0.4); }
+.diff-filter-btn.diff-hard.active { box-shadow: 0 2px 8px rgba(255, 107, 107, 0.4); }
+.diff-filter-btn.diff-expert.active { box-shadow: 0 2px 8px rgba(197, 137, 232, 0.4); }
+.diff-filter-btn.diff-master.active { box-shadow: 0 2px 8px rgba(51, 51, 51, 0.4); }
+
+/* 16. 试管口：增强玻璃反光精致度 */
+.tube-mouth {
+  box-shadow:
+    inset 0 2px 3px rgba(255, 255, 255, 0.3),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.08);
+}
+/* 试管口顶部高光线 */
+.tube-mouth::before {
+  content: '';
+  position: absolute;
+  top: 1px;
+  left: 4px;
+  width: 30%;
+  height: 1.5px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 1px;
+  pointer-events: none;
+}
+
+/* 17. 暗色主题适配：第四批新增项在暗色模式下保持可读性 */
+@media (prefers-color-scheme: dark) {
+  .win-card {
+    background: linear-gradient(160deg, #2a2a3e 0%, #252538 100%);
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+  }
+  .win-card::before {
+    background: radial-gradient(ellipse at center, rgba(255, 230, 109, 0.1) 0%, transparent 70%);
+  }
+  .deadlock-card {
+    background: linear-gradient(160deg, #3a3520 0%, #332f1a 100%);
+    border-top-color: #ffc107;
+  }
+  .faq-item:hover {
+    background: rgba(255, 255, 255, 0.06);
+  }
+}
+/* 显式暗色主题类适配 */
+.dark-theme .win-card {
+  background: linear-gradient(160deg, #2a2a3e 0%, #252538 100%);
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+}
+.dark-theme .deadlock-card {
+  background: linear-gradient(160deg, #3a3520 0%, #332f1a 100%);
+}
+.dark-theme .faq-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* 18. 减少动画偏好：禁用本批次新增的装饰性动画 */
+@media (prefers-reduced-motion: reduce) {
+  .win-card,
+  .win-emoji,
+  .star.star-filled.star-pop,
+  .deadlock-card,
+  .deadlock-emoji,
+  .achievement-notification,
+  .achievement-notif-icon,
+  .checkin-checked,
+  .progress-bar-fill::after,
+  .diff-progress-fill::after,
+  .level-btn.completed::after {
+    animation: none !important;
+  }
+}
+
+/* 19. 移动端触摸反馈增强：弹窗内按钮与签到按钮 */
+@media (hover: none) and (pointer: coarse) {
+  .game-controls .btn:active:not(:disabled) {
+    transform: scale(0.94);
+    filter: brightness(0.9);
+    transition: transform 0.08s ease, filter 0.08s ease;
+  }
+  .checkin-btn:active {
+    transform: scale(0.94);
+    transition: transform 0.08s ease;
+  }
+  .diff-filter-btn:active {
+    transform: scale(0.96);
+    transition: transform 0.08s ease;
+  }
+  .footer-link:active {
+    opacity: 0.7;
+    transition: opacity 0.08s ease;
   }
 }

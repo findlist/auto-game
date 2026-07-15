@@ -338,3 +338,68 @@ export function getQuizStreak(): number {
     return streak;
   } catch (e) { return 0; }
 }
+
+/**
+ * 获取每日问答错题列表
+ * 从历史记录中筛选答错的题目，关联题库返回完整信息
+ */
+export function getQuizWrongAnswers(): Array<{
+  dayIndex: number;
+  question: string;
+  options: string[];
+  correctAnswer: number;
+  explanation: string;
+  difficulty: 'easy' | 'medium' | 'hard';
+  date: string;
+  userAnswer: number;
+}> {
+  try {
+    const history = getDailyQuizHistory();
+    const wrongRecords = history.filter(h => !h.correct);
+    // 关联题库获取完整题目信息
+    return wrongRecords.map(h => {
+      const quiz = DAILY_COLOR_QUIZ[h.dayIndex];
+      if (!quiz) return null;
+      // 尝试从 localStorage 获取用户选择的答案
+      const userAnswerKey = `quiz_user_answer_${h.dayIndex}_${h.date}`;
+      const userAnswer = parseInt(localStorage.getItem(userAnswerKey) || '0', 10);
+      return {
+        dayIndex: h.dayIndex,
+        question: quiz.question,
+        options: quiz.options,
+        correctAnswer: quiz.answer,
+        explanation: quiz.explanation,
+        difficulty: quiz.difficulty,
+        date: h.date,
+        userAnswer: isNaN(userAnswer) ? -1 : userAnswer,
+      };
+    }).filter(Boolean) as Array<{
+      dayIndex: number;
+      question: string;
+      options: string[];
+      correctAnswer: number;
+      explanation: string;
+      difficulty: 'easy' | 'medium' | 'hard';
+      date: string;
+      userAnswer: number;
+    }>;
+  } catch (e) { return []; }
+}
+
+/**
+ * 保存用户答题时选择的答案（用于错题本展示）
+ */
+export function saveQuizUserAnswer(dayIndex: number, date: string, userAnswer: number): void {
+  try {
+    const key = `quiz_user_answer_${dayIndex}_${date}`;
+    localStorage.setItem(key, String(userAnswer));
+    // 只保留最近90天的用户答案记录
+    const allKeys = Object.keys(localStorage).filter(k => k.startsWith('quiz_user_answer_'));
+    if (allKeys.length > 90) {
+      // 按时间清理旧记录
+      const sorted = allKeys.sort();
+      const toRemove = sorted.slice(0, allKeys.length - 90);
+      toRemove.forEach(k => localStorage.removeItem(k));
+    }
+  } catch (e) { /* 忽略 */ }
+}
