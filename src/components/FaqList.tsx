@@ -152,6 +152,18 @@ const FaqList: React.FC = () => {
         <div className="faq-question">🎨 成就可以按百科游戏筛选吗？</div>
         <div className="faq-answer">可以！成就页面新增「百科游戏」分类筛选标签，包含色彩辨识、序列记忆、配对、反应力、混合器、问答等相关成就，每个分类显示独立解锁进度条。</div>
       </div>
+      <div className="faq-item">
+        <div className="faq-question">📖 每日问答有错题本吗？</div>
+        <div className="faq-answer">有！每日问答答错后会自动记录到错题本，点击「查看错题本」按钮可以回顾所有答错的题目、正确答案和详细解析，帮助你学习色彩知识，避免再犯同样错误。</div>
+      </div>
+      <div className="faq-item">
+        <div className="faq-question">🎚️ 配对游戏可以自定义难度吗？</div>
+        <div className="faq-answer">可以！色彩记忆配对游戏除了简单、普通、困难三档预设难度外，还新增自定义难度，通过滑块选择4到12对卡牌，自由调节挑战强度。自定义难度也会独立记录最佳成绩。</div>
+      </div>
+      <div className="faq-item">
+        <div className="faq-question">⚡ 网站加载速度快吗？</div>
+        <div className="faq-answer">色彩排序网站经过性能优化，首屏加载不到3秒，单页JS体积控制在300KB以内。更新日志和FAQ等非首屏内容采用懒加载技术，确保快速加载体验。</div>
+      </div>
     </div>
   );
 };

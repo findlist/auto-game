@@ -13,6 +13,15 @@ const ChangelogModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         <h2>色彩排序更新日志</h2>
         <div className="changelog-content">
           <div className="changelog-item">
+            <h3>🎉 v1.33.0</h3>
+            <ul>
+              <li>📖 每日问答新增错题本功能，自动记录答错的题目可随时回顾</li>
+              <li>🎚️ 配对游戏新增自定义难度，滑动选择4-12对卡牌自由调节挑战</li>
+              <li>⚡ 首屏性能优化：更新日志和FAQ提取为懒加载组件，首屏体积降至283KB</li>
+              <li>📝 SEO更新+FAQ补充3条问答+版本号同步</li>
+            </ul>
+          </div>
+          <div className="changelog-item">
             <h3>🎉 v1.32.0</h3>
             <ul>
               <li>🏆 每日问答连续30天/100天解锁「色彩智者」「色彩圣贤」成就</li>
