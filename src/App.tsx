@@ -2351,7 +2351,8 @@ export default function App() {
         setNewAchievements(prev => [...prev, ...reactionAchievements]);
       }
     }} onQuizComplete={(totalCompleted: number) => {
-      const quizAchievements = AchievementManager.checkDailyQuizAchievements(totalCompleted);
+      // 传入连续答题天数，用于检查连续答题里程碑成就
+      const quizAchievements = AchievementManager.checkDailyQuizAchievements(totalCompleted, getQuizStreak());
       if (quizAchievements.length > 0) {
         setNewAchievements(prev => [...prev, ...quizAchievements]);
       }

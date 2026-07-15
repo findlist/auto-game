@@ -354,6 +354,18 @@ export const ACHIEVEMENT_DEFS = [
     icon: '🎓',
   },
   {
+    id: 'quiz_consecutive_30',
+    name: '色彩智者',
+    description: '连续30天完成每日色彩问答',
+    icon: '🧙',
+  },
+  {
+    id: 'quiz_consecutive_100',
+    name: '色彩圣贤',
+    description: '连续100天完成每日色彩问答',
+    icon: '🌟',
+  },
+  {
     id: 'knowledge_explorer',
     name: '知识探索者',
     description: '在色彩百科中使用搜索功能',
@@ -785,8 +797,8 @@ export const AchievementManager = {
     return [];
   },
 
-  // 检查每日问答成就（传入累计完成次数）
-  checkDailyQuizAchievements(totalCompleted: number): Achievement[] {
+  // 检查每日问答成就（传入累计完成次数，可选传入连续天数）
+  checkDailyQuizAchievements(totalCompleted: number, consecutiveDays?: number): Achievement[] {
     const newlyUnlocked: Achievement[] = [];
     if (totalCompleted >= 1 && !('quiz_first' in loadState().unlocked)) {
       newlyUnlocked.push(...this.unlock('quiz_first'));
@@ -796,6 +808,15 @@ export const AchievementManager = {
     }
     if (totalCompleted >= 30 && !('quiz_streak_30' in loadState().unlocked)) {
       newlyUnlocked.push(...this.unlock('quiz_streak_30'));
+    }
+    // 连续答题成就：30天和100天里程碑，激励长期回访
+    if (consecutiveDays !== undefined) {
+      if (consecutiveDays >= 30 && !('quiz_consecutive_30' in loadState().unlocked)) {
+        newlyUnlocked.push(...this.unlock('quiz_consecutive_30'));
+      }
+      if (consecutiveDays >= 100 && !('quiz_consecutive_100' in loadState().unlocked)) {
+        newlyUnlocked.push(...this.unlock('quiz_consecutive_100'));
+      }
     }
     return newlyUnlocked;
   },
