@@ -1261,6 +1261,42 @@ const COLOR_TOPICS = [
   },
 ];
 
+/**
+ * 根据当前月份和节日动态推荐色彩专题
+ * 优先展示与当前季节/节日相关的色彩知识，增强时令感
+ */
+function getSeasonalTopic(): { icon: string; title: string; description: string; colors: string[] } | null {
+  const now = new Date();
+  const month = now.getMonth() + 1; // 1-12
+  const day = now.getDate();
+
+  // 春节/新年（1月-2月）
+  if (month === 1 || (month === 2 && day <= 20)) {
+    return { icon: '🧧', title: '新春佳节色彩', description: '春节传统色彩的文化寓意', colors: ['红色', '黄色', '橙色'] };
+  }
+  // 情人节（2月14日前后）
+  if (month === 2 && day >= 10 && day <= 18) {
+    return { icon: '💝', title: '浪漫情人节色彩', description: '粉红与紫色营造的浪漫氛围', colors: ['粉色', '紫色', '红色'] };
+  }
+  // 春季（3-5月）
+  if (month >= 3 && month <= 5) {
+    return { icon: '🌸', title: '春日色彩', description: '春天万物复苏的嫩绿与花色', colors: ['绿色', '粉色', '黄色'] };
+  }
+  // 夏季（6-8月）
+  if (month >= 6 && month <= 8) {
+    return { icon: '☀️', title: '盛夏色彩', description: '夏日的阳光、海洋与清凉', colors: ['蓝色', '青色', '黄色'] };
+  }
+  // 秋季（9-11月）
+  if (month >= 9 && month <= 11) {
+    return { icon: '🍂', title: '金秋色彩', description: '秋天的丰收与落叶色调', colors: ['橙色', '棕色', '黄色'] };
+  }
+  // 冬季/圣诞（12月）
+  if (month === 12) {
+    return { icon: '🎄', title: '冬日色彩', description: '冬日的白雪与节日红绿', colors: ['红色', '绿色', '灰色'] };
+  }
+  return null;
+}
+
 export const ColorEncyclopediaPage: React.FC<ColorEncyclopediaPageProps> = ({ onBack, onTestComplete, onMixerUse, onSequenceComplete, onPairMatchComplete, onReactionComplete, onQuizComplete, onSearch, onQuizShare, onColorView, onGamePlayed }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchAchievementTriggered, setSearchAchievementTriggered] = useState(false);
@@ -1396,6 +1432,34 @@ export const ColorEncyclopediaPage: React.FC<ColorEncyclopediaPageProps> = ({ on
         {!trimmedQuery && (
           <>
             <h3 id="section-topics">🗂️ 色彩知识专题</h3>
+            {/* 季节/节日动态推荐：根据当前时段展示应景色彩专题 */}
+            {(() => {
+              const seasonal = getSeasonalTopic();
+              if (!seasonal) return null;
+              return (
+                <div className="seasonal-topic-banner" onClick={() => {
+                  const firstColor = COLOR_KNOWLEDGE.find(c => c.name === seasonal.colors[0]);
+                  if (firstColor) {
+                    setExpandedColor(firstColor.name);
+                    recordColorView(firstColor.name);
+                    scrollToSection('section-colors');
+                  }
+                }}>
+                  <div className="seasonal-topic-badge">📅 当季推荐</div>
+                  <div className="seasonal-topic-icon">{seasonal.icon}</div>
+                  <div className="seasonal-topic-info">
+                    <h4 className="seasonal-topic-title">{seasonal.title}</h4>
+                    <p className="seasonal-topic-desc">{seasonal.description}</p>
+                    <div className="seasonal-topic-colors">
+                      {seasonal.colors.map(cn => {
+                        const c = COLOR_KNOWLEDGE.find(ck => ck.name === cn);
+                        return c ? <span key={cn} className="color-topic-chip" style={{ background: c.hex }} title={cn}>{c.emoji}</span> : null;
+                      })}
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
             <div className="color-topics-grid">
               {COLOR_TOPICS.map((topic, idx) => (
                 <div key={idx} className="color-topic-card" onClick={() => {
