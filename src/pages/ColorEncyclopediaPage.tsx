@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { SoundEngine } from '../game/soundEngine';
-import { getTodayColorQuiz, saveDailyQuizResult, getDailyQuizHistory, getQuizStreak, getQuizDifficultyStats, getQuizWrongAnswers, saveQuizUserAnswer, savePerceptionWrongAnswer, getPerceptionWrongAnswers, clearPerceptionWrongAnswers } from '../game/announcements';
+import { getTodayColorQuiz, saveDailyQuizResult, getDailyQuizHistory, getQuizStreak, getQuizDifficultyStats, getQuizWrongAnswers, saveQuizUserAnswer, savePerceptionWrongAnswer, getPerceptionWrongAnswers, clearPerceptionWrongAnswers, saveReactionWrongAnswer } from '../game/announcements';
 import { ParticleEffect } from '../components/ParticleEffect';
 
 interface ColorEncyclopediaPageProps {
@@ -952,6 +952,19 @@ const ColorReactionTest: React.FC<{ onComplete?: (score: number) => void }> = ({
     } else {
       setFeedback(`❌ 是${REACTION_COLORS[targetColor].name}色`);
       SoundEngine.error();
+      // 记录错题：保存正确颜色和用户选错的颜色信息
+      const now = new Date();
+      const dateStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+      saveReactionWrongAnswer({
+        targetName: REACTION_COLORS[targetColor].name,
+        targetHex: REACTION_COLORS[targetColor].hex,
+        userName: REACTION_COLORS[idx].name,
+        userHex: REACTION_COLORS[idx].hex,
+        round: round + 1,
+        totalRounds: TOTAL_ROUNDS,
+        date: dateStr,
+        timestamp: now.getTime(),
+      });
     }
     setTimeout(() => {
       setFeedback('');
