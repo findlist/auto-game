@@ -1571,6 +1571,17 @@ export const ColorEncyclopediaPage: React.FC<ColorEncyclopediaPageProps> = ({ on
     }
   }, [searchAchievementTriggered, onSearch]);
 
+  // 搜索关键词高亮渲染函数 — 将文本中匹配的关键词包裹在高亮 span 中
+  const highlightText = useCallback((text: string, query: string): React.ReactNode => {
+    if (!query.trim()) return text;
+    const escaped = query.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp(`(${escaped})`, 'gi');
+    const parts = text.split(regex);
+    return parts.map((part, i) =>
+      regex.test(part) ? <mark key={i} className="search-highlight">{part}</mark> : part
+    );
+  }, []);
+
   const scrollToSection = useCallback((id: string) => {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1766,17 +1777,17 @@ export const ColorEncyclopediaPage: React.FC<ColorEncyclopediaPageProps> = ({ on
                   <div className="color-encyclopedia-header" style={{ borderLeft: `4px solid ${color.hex}` }}>
                     <span className="color-encyclopedia-emoji">{color.emoji}</span>
                     <div>
-                      <h4 className="color-encyclopedia-name">{color.name}</h4>
+                      <h4 className="color-encyclopedia-name">{trimmedQuery ? highlightText(color.name, trimmedQuery) : color.name}</h4>
                       <span className="color-encyclopedia-hex">{color.hex} · {color.wavelength}</span>
                     </div>
                     <span className="card-expand-icon">▶</span>
                   </div>
-                  <div className="color-encyclopedia-keywords">{color.keywords}</div>
+                  <div className="color-encyclopedia-keywords">{trimmedQuery ? highlightText(color.keywords, trimmedQuery) : color.keywords}</div>
                   <div className="color-encyclopedia-detail">
-                    <p className="color-encyclopedia-desc">{color.description}</p>
+                    <p className="color-encyclopedia-desc">{trimmedQuery ? highlightText(color.description, trimmedQuery) : color.description}</p>
                     <div className="color-encyclopedia-tip">
                       <span className="tip-icon">💡</span>
-                      <span>{color.tips}</span>
+                      <span>{trimmedQuery ? highlightText(color.tips, trimmedQuery) : color.tips}</span>
                     </div>
                   </div>
                 </div>
@@ -1791,8 +1802,8 @@ export const ColorEncyclopediaPage: React.FC<ColorEncyclopediaPageProps> = ({ on
             <div className="color-theory-section">
               {filteredTheory.map((item, idx) => (
                 <div key={idx} className="color-theory-card">
-                  <h4>{item.title}</h4>
-                  <p>{item.content}</p>
+                  <h4>{trimmedQuery ? highlightText(item.title, trimmedQuery) : item.title}</h4>
+                  <p>{trimmedQuery ? highlightText(item.content, trimmedQuery) : item.content}</p>
                 </div>
               ))}
             </div>
@@ -1805,8 +1816,8 @@ export const ColorEncyclopediaPage: React.FC<ColorEncyclopediaPageProps> = ({ on
             <div className="color-trivia-section">
               {filteredTrivia.map((item, idx) => (
                 <div key={idx} className="color-trivia-item">
-                  <h4>Q: {item.q}</h4>
-                  <p><strong>A:</strong> {item.a}</p>
+                  <h4>Q: {trimmedQuery ? highlightText(item.q, trimmedQuery) : item.q}</h4>
+                  <p><strong>A:</strong> {trimmedQuery ? highlightText(item.a, trimmedQuery) : item.a}</p>
                 </div>
               ))}
             </div>

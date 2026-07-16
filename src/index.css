@@ -9807,3 +9807,16 @@ canvas[aria-hidden="true"] {
 .dark-theme .today-ach-next {
   color: #888;
 }
+
+/* 搜索结果关键词高亮 — 帮助用户快速定位匹配内容 */
+mark.search-highlight {
+  background: rgba(255, 235, 59, 0.4);
+  color: inherit;
+  padding: 1px 3px;
+  border-radius: 3px;
+  font-weight: 600;
+}
+.dark-theme mark.search-highlight {
+  background: rgba(255, 235, 59, 0.25);
+  color: #fff;
+}
