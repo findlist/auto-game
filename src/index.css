@@ -6100,6 +6100,27 @@ html {
   line-height: 1.5;
   opacity: 0.8;
 }
+/* 颜色数量选择器 */
+.csg-color-count-select {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: 8px 0 12px;
+  flex-wrap: wrap;
+}
+.csg-color-count-label {
+  font-size: 12px;
+  color: var(--text-light, #888);
+}
+/* 序列记忆游戏颜色按钮容器 */
+.csg-colors {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  max-width: 280px;
+  margin: 0 auto 16px;
+}
 .csg-best {
   font-size: 13px;
   color: var(--primary, #667eea);

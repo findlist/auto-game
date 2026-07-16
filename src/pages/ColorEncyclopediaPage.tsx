@@ -720,12 +720,24 @@ const ColorPairMatch: React.FC<{ onComplete?: (moves: number) => void }> = ({ on
 
 // 色彩序列记忆组件
 const ColorSequenceGame: React.FC<{ onComplete?: (level: number) => void }> = ({ onComplete }) => {
-  const COLORS = [
+  // 颜色池：8种颜色，不同模式下使用不同数量
+  const ALL_COLORS = [
     { hex: '#FF6B6B', name: '红', freq: 523.25 },   // C5
     { hex: '#4ECDC4', name: '蓝', freq: 659.25 },   // E5
     { hex: '#FFE66D', name: '黄', freq: 783.99 },   // G5
     { hex: '#95E1A3', name: '绿', freq: 1046.50 },  // C6
+    { hex: '#C589E8', name: '紫', freq: 880.00 },   // A5
+    { hex: '#FFA07A', name: '橙', freq: 698.46 },   // F5
+    { hex: '#74B9FF', name: '天', freq: 587.33 },   // D5
+    { hex: '#FF7675', name: '粉', freq: 739.99 },   // F#5
   ];
+  // 颜色数量模式：4色经典/6色进阶/8色大师
+  const COLOR_COUNT_CONFIG = {
+    4: { label: '4色经典', colors: 4 },
+    6: { label: '6色进阶', colors: 6 },
+    8: { label: '8色大师', colors: 8 },
+  };
+  type ColorCount = keyof typeof COLOR_COUNT_CONFIG;
   // 难度配置：控制颜色展示时长和间隔时长（毫秒）
   const DIFFICULTY_CONFIG = {
     easy:   { label: '慢速', showTime: 800, gapTime: 350, initialDelay: 900 },
@@ -737,6 +749,8 @@ const ColorSequenceGame: React.FC<{ onComplete?: (level: number) => void }> = ({
   const SAVE_KEY = 'color_sequence_save';
   // 难度偏好存储键
   const DIFFICULTY_KEY = 'color_sequence_difficulty';
+  // 颜色数量偏好存储键
+  const COLOR_COUNT_KEY = 'color_sequence_color_count';
   const [sequence, setSequence] = useState<number[]>([]);
   const [playerIdx, setPlayerIdx] = useState(0);
   const [gameState, setGameState] = useState<'idle' | 'showing' | 'playing' | 'finished'>('idle');
@@ -744,16 +758,22 @@ const ColorSequenceGame: React.FC<{ onComplete?: (level: number) => void }> = ({
   const [activeColor, setActiveColor] = useState<number | null>(null);
   // 里程碑庆祝效果：到达5/10/15关时触发
   const [showMilestone, setShowMilestone] = useState<string | null>(null);
+  // 颜色数量模式：从 localStorage 读取上次偏好，默认4色
+  const [colorCount, setColorCount] = useState<ColorCount>(() => {
+    try { return (parseInt(localStorage.getItem(COLOR_COUNT_KEY) || '4', 10) as ColorCount) || 4; } catch (e) { return 4; }
+  });
+  // 当前模式使用的颜色子集
+  const COLORS = ALL_COLORS.slice(0, colorCount);
   // 是否有可恢复的存档
   const [hasSave, setHasSave] = useState(false);
   // 难度选择：从 localStorage 读取上次偏好
   const [difficulty, setDifficulty] = useState<SeqDifficulty>(() => {
     try { return (localStorage.getItem(DIFFICULTY_KEY) as SeqDifficulty) || 'normal'; } catch (e) { return 'normal'; }
   });
-  const bestScore = (() => { try { return parseInt(localStorage.getItem('color_sequence_best') || '0', 10); } catch (e) { return 0; } })();
-  // 各难度最佳记录
+  const bestScore = (() => { try { return parseInt(localStorage.getItem(`color_sequence_best_${colorCount}`) || '0', 10); } catch (e) { return 0; } })();
+  // 各难度最佳记录（含颜色数量维度）
   const bestScoreByDiff = (diff: SeqDifficulty) => {
-    try { return parseInt(localStorage.getItem(`color_sequence_best_${diff}`) || '0', 10); } catch (e) { return 0; }
+    try { return parseInt(localStorage.getItem(`color_sequence_best_${diff}_${colorCount}`) || '0', 10); } catch (e) { return 0; }
   };
 
   // 检查是否有未完成的存档
@@ -781,7 +801,7 @@ const ColorSequenceGame: React.FC<{ onComplete?: (level: number) => void }> = ({
   }, [sequence, level, gameState]);
 
   const startGame = useCallback(() => {
-    const first = Math.floor(Math.random() * 4);
+    const first = Math.floor(Math.random() * COLORS.length);
     setSequence([first]);
     setLevel(1);
     setPlayerIdx(0);
@@ -789,7 +809,8 @@ const ColorSequenceGame: React.FC<{ onComplete?: (level: number) => void }> = ({
     setHasSave(false);
     // 保存难度偏好
     try { localStorage.setItem(DIFFICULTY_KEY, difficulty); } catch (e) { /* 忽略 */ }
-  }, [difficulty]);
+    try { localStorage.setItem(COLOR_COUNT_KEY, String(colorCount)); } catch (e) { /* 忽略 */ }
+  }, [difficulty, colorCount]);
 
   // 恢复存档：从中断处继续，重新展示当前序列
   const resumeGame = useCallback(() => {
@@ -848,15 +869,15 @@ const ColorSequenceGame: React.FC<{ onComplete?: (level: number) => void }> = ({
         }
         if (level >= 15) {
           setGameState('finished');
-          // 保存当前难度最佳记录
+          // 保存当前难度+颜色数量模式最佳记录
           const diffBest = bestScoreByDiff(difficulty);
           if (level > diffBest) {
-            try { localStorage.setItem(`color_sequence_best_${difficulty}`, String(level)); } catch (e) { /* 忽略 */ }
+            try { localStorage.setItem(`color_sequence_best_${difficulty}_${colorCount}`, String(level)); } catch (e) { /* 忽略 */ }
           }
           if (onComplete) onComplete(level);
           return;
         }
-        const nextColor = Math.floor(Math.random() * 4);
+        const nextColor = Math.floor(Math.random() * COLORS.length);
         const newSeq = [...sequence, nextColor];
         setSequence(newSeq);
         setLevel(l => l + 1);
@@ -867,14 +888,14 @@ const ColorSequenceGame: React.FC<{ onComplete?: (level: number) => void }> = ({
     } else {
       SoundEngine.error();
       setGameState('finished');
-      // 失败时也保存当前难度最佳记录
+      // 失败时也保存当前难度+颜色数量模式最佳记录
       const diffBest = bestScoreByDiff(difficulty);
       if (level > diffBest) {
-        try { localStorage.setItem(`color_sequence_best_${difficulty}`, String(level)); } catch (e) { /* 忽略 */ }
+        try { localStorage.setItem(`color_sequence_best_${difficulty}_${colorCount}`, String(level)); } catch (e) { /* 忽略 */ }
       }
       if (onComplete) onComplete(level);
     }
-  }, [gameState, sequence, playerIdx, level, onComplete, difficulty]);
+  }, [gameState, sequence, playerIdx, level, onComplete, difficulty, colorCount]);
 
   return (
     <div className="csg-container">
@@ -897,6 +918,19 @@ const ColorSequenceGame: React.FC<{ onComplete?: (level: number) => void }> = ({
                 onClick={() => setDifficulty(d)}
               >
                 {DIFFICULTY_CONFIG[d].label}
+              </button>
+            ))}
+          </div>
+          {/* 颜色数量模式选择：4色经典/6色进阶/8色大师 */}
+          <div className="csg-color-count-select">
+            <span className="csg-color-count-label">颜色数量：</span>
+            {(Object.keys(COLOR_COUNT_CONFIG).map(Number) as ColorCount[]).map(c => (
+              <button
+                key={c}
+                className={`cpm-difficulty-btn ${colorCount === c ? 'cpm-difficulty-active' : ''}`}
+                onClick={() => setColorCount(c)}
+              >
+                {COLOR_COUNT_CONFIG[c].label}
               </button>
             ))}
           </div>
