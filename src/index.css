@@ -92,9 +92,6 @@ body {
 
 /* 首页悬浮音效切换按钮 — 无需进入设置页即可快速静音 */
 .sound-toggle-btn {
-  position: absolute;
-  top: 16px;
-  right: 16px;
   width: 40px;
   height: 40px;
   border: none;
@@ -108,6 +105,15 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* 首页header控制按钮容器 */
+.header-controls {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  gap: 8px;
   z-index: 10;
 }
 

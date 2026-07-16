@@ -904,14 +904,28 @@ export default function App() {
       <div className="app">
         <a href="#main-content" className="sr-only">跳转到主要内容</a>
         <header className="home-header">
-          <button className="sound-toggle-btn" onClick={() => {
-            const newSound = GameSettings.toggleSound();
-            if (newSound) SoundEngine.click();
-            // 关闭音效时同时停止背景音乐
-            if (!newSound) SoundEngine.stopBGM();
-          }} aria-label={GameSettings.getSound() ? '关闭音效' : '开启音效'} title={GameSettings.getSound() ? '关闭音效' : '开启音效'}>
-            {GameSettings.getSound() ? '🔊' : '🔇'}
-          </button>
+          <div className="header-controls">
+            <button className="sound-toggle-btn" onClick={() => {
+              const newSound = GameSettings.toggleSound();
+              if (newSound) SoundEngine.click();
+              // 关闭音效时同时停止背景音乐
+              if (!newSound) SoundEngine.stopBGM();
+            }} aria-label={GameSettings.getSound() ? '关闭音效' : '开启音效'} title={GameSettings.getSound() ? '关闭音效' : '开启音效'}>
+              {GameSettings.getSound() ? '🔊' : '🔇'}
+            </button>
+            {/* BGM快捷切换 - 独立于音效开关，方便玩家随时切换背景音乐 */}
+            <button className="sound-toggle-btn bgm-toggle-btn" onClick={() => {
+              const newBgm = GameSettings.toggleBGM();
+              if (newBgm) {
+                SoundEngine.resume();
+                SoundEngine.startBGM();
+              } else {
+                SoundEngine.stopBGM();
+              }
+            }} aria-label={GameSettings.getBGM() ? '关闭背景音乐' : '开启背景音乐'} title={GameSettings.getBGM() ? '关闭背景音乐' : '开启背景音乐'}>
+              {GameSettings.getBGM() ? '🎵' : '🎵̸'}
+            </button>
+          </div>
           <div className="logo">🎨</div>
           <h1 className="title">色彩排序</h1>
           <p className="subtitle">经典好玩的颜色游戏</p>
