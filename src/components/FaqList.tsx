@@ -176,6 +176,22 @@ const FaqList: React.FC = () => {
         <div className="faq-question">📅 色彩百科有季节推荐吗？</div>
         <div className="faq-answer">有！色彩百科页面根据当前季节和节日动态推荐应景色彩专题，如春季推荐嫩绿花色、夏季推荐阳光海洋色、秋季推荐丰收落叶色、冬季推荐白雪红绿色，春节和情人节也有专属推荐。</div>
       </div>
+      <div className="faq-item">
+        <div className="faq-question">📊 每日问答有答题日历吗？</div>
+        <div className="faq-answer">有！每日问答结算页面新增30天答题日历热力图，按难度颜色区分正确（绿/橙/红）、错误和未答题日期，直观展示你的答题坚持情况和正确率趋势。</div>
+      </div>
+      <div className="faq-item">
+        <div className="faq-question">🎵 可以在首页快速开关背景音乐吗？</div>
+        <div className="faq-answer">可以！首页右上角新增BGM快捷切换按钮，独立于音效开关，方便随时开启或关闭背景音乐，无需进入设置页面。</div>
+      </div>
+      <div className="faq-item">
+        <div className="faq-question">🔥 统计页面有活跃热力图吗？</div>
+        <div className="faq-answer">有！统计页面新增30天访问活跃热力图，类似GitHub贡献图，用颜色深浅展示每天的访问频次，帮助你直观了解自己的游玩活跃度。</div>
+      </div>
+      <div className="faq-item">
+        <div className="faq-question">🏆 成就页面有目标提示吗？</div>
+        <div className="faq-answer">有！成就页面新增“最近解锁”和“下一个目标”提示卡片，展示你最近获得的成就和下一个待解锁的成就目标，激励持续挑战。</div>
+      </div>
     </div>
   );
 };
