@@ -7687,6 +7687,75 @@ html[style*="1a1a2e"] .daily-quiz-difficulty-hard {
   color: var(--text-light, #999);
   white-space: nowrap;
 }
+
+/* 每日问答30天答题日历热力图 */
+.quiz-calendar-heatmap {
+  margin-top: 12px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+}
+.quiz-calendar-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-light, #666);
+  margin-bottom: 8px;
+}
+.quiz-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(15, 1fr);
+  gap: 3px;
+  margin-bottom: 8px;
+}
+.quiz-cal-cell {
+  aspect-ratio: 1;
+  border-radius: 3px;
+  min-height: 14px;
+  min-width: 14px;
+  transition: transform 0.15s;
+  cursor: default;
+}
+.quiz-cal-cell:hover {
+  transform: scale(1.3);
+  z-index: 1;
+}
+.quiz-calendar-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 10px;
+  color: var(--text-light, #999);
+}
+.quiz-cal-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.quiz-cal-legend-box {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+/* 移动端热力图适配 */
+@media (max-width: 768px) {
+  .quiz-calendar-grid {
+    grid-template-columns: repeat(10, 1fr);
+  }
+  .quiz-cal-cell {
+    min-height: 16px;
+    min-width: 16px;
+  }
+}
+/* 暗色主题适配 */
+html[style*="1a1a2e"] .quiz-calendar-heatmap {
+  background: rgba(255, 255, 255, 0.06);
+}
+html[style*="1a1a2e"] .quiz-calendar-label,
+html[style*="1a1a2e"] .quiz-calendar-legend {
+  color: rgba(255, 255, 255, 0.7);
+}
 .daily-quiz-comeback {
   font-size: 12px;
   color: var(--text-light, #999);

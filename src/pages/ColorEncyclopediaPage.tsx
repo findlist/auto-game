@@ -168,6 +168,56 @@ const DailyColorQuiz: React.FC<{ onComplete?: (totalCompleted: number) => void; 
               </div>
             );
           })()}
+          {/* 30天答题日历热力图 - 类似GitHub贡献图，增强长期留存可视化 */}
+          {(() => {
+            const history = getDailyQuizHistory();
+            if (history.length === 0) return null;
+            // 按日期去重映射
+            const byDate: Record<string, { correct: boolean; difficulty?: string }> = {};
+            for (const h of history) {
+              byDate[h.date] = { correct: h.correct, difficulty: h.difficulty };
+            }
+            // 生成最近30天的日期列表
+            const days: Array<{ date: string; entry?: { correct: boolean; difficulty?: string } }> = [];
+            const today = new Date();
+            for (let i = 29; i >= 0; i--) {
+              const d = new Date(today);
+              d.setDate(d.getDate() - i);
+              const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+              days.push({ date: dateStr, entry: byDate[dateStr] });
+            }
+            const correctCount = days.filter(d => d.entry?.correct).length;
+            const totalAnswered = days.filter(d => d.entry).length;
+            return (
+              <div className="quiz-calendar-heatmap">
+                <span className="quiz-calendar-label">📅 近30天答题日历（{correctCount}/{totalAnswered}正确）</span>
+                <div className="quiz-calendar-grid">
+                  {days.map(d => {
+                    const hasEntry = !!d.entry;
+                    const isCorrect = d.entry?.correct;
+                    const diff = d.entry?.difficulty;
+                    const bgColor = !hasEntry ? 'var(--quiz-cal-empty, rgba(255,255,255,0.1))' : isCorrect ? (diff === 'hard' ? '#f44336' : diff === 'medium' ? '#FF9800' : '#4CAF50') : 'var(--quiz-cal-wrong, rgba(180,80,80,0.5))';
+                    const dateLabel = d.date.slice(5);
+                    return (
+                      <div
+                        key={d.date}
+                        className="quiz-cal-cell"
+                        style={{ background: bgColor }}
+                        title={`${dateLabel} ${!hasEntry ? '未答题' : isCorrect ? '✅ 正确' : '❌ 错误'}`}
+                      />
+                    );
+                  })}
+                </div>
+                <div className="quiz-calendar-legend">
+                  <span className="quiz-cal-legend-item"><span className="quiz-cal-legend-box" style={{ background: 'var(--quiz-cal-empty, rgba(255,255,255,0.1))' }} />未答</span>
+                  <span className="quiz-cal-legend-item"><span className="quiz-cal-legend-box" style={{ background: '#4CAF50' }} />简单正确</span>
+                  <span className="quiz-cal-legend-item"><span className="quiz-cal-legend-box" style={{ background: '#FF9800' }} />中等正确</span>
+                  <span className="quiz-cal-legend-item"><span className="quiz-cal-legend-box" style={{ background: '#f44336' }} />困难正确</span>
+                  <span className="quiz-cal-legend-item"><span className="quiz-cal-legend-box" style={{ background: 'var(--quiz-cal-wrong, rgba(180,80,80,0.5))' }} />答错</span>
+                </div>
+              </div>
+            );
+          })()}
           {!answeredToday && (
             <button className="daily-quiz-share-btn" onClick={handleShare}>
               📤 分享结果
