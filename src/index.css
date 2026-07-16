@@ -9706,3 +9706,104 @@ canvas[aria-hidden="true"] {
 .dark-theme .win-actions {
   border-top-color: rgba(255, 255, 255, 0.1);
 }
+
+/* 今日成就快捷入口卡片 — 首页展示成就进度与最近解锁，提升发现率 */
+.today-achievement-card {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.08), rgba(118, 75, 162, 0.08));
+  border: 1px solid rgba(102, 126, 234, 0.2);
+  border-radius: 16px;
+  padding: 16px;
+  margin: 12px 0;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.today-achievement-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+}
+.today-achievement-card:active {
+  transform: translateY(0);
+}
+.today-ach-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.today-ach-icon {
+  font-size: 28px;
+}
+.today-ach-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.today-ach-label {
+  font-size: 15px;
+  font-weight: 700;
+  color: #333;
+}
+.today-ach-progress {
+  font-size: 13px;
+  color: #888;
+}
+.today-ach-bar {
+  width: 100%;
+  height: 8px;
+  background: rgba(102, 126, 234, 0.12);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.today-ach-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+.today-ach-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.today-ach-recent {
+  font-size: 13px;
+  color: #555;
+}
+.today-ach-next {
+  font-size: 12px;
+  color: #999;
+}
+/* 移动端适配 */
+@media (max-width: 480px) {
+  .today-achievement-card {
+    padding: 12px;
+    margin: 10px 0;
+  }
+  .today-ach-icon {
+    font-size: 24px;
+  }
+  .today-ach-label {
+    font-size: 14px;
+  }
+}
+/* 暗色主题适配 */
+.dark-theme .today-achievement-card {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.12), rgba(118, 75, 162, 0.12));
+  border-color: rgba(102, 126, 234, 0.3);
+}
+.dark-theme .today-ach-label {
+  color: #e0e0e0;
+}
+.dark-theme .today-ach-progress {
+  color: #aaa;
+}
+.dark-theme .today-ach-bar {
+  background: rgba(255, 255, 255, 0.08);
+}
+.dark-theme .today-ach-recent {
+  color: #ccc;
+}
+.dark-theme .today-ach-next {
+  color: #888;
+}

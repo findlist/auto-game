@@ -1498,6 +1498,46 @@ export default function App() {
             ) : null;
           })()}
 
+          {/* 今日成就快捷入口 — 展示成就进度与最近解锁，提升成就发现率 */}
+          {(() => {
+            const allAchievements = AchievementManager.getAll();
+            const unlockedCount = allAchievements.filter(a => a.unlocked).length;
+            const totalCount = allAchievements.length;
+            const pct = totalCount > 0 ? Math.round(unlockedCount / totalCount * 100) : 0;
+            // 找最近解锁的成就
+            const unlockedSorted = allAchievements
+              .filter(a => a.unlocked && a.unlockedAt)
+              .sort((a, b) => (b.unlockedAt || 0) - (a.unlockedAt || 0));
+            const recent = unlockedSorted[0];
+            // 找下一个未解锁成就
+            const nextTarget = allAchievements.find(a => !a.unlocked);
+            return (
+              <div className="today-achievement-card" onClick={() => setPage('achievements')} role="button" tabIndex={0}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setPage('achievements'); } }}>
+                <div className="today-ach-header">
+                  <span className="today-ach-icon">🏆</span>
+                  <div className="today-ach-info">
+                    <span className="today-ach-label">今日成就</span>
+                    <span className="today-ach-progress">{unlockedCount}/{totalCount} 已解锁 · {pct}%</span>
+                  </div>
+                </div>
+                <div className="today-ach-bar">
+                  <div className="today-ach-bar-fill" style={{ width: `${pct}%` }} />
+                </div>
+                <div className="today-ach-detail">
+                  {recent ? (
+                    <span className="today-ach-recent">最近解锁: {recent.icon} {recent.name}</span>
+                  ) : (
+                    <span className="today-ach-recent">开始游戏解锁你的第一个成就!</span>
+                  )}
+                  {nextTarget && (
+                    <span className="today-ach-next">下一个目标: {nextTarget.icon} {nextTarget.name}</span>
+                  )}
+                </div>
+              </div>
+            );
+          })()}
+
           {/* 快捷功能导航区 - 提升功能发现率与 SEO 内链 */}
           <div className="quick-nav-section">
             <h3>🧭 探索更多</h3>
@@ -1510,7 +1550,7 @@ export default function App() {
               <button className="quick-nav-card" onClick={() => setPage('achievements')}>
                 <span className="quick-nav-icon">🏆</span>
                 <span className="quick-nav-label">成就大厅</span>
-                <span className="quick-nav-desc">61个成就等你解锁</span>
+                <span className="quick-nav-desc">64个成就等你解锁</span>
               </button>
               <button className="quick-nav-card" onClick={() => setPage('stats')}>
                 <span className="quick-nav-icon">📊</span>
