@@ -87,6 +87,45 @@ export const AchievementsPage: React.FC<AchievementsPageProps> = ({ onBack }) =>
           </div>
         </div>
 
+        {/* 最近解锁与即将达成提示卡片 */}
+        <div className="achievement-hint-cards">
+          {/* 最近解锁的成就 */}
+          {timelineAchievements.length > 0 && (
+            <div className="ach-hint-card ach-hint-recent" onClick={() => setViewMode('timeline')}>
+              <span className="ach-hint-icon">{timelineAchievements[0].icon}</span>
+              <div className="ach-hint-info">
+                <span className="ach-hint-label">最近解锁</span>
+                <span className="ach-hint-name">{timelineAchievements[0].name}</span>
+                <span className="ach-hint-time">{new Date(timelineAchievements[0].unlockedAt!).toLocaleDateString('zh-CN')}</span>
+              </div>
+            </div>
+          )}
+          {/* 下一个待解锁成就 - 选择未解锁中离解锁最近的 */}
+          {(() => {
+            const locked = achievements.filter(a => !a.unlocked);
+            if (locked.length === 0) return (
+              <div className="ach-hint-card ach-hint-complete">
+                <span className="ach-hint-icon">👑</span>
+                <div className="ach-hint-info">
+                  <span className="ach-hint-label">全部达成</span>
+                  <span className="ach-hint-name">恭喜！所有成就已解锁</span>
+                </div>
+              </div>
+            );
+            // 随机展示一个未解锁成就作为目标提示
+            const nextTarget = locked[0];
+            return (
+              <div className="ach-hint-card ach-hint-next">
+                <span className="ach-hint-icon">🔒</span>
+                <div className="ach-hint-info">
+                  <span className="ach-hint-label">下一个目标</span>
+                  <span className="ach-hint-name">{nextTarget.name}</span>
+                  <span className="ach-hint-time">{nextTarget.description}</span>
+                </div>
+              </div>
+            );
+          })()}
+        </div>
         {/* 视图切换按钮 */}
         <div className="achievement-view-toggle">
           <button 

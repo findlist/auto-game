@@ -2468,6 +2468,90 @@ html[style*="1a1a2e"] .encyclopedia-progress-track {
   transition: width 0.5s ease;
 }
 
+/* 成就提示卡片：最近解锁 + 下一个目标 */
+.achievement-hint-cards {
+  display: flex;
+  gap: 10px;
+  margin: 12px 0;
+}
+.ach-hint-card {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.ach-hint-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.ach-hint-recent {
+  background: linear-gradient(135deg, rgba(78,205,196,0.12), rgba(255,215,0,0.08));
+  border: 1px solid rgba(78,205,196,0.3);
+}
+.ach-hint-next {
+  background: linear-gradient(135deg, rgba(102,126,234,0.12), rgba(118,75,162,0.08));
+  border: 1px solid rgba(102,126,234,0.3);
+}
+.ach-hint-complete {
+  background: linear-gradient(135deg, rgba(255,215,0,0.15), rgba(255,107,107,0.08));
+  border: 1px solid rgba(255,215,0,0.3);
+}
+.ach-hint-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+}
+.ach-hint-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.ach-hint-label {
+  font-size: 11px;
+  color: var(--text-light, #999);
+  font-weight: 600;
+}
+.ach-hint-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text, #333);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ach-hint-time {
+  font-size: 11px;
+  color: var(--text-light, #999);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media (max-width: 480px) {
+  .achievement-hint-cards {
+    flex-direction: column;
+  }
+}
+/* 暗色主题适配 */
+html[style*="1a1a2e"] .ach-hint-recent {
+  background: linear-gradient(135deg, rgba(78,205,196,0.1), rgba(255,215,0,0.06));
+  border-color: rgba(78,205,196,0.2);
+}
+html[style*="1a1a2e"] .ach-hint-next {
+  background: linear-gradient(135deg, rgba(102,126,234,0.1), rgba(118,75,162,0.06));
+  border-color: rgba(102,126,234,0.2);
+}
+html[style*="1a1a2e"] .ach-hint-name {
+  color: rgba(255,255,255,0.9);
+}
+html[style*="1a1a2e"] .ach-hint-label,
+html[style*="1a1a2e"] .ach-hint-time {
+  color: rgba(255,255,255,0.6);
+}
+
 /* ============ 成就分类筛选 ============ */
 .achievement-category-filter {
   display: flex;
