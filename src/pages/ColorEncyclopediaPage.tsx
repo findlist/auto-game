@@ -1373,36 +1373,44 @@ const COLOR_TRIVIA = [
 ];
 
 // 色彩知识专题分类
+// 专题分类标签
+const TOPIC_CATEGORIES = ['全部', '自然', '艺术', '心理', '科学', '文化'] as const;
+
 const COLOR_TOPICS = [
   {
     icon: '🌿',
     title: '自然界的色彩',
     description: '天空、海洋、植物和动物身上的颜色奥秘',
     colors: ['蓝色', '绿色', '青色'],
+    category: '自然',
   },
   {
     icon: '🎨',
     title: '艺术与设计中的色彩',
     description: '绘画、设计和文化中色彩运用的智慧',
     colors: ['红色', '黄色', '橙色'],
+    category: '艺术',
   },
   {
     icon: '🧠',
     title: '色彩与心理',
     description: '颜色如何影响我们的情绪和行为',
     colors: ['红色', '蓝色', '粉色', '紫色'],
+    category: '心理',
   },
   {
     icon: '🔮',
     title: '色彩的科学与物理',
     description: '波长、光谱和色彩感知的科学原理',
     colors: ['紫色', '青色', '灰色'],
+    category: '科学',
   },
   {
     icon: '🏛️',
     title: '色彩与文化',
     description: '不同文化中色彩的象征意义和传统',
     colors: ['红色', '紫色', '棕色'],
+    category: '文化',
   },
 ];
 
@@ -1452,6 +1460,8 @@ export const ColorEncyclopediaPage: React.FC<ColorEncyclopediaPageProps> = ({ on
     } catch (e) { return []; }
   });
   const [expandedColor, setExpandedColor] = useState<string | null>(null);
+  // 专题筛选状态
+  const [topicFilter, setTopicFilter] = useState<string>('全部');
   const [viewedColorsCount, setViewedColorsCount] = useState<number>(() => {
     try {
       const data = localStorage.getItem('encyclopedia_viewed_colors');
@@ -1605,8 +1615,19 @@ export const ColorEncyclopediaPage: React.FC<ColorEncyclopediaPageProps> = ({ on
                 </div>
               );
             })()}
+            <div className="color-topics-filter">
+              {TOPIC_CATEGORIES.map(cat => (
+                <button
+                  key={cat}
+                  className={`topic-filter-btn ${topicFilter === cat ? 'topic-filter-active' : ''}`}
+                  onClick={() => setTopicFilter(cat)}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
             <div className="color-topics-grid">
-              {COLOR_TOPICS.map((topic, idx) => (
+              {COLOR_TOPICS.filter(t => topicFilter === '全部' || t.category === topicFilter).map((topic, idx) => (
                 <div key={idx} className="color-topic-card" onClick={() => {
                   const firstColor = COLOR_KNOWLEDGE.find(c => c.name === topic.colors[0]);
                   if (firstColor) {
