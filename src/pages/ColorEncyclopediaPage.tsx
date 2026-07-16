@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { SoundEngine } from '../game/soundEngine';
-import { getTodayColorQuiz, saveDailyQuizResult, getDailyQuizHistory, getQuizStreak, getQuizDifficultyStats, getQuizWrongAnswers, saveQuizUserAnswer, savePerceptionWrongAnswer, getPerceptionWrongAnswers, clearPerceptionWrongAnswers, saveReactionWrongAnswer } from '../game/announcements';
+import { getTodayColorQuiz, saveDailyQuizResult, getDailyQuizHistory, getQuizStreak, getQuizDifficultyStats, getQuizWrongAnswers, saveQuizUserAnswer, savePerceptionWrongAnswer, getPerceptionWrongAnswers, clearPerceptionWrongAnswers, saveReactionWrongAnswer, getReactionWrongAnswers, clearReactionWrongAnswers, savePairLowScore, getPairLowScores, clearPairLowScores } from '../game/announcements';
 import { ParticleEffect } from '../components/ParticleEffect';
 
 interface ColorEncyclopediaPageProps {
@@ -450,6 +450,9 @@ const ColorPairMatch: React.FC<{ onComplete?: (moves: number) => void }> = ({ on
   const [timeLeft, setTimeLeft] = useState(0);
   const [elapsedTime, setElapsedTime] = useState(0);
   const [startTime, setStartTime] = useState(0);
+  // 配对游戏低分记录状态
+  const [showLowScores, setShowLowScores] = useState(false);
+  const [lowScoreRecords, setLowScoreRecords] = useState(() => getPairLowScores());
 
   const initGame = useCallback((diff: Difficulty, useTimed: boolean = false) => {
     const pairs = diff === 'custom' ? customPairs : DIFFICULTY_CONFIG[diff as keyof typeof DIFFICULTY_CONFIG].pairs;
@@ -520,7 +523,29 @@ const ColorPairMatch: React.FC<{ onComplete?: (moves: number) => void }> = ({ on
           setMatchedPairs(newMatched);
           if (newMatched >= getCurrentPairs()) {
             setGameState('finished');
-            if (onComplete) onComplete(moves + 1);
+            // 记录低分对局：步数超过理论最少步数（配对数）时保存
+            const finalMoves = moves + 1;
+            const pairs = getCurrentPairs();
+            const parMoves = pairs; // 理论最少步数等于配对数
+            const efficiency = Math.round((parMoves / finalMoves) * 100);
+            const now = new Date();
+            const dateStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+            // 效率低于80%或步数超过理论步数1.5倍时记录
+            if (efficiency < 80) {
+              savePairLowScore({
+                difficulty: getCurrentLabel(),
+                pairs,
+                moves: finalMoves,
+                parMoves,
+                efficiency,
+                timedMode,
+                timeUsed: elapsedTime,
+                date: dateStr,
+                timestamp: now.getTime(),
+              });
+              setLowScoreRecords(getPairLowScores());
+            }
+            if (onComplete) onComplete(finalMoves);
           }
         }, 500);
       } else {
@@ -652,6 +677,41 @@ const ColorPairMatch: React.FC<{ onComplete?: (moves: number) => void }> = ({ on
             </div>
           )}
           <button className="cpm-restart-btn" onClick={() => initGame(difficulty)}>🔄 再来一局</button>
+          {/* 低分回顾按钮：有低分记录时展示 */}
+          {lowScoreRecords.length > 0 && (
+            <button className="cpm-lowscore-btn" onClick={() => setShowLowScores(true)}>📊 查看低分回顾（{lowScoreRecords.length}）</button>
+          )}
+          {/* 低分回顾弹窗 */}
+          {showLowScores && (
+            <div className="quiz-wrongbook-overlay" onClick={() => setShowLowScores(false)}>
+              <div className="quiz-wrongbook-content" onClick={(e) => e.stopPropagation()}>
+                <div className="quiz-wrongbook-header">
+                  <h3 className="quiz-wrongbook-title">📊 配对低分回顾</h3>
+                  <button className="quiz-wrongbook-close" onClick={() => setShowLowScores(false)}>✕</button>
+                </div>
+                <div className="quiz-wrongbook-list">
+                  {lowScoreRecords.map((r, i) => (
+                    <div key={i} className="cpm-lowscore-item">
+                      <div className="cpm-lowscore-header">
+                        <span className="cpm-lowscore-diff">{r.difficulty}</span>
+                        <span className="cpm-lowscore-date">{r.date}</span>
+                      </div>
+                      <div className="cpm-lowscore-stats">
+                        <span className="cpm-lowscore-moves">{r.moves}步</span>
+                        <span className="cpm-lowscore-par">理论最少：{r.parMoves}步</span>
+                        <span className="cpm-lowscore-eff">效率：{r.efficiency}%</span>
+                        {r.timedMode && <span className="cpm-lowscore-time">⏱ {r.timeUsed}秒</span>}
+                      </div>
+                      <div className="cpm-lowscore-bar">
+                        <div className="cpm-lowscore-bar-fill" style={{ width: `${r.efficiency}%`, background: r.efficiency >= 60 ? '#f59e0b' : '#ef4444' }} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <button className="quiz-wrongbook-clear" onClick={() => { clearPairLowScores(); setLowScoreRecords([]); setShowLowScores(false); }}>🗑️ 清空记录</button>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>
@@ -916,6 +976,9 @@ const ColorReactionTest: React.FC<{ onComplete?: (score: number) => void }> = ({
   const [targetColor, setTargetColor] = useState(0);
   const [options, setOptions] = useState<number[]>([]);
   const [feedback, setFeedback] = useState('');
+  // 反应力测试错题本状态
+  const [showWrongBook, setShowWrongBook] = useState(false);
+  const [wrongAnswers, setWrongAnswers] = useState(() => getReactionWrongAnswers());
   // 读取历史最佳分数，初始化时读取 localStorage
   const [bestScore, setBestScore] = useState<number>(() => {
     try { return parseInt(localStorage.getItem(BEST_SCORE_KEY) || '0', 10); } catch (e) { return 0; }
@@ -965,6 +1028,7 @@ const ColorReactionTest: React.FC<{ onComplete?: (score: number) => void }> = ({
         date: dateStr,
         timestamp: now.getTime(),
       });
+      setWrongAnswers(getReactionWrongAnswers());
     }
     setTimeout(() => {
       setFeedback('');
@@ -1036,7 +1100,41 @@ const ColorReactionTest: React.FC<{ onComplete?: (score: number) => void }> = ({
           {score >= TOTAL_ROUNDS && <p className="crt-rating">🏆 反应力满分！</p>}
           {score >= 6 && score < TOTAL_ROUNDS && <p className="crt-rating">🌟 反应迅捷！</p>}
           {score < 6 && <p className="crt-rating">💪 多练习，反应力会更好！</p>}
+          {/* 错题本按钮：有错题记录时展示 */}
+          {wrongAnswers.length > 0 && (
+            <button className="crt-wrongbook-btn" onClick={() => setShowWrongBook(true)}>📋 查看错题本（{wrongAnswers.length}）</button>
+          )}
           <button className="crt-restart-btn" onClick={startGame}>🔄 再来一次</button>
+          {/* 错题本弹窗 */}
+          {showWrongBook && (
+            <div className="quiz-wrongbook-overlay" onClick={() => setShowWrongBook(false)}>
+              <div className="quiz-wrongbook-content" onClick={(e) => e.stopPropagation()}>
+                <div className="quiz-wrongbook-header">
+                  <h3 className="quiz-wrongbook-title">📋 反应力错题本</h3>
+                  <button className="quiz-wrongbook-close" onClick={() => setShowWrongBook(false)}>✕</button>
+                </div>
+                <div className="quiz-wrongbook-list">
+                  {wrongAnswers.map((w, i) => (
+                    <div key={i} className="crt-wrongbook-item">
+                      <div className="crt-wrongbook-round">第 {w.round}/{w.totalRounds} 轮 · {w.date}</div>
+                      <div className="crt-wrongbook-colors">
+                        <div className="crt-wrongbook-color">
+                          <div className="crt-wrongbook-swatch" style={{ background: w.targetHex }} />
+                          <span className="crt-wrongbook-label">正确：{w.targetName}色</span>
+                        </div>
+                        <div className="crt-wrongbook-arrow">←</div>
+                        <div className="crt-wrongbook-color">
+                          <div className="crt-wrongbook-swatch wrong" style={{ background: w.userHex }} />
+                          <span className="crt-wrongbook-label">你选：{w.userName}色</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <button className="quiz-wrongbook-clear" onClick={() => { clearReactionWrongAnswers(); setWrongAnswers([]); setShowWrongBook(false); }}>🗑️ 清空错题记录</button>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>
