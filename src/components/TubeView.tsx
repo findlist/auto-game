@@ -102,11 +102,8 @@ export const TubeView: React.FC<TubeViewProps> = React.memo(({ tube, index, isSe
     <div
       className={`tube-container ${isSelected ? 'selected' : ''} ${isHinted ? 'hinted' : ''} ${isPouring ? 'pouring' : ''} ${isSettled ? 'tube-settled' : ''}`}
       onClick={() => {
-        console.log('[debug] TubeView onClick', { index, longPressTriggered: longPressTriggered.current });
         if (!longPressTriggered.current) {
           onClick(index);
-        } else {
-          console.log('[debug] 点击被 longPressTriggered 拦截');
         }
       }}
       onTouchStart={handleTouchStart}

@@ -165,10 +165,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
   }, [isWon, isTimeUp, level]);
 
   const handleTubeClick = useCallback((index: number) => {
-    // [临时调试日志] 定位"点击不能倒"问题
-    console.log('[debug] handleTubeClick', { index, isWon, selectedTube, tubesLen: tubes.length, tubes: tubes.map(t => t.layers.length) });
     if (isWon) {
-      console.log('[debug] 提前返回：isWon 为 true');
       return;
     }
     SoundEngine.resume();
@@ -192,11 +189,9 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
     const fromTube = tubes[selectedTube];
     const toTube = tubes[index];
     const canPourResult = canPour(fromTube, toTube);
-    console.log('[debug] 尝试倾倒', { selectedTube, index, fromLayers: fromTube?.layers.length, toLayers: toTube?.layers.length, canPour: canPourResult });
 
     if (!canPourResult) {
       // 不能倒，切换选中
-      console.log('[debug] 不能倒，切换选中');
       SoundEngine.error();
       if (tubes[index].layers.length > 0) {
         setSelectedTube(index);
@@ -209,7 +204,6 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
 
     // 执行倾倒
     const { from: newFrom, to: newTo } = pour(fromTube, toTube);
-    console.log('[debug] 执行倾倒成功', { newFromLayers: newFrom.layers.length, newToLayers: newTo.layers.length });
     // 回滚优化：cloneTubes 深拷贝所有试管，确保 React.memo 检测到引用变化
     const newTubes = cloneTubes(tubes);
     newTubes[selectedTube] = newFrom;
@@ -221,9 +215,8 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
     setTubes(newTubes);
     setMoves(prev => prev + 1);
     setSelectedTube(null);
-    setPouringTo(index); // 触发倾倒动画
+    setPouringTo(index);
     setTimeout(() => setPouringTo(null), 300);
-    // 步数脉冲动画
     setMovesPulse(true);
     setTimeout(() => setMovesPulse(false), 300);
     SoundEngine.pour();
