@@ -3896,6 +3896,48 @@ html[style*="1a1a2e"] .encyclopedia-progress-track {
   transition: height 0.3s ease;
 }
 
+/* 统计页30天访问热力图 */
+.stats-heatmap {
+  margin-top: 8px;
+}
+.stats-heatmap-grid {
+  display: grid;
+  grid-template-columns: repeat(15, 1fr);
+  gap: 3px;
+  margin-bottom: 6px;
+}
+.stats-heatmap-cell {
+  aspect-ratio: 1;
+  border-radius: 3px;
+  min-height: 12px;
+  min-width: 12px;
+  transition: transform 0.15s;
+}
+.stats-heatmap-cell:hover {
+  transform: scale(1.4);
+  z-index: 1;
+}
+.stats-heatmap-legend {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  color: var(--text-light, #999);
+  justify-content: flex-end;
+}
+.stats-heatmap-legend .stats-heatmap-cell {
+  min-height: 10px;
+  min-width: 10px;
+}
+@media (max-width: 768px) {
+  .stats-heatmap-grid {
+    grid-template-columns: repeat(10, 1fr);
+  }
+}
+html[style*="1a1a2e"] .stats-heatmap-cell {
+  background: rgba(255,255,255,0.05);
+}
+
 .trend-bar-label {
   font-size: 10px;
   line-height: 1;

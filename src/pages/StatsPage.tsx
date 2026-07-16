@@ -481,6 +481,40 @@ export const StatsPage: React.FC<StatsPageProps> = ({ onBack, timedHighScore }) 
                     );
                   })}
                 </div>
+                {/* 30天访问热力图 - 类似GitHub贡献图，展示长期活跃度 */}
+                <h4 style={{ marginTop: '16px', color: '#667eea' }}>近30天活跃热力图</h4>
+                {(() => {
+                  const trend30 = getRecentVisitTrend(30);
+                  const maxV = Math.max(...trend30.map(t => t.visits), 1);
+                  return (
+                    <div className="stats-heatmap">
+                      <div className="stats-heatmap-grid">
+                        {trend30.map((t, i) => {
+                          const intensity = t.visits === 0 ? 0 : Math.ceil((t.visits / maxV) * 4);
+                          const bgColor = t.visits === 0 ? 'rgba(255,255,255,0.08)' : `rgba(102,126,234,${0.3 + intensity * 0.18})`;
+                          const dateLabel = t.date.slice(5);
+                          return (
+                            <div
+                              key={i}
+                              className="stats-heatmap-cell"
+                              style={{ background: bgColor }}
+                              title={`${dateLabel} · ${t.visits}次访问`}
+                            />
+                          );
+                        })}
+                      </div>
+                      <div className="stats-heatmap-legend">
+                        <span>少</span>
+                        <span className="stats-heatmap-cell" style={{ background: 'rgba(255,255,255,0.08)' }} />
+                        <span className="stats-heatmap-cell" style={{ background: 'rgba(102,126,234,0.48)' }} />
+                        <span className="stats-heatmap-cell" style={{ background: 'rgba(102,126,234,0.66)' }} />
+                        <span className="stats-heatmap-cell" style={{ background: 'rgba(102,126,234,0.84)' }} />
+                        <span className="stats-heatmap-cell" style={{ background: 'rgba(102,126,234,1)' }} />
+                        <span>多</span>
+                      </div>
+                    </div>
+                  );
+                })()}
               </>
             );
           })()}
