@@ -151,6 +151,25 @@ export const ACHIEVEMENT_DEFS = [
     description: '累计签到 100 天',
     icon: '👑',
   },
+  // 累计游玩天数里程碑成就 — 激励玩家长期回访，增强留存
+  {
+    id: 'play_days_7',
+    name: '一周常客',
+    description: '累计游玩 7 天',
+    icon: '📅',
+  },
+  {
+    id: 'play_days_30',
+    name: '月度忠实玩家',
+    description: '累计游玩 30 天',
+    icon: '🗓️',
+  },
+  {
+    id: 'play_days_100',
+    name: '百日传奇',
+    description: '累计游玩 100 天',
+    icon: '🏆',
+  },
   // 步数与效率成就
   {
     id: 'total_100_moves',
@@ -407,6 +426,8 @@ interface AchievementState {
   consecutiveNoHint: number; // 连续不使用提示通关数
   dailyStreak: number; // 每日挑战连续天数
   lastDailyDate: string | null; // 上次完成每日挑战的日期
+  playDays: number; // 累计游玩天数（不同自然日）
+  lastPlayDate: string | null; // 上次游玩日期，用于判断是否为新的一天
 }
 
 // 本地日期字符串（与 dailyChallenge.ts 的 getTodayString 保持一致）
@@ -429,11 +450,13 @@ function loadState(): AchievementState {
           consecutiveNoHint: typeof parsed.consecutiveNoHint === 'number' ? parsed.consecutiveNoHint : 0,
           dailyStreak: typeof parsed.dailyStreak === 'number' ? parsed.dailyStreak : 0,
           lastDailyDate: typeof parsed.lastDailyDate === 'string' ? parsed.lastDailyDate : null,
+          playDays: typeof parsed.playDays === 'number' ? parsed.playDays : 0,
+          lastPlayDate: typeof parsed.lastPlayDate === 'string' ? parsed.lastPlayDate : null,
         };
       }
     }
   } catch (e) { /* 忽略 */ }
-  return { unlocked: {}, consecutiveNoHint: 0, dailyStreak: 0, lastDailyDate: null };
+  return { unlocked: {}, consecutiveNoHint: 0, dailyStreak: 0, lastDailyDate: null, playDays: 0, lastPlayDate: null };
 }
 
 function saveState(state: AchievementState) {
@@ -618,6 +641,33 @@ export const AchievementManager = {
     if (totalDays >= 100 && !('checkin_100' in loadState().unlocked)) {
       newlyUnlocked.push(...this.unlock('checkin_100'));
     }
+    return newlyUnlocked;
+  },
+
+  // 检查累计游玩天数里程碑成就 — 每次进入游戏页面时调用
+  // 通过比较当天日期与上次游玩日期，判断是否为新的一天
+  checkPlayDaysAchievements(): Achievement[] {
+    const newlyUnlocked: Achievement[] = [];
+    const state = loadState();
+    const today = getLocalDateString(new Date());
+    
+    // 如果今天还没记录过游玩，则增加累计天数
+    if (state.lastPlayDate !== today) {
+      state.playDays = (state.playDays || 0) + 1;
+      state.lastPlayDate = today;
+      saveState(state);
+      
+      if (state.playDays >= 7 && !('play_days_7' in state.unlocked)) {
+        newlyUnlocked.push(...this.unlock('play_days_7'));
+      }
+      if (state.playDays >= 30 && !('play_days_30' in state.unlocked)) {
+        newlyUnlocked.push(...this.unlock('play_days_30'));
+      }
+      if (state.playDays >= 100 && !('play_days_100' in state.unlocked)) {
+        newlyUnlocked.push(...this.unlock('play_days_100'));
+      }
+    }
+    
     return newlyUnlocked;
   },
 

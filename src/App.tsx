@@ -604,6 +604,11 @@ export default function App() {
     saveRecent({ level: progress.currentLevel, mode: 'normal', timestamp: Date.now() });
     setRecentPlay({ level: progress.currentLevel, mode: 'normal', timestamp: Date.now() });
     recordPlayedMode('normal');
+    // 检查累计游玩天数成就 — 每次开始游戏时记录当日游玩
+    const playDaysAchievements = AchievementManager.checkPlayDaysAchievements();
+    if (playDaysAchievements.length > 0) {
+      setNewAchievements(prev => [...prev, ...playDaysAchievements]);
+    }
     if (!hasSeenTutorial()) {
       setShowTutorial(true);
     }
@@ -668,6 +673,11 @@ export default function App() {
     setUsedHintThisLevel(false);
     setRecoveredFromDeadlock(false);
     recordPlayedMode('daily');
+    // 检查累计游玩天数成就
+    const playDaysAchievements = AchievementManager.checkPlayDaysAchievements();
+    if (playDaysAchievements.length > 0) {
+      setNewAchievements(prev => [...prev, ...playDaysAchievements]);
+    }
   };
 
   const handleEndlessMode = () => {
@@ -681,6 +691,11 @@ export default function App() {
     setUsedHintThisLevel(false);
     setRecoveredFromDeadlock(false);
     recordPlayedMode('endless');
+    // 检查累计游玩天数成就
+    const playDaysAchievements = AchievementManager.checkPlayDaysAchievements();
+    if (playDaysAchievements.length > 0) {
+      setNewAchievements(prev => [...prev, ...playDaysAchievements]);
+    }
   };
 
   const handleTimedMode = () => {
@@ -694,6 +709,11 @@ export default function App() {
     setUsedHintThisLevel(false);
     setRecoveredFromDeadlock(false);
     recordPlayedMode('timed');
+    // 检查累计游玩天数成就
+    const playDaysAchievements = AchievementManager.checkPlayDaysAchievements();
+    if (playDaysAchievements.length > 0) {
+      setNewAchievements(prev => [...prev, ...playDaysAchievements]);
+    }
   };
 
   const handleDeadlockRecover = useCallback(() => {
