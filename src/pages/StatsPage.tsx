@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { StatsTracker } from '../game/statsTracker';
 import { DailyCheckin } from '../game/dailyCheckin';
-import { getTodayLeaderboard, getDailyStats } from '../game/dailyLeaderboard';
+import { getTodayLeaderboard, getDailyStats, getDailyLeaderboard } from '../game/dailyLeaderboard';
 import { getVisitSummary, getRecentVisitTrend, getAvgSessionDuration, getReturnRate } from '../game/visitTracker';
 import { getWeeklyStreak, getWeeklyRecord, getWeeklyInfo, getWeeklyHistory } from '../game/weeklyChallenge';
 
@@ -515,6 +515,78 @@ export const StatsPage: React.FC<StatsPageProps> = ({ onBack, timedHighScore }) 
                     </div>
                   );
                 })()}
+              </>
+            );
+          })()}
+        </div>
+
+        {/* 每日挑战历史日历热力图 — 展示最近30天每日挑战完成情况 */}
+        <div className="stats-detail">
+          <h3>📅 每日挑战日历</h3>
+          {(() => {
+            const leaderboard = getDailyLeaderboard();
+            // 构建日期到最佳成绩的映射
+            const dateMap = new Map<string, { stars: number; moves: number }>();
+            for (const entry of leaderboard) {
+              const existing = dateMap.get(entry.date);
+              if (!existing || entry.stars > existing.stars || (entry.stars === existing.stars && entry.moves < existing.moves)) {
+                dateMap.set(entry.date, { stars: entry.stars, moves: entry.moves });
+              }
+            }
+            // 生成最近30天日期数组
+            const days: { date: string; record: { stars: number; moves: number } | null }[] = [];
+            const today = new Date();
+            for (let i = 29; i >= 0; i--) {
+              const d = new Date(today);
+              d.setDate(d.getDate() - i);
+              const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+              const record = dateMap.get(dateStr) || null;
+              days.push({ date: dateStr, record });
+            }
+            const completedCount = days.filter(d => d.record).length;
+            if (completedCount === 0) {
+              return <p style={{ color: '#999', fontSize: '13px' }}>还未完成每日挑战，点击首页“每日挑战”开始吧！</p>;
+            }
+            return (
+              <>
+                <div className="stats-row"><span>近30天完成</span><span>📅 {completedCount} 天</span></div>
+                <h4 style={{ marginTop: '16px', color: '#667eea' }}>近30天挑战日历</h4>
+                <div className="stats-heatmap">
+                  <div className="stats-heatmap-grid">
+                    {days.map((d, i) => {
+                      let bgColor = 'rgba(255,255,255,0.08)';
+                      let title = `${d.date.slice(5)} · 未挑战`;
+                      if (d.record) {
+                        // 根据星级使用不同颜色深度
+                        const intensity = d.record.stars;
+                        const colors = [
+                          'rgba(158, 158, 158, 0.4)',   // 0星 — 已挑战但未满星
+                                                   'rgba(255, 167, 38, 0.5)',   // 1星 — 橙色
+                                                   'rgba(102, 187, 106, 0.5)',  // 2星 — 绿色
+                                                   'rgba(102, 126, 234, 0.85)', // 3星 — 蓝紫色
+                        ];
+                        bgColor = colors[Math.min(intensity, 3)] || colors[0];
+                        title = `${d.date.slice(5)} · ⭐${d.record.stars} · ${d.record.moves}步`;
+                      }
+                      return (
+                        <div
+                          key={i}
+                          className="stats-heatmap-cell"
+                          style={{ background: bgColor }}
+                          title={title}
+                        />
+                      );
+                    })}
+                  </div>
+                  <div className="stats-heatmap-legend">
+                    <span>未挑战</span>
+                    <span className="stats-heatmap-cell" style={{ background: 'rgba(255,255,255,0.08)' }} />
+                    <span className="stats-heatmap-cell" style={{ background: 'rgba(255, 167, 38, 0.5)' }} />
+                    <span className="stats-heatmap-cell" style={{ background: 'rgba(102, 187, 106, 0.5)' }} />
+                    <span className="stats-heatmap-cell" style={{ background: 'rgba(102, 126, 234, 0.85)' }} />
+                    <span>⭐3星</span>
+                  </div>
+                </div>
               </>
             );
           })()}
