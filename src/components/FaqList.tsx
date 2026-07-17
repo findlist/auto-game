@@ -192,6 +192,22 @@ const FaqList: React.FC = () => {
         <div className="faq-question">🏆 成就页面有目标提示吗？</div>
         <div className="faq-answer">有！成就页面新增“最近解锁”和“下一个目标”提示卡片，展示你最近获得的成就和下一个待解锁的成就目标，激励持续挑战。</div>
       </div>
+      <div className="faq-item">
+        <div className="faq-question">⏸️ 游戏可以暂停吗？</div>
+        <div className="faq-answer">可以！点击暂停按钮或按空格/P键即可暂停游戏，暂停时计时冻结、操作锁定，恢复后继续游戏，方便随时休息。</div>
+      </div>
+      <div className="faq-item">
+        <div className="faq-question">⭐ 3星通关有特殊效果吗？</div>
+        <div className="faq-answer">有！3星通关时结算卡片会显示旋转光芒庆祝特效，星星弹出时还有光晕扩散动画，为你的完美表现喝彩！</div>
+      </div>
+      <div className="faq-item">
+        <div className="faq-question">⬆️ 百科页面有返回顶部按钮吗？</div>
+        <div className="faq-answer">有！色彩百科页面内容较多，滚动超过300px时右下角会出现返回顶部浮动按钮，点击平滑滚动回页面顶部。</div>
+      </div>
+      <div className="faq-item">
+        <div className="faq-question">🔄 首页可以快速重玩上一关吗？</div>
+        <div className="faq-answer">可以！首页新增快速重玩上一关入口卡片，显示最近通关的关卡号和星级评价，点击即可快速重玩。</div>
+      </div>
     </div>
   );
 };

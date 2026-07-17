@@ -13,6 +13,25 @@ const ChangelogModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         <h2>色彩排序更新日志</h2>
         <div className="changelog-content">
           <div className="changelog-item">
+            <h3>🎉 v1.36.0</h3>
+            <ul>
+              <li>⏸️ 游戏新增暂停功能，支持空格/P键快捷暂停恢复，暂停时冻结计时</li>
+              <li>⭐ 星级动画增强，3星通关添加旋转光芒庆祝特效，星星弹出光晕扩散</li>
+              <li>⬆️ 色彩百科页面新增返回顶部浮动按钮，滚动超过300px时显示</li>
+              <li>🔄 首页新增快速重玩上一关快捷入口，展示关卡星级评价</li>
+              <li>📝 SEO更新+FAQ补充4条问答+版本号同步</li>
+            </ul>
+          </div>
+          <div className="changelog-item">
+            <h3>🎉 v1.35.5</h3>
+            <ul>
+              <li>🏆 新增累计游玩天数里程碑成就（7天/30天/100天），增强长期留存激励</li>
+              <li>🏠 首页新增今日成就快捷入口卡片，展示成就进度与最近解锁/下一个目标</li>
+              <li>📅 统计页新增每日挑战历史日历热力图，按星级颜色区分完成情况</li>
+              <li>🔍 色彩百科搜索结果新增关键词高亮显示，提升搜索体验</li>
+            </ul>
+          </div>
+          <div className="changelog-item">
             <h3>🎉 v1.35.0</h3>
             <ul>
               <li>📅 每日问答新增30天答题日历热力图，按难度颜色区分正确/错误/未答</li>

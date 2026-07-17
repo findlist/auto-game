@@ -89,7 +89,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onBack }) => {
         <h3>技术栈</h3>
         <p>React 18 + Vite 5 + TypeScript，纯前端实现，无后端依赖。所有美术资源使用 CSS/SVG/Emoji 生成，音效使用 Web Audio API 合成，零外部素材依赖。</p>
 
-        <p className="version">版本: v1.35.0 | 2026</p>
+        <p className="version">版本: v1.36.1 | 2026</p>
         {/* SEO 友好的详细问答内容 */}
         <div className="faq-section">
           <h3>❓ 常见问题</h3>
