@@ -414,6 +414,63 @@ export const ACHIEVEMENT_DEFS = [
     description: '体验色彩百科中所有小游戏',
     icon: '🏅',
   },
+  // 连击里程碑成就 — 激励玩家保持连续通关
+  {
+    id: 'combo_5',
+    name: '连击新手',
+    description: '单次连续通关达到 5 连击',
+    icon: '⚡',
+  },
+  {
+    id: 'combo_10',
+    name: '连击高手',
+    description: '单次连续通关达到 10 连击',
+    icon: '🔥',
+  },
+  {
+    id: 'combo_20',
+    name: '连击传奇',
+    description: '单次连续通关达到 20 连击',
+    icon: '👑',
+  },
+  // 累计连击成就 — 长期目标感
+  {
+    id: 'total_combo_50',
+    name: '连击累计者',
+    description: '累计连击通关 50 次',
+    icon: '💪',
+  },
+  {
+    id: 'total_combo_100',
+    name: '连击百次达成',
+    description: '累计连击通关 100 次',
+    icon: '💯',
+  },
+  {
+    id: 'total_combo_200',
+    name: '连击大师',
+    description: '累计连击通关 200 次',
+    icon: '🏆',
+  },
+  // 每日目标成就 — 引导玩家参与每日目标系统
+  {
+    id: 'daily_goal_first',
+    name: '目标达成',
+    description: '完成首个每日目标',
+    icon: '🎯',
+  },
+  {
+    id: 'daily_goal_all',
+    name: '全线飘绿',
+    description: '单日完成所有每日目标',
+    icon: '🌟',
+  },
+  {
+    id: 'daily_goal_7days',
+    name: '目标坚持者',
+    description: '连续 7 天完成所有每日目标',
+    icon: '📅',
+  },
 ];
 
 import { STORAGE_KEYS } from './storageKeys';
@@ -914,6 +971,48 @@ export const AchievementManager = {
       return this.unlock('all_encyclopedia_games');
     }
     return [];
+  },
+
+  // 检查连击里程碑成就（传入当前连击数）
+  checkComboAchievements(combo: number): Achievement[] {
+    const newlyUnlocked: Achievement[] = [];
+    if (combo >= 5 && !('combo_5' in loadState().unlocked)) {
+      newlyUnlocked.push(...this.unlock('combo_5'));
+    }
+    if (combo >= 10 && !('combo_10' in loadState().unlocked)) {
+      newlyUnlocked.push(...this.unlock('combo_10'));
+    }
+    if (combo >= 20 && !('combo_20' in loadState().unlocked)) {
+      newlyUnlocked.push(...this.unlock('combo_20'));
+    }
+    return newlyUnlocked;
+  },
+
+  // 检查累计连击成就（传入累计连击总次数）
+  checkTotalComboAchievements(totalCombo: number): Achievement[] {
+    const newlyUnlocked: Achievement[] = [];
+    if (totalCombo >= 50 && !('total_combo_50' in loadState().unlocked)) {
+      newlyUnlocked.push(...this.unlock('total_combo_50'));
+    }
+    if (totalCombo >= 100 && !('total_combo_100' in loadState().unlocked)) {
+      newlyUnlocked.push(...this.unlock('total_combo_100'));
+    }
+    if (totalCombo >= 200 && !('total_combo_200' in loadState().unlocked)) {
+      newlyUnlocked.push(...this.unlock('total_combo_200'));
+    }
+    return newlyUnlocked;
+  },
+
+  // 检查每日目标成就（传入已完成目标数、总目标数、是否全部完成）
+  checkDailyGoalAchievements(completedCount: number, totalGoals: number): Achievement[] {
+    const newlyUnlocked: Achievement[] = [];
+    if (completedCount >= 1 && !('daily_goal_first' in loadState().unlocked)) {
+      newlyUnlocked.push(...this.unlock('daily_goal_first'));
+    }
+    if (completedCount >= totalGoals && totalGoals > 0 && !('daily_goal_all' in loadState().unlocked)) {
+      newlyUnlocked.push(...this.unlock('daily_goal_all'));
+    }
+    return newlyUnlocked;
   },
 
   // 重置所有成就

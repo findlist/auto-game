@@ -23,8 +23,8 @@ import { claimWeekendBonus, getWeekendBonusInfo } from './game/weekendBonus';
 import { GameSettings } from './game/settings';
 import { canInstallPWA, triggerPWAInstall, isPWAInstallDismissed, dismissPWAInstall } from './game/pwaInstall';
 import { loadRecent, saveRecent, RecentPlay, loadProgress, saveProgress, Progress, loadBestScores, saveBestScore, hasSeenTutorial, markTutorialSeen, loadStars, saveStars, loadAutosave, saveAutosave, clearAutosave, loadTimedHighScore, saveTimedHighScore, AutosaveData } from './game/homeStorage';
-import { getDailyGoals, updateGoalProgress, claimGoalReward } from './game/dailyGoals';
-import { getComboStreak, incrementComboStreak, resetComboStreak, checkComboCelebration, addTotalComboCount, ComboCelebration } from './game/comboStreak';
+import { getDailyGoals, updateGoalProgress, claimGoalReward, getDailyGoalsProgress } from './game/dailyGoals';
+import { getComboStreak, incrementComboStreak, resetComboStreak, checkComboCelebration, addTotalComboCount, getTotalComboCount, ComboCelebration } from './game/comboStreak';
 // 懒加载非首屏页面组件,减小首屏 bundle 大小
 const AboutPage = lazy(() => import('./pages/AboutPage').then(m => ({ default: m.AboutPage })));
 const AchievementsPage = lazy(() => import('./pages/AchievementsPage').then(m => ({ default: m.AchievementsPage })));
@@ -377,6 +377,22 @@ export default function App() {
         SoundEngine.win();
         // 3秒后自动关闭
         setTimeout(() => setComboCelebration(null), 3000);
+      }
+      // 检查连击里程碑成就
+      const comboAchievements = AchievementManager.checkComboAchievements(newCombo);
+      if (comboAchievements.length > 0) {
+        setNewAchievements(prev => [...prev, ...comboAchievements]);
+      }
+      // 检查累计连击成就
+      const totalComboAchievements = AchievementManager.checkTotalComboAchievements(getTotalComboCount());
+      if (totalComboAchievements.length > 0) {
+        setNewAchievements(prev => [...prev, ...totalComboAchievements]);
+      }
+      // 检查每日目标成就
+      const goalProgress = getDailyGoalsProgress();
+      const goalAchievements = AchievementManager.checkDailyGoalAchievements(goalProgress.completed, goalProgress.total);
+      if (goalAchievements.length > 0) {
+        setNewAchievements(prev => [...prev, ...goalAchievements]);
       }
     }
     if (isDailyMode) {
