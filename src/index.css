@@ -3053,6 +3053,7 @@ html[style*="1a1a2e"] .ach-hint-time {
 
 .star-filled {
   opacity: 1;
+  position: relative;
 }
 
 .star-empty {
@@ -8998,6 +8999,61 @@ canvas[aria-hidden="true"] {
   0% { transform: scale(0) rotate(-90deg); opacity: 0; }
   50% { transform: scale(1.4) rotate(15deg); opacity: 1; }
   100% { transform: scale(1) rotate(0); opacity: 1; }
+}
+
+/* 星星光芒扩散效果 */
+.star.star-filled.star-pop::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  margin: -20px 0 0 -20px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 215, 0, 0.4) 0%, transparent 70%);
+  animation: star-glow-burst 0.8s ease-out both;
+  pointer-events: none;
+}
+@keyframes star-glow-burst {
+  0% { transform: scale(0); opacity: 1; }
+  100% { transform: scale(3); opacity: 0; }
+}
+
+/* 3星通关时的庆祝光芒 */
+.win-card.three-stars-celebration {
+  position: relative;
+  overflow: hidden;
+}
+.win-card.three-stars-celebration::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    rgba(255, 215, 0, 0.08) 30deg,
+    transparent 60deg,
+    rgba(255, 215, 0, 0.08) 90deg,
+    transparent 120deg,
+    rgba(255, 215, 0, 0.08) 150deg,
+    transparent 180deg,
+    rgba(255, 215, 0, 0.08) 210deg,
+    transparent 240deg,
+    rgba(255, 215, 0, 0.08) 270deg,
+    transparent 300deg,
+    rgba(255, 215, 0, 0.08) 330deg,
+    transparent 360deg
+  );
+  animation: celebration-rotate 3s linear infinite;
+  pointer-events: none;
+}
+@keyframes celebration-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 /* 5. 死局卡片：黄色警告色调，与胜利卡片视觉区分 */

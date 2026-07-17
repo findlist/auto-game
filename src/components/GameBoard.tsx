@@ -547,7 +547,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
 
       {isWon && (
         <div className="win-overlay">
-          <div className="win-card">
+          <div className={`win-card ${starRating === 3 ? 'three-stars-celebration' : ''}`}>
             <div className="win-emoji">🎉</div>
             <h2>{level === -3 ? `通过第 ${timedScore + 1} 关！` : level === -2 ? `通过第 ${endlessScore + 1} 关！` : '恭喜过关！'}</h2>
             <div className="star-rating">
