@@ -1521,6 +1521,23 @@ export const ColorEncyclopediaPage: React.FC<ColorEncyclopediaPageProps> = ({ on
   const totalColors = COLOR_KNOWLEDGE.length;
   // 全浏览完成时的庆祝动画触发
   const [showCelebration, setShowCelebration] = useState(false);
+  // 返回顶部浮动按钮可见状态：滚动超过 300px 时显示
+  const [showScrollTop, setShowScrollTop] = useState(false);
+
+  // 滚动监听：控制返回顶部按钮的显示/隐藏
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 300);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // 返回顶部：平滑滚动并播放音效
+  const handleScrollToTop = useCallback(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    SoundEngine.click();
+  }, []);
 
   const recordColorView = useCallback((colorName: string) => {
     setRecentColors(prev => {
@@ -1937,6 +1954,18 @@ export const ColorEncyclopediaPage: React.FC<ColorEncyclopediaPageProps> = ({ on
           })
         }} />
       </main>
+
+      {/* 返回顶部浮动按钮：长页面浏览时快速返回顶部 */}
+      {showScrollTop && (
+        <button
+          className="scroll-top-fab"
+          onClick={handleScrollToTop}
+          aria-label="返回顶部"
+          title="返回顶部"
+        >
+          ⬆️
+        </button>
+      )}
     </div>
   );
 };

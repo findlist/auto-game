@@ -8876,6 +8876,54 @@ canvas[aria-hidden="true"] {
   padding: 12px 0;
   margin: 0;
 }
+
+/* 返回顶部浮动按钮 */
+.scroll-top-fab {
+  position: fixed;
+  bottom: 80px;
+  right: 24px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  animation: fade-in 0.3s ease;
+}
+
+.scroll-top-fab:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+}
+
+.scroll-top-fab:active {
+  transform: scale(0.95);
+}
+
+@media (max-width: 768px) {
+  .scroll-top-fab {
+    bottom: 64px;
+    right: 16px;
+    width: 42px;
+    height: 42px;
+    font-size: 18px;
+  }
+}
+
+/* 暗色主题适配 */
+.dark-theme .scroll-top-fab {
+  background: linear-gradient(135deg, #4a5bc7 0%, #5a3d82 100%);
+  box-shadow: 0 4px 16px rgba(74, 91, 199, 0.4);
+}
+
 .skill-compare-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
