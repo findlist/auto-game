@@ -21,6 +21,8 @@ import { STORAGE_KEYS } from './game/storageKeys';
 import { recordPlayedMode, getPlayedModes } from './game/playedModes';
 import { claimWeekendBonus, getWeekendBonusInfo } from './game/weekendBonus';
 import { GameSettings } from './game/settings';
+import { canInstallPWA, triggerPWAInstall, isPWAInstallDismissed, dismissPWAInstall } from './game/pwaInstall';
+import { loadRecent, saveRecent, RecentPlay, loadProgress, saveProgress, Progress, loadBestScores, saveBestScore, hasSeenTutorial, markTutorialSeen, loadStars, saveStars, loadAutosave, saveAutosave, clearAutosave, loadTimedHighScore, saveTimedHighScore, AutosaveData } from './game/homeStorage';
 // 懒加载非首屏页面组件,减小首屏 bundle 大小
 const AboutPage = lazy(() => import('./pages/AboutPage').then(m => ({ default: m.AboutPage })));
 const AchievementsPage = lazy(() => import('./pages/AchievementsPage').then(m => ({ default: m.AchievementsPage })));
@@ -52,137 +54,6 @@ type Page = 'home' | 'game' | 'about' | 'privacy' | 'achievements' | 'settings' 
 const TIMED_DURATION = 120; // 限时模式时长(秒)
 const LEVELS_PER_PAGE = 20; // 关卡选择每页显示数量
 
-// 本地存储键 - 统一使用 STORAGE_KEYS 管理(src/game/storageKeys.ts)
-const STORAGE_KEY = STORAGE_KEYS.PROGRESS;
-const BEST_SCORES_KEY = STORAGE_KEYS.BEST_SCORES;
-const TUTORIAL_KEY = STORAGE_KEYS.TUTORIAL;
-const STARS_KEY = STORAGE_KEYS.STARS;
-const AUTOSAVE_KEY = STORAGE_KEYS.AUTOSAVE;
-const RECENT_KEY = STORAGE_KEYS.RECENT;
-const TIMED_KEY = STORAGE_KEYS.TIMED;
-const PWA_INSTALL_DISMISSED_KEY = STORAGE_KEYS.PWA_INSTALL_DISMISSED;
-
-interface RecentPlay {
-  level: number;
-  mode: 'normal' | 'daily' | 'endless' | 'timed';
-  timestamp: number;
-}
-
-// PWA 安装提示相关变量和 beforeinstallprompt 事件
-let deferredPrompt: any = null;
-
-export function setupPWAInstallPrompt() {
-  window.addEventListener('beforeinstallprompt', (e: Event) => {
-    e.preventDefault();
-    deferredPrompt = e;
-  });
-}
-
-function canInstallPWA(): boolean {
-  return deferredPrompt !== null;
-}
-
-async function triggerPWAInstall(): Promise<boolean> {
-  if (!deferredPrompt) return false;
-  deferredPrompt.prompt();
-  const { outcome } = await deferredPrompt.userChoice;
-  deferredPrompt = null;
-  return outcome === 'accepted';
-}
-
-function isPWAInstallDismissed(): boolean {
-  try {
-    return localStorage.getItem(PWA_INSTALL_DISMISSED_KEY) === '1';
-  } catch (e) { return false; }
-}
-
-function dismissPWAInstall() {
-  try {
-    localStorage.setItem(PWA_INSTALL_DISMISSED_KEY, '1');
-  } catch (e) { /* 忽略 */ }
-}
-
-function loadRecent(): RecentPlay | null {
-  try {
-    const data = localStorage.getItem(RECENT_KEY);
-    if (data) return JSON.parse(data);
-  } catch (e) { /* 忽略 */ }
-  return null;
-}
-
-function saveRecent(rec: RecentPlay) {
-  try {
-    localStorage.setItem(RECENT_KEY, JSON.stringify(rec));
-  } catch (e) { /* 忽略 */ }
-}
-
-interface Progress {
-  currentLevel: number;
-  completedLevels: number[];
-}
-
-function loadProgress(): Progress {
-  try {
-    const data = localStorage.getItem(STORAGE_KEY);
-    if (data) return JSON.parse(data);
-  } catch (e) { /* 忽略 */ }
-  return { currentLevel: 1, completedLevels: [] };
-}
-
-function saveProgress(progress: Progress) {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
-  } catch (e) { /* 忽略 */ }
-}
-
-function loadBestScores(): Record<number, number> {
-  try {
-    const data = localStorage.getItem(BEST_SCORES_KEY);
-    if (data) return JSON.parse(data);
-  } catch (e) { /* 忽略 */ }
-  return {};
-}
-
-function saveBestScore(level: number, moves: number) {
-  try {
-    const scores = loadBestScores();
-    if (!scores[level] || moves < scores[level]) {
-      scores[level] = moves;
-      localStorage.setItem(BEST_SCORES_KEY, JSON.stringify(scores));
-    }
-  } catch (e) { /* 忽略 */ }
-}
-
-function hasSeenTutorial(): boolean {
-  try {
-    return localStorage.getItem(TUTORIAL_KEY) === '1';
-  } catch (e) { return false; }
-}
-
-function markTutorialSeen() {
-  try {
-    localStorage.setItem(TUTORIAL_KEY, '1');
-  } catch (e) { /* 忽略 */ }
-}
-
-function loadStars(): Record<number, number> {
-  try {
-    const data = localStorage.getItem(STARS_KEY);
-    if (data) return JSON.parse(data);
-  } catch (e) { /* 忽略 */ }
-  return {};
-}
-
-function saveStars(level: number, stars: number) {
-  try {
-    const all = loadStars();
-    if (!all[level] || stars > all[level]) {
-      all[level] = stars;
-      localStorage.setItem(STARS_KEY, JSON.stringify(all));
-    }
-  } catch (e) { /* 忽略 */ }
-}
-
 export default function App() {
   const [page, setPage] = useState<Page>('home');
   const [progress, setProgress] = useState<Progress>(loadProgress);
@@ -196,7 +67,7 @@ export default function App() {
   const [pageLevel, setPageLevel] = useState(0); // 关卡选择当前页
   const [recentPlay, setRecentPlay] = useState<RecentPlay | null>(loadRecent);
   const [showResumeDialog, setShowResumeDialog] = useState(false);
-  const [autosaveData, setAutosaveData] = useState<{level: number; mode: string; moves: number; isWon: boolean; endlessScore?: number; timedScore?: number; timestamp?: number} | null>(null);
+  const [autosaveData, setAutosaveData] = useState<AutosaveData | null>(null);
   const [showPWAInstall, setShowPWAInstall] = useState(false);
   const [showHelpModal, setShowHelpModal] = useState(false);
   const [levelSearchInput, setLevelSearchInput] = useState('');
@@ -268,16 +139,11 @@ export default function App() {
     if (bonus.claimed) {
       setHintItemsState(bonus.total);
     }
-    try {
-      const data = localStorage.getItem(AUTOSAVE_KEY);
-      if (data) {
-        const parsed = JSON.parse(data);
-        if (parsed && parsed.level && parsed.moves > 0 && !parsed.isWon) {
-          setAutosaveData(parsed);
-          setShowResumeDialog(true);
-        }
-      }
-    } catch (e) { /* 忽略 */ }
+    const saved = loadAutosave();
+    if (saved && saved.level && saved.moves > 0 && !saved.isWon) {
+      setAutosaveData(saved);
+      setShowResumeDialog(true);
+    }
 
     // 新版本更新,显示更新日志
     const CHANGELOG_KEY = STORAGE_KEYS.CHANGELOG_VERSION;
@@ -345,12 +211,9 @@ export default function App() {
   // 自动保存当前游戏状态
   const autoSaveGame = useCallback((level: number, mode: string, moves: number, isWon: boolean, extra?: Record<string, number>) => {
     if (moves > 0 && !isWon) {
-      try {
-        const saveData: Record<string, unknown> = { level, mode, moves, isWon: false, timestamp: Date.now(), ...extra };
-        localStorage.setItem(AUTOSAVE_KEY, JSON.stringify(saveData));
-      } catch (e) { /* 忽略 */ }
+      saveAutosave({ level, mode, moves, isWon: false, ...extra } as AutosaveData);
     } else {
-      try { localStorage.removeItem(AUTOSAVE_KEY); } catch (e) { /* 忽略 */ }
+      clearAutosave();
     }
   }, []);
 
@@ -361,9 +224,7 @@ export default function App() {
   const [isWeeklyMode, setIsWeeklyMode] = useState(false);
   const [weeklyCompleted, setWeeklyCompleted] = useState(hasCompletedWeeklyThisWeek());
   const [timedScore, setTimedScore] = useState(0);
-  const [timedHighScore, setTimedHighScore] = useState(() => {
-    try { return parseInt(localStorage.getItem(TIMED_KEY) || '0', 10); } catch (e) { return 0; }
-  });
+  const [timedHighScore, setTimedHighScore] = useState(() => loadTimedHighScore());
   const [endlessScore, setEndlessScore] = useState(0);
   const [endlessHighScore, setEndlessHighScore] = useState(getEndlessHighScore());
   const [dailyCompletedToday, setDailyCompletedToday] = useState(hasCompletedDailyToday());
@@ -518,7 +379,7 @@ export default function App() {
     }
 
     // 胜利时清除自动存档
-    try { localStorage.removeItem(AUTOSAVE_KEY); } catch (e) { /* 忽略 */ }
+    clearAutosave();
 
     // 每日挑战完成处理
     if (isDailyMode) {
@@ -569,13 +430,10 @@ export default function App() {
       // 修复:原代码在此 setTimedScore(newScore),timedScore 是 GameBoard 的 prop 且在其 useEffect 依赖中,
       // timedScore 变化触发 GameBoard 重新生成关卡(setIsWon(false)),胜利弹窗 500ms 后消失
       // 现仅更新最高分,timedScore 累加交给用户点击"下一关"时的 handleNextLevelAction
-      try {
-        const current = parseInt(localStorage.getItem(TIMED_KEY) || '0', 10);
-        if (newScore > current) {
-          localStorage.setItem(TIMED_KEY, String(newScore));
-          setTimedHighScore(newScore);
-        }
-      } catch (e) { /* 忽略 */ }
+      saveTimedHighScore(newScore);
+      if (newScore > timedHighScore) {
+        setTimedHighScore(newScore);
+      }
       const timedAchievements = AchievementManager.checkTimedAchievements(newScore);
       if (timedAchievements.length > 0) {
         setNewAchievements(prev => [...prev, ...timedAchievements]);
@@ -640,7 +498,7 @@ export default function App() {
     setUsedHintThisLevel(false);
     setRecoveredFromDeadlock(false);
     // 清除自动存档
-    try { localStorage.removeItem(AUTOSAVE_KEY); } catch (e) { /* 忽略 */ }
+    clearAutosave();
   };
 
   // 确认的返回首页:防止误退出
@@ -1659,7 +1517,7 @@ export default function App() {
                 }}>▶ 继续游戏</button>
                 <button className="btn btn-secondary" onClick={() => {
                   setShowResumeDialog(false);
-                  try { localStorage.removeItem(AUTOSAVE_KEY); } catch (e) { /* 忽略 */ }
+                  clearAutosave();
                 }}>放弃存档</button>
               </div>
             </div>

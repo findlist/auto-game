@@ -17,7 +17,7 @@ if ('serviceWorker' in navigator) {
 }
 
 // PWA 安装引导：捕获 beforeinstallprompt 事件
-import { setupPWAInstallPrompt } from './App';
+import { setupPWAInstallPrompt } from './game/pwaInstall';
 import { trackVisit, recordSessionDuration } from './game/visitTracker';
 // 记录访问数据（阶段二：数据驱动迭代基础）
 trackVisit();
