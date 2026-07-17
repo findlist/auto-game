@@ -3570,6 +3570,49 @@ html[style*="1a1a2e"] .ach-hint-time {
   gap: 8px;
 }
 
+/* 每日目标整体进度条 */
+.daily-goals-bar {
+  height: 4px;
+  background: rgba(255, 184, 0, 0.15);
+  border-radius: 2px;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+.daily-goals-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff8a00, #ff5e3a);
+  border-radius: 2px;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 单目标进度条 */
+.goal-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.goal-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.goal-progress-bar {
+  height: 3px;
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.goal-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ffa726, #ff7043);
+  border-radius: 2px;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.goal-progress-done {
+  background: linear-gradient(90deg, #66bb6a, #4caf50);
+}
+
 .daily-goal-item {
   display: flex;
   align-items: center;

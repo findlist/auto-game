@@ -980,12 +980,24 @@ export default function App() {
               <span className="daily-goals-title">🎯 每日目标</span>
               <span className="daily-goals-progress">{dailyGoals.filter(g => g.completed).length}/{dailyGoals.length}</span>
             </div>
+            {/* 整体进度条 */}
+            <div className="daily-goals-bar">
+              <div className="daily-goals-bar-fill" style={{ width: `${(dailyGoals.filter(g => g.completed).length / dailyGoals.length) * 100}%` }} />
+            </div>
             <div className="daily-goals-list">
               {dailyGoals.map(goal => (
                 <div key={goal.type} className={`daily-goal-item ${goal.completed ? 'goal-completed' : ''} ${goal.claimed ? 'goal-claimed' : ''}`}>
                   <span className="goal-icon">{goal.icon}</span>
-                  <span className="goal-desc">{goal.description}</span>
-                  <span className="goal-progress-text">{goal.current}/{goal.target}</span>
+                  <div className="goal-content">
+                    <div className="goal-row">
+                      <span className="goal-desc">{goal.description}</span>
+                      <span className="goal-progress-text">{goal.current}/{goal.target}</span>
+                    </div>
+                    {/* 单目标进度条 */}
+                    <div className="goal-progress-bar">
+                      <div className={`goal-progress-fill ${goal.completed ? 'goal-progress-done' : ''}`} style={{ width: `${Math.min(100, (goal.current / goal.target) * 100)}%` }} />
+                    </div>
+                  </div>
                   {goal.completed && !goal.claimed ? (
                     <button className="goal-claim-btn" onClick={() => handleClaimGoal(goal.type)}>领取+{goal.reward}</button>
                   ) : goal.claimed ? (
