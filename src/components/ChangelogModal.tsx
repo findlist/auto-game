@@ -13,6 +13,16 @@ const ChangelogModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         <h2>色彩排序更新日志</h2>
         <div className="changelog-content">
           <div className="changelog-item">
+            <h3>🎉 v1.37.0</h3>
+            <ul>
+              <li>🎯 新增每日目标系统，完成 3 关/获得 6 星/每日挑战/不使用提示通关四个目标，领取提示道具奖励</li>
+              <li>🔥 新增连续通关连击计数器，普通模式连续通关累积连击数，游戏页显示连击徽章</li>
+              <li>📊 首页新增今日概览卡片，展示当日通关数、获得星数和连击数</li>
+              <li>🔧 代码重构：提取 PWA 安装和 localStorage 工具函数到独立文件，App.tsx 减少 123 行</li>
+              <li>📝 SEO更新+FAQ补充4条问答+版本号同步</li>
+            </ul>
+          </div>
+          <div className="changelog-item">
             <h3>🎉 v1.36.0</h3>
             <ul>
               <li>⏸️ 游戏新增暂停功能，支持空格/P键快捷暂停恢复，暂停时冻结计时</li>

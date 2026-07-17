@@ -1,6 +1,6 @@
 // 色彩排序 Service Worker - 离线缓存
 // 修复：缓存版本与 package.json 版本保持一致
-const CACHE_VERSION = 'color-sort-v1.36.1';
+const CACHE_VERSION = 'color-sort-v1.37.0';
 const STATIC_ASSETS = [
   '/',
   '/index.html',

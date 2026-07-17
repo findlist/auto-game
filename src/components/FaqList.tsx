@@ -208,6 +208,18 @@ const FaqList: React.FC = () => {
         <div className="faq-question">🔄 首页可以快速重玩上一关吗？</div>
         <div className="faq-answer">可以！首页新增快速重玩上一关入口卡片，显示最近通关的关卡号和星级评价，点击即可快速重玩。</div>
       </div>
+      <div className="faq-item">
+        <div className="faq-question">🎯 什么是每日目标系统？</div>
+        <div className="faq-answer">每日目标系统提供4个小目标：完成3关、获得6颗星、完成每日挑战、不使用提示通关1关。完成后可领取提示道具奖励，每天自动重置。</div>
+      </div>
+      <div className="faq-item">
+        <div className="faq-question">🔥 连续通关连击怎么计算？</div>
+        <div className="faq-answer">普通模式连续通关会累积连击数，在游戏页面显示连击徽章。返回首页会重置连击，但撤销操作不影响连击。连击数越多越能展示您的实力。</div>
+      </div>
+      <div className="faq-item">
+        <div className="faq-question">📊 首页今日概览卡片展示什么？</div>
+        <div className="faq-answer">今日概览卡片展示您当天的通关数、获得星数和连击数，帮助您直观了解每日游玩进度，当有数据时才显示。</div>
+      </div>
     </div>
   );
 };
