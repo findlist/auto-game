@@ -929,6 +929,39 @@ export default function App() {
             );
           })()}
 
+          {/* 今日概览卡片：展示当日游玩数据，提升首页信息密度 */}
+          {(() => {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const todayMs = today.getTime();
+            const stats = StatsTracker.get();
+            const todayRecords = stats.recentRecords.filter(r => r.timestamp >= todayMs);
+            const todayWins = todayRecords.length;
+            const todayStars = todayRecords.reduce((sum, r) => sum + r.stars, 0);
+            if (todayWins === 0 && comboStreak === 0) return null;
+            return (
+              <div className="today-summary-card">
+                <div className="today-summary-item">
+                  <span className="today-summary-icon">🎯</span>
+                  <span className="today-summary-value">{todayWins}</span>
+                  <span className="today-summary-label">今日通关</span>
+                </div>
+                <div className="today-summary-item">
+                  <span className="today-summary-icon">⭐</span>
+                  <span className="today-summary-value">{todayStars}</span>
+                  <span className="today-summary-label">今日星数</span>
+                </div>
+                {comboStreak >= 2 && (
+                  <div className="today-summary-item">
+                    <span className="today-summary-icon">🔥</span>
+                    <span className="today-summary-value">{comboStreak}</span>
+                    <span className="today-summary-label">连击</span>
+                  </div>
+                )}
+              </div>
+            );
+          })()}
+
           {/* 每日目标卡片：增强日活留存，完成小目标领取提示道具奖励 */}
           <div className="daily-goals-card">
             <div className="daily-goals-header">
