@@ -23,6 +23,7 @@ import { claimWeekendBonus, getWeekendBonusInfo } from './game/weekendBonus';
 import { GameSettings } from './game/settings';
 import { canInstallPWA, triggerPWAInstall, isPWAInstallDismissed, dismissPWAInstall } from './game/pwaInstall';
 import { loadRecent, saveRecent, RecentPlay, loadProgress, saveProgress, Progress, loadBestScores, saveBestScore, hasSeenTutorial, markTutorialSeen, loadStars, saveStars, loadAutosave, saveAutosave, clearAutosave, loadTimedHighScore, saveTimedHighScore, AutosaveData } from './game/homeStorage';
+import { getDailyGoals, updateGoalProgress, claimGoalReward } from './game/dailyGoals';
 // 懒加载非首屏页面组件,减小首屏 bundle 大小
 const AboutPage = lazy(() => import('./pages/AboutPage').then(m => ({ default: m.AboutPage })));
 const AchievementsPage = lazy(() => import('./pages/AchievementsPage').then(m => ({ default: m.AchievementsPage })));
@@ -78,6 +79,24 @@ export default function App() {
   const [checkinTotal, setCheckinTotal] = useState(DailyCheckin.getTotalDays());
   const [showCheckinReward, setShowCheckinReward] = useState<string | null>(null);
   const [hintItems, setHintItemsState] = useState(getHintItems());
+
+  // 每日目标状态
+  const [dailyGoals, setDailyGoals] = useState(getDailyGoals());
+  const [goalClaimToast, setGoalClaimToast] = useState<string | null>(null);
+
+  // 领取每日目标奖励
+  const handleClaimGoal = useCallback((type: string) => {
+    const reward = claimGoalReward(type as any);
+    if (reward > 0) {
+      addHintItems(reward);
+      setHintItemsState(getHintItems());
+      setDailyGoals(getDailyGoals());
+      SoundEngine.win();
+      const goal = dailyGoals.find(g => g.type === type);
+      setGoalClaimToast(`领取 ${goal?.icon} ${goal?.description} 奖励 +${reward} 提示道具`);
+      setTimeout(() => setGoalClaimToast(null), 3000);
+    }
+  }, [dailyGoals]);
 
   // 更新日志、公告状态
   const [showChangelog, setShowChangelog] = useState(false);
@@ -331,6 +350,19 @@ export default function App() {
 
     // 记录统计:检查是否使用撒销/提示等辅助通关判定
     StatsTracker.recordWin(currentLevel, winMoves, stars, isDailyMode, isEndlessMode, isTimedMode, playTimeSec, usedHintThisLevel || recoveredFromDeadlock, usedHintThisLevel);
+
+    // 每日目标进度更新
+    if (!isDailyMode && !isEndlessMode && !isTimedMode && !isWeeklyMode) {
+      // 普通模式通关
+      updateGoalProgress('complete_levels');
+      updateGoalProgress('earn_stars', stars);
+      if (!usedHintThisLevel) {
+        updateGoalProgress('no_hint_clear');
+      }
+    }
+    if (isDailyMode) {
+      updateGoalProgress('daily_challenge');
+    }
 
     // 非胜利成就:仅普通模式胜利才累计普通连胜
     // 修复:原条件未排除 isWeeklyMode,周挑战通关会误触发普通连胜/里程碑/探索者/色彩成就
@@ -884,6 +916,33 @@ export default function App() {
               </div>
             );
           })()}
+
+          {/* 每日目标卡片：增强日活留存，完成小目标领取提示道具奖励 */}
+          <div className="daily-goals-card">
+            <div className="daily-goals-header">
+              <span className="daily-goals-title">🎯 每日目标</span>
+              <span className="daily-goals-progress">{dailyGoals.filter(g => g.completed).length}/{dailyGoals.length}</span>
+            </div>
+            <div className="daily-goals-list">
+              {dailyGoals.map(goal => (
+                <div key={goal.type} className={`daily-goal-item ${goal.completed ? 'goal-completed' : ''} ${goal.claimed ? 'goal-claimed' : ''}`}>
+                  <span className="goal-icon">{goal.icon}</span>
+                  <span className="goal-desc">{goal.description}</span>
+                  <span className="goal-progress-text">{goal.current}/{goal.target}</span>
+                  {goal.completed && !goal.claimed ? (
+                    <button className="goal-claim-btn" onClick={() => handleClaimGoal(goal.type)}>领取+{goal.reward}</button>
+                  ) : goal.claimed ? (
+                    <span className="goal-claimed-icon">✅</span>
+                  ) : (
+                    <span className="goal-pending-icon">○</span>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+          {goalClaimToast && (
+            <div className="goal-claim-toast">{goalClaimToast}</div>
+          )}
 
           {/* 游戏模式 2×2 网格 */}
           <div className="mode-grid">

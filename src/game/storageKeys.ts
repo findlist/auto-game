@@ -30,6 +30,7 @@ export const STORAGE_KEYS = {
   WEEKLY_RECORD: 'color-sort-weekly-record',
   WEEKLY_STREAK: 'color-sort-weekly-streak',
   WEEKLY_HISTORY: 'color-sort-weekly-history',
+  DAILY_GOALS: 'color-sort-daily-goals',
 } as const;
 
 // 导出所有需要重置的键（用于设置页"重置进度"功能）
@@ -60,6 +61,7 @@ export const RESETTABLE_KEYS = [
   STORAGE_KEYS.ANNOUNCEMENTS_READ,
   STORAGE_KEYS.DAILY_TIP_DATE,
   STORAGE_KEYS.DAILY_TIP_INDEX,
+  STORAGE_KEYS.DAILY_GOALS,
 ];
 
 // 导出所有需要备份的键（用于设置页"导出存档"功能）
@@ -87,4 +89,5 @@ export const BACKUP_KEYS = [
   STORAGE_KEYS.WEEKLY_RECORD,
   STORAGE_KEYS.WEEKLY_STREAK,
   STORAGE_KEYS.WEEKLY_HISTORY,
+  STORAGE_KEYS.DAILY_GOALS,
 ];

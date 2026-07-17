@@ -3431,6 +3431,127 @@ html[style*="1a1a2e"] .ach-hint-time {
   color: #999;
 }
 
+/* 每日目标卡片 */
+.daily-goals-card {
+  background: linear-gradient(135deg, rgba(255, 184, 0, 0.06) 0%, rgba(255, 120, 50, 0.06) 100%);
+  border-radius: 14px;
+  padding: 14px 18px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(255, 184, 0, 0.08);
+}
+
+.daily-goals-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.daily-goals-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #ff8a00;
+}
+
+.daily-goals-progress {
+  font-size: 13px;
+  color: #999;
+  font-weight: 600;
+}
+
+.daily-goals-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.daily-goal-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.5);
+  transition: all 0.2s;
+}
+
+.goal-completed {
+  background: rgba(76, 175, 80, 0.1);
+}
+
+.goal-claimed {
+  opacity: 0.6;
+}
+
+.goal-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.goal-desc {
+  font-size: 13px;
+  color: var(--text);
+  flex: 1;
+}
+
+.goal-progress-text {
+  font-size: 12px;
+  color: #999;
+  font-weight: 600;
+  min-width: 30px;
+  text-align: right;
+}
+
+.goal-claim-btn {
+  font-size: 12px;
+  color: #fff;
+  background: linear-gradient(135deg, #ff8a00, #ff5e3a);
+  border: none;
+  border-radius: 8px;
+  padding: 4px 10px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.goal-claim-btn:hover {
+  transform: scale(1.05);
+}
+
+.goal-claim-btn:active {
+  transform: scale(0.95);
+}
+
+.goal-claimed-icon {
+  font-size: 14px;
+}
+
+.goal-pending-icon {
+  font-size: 14px;
+  color: #ccc;
+}
+
+.goal-claim-toast {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(76, 175, 80, 0.95);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  z-index: 1000;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+  animation: toastSlideDown 0.3s ease;
+}
+
+@keyframes toastSlideDown {
+  from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
 .recent-icon {
   font-size: 20px;
   color: var(--primary);
@@ -10023,6 +10144,30 @@ canvas[aria-hidden="true"] {
   color: #ccc;
 }
 
+/* 每日目标卡片暗色适配 */
+.dark-theme .daily-goals-card {
+  background: linear-gradient(135deg, rgba(255, 184, 0, 0.1) 0%, rgba(255, 120, 50, 0.1) 100%);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+.dark-theme .daily-goals-title {
+  color: #ffb74d;
+}
+.dark-theme .daily-goal-item {
+  background: rgba(255, 255, 255, 0.05);
+}
+.dark-theme .goal-completed {
+  background: rgba(76, 175, 80, 0.15);
+}
+.dark-theme .goal-desc {
+  color: #ddd;
+}
+.dark-theme .goal-progress-text {
+  color: #999;
+}
+.dark-theme .goal-pending-icon {
+  color: #555;
+}
+
 /* 搜索结果关键词高亮 — 帮助用户快速定位匹配内容 */
 mark.search-highlight {
   background: rgba(255, 235, 59, 0.4);
@@ -10034,4 +10179,356 @@ mark.search-highlight {
 .dark-theme mark.search-highlight {
   background: rgba(255, 235, 59, 0.25);
   color: #fff;
+}
+
+/* ============================================================ */
+/* ============ 2026-07-18 样式优化增强（第六批） ============ */
+/* ============================================================ */
+/* 本批次目标：
+   - 增强通关瞬间的视觉冲击力（全屏闪光、胜利卡片 stagger 入场）
+   - 让液体更"活"（顶层液体周期性波动、试管底部反光增强）
+   - 提升首页浮动导航的玻璃质感与交互反馈
+   - 各页面增加装饰性细节与加载动画
+   - 完善超小屏与暗色主题适配
+   所有修改均为追加样式，不修改已有规则，不破坏现有功能。 */
+
+/* 1. 首页模式按钮：悬停光晕跟随各自主题色 */
+.mode-grid-btn.btn-primary:hover {
+  box-shadow: 0 6px 24px rgba(102, 126, 234, 0.5), 0 0 0 2px rgba(102, 126, 234, 0.3);
+}
+.mode-grid-btn.btn-daily:hover {
+  box-shadow: 0 6px 24px rgba(255, 107, 107, 0.5), 0 0 0 2px rgba(255, 160, 122, 0.4);
+}
+.mode-grid-btn.btn-endless:hover {
+  box-shadow: 0 6px 24px rgba(107, 115, 255, 0.55), 0 0 0 2px rgba(0, 13, 255, 0.25);
+}
+.mode-grid-btn.btn-timed:hover {
+  box-shadow: 0 6px 24px rgba(79, 172, 254, 0.55), 0 0 0 2px rgba(0, 242, 254, 0.35);
+}
+/* 模式按钮内部图标：悬停时轻微弹跳 */
+.mode-grid-btn:hover .mode-grid-icon {
+  transform: translateY(-2px) scale(1.1);
+  transition: transform 0.3s cubic-bezier(0.34, 1.5, 0.64, 1);
+}
+.mode-grid-icon {
+  transition: transform 0.25s ease;
+}
+
+/* 2. 首页浮动导航（fab-nav）容器玻璃化 */
+.fab-nav {
+  padding: 6px;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+.fab-nav-btn {
+  position: relative;
+  overflow: hidden;
+  /* 内置高光：玻璃质感 */
+  background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(102, 126, 234, 0.9));
+}
+.fab-nav-btn::before {
+  /* 顶部光泽线 */
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 20%;
+  right: 20%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 1px;
+  pointer-events: none;
+}
+.fab-nav-btn:hover {
+  transform: scale(1.12) rotate(-3deg);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.55);
+}
+.fab-nav-btn:active {
+  transform: scale(0.94) rotate(0);
+  transition: transform 0.08s ease;
+}
+
+/* 3. 通关瞬间全屏闪光：增强通关的视觉冲击 */
+.win-overlay::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.7) 0%, transparent 60%);
+  pointer-events: none;
+  animation: win-flash 0.6s ease-out forwards;
+  z-index: -1;
+}
+@keyframes win-flash {
+  0% { opacity: 0; transform: scale(0.3); }
+  30% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.4); }
+}
+
+/* 4. 胜利卡片：标题、星星、按钮依次淡入（stagger 入场） */
+.win-card .win-emoji {
+  animation: win-emoji-pop 0.6s cubic-bezier(0.34, 1.5, 0.64, 1);
+}
+@keyframes win-emoji-pop {
+  0% { transform: scale(0) rotate(-30deg); opacity: 0; }
+  60% { transform: scale(1.2) rotate(10deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0); opacity: 1; }
+}
+.win-card h2 {
+  animation: win-text-in 0.5s ease 0.15s both;
+}
+.win-card > p,
+.win-card .new-record-badge,
+.win-card .prev-best-badge {
+  animation: win-text-in 0.5s ease 0.25s both;
+}
+.win-card .star-rating {
+  animation: win-text-in 0.5s ease 0.35s both;
+}
+.win-card .win-efficiency-bar {
+  animation: win-text-in 0.5s ease 0.45s both;
+}
+.win-card .win-actions {
+  animation: win-text-in 0.5s ease 0.55s both;
+}
+@keyframes win-text-in {
+  0% { opacity: 0; transform: translateY(12px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* 5. 液体表面周期性波动：让液体看起来更"活" */
+.tube-inner > .color-layer:last-child::after {
+  animation: liquid-surface-wave 3.5s ease-in-out infinite;
+}
+@keyframes liquid-surface-wave {
+  0%, 100% { transform: scaleX(1); opacity: 0.7; }
+  50% { transform: scaleX(1.04); opacity: 0.9; }
+}
+
+/* 6. 试管底部反光：增强玻璃质感 */
+.tube::after {
+  /* 在原右侧次高光基础上，底部增加一个微弱的反光弧 */
+  box-shadow:
+    0 0 0 0 transparent,
+    /* 底部圆弧反光 */
+    0 -2px 4px rgba(255, 255, 255, 0.15) inset;
+}
+.tube-inner {
+  /* 底部内侧增加一条反光弧线 */
+  box-shadow: inset 0 -4px 8px -2px rgba(255, 255, 255, 0.18);
+}
+
+/* 7. 信息页（关于/隐私/FAQ）头部装饰光晕 */
+.info-page > h2:first-of-type {
+  position: relative;
+  padding-top: 12px;
+}
+.info-page > h2:first-of-type::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+  border-radius: 2px;
+  pointer-events: none;
+}
+.info-page h3 {
+  position: relative;
+  transition: border-color 0.25s ease, padding-left 0.25s ease;
+}
+.info-page h3:hover {
+  border-left-color: rgba(255, 255, 255, 0.8);
+  padding-left: 12px;
+}
+
+/* 8. 统计页条形图填充动画 */
+.chart-bar-fill {
+  animation: chart-bar-grow 0.8s cubic-bezier(0.34, 1.2, 0.64, 1) both;
+  transform-origin: left center;
+}
+@keyframes chart-bar-grow {
+  0% { transform: scaleX(0); opacity: 0.3; }
+  100% { transform: scaleX(1); opacity: 1; }
+}
+/* 进度条同步动画 */
+.progress-bar-fill,
+.achievement-overall-fill,
+.ach-cat-progress-fill,
+.today-ach-bar-fill,
+.diff-progress-fill,
+.progress-overall-bar {
+  animation: chart-bar-grow 1s cubic-bezier(0.34, 1.2, 0.64, 1) both;
+}
+/* 热力图格子依次淡入 */
+.stats-heatmap-cell {
+  animation: heatmap-fade-in 0.4s ease both;
+}
+@keyframes heatmap-fade-in {
+  0% { opacity: 0; transform: scale(0.7); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* 9. 成就时间线连接线绘制动画 */
+.timeline-connector {
+  background: linear-gradient(180deg, var(--primary) 0%, var(--primary) 100%);
+  background-size: 100% 100%;
+  animation: timeline-draw 0.6s ease both;
+}
+@keyframes timeline-draw {
+  0% { transform: scaleY(0); transform-origin: top center; opacity: 0; }
+  100% { transform: scaleY(1); transform-origin: top center; opacity: 1; }
+}
+.timeline-item-dot {
+  animation: timeline-dot-pop 0.4s cubic-bezier(0.34, 1.5, 0.64, 1) both;
+}
+@keyframes timeline-dot-pop {
+  0% { transform: scale(0); }
+  60% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* 10. 设置页 toggle-switch 弹性动画 */
+.toggle-switch {
+  transition: background 0.25s cubic-bezier(0.34, 1.2, 0.64, 1);
+}
+.toggle-knob {
+  transition: transform 0.3s cubic-bezier(0.34, 1.5, 0.64, 1), box-shadow 0.2s ease;
+}
+.toggle-switch.on .toggle-knob {
+  /* 开启时旋钮有轻微的过冲反馈 */
+  animation: toggle-on-bounce 0.4s cubic-bezier(0.34, 1.5, 0.64, 1);
+}
+@keyframes toggle-on-bounce {
+  0% { transform: translateX(0); }
+  60% { transform: translateX(20px); }
+  80% { transform: translateX(18px); }
+  100% { transform: translateX(20px); }
+}
+
+/* 11. 可折叠区域：展开/折叠图标旋转动画 */
+.collapse-toggle {
+  transition: transform 0.3s cubic-bezier(0.34, 1.3, 0.64, 1);
+  display: inline-block;
+}
+.collapse-toggle.collapsed {
+  transform: rotate(-90deg);
+}
+.collapse-header:hover .collapse-toggle {
+  transform: scale(1.15);
+}
+.collapse-header:hover .collapse-toggle.collapsed {
+  transform: rotate(-90deg) scale(1.15);
+}
+
+/* 12. 关卡按钮悬停时显示更清晰的状态指示 */
+.level-btn {
+  transition: transform 0.18s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  position: relative;
+}
+.level-btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.08);
+}
+.level-btn.current::after {
+  /* 当前关卡：右上角"在此"指示点 */
+  content: '';
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 6px;
+  height: 6px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.9);
+  animation: current-pulse 1.4s ease-in-out infinite;
+}
+@keyframes current-pulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.3); }
+}
+.level-btn.completed:hover {
+  box-shadow: 0 4px 12px rgba(149, 225, 163, 0.4);
+}
+
+/* 13. 超小屏幕（≤360px）试管尺寸自适应 */
+@media (max-width: 360px) {
+  .tube {
+    width: 36px;
+    height: 116px;
+    border-radius: 0 0 16px 16px;
+  }
+  .tube-inner {
+    border-radius: 0 0 13px 13px;
+  }
+  .tube-mouth {
+    left: -5px;
+    right: -5px;
+    height: 5px;
+  }
+  /* 多管时进一步紧凑 */
+  .tubes-grid[data-tube-count="9"] .tube,
+  .tubes-grid[data-tube-count="10"] .tube,
+  .tubes-grid[data-tube-count="11"] .tube,
+  .tubes-grid[data-tube-count="12"] .tube {
+    width: 32px;
+    height: 104px;
+  }
+}
+
+/* 14. 减少动画偏好：禁用本批次新增的装饰性动画 */
+@media (prefers-reduced-motion: reduce) {
+  .win-overlay::before,
+  .win-card .win-emoji,
+  .win-card h2,
+  .win-card > p,
+  .win-card .new-record-badge,
+  .win-card .prev-best-badge,
+  .win-card .star-rating,
+  .win-card .win-efficiency-bar,
+  .win-card .win-actions,
+  .tube-inner > .color-layer:last-child::after,
+  .chart-bar-fill,
+  .progress-bar-fill,
+  .achievement-overall-fill,
+  .ach-cat-progress-fill,
+  .today-ach-bar-fill,
+  .diff-progress-fill,
+  .progress-overall-bar,
+  .stats-heatmap-cell,
+  .timeline-connector,
+  .timeline-item-dot,
+  .toggle-switch.on .toggle-knob,
+  .collapse-toggle,
+  .level-btn.current::after,
+  .mode-grid-btn:hover .mode-grid-icon,
+  .fab-nav-btn {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* 15. 暗色主题适配：本批次新增项目在暗色模式下保持可读性 */
+@media (prefers-color-scheme: dark) {
+  .fab-nav {
+    background: rgba(0, 0, 0, 0.25);
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+  .info-page > h2:first-of-type::before {
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  }
+}
+.dark-theme .fab-nav {
+  background: rgba(0, 0, 0, 0.25);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+.dark-theme .info-page > h2:first-of-type::before {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+}
+.dark-theme .timeline-connector {
+  background: linear-gradient(180deg, var(--primary) 0%, var(--primary) 100%);
 }
