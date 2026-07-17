@@ -281,7 +281,7 @@ export default function App() {
 
     // 新版本更新,显示更新日志
     const CHANGELOG_KEY = STORAGE_KEYS.CHANGELOG_VERSION;
-    const currentVersion = '1.35.0';
+    const currentVersion = '1.36.0';
     try {
       const lastVersion = localStorage.getItem(CHANGELOG_KEY);
       if (lastVersion !== currentVersion) {
@@ -1010,6 +1010,22 @@ export default function App() {
               <span className="recent-arrow">→</span>
             </div>
           )}
+
+          {/* 快速重玩上一关：让玩家可快速重玩最近通关的关卡，提升重玩率 */}
+          {progress.completedLevels.length > 0 && (() => {
+            const lastCompleted = progress.completedLevels[progress.completedLevels.length - 1];
+            return (
+              <div className="replay-last-card" onClick={() => { SoundEngine.click(); handleSelectLevel(lastCompleted); }} role="button" tabIndex={0}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); SoundEngine.click(); handleSelectLevel(lastCompleted); } }}>
+                <span className="replay-last-icon">🔄</span>
+                <div className="replay-last-info">
+                  <span className="replay-last-label">重玩上一关</span>
+                  <span className="replay-last-detail">第 {lastCompleted} 关 · {levelStars[lastCompleted] ? '⭐'.repeat(levelStars[lastCompleted]) : '未评星'}</span>
+                </div>
+                <span className="replay-last-arrow">→</span>
+              </div>
+            );
+          })()}
 
           {/* 游戏模式 2×2 网格 */}
           <div className="mode-grid">

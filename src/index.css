@@ -3381,6 +3381,56 @@ html[style*="1a1a2e"] .ach-hint-time {
   transform: translateY(0);
 }
 
+/* 快速重玩上一关卡片 */
+.replay-last-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%);
+  border-radius: 14px;
+  padding: 12px 18px;
+  margin-bottom: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+}
+
+.replay-last-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(102, 126, 234, 0.2);
+}
+
+.replay-last-card:active {
+  transform: translateY(0);
+}
+
+.replay-last-icon {
+  font-size: 20px;
+}
+
+.replay-last-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 2px;
+}
+
+.replay-last-label {
+  font-size: 13px;
+  color: #667eea;
+  font-weight: 600;
+}
+
+.replay-last-detail {
+  font-size: 14px;
+  color: var(--text);
+}
+
+.replay-last-arrow {
+  font-size: 18px;
+  color: #999;
+}
+
 .recent-icon {
   font-size: 20px;
   color: var(--primary);
@@ -9959,6 +10009,18 @@ canvas[aria-hidden="true"] {
 }
 .dark-theme .today-ach-next {
   color: #888;
+}
+
+/* 暗色主题：快速重玩卡片 */
+.dark-theme .replay-last-card {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+.dark-theme .replay-last-label {
+  color: #8e9aef;
+}
+.dark-theme .replay-last-detail {
+  color: #ccc;
 }
 
 /* 搜索结果关键词高亮 — 帮助用户快速定位匹配内容 */
