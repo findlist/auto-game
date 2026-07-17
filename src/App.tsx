@@ -24,7 +24,7 @@ import { GameSettings } from './game/settings';
 import { canInstallPWA, triggerPWAInstall, isPWAInstallDismissed, dismissPWAInstall } from './game/pwaInstall';
 import { loadRecent, saveRecent, RecentPlay, loadProgress, saveProgress, Progress, loadBestScores, saveBestScore, hasSeenTutorial, markTutorialSeen, loadStars, saveStars, loadAutosave, saveAutosave, clearAutosave, loadTimedHighScore, saveTimedHighScore, AutosaveData } from './game/homeStorage';
 import { getDailyGoals, updateGoalProgress, claimGoalReward } from './game/dailyGoals';
-import { getComboStreak, incrementComboStreak, resetComboStreak } from './game/comboStreak';
+import { getComboStreak, incrementComboStreak, resetComboStreak, checkComboCelebration, addTotalComboCount, ComboCelebration } from './game/comboStreak';
 // 懒加载非首屏页面组件,减小首屏 bundle 大小
 const AboutPage = lazy(() => import('./pages/AboutPage').then(m => ({ default: m.AboutPage })));
 const AchievementsPage = lazy(() => import('./pages/AchievementsPage').then(m => ({ default: m.AchievementsPage })));
@@ -87,6 +87,8 @@ export default function App() {
 
   // 连击计数器状态
   const [comboStreak, setComboStreak] = useState(getComboStreak());
+  // 连击里程碑庆祝弹窗
+  const [comboCelebration, setComboCelebration] = useState<ComboCelebration | null>(null);
 
   // 领取每日目标奖励
   const handleClaimGoal = useCallback((type: string) => {
@@ -366,6 +368,16 @@ export default function App() {
       // 连续通关连击+1
       const newCombo = incrementComboStreak();
       setComboStreak(newCombo);
+      // 累计连击总数（用于成就判定）
+      addTotalComboCount();
+      // 检查是否触发连击里程碑庆祝弹窗
+      const celebration = checkComboCelebration();
+      if (celebration) {
+        setComboCelebration(celebration);
+        SoundEngine.win();
+        // 3秒后自动关闭
+        setTimeout(() => setComboCelebration(null), 3000);
+      }
     }
     if (isDailyMode) {
       updateGoalProgress('daily_challenge');
@@ -1674,6 +1686,18 @@ export default function App() {
                 <div className="achievement-notif-name">{newAchievements[0].name}</div>
                 <div className="achievement-notif-desc">{newAchievements[0].description}</div>
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* 连击里程碑庆祝弹窗 */}
+        {comboCelebration && (
+          <div className="combo-celebration-overlay" onClick={() => setComboCelebration(null)}>
+            <div className="combo-celebration-card" style={{ borderColor: comboCelebration.color }}>
+              <div className="combo-celebration-emoji" style={{ animation: 'comboPop 0.6s ease-out' }}>{comboCelebration.emoji}</div>
+              <div className="combo-celebration-title" style={{ color: comboCelebration.color }}>{comboCelebration.title}</div>
+              <div className="combo-celebration-desc">{comboCelebration.desc}</div>
+              <button className="btn btn-primary" onClick={() => setComboCelebration(null)}>继续</button>
             </div>
           </div>
         )}
