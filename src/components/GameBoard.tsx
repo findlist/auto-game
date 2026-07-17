@@ -74,13 +74,17 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
 
   // 帮助弹窗状态
   const [showHelpModal, setShowHelpModal] = useState(false);
+  // 暂停状态：玩家可暂停游戏，暂停时冻结计时器和操作
+  const [isPaused, setIsPaused] = useState(false);
+  // 暂停时记录的已用时间，用于恢复计时
+  const pausedElapsedRef = useRef<number>(0);
 
   // 同步当前 tubes 到父组件的 ref（用于提示功能）
   tubesRef.current = tubes;
 
-  // 限时模式倒计时
+  // 限时模式倒计时（暂停时冻结）
   useEffect(() => {
-    if (level !== -3 || isWon || isTimeUp) return;
+    if (level !== -3 || isWon || isTimeUp || isPaused) return;
     if (timeLeft <= 0) {
       setIsTimeUp(true);
       SoundEngine.timeUp();
@@ -93,7 +97,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
     }
     const timer = setTimeout(() => setTimeLeft(t => t - 1), 1000);
     return () => clearTimeout(timer);
-  }, [level, timeLeft, isWon, isTimeUp, onTimeUp]);
+  }, [level, timeLeft, isWon, isTimeUp, isPaused, onTimeUp]);
 
   // 关卡变化时重置
   useEffect(() => {
@@ -145,11 +149,11 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
     gameStartTime.current = Date.now(); // 重置计时器
   }, [level, endlessScore, timedScore, timedDuration]);
 
-  // 实时计时器（非限时模式也显示已用时间）
+  // 实时计时器（非限时模式也显示已用时间），暂停时冻结
   // 使用 requestAnimationFrame 替代 setInterval，减少不必要的重渲染
   // 仅在秒数变化时更新状态
   useEffect(() => {
-    if (isWon || isTimeUp) return;
+    if (isWon || isTimeUp || isPaused) return;
     let rafId: number;
     let lastSecond = -1;
     const tick = () => {
@@ -162,10 +166,10 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
     };
     rafId = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(rafId);
-  }, [isWon, isTimeUp, level]);
+  }, [isWon, isTimeUp, isPaused, level]);
 
   const handleTubeClick = useCallback((index: number) => {
-    if (isWon) {
+    if (isWon || isPaused) {
       return;
     }
     SoundEngine.resume();
@@ -313,9 +317,9 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
     handleTubeClickRef.current(index);
   }, []);
 
-  // 撤销
+  // 撤销（暂停时禁止）
   const handleUndo = useCallback(() => {
-    if (history.length === 0 || isWon) return;
+    if (history.length === 0 || isWon || isPaused) return;
     SoundEngine.resume();
     const prev = history[history.length - 1];
     setTubes(prev);
@@ -416,10 +420,17 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
           onPrevLevel();
         }
       }
+      // 暂停/恢复快捷键（空格或P键）
+      if (e.key === ' ' || e.key.toLowerCase() === 'p') {
+        e.preventDefault();
+        if (!isWon && !isTimeUp) {
+          setIsPaused(prev => !prev);
+        }
+      }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isWon, isTimeUp, onHint, onNextLevel, onPrevLevel, stableHandleTubeClick, stableHandleUndo, stableHandleReset]);
+  }, [isWon, isTimeUp, isPaused, onHint, onNextLevel, onPrevLevel, stableHandleTubeClick, stableHandleUndo, stableHandleReset]);
 
   // 清除提示
   useEffect(() => {
@@ -447,6 +458,29 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
         replayTimerRef.current = null;
       }
     };
+  }, []);
+
+  // 暂停/恢复处理：暂停时记录当前已用时间，恢复时调整起始时间戳
+  const handleTogglePause = useCallback(() => {
+    if (isWon || isTimeUp) return;
+    if (!isPaused) {
+      // 进入暂停：记录当前已用时间
+      pausedElapsedRef.current = Date.now() - gameStartTime.current;
+      setIsPaused(true);
+      SoundEngine.click();
+    } else {
+      // 恢复游戏：将起始时间戳向后调整暂停的时长
+      gameStartTime.current = Date.now() - pausedElapsedRef.current;
+      setIsPaused(false);
+      SoundEngine.click();
+    }
+  }, [isPaused, isWon, isTimeUp]);
+
+  // 使用 ref 保存 handleTogglePause 的最新引用，避免闭包陷阱
+  const handleTogglePauseRef = useRef(handleTogglePause);
+  handleTogglePauseRef.current = handleTogglePause;
+  const stableHandleTogglePause = useCallback(() => {
+    handleTogglePauseRef.current();
   }, []);
 
   return (
@@ -770,11 +804,14 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
       )}
 
       <div className="game-controls">
-        <button className="btn btn-undo" onClick={handleUndo} disabled={history.length === 0 || isWon} aria-label="撤销上一步">
+        <button className="btn btn-undo" onClick={handleUndo} disabled={history.length === 0 || isWon || isPaused} aria-label="撤销上一步">
           ↩️ 撤销
         </button>
-        <button className="btn btn-hint" onClick={() => { if (onHint) onHint(); }} disabled={isWon || hintItems <= 0} aria-label="使用提示道具">
+        <button className="btn btn-hint" onClick={() => { if (onHint) onHint(); }} disabled={isWon || hintItems <= 0 || isPaused} aria-label="使用提示道具">
           💡 提示 <span className="hint-count">{hintItems}</span>
+        </button>
+        <button className="btn btn-pause" onClick={stableHandleTogglePause} disabled={isWon || isTimeUp} aria-label={isPaused ? '继续游戏' : '暂停游戏'}>
+          {isPaused ? '▶️ 继续' : '⏸️ 暂停'}
         </button>
         <button className="btn btn-reset" onClick={handleReset} aria-label="重新开始当前关卡">
           🔄 重置
@@ -784,9 +821,24 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
         </button>
       </div>
       <div className="keyboard-hint">
-        <span className="hint-desktop">快捷键: 数字键选管 · Z 撤销 · R 重置 · H 提示(消耗道具) · PageUp 上一关 · PageDown 下一关 · 移动端长按试管撤销</span>
+        <span className="hint-desktop">快捷键: 数字键选管 · Z 撤销 · R 重置 · H 提示(消耗道具) · P/空格 暂停 · PageUp 上一关 · PageDown 下一关 · 移动端长按试管撤销</span>
         <span className="hint-mobile">点击试管选中 → 再点目标试管倒色 · 长按试管撤销 · 💡提示需消耗道具</span>
       </div>
+
+      {/* 暂停遵罩 */}
+      {isPaused && !isWon && !isTimeUp && (
+        <div className="pause-overlay" onClick={stableHandleTogglePause}>
+          <div className="pause-card" onClick={(e) => e.stopPropagation()}>
+            <div className="pause-emoji">⏸️</div>
+            <h2>游戏已暂停</h2>
+            <p>计时已停止，放松一下吧~</p>
+            <div className="win-actions">
+              <button className="btn btn-primary" onClick={stableHandleTogglePause}>▶️ 继续游戏</button>
+              <button className="btn btn-secondary" onClick={onGoHome}>🏠 返回首页</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* 游戏内帮助弹窗 */}
       {showHelpModal && (

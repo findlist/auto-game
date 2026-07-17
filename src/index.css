@@ -1499,6 +1499,17 @@ body {
   color: #e65100;
 }
 
+/* 暂停按钮 */
+.btn-pause {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.btn-pause:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .btn-hint {
   background: #fff8e1;
   color: #f57c00;
@@ -1556,7 +1567,7 @@ body {
 }
 
 /* 胜利覆盖层 */
-.win-overlay, .deadlock-overlay {
+.win-overlay, .deadlock-overlay, .pause-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.5);
@@ -1593,6 +1604,40 @@ body {
   font-size: 64px;
   margin-bottom: 12px;
   animation: bounce 1s ease;
+}
+
+/* 暂停遵罩卡片 */
+.pause-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 32px 40px;
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  animation: pop-in 0.4s ease;
+  max-width: 400px;
+  width: 90vw;
+}
+
+.pause-emoji {
+  font-size: 64px;
+  margin-bottom: 12px;
+  animation: pulse 2s ease infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.pause-card h2 {
+  font-size: 24px;
+  margin-bottom: 8px;
+  color: var(--text);
+}
+
+.pause-card p {
+  color: #666;
+  font-size: 16px;
 }
 
 .win-card h2, .deadlock-card h2 {
@@ -9252,6 +9297,10 @@ canvas[aria-hidden="true"] {
 }
 .dark-theme .deadlock-card {
   background: linear-gradient(160deg, #3a3520 0%, #332f1a 100%);
+}
+.dark-theme .pause-card {
+  background: linear-gradient(160deg, #2a2a3e 0%, #252538 100%);
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
 }
 .dark-theme .faq-item:hover {
   background: rgba(255, 255, 255, 0.06);
