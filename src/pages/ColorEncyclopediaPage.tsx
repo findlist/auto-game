@@ -1577,8 +1577,12 @@ export const ColorEncyclopediaPage: React.FC<ColorEncyclopediaPageProps> = ({ on
     const escaped = query.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const regex = new RegExp(`(${escaped})`, 'gi');
     const parts = text.split(regex);
+    // 修复：原代码在 map 中使用 regex.test(part)，但带 g 标志的正则 lastIndex 有状态，
+    // 多次调用 test 会因 lastIndex 偏移导致交替返回 true/false，使部分匹配项未被高亮。
+    // 改为用不带 g 标志的新正则做测试，避免 lastIndex 状态污染。
+    const testRegex = new RegExp(`^${escaped}$`, 'i');
     return parts.map((part, i) =>
-      regex.test(part) ? <mark key={i} className="search-highlight">{part}</mark> : part
+      testRegex.test(part) ? <mark key={i} className="search-highlight">{part}</mark> : part
     );
   }, []);
 
@@ -1917,7 +1921,7 @@ export const ColorEncyclopediaPage: React.FC<ColorEncyclopediaPageProps> = ({ on
           </>
         )}
 
-        <p className="version">色彩百科 | 色彩排序 v1.35.0 | 2026</p>
+        <p className="version">色彩百科 | 色彩排序 v1.36.0 | 2026</p>
 
         {/* SEO 结构化数据 */}
         <script type="application/ld+json" dangerouslySetInnerHTML={{
