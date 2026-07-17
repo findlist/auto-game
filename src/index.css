@@ -855,6 +855,18 @@ body {
   opacity: 0.5;
 }
 
+/* 连击徽章 */
+.combo-badge {
+  color: #ff5e3a;
+  font-weight: 700;
+  animation: comboPulse 0.5s ease;
+}
+@keyframes comboPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
 .game-title {
   font-size: 18px;
   font-weight: 700;

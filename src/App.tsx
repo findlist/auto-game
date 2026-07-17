@@ -24,6 +24,7 @@ import { GameSettings } from './game/settings';
 import { canInstallPWA, triggerPWAInstall, isPWAInstallDismissed, dismissPWAInstall } from './game/pwaInstall';
 import { loadRecent, saveRecent, RecentPlay, loadProgress, saveProgress, Progress, loadBestScores, saveBestScore, hasSeenTutorial, markTutorialSeen, loadStars, saveStars, loadAutosave, saveAutosave, clearAutosave, loadTimedHighScore, saveTimedHighScore, AutosaveData } from './game/homeStorage';
 import { getDailyGoals, updateGoalProgress, claimGoalReward } from './game/dailyGoals';
+import { getComboStreak, incrementComboStreak, resetComboStreak } from './game/comboStreak';
 // 懒加载非首屏页面组件,减小首屏 bundle 大小
 const AboutPage = lazy(() => import('./pages/AboutPage').then(m => ({ default: m.AboutPage })));
 const AchievementsPage = lazy(() => import('./pages/AchievementsPage').then(m => ({ default: m.AchievementsPage })));
@@ -83,6 +84,9 @@ export default function App() {
   // 每日目标状态
   const [dailyGoals, setDailyGoals] = useState(getDailyGoals());
   const [goalClaimToast, setGoalClaimToast] = useState<string | null>(null);
+
+  // 连击计数器状态
+  const [comboStreak, setComboStreak] = useState(getComboStreak());
 
   // 领取每日目标奖励
   const handleClaimGoal = useCallback((type: string) => {
@@ -359,6 +363,9 @@ export default function App() {
       if (!usedHintThisLevel) {
         updateGoalProgress('no_hint_clear');
       }
+      // 连续通关连击+1
+      const newCombo = incrementComboStreak();
+      setComboStreak(newCombo);
     }
     if (isDailyMode) {
       updateGoalProgress('daily_challenge');
@@ -531,6 +538,11 @@ export default function App() {
     setRecoveredFromDeadlock(false);
     // 清除自动存档
     clearAutosave();
+    // 返回首页时重置连击（非通关返回不算连续）
+    if (currentMoves > 0 && !isDailyMode && !isEndlessMode && !isTimedMode && !isWeeklyMode) {
+      resetComboStreak();
+      setComboStreak(0);
+    }
   };
 
   // 确认的返回首页:防止误退出
@@ -1784,6 +1796,12 @@ export default function App() {
               <>
                 <span className="level-info-divider">|</span>
                 <span className="level-info-item">🏆 最佳: {bestScores[currentLevel]}步</span>
+              </>
+            )}
+            {comboStreak >= 2 && (
+              <>
+                <span className="level-info-divider">|</span>
+                <span className="level-info-item combo-badge">🔥 {comboStreak}连击</span>
               </>
             )}
           </div>
