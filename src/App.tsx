@@ -24,6 +24,8 @@ import { GameSettings } from './game/settings';
 import { canInstallPWA, triggerPWAInstall, isPWAInstallDismissed, dismissPWAInstall } from './game/pwaInstall';
 import { loadRecent, saveRecent, RecentPlay, loadProgress, saveProgress, Progress, loadBestScores, saveBestScore, hasSeenTutorial, markTutorialSeen, loadStars, saveStars, loadAutosave, saveAutosave, clearAutosave, loadTimedHighScore, saveTimedHighScore, AutosaveData } from './game/homeStorage';
 import { getDailyGoals, updateGoalProgress, claimGoalReward, getDailyGoalsProgress } from './game/dailyGoals';
+import { DailyGoalsCard } from './components/DailyGoalsCard';
+import { TodaySummaryCard } from './components/TodaySummaryCard';
 import { getComboStreak, incrementComboStreak, resetComboStreak, checkComboCelebration, addTotalComboCount, getTotalComboCount, ComboCelebration } from './game/comboStreak';
 // 懒加载非首屏页面组件,减小首屏 bundle 大小
 const AboutPage = lazy(() => import('./pages/AboutPage').then(m => ({ default: m.AboutPage })));
@@ -958,76 +960,10 @@ export default function App() {
           })()}
 
           {/* 今日概览卡片：展示当日游玩数据，提升首页信息密度 */}
-          {(() => {
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            const todayMs = today.getTime();
-            const stats = StatsTracker.get();
-            const todayRecords = stats.recentRecords.filter(r => r.timestamp >= todayMs);
-            const todayWins = todayRecords.length;
-            const todayStars = todayRecords.reduce((sum, r) => sum + r.stars, 0);
-            if (todayWins === 0 && comboStreak === 0) return null;
-            return (
-              <div className="today-summary-card">
-                <div className="today-summary-item">
-                  <span className="today-summary-icon">🎯</span>
-                  <span className="today-summary-value">{todayWins}</span>
-                  <span className="today-summary-label">今日通关</span>
-                </div>
-                <div className="today-summary-item">
-                  <span className="today-summary-icon">⭐</span>
-                  <span className="today-summary-value">{todayStars}</span>
-                  <span className="today-summary-label">今日星数</span>
-                </div>
-                {comboStreak >= 2 && (
-                  <div className="today-summary-item">
-                    <span className="today-summary-icon">🔥</span>
-                    <span className="today-summary-value">{comboStreak}</span>
-                    <span className="today-summary-label">连击</span>
-                  </div>
-                )}
-              </div>
-            );
-          })()}
+          <TodaySummaryCard comboStreak={comboStreak} />
 
           {/* 每日目标卡片：增强日活留存，完成小目标领取提示道具奖励 */}
-          <div className="daily-goals-card">
-            <div className="daily-goals-header">
-              <span className="daily-goals-title">🎯 每日目标</span>
-              <span className="daily-goals-progress">{dailyGoals.filter(g => g.completed).length}/{dailyGoals.length}</span>
-            </div>
-            {/* 整体进度条 */}
-            <div className="daily-goals-bar">
-              <div className="daily-goals-bar-fill" style={{ width: `${(dailyGoals.filter(g => g.completed).length / dailyGoals.length) * 100}%` }} />
-            </div>
-            <div className="daily-goals-list">
-              {dailyGoals.map(goal => (
-                <div key={goal.type} className={`daily-goal-item ${goal.completed ? 'goal-completed' : ''} ${goal.claimed ? 'goal-claimed' : ''}`}>
-                  <span className="goal-icon">{goal.icon}</span>
-                  <div className="goal-content">
-                    <div className="goal-row">
-                      <span className="goal-desc">{goal.description}</span>
-                      <span className="goal-progress-text">{goal.current}/{goal.target}</span>
-                    </div>
-                    {/* 单目标进度条 */}
-                    <div className="goal-progress-bar">
-                      <div className={`goal-progress-fill ${goal.completed ? 'goal-progress-done' : ''}`} style={{ width: `${Math.min(100, (goal.current / goal.target) * 100)}%` }} />
-                    </div>
-                  </div>
-                  {goal.completed && !goal.claimed ? (
-                    <button className="goal-claim-btn" onClick={() => handleClaimGoal(goal.type)}>领取+{goal.reward}</button>
-                  ) : goal.claimed ? (
-                    <span className="goal-claimed-icon">✅</span>
-                  ) : (
-                    <span className="goal-pending-icon">○</span>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-          {goalClaimToast && (
-            <div className="goal-claim-toast">{goalClaimToast}</div>
-          )}
+          <DailyGoalsCard goals={dailyGoals} onClaim={handleClaimGoal} claimToast={goalClaimToast} />
 
           {/* 游戏模式 2×2 网格 */}
           <div className="mode-grid">
