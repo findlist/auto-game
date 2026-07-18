@@ -13,6 +13,15 @@ const ChangelogModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         <h2>色彩排序更新日志</h2>
         <div className="changelog-content">
           <div className="changelog-item">
+            <h3>🎉 v1.39.0</h3>
+            <ul>
+              <li>⏱ 限时模式新增每5关里程碑奖励提示道具，与无尽模式保持一致的留存激励</li>
+              <li>🎉 新手引导增强，首次倒水成功后显示“做得好！”鼓励提示，4秒自动消失，帮助新手建立信心</li>
+              <li>📝 FAQ补充2条问答（限时模式里程碑奖励、新手鼓励提示），更新模式介绍文案</li>
+              <li>🔍 SEO更新，新增2条FAQ结构化数据，扩展长尾关键词覆盖</li>
+            </ul>
+          </div>
+          <div className="changelog-item">
             <h3>🎉 v1.38.0</h3>
             <ul>
               <li>🎉 连击里程碑庆祝弹窗，3/5/7/10/15/20连击时弹出动画庆祝，每个里程碑不同颜色和文案</li>
