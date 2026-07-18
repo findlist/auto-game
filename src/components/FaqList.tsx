@@ -34,7 +34,7 @@ const FaqList: React.FC = () => {
       </div>
       <div className="faq-item">
         <div className="faq-question">🎮 色彩排序有哪些游戏模式？</div>
-        <div className="faq-answer">色彩排序包含五种模式：100关闯关模式、每天一题的每日挑战、每周一题的周挑战、难度无限递增的无尽模式、120秒极限的限时挑战模式。每种模式都有独特的乐趣！</div>
+        <div className="faq-answer">色彩排序包含五种模式：100关闯关模式、每天一题的每日挑战、每周一题的周挑战、难度无限递增的无尽模式（每过5关奖励提示道具）、120秒极限的限时挑战模式。每种模式都有独特的乐趣！</div>
       </div>
       <div className="faq-item">
         <div className="faq-question">🏆 成就系统怎么玩？</div>
@@ -219,6 +219,18 @@ const FaqList: React.FC = () => {
       <div className="faq-item">
         <div className="faq-question">📊 首页今日概览卡片展示什么？</div>
         <div className="faq-answer">今日概览卡片展示您当天的通关数、获得星数和连击数，帮助您直观了解每日游玩进度，当有数据时才显示。</div>
+      </div>
+      <div className="faq-item">
+        <div className="faq-question">🎉 连击里程碑有什么庆祝效果？</div>
+        <div className="faq-answer">连续通关达到3、5、7、10、15、20连击时会弹出庆祝弹窗，配合动画和音效，每个里程碑有不同颜色和文案，20连击将获得“色彩排序之王”称号。</div>
+      </div>
+      <div className="faq-item">
+        <div className="faq-question">🏆 连击和每日目标有成就吗？</div>
+        <div className="faq-answer">有！连击方面新增单次5/10/20连击和累计50/100/200连击共6个成就，每日目标方面新增首个目标完成、全目标完成、连续7天全目标完成3个成就，合计9个新成就等你解锁。</div>
+      </div>
+      <div className="faq-item">
+        <div className="faq-question">📊 每日目标进度条有什么用？</div>
+        <div className="faq-answer">每日目标卡片新增整体进度条和单目标进度条，进度条带平滑动画，完成时颜色从橙色变为绿色，直观展示目标完成进度。</div>
       </div>
     </div>
   );

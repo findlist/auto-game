@@ -493,6 +493,14 @@ export default function App() {
       if (endlessAchievements.length > 0) {
         setNewAchievements(prev => [...prev, ...endlessAchievements]);
       }
+      // 无尽模式里程碑奖励：每过5关奖励1个提示道具，增强留存动力
+      if (newScore > 0 && newScore % 5 === 0) {
+        const bonus = addHintItems(1);
+        setHintItemsState(bonus);
+        // 显示里程碑奖励提示
+        setGoalClaimToast(`🎉 无尽模式 ${newScore} 关里程碑！奖励 +1 提示道具`);
+        setTimeout(() => setGoalClaimToast(null), 3000);
+      }
     }
     // 限时模式完成处理
     if (isTimedMode) {
@@ -987,7 +995,7 @@ export default function App() {
             >
               <span className="mode-grid-icon">∞</span>
               <span className="mode-grid-label">无尽模式</span>
-              <span className="mode-grid-sub">难度无限递增</span>
+              <span className="mode-grid-sub">每5关奖提示道具</span>
             </button>
             <button
               className="btn btn-timed mode-grid-btn"
