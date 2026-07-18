@@ -1,6 +1,8 @@
 // 成就系统
 // 记录玩家成就，增加长期留存和目标感
 
+export type AchievementRarity = 'common' | 'rare' | 'epic' | 'legendary';
+
 export interface Achievement {
   id: string;
   name: string;
@@ -8,6 +10,100 @@ export interface Achievement {
   icon: string; // Emoji
   unlocked: boolean;
   unlockedAt?: number; // 解锁时间戳
+  rarity?: AchievementRarity; // 稀有度，用于差异化音效和展示
+}
+
+// 成就稀有度映射表 — 根据成就解锁难度分为四档
+// common: 初期即可解锁的引导型成就
+// rare: 需要一定技巧或坚持的中等难度成就
+// epic: 需要长期坚持或高超技巧的高难度成就
+// legendary: 极少数玩家可达成的终极成就
+const ACHIEVEMENT_RARITY: Record<string, AchievementRarity> = {
+  // common — 引导型，初期自然解锁
+  first_win: 'common',
+  daily_first: 'common',
+  checkin_first: 'common',
+  all_round: 'common',
+  stats_viewer: 'common',
+  encyclopedia_visitor: 'common',
+  quiz_first: 'common',
+  daily_goal_first: 'common',
+  pair_speed_easy: 'common',
+  color_mixer_10: 'common',
+  knowledge_explorer: 'common',
+  quiz_sharer: 'common',
+
+  // rare — 中等难度，需要技巧或短期坚持
+  level_10: 'rare',
+  level_25: 'rare',
+  no_hint_5: 'rare',
+  speed_run: 'rare',
+  streak_3: 'rare',
+  endless_5: 'rare',
+  timed_5: 'rare',
+  checkin_7: 'rare',
+  play_days_7: 'rare',
+  total_100_moves: 'rare',
+  speed_30s: 'rare',
+  perfect_10: 'rare',
+  explorer_20: 'rare',
+  color_master_5: 'rare',
+  color_perception_8: 'rare',
+  sequence_memory_5: 'rare',
+  pair_match_master: 'rare',
+  reaction_sharp: 'rare',
+  pair_speed_hard: 'rare',
+  quiz_streak_7: 'rare',
+  encyclopedia_explorer: 'rare',
+  quiz_expert: 'rare',
+  color_master_8: 'rare',
+  combo_5: 'rare',
+  total_combo_50: 'rare',
+  weekly_first: 'rare',
+  all_encyclopedia_games: 'rare',
+
+  // epic — 高难度，需要长期坚持或高超技巧
+  level_50: 'epic',
+  level_75: 'epic',
+  efficient: 'epic',
+  streak_5: 'epic',
+  endless_15: 'epic',
+  timed_10: 'epic',
+  daily_streak_7: 'epic',
+  checkin_30: 'epic',
+  play_days_30: 'epic',
+  total_5000_moves: 'epic',
+  speed_15s: 'epic',
+  perfect_30: 'epic',
+  explorer_50: 'epic',
+  sequence_memory_10: 'epic',
+  reaction_perfect: 'epic',
+  quiz_streak_30: 'epic',
+  combo_10: 'epic',
+  total_combo_100: 'epic',
+  weekly_streak_4: 'epic',
+  daily_goal_all: 'epic',
+  persistent: 'epic',
+  color_master_all: 'epic',
+
+  // legendary — 终极成就，极少数玩家可达成
+  level_100: 'legendary',
+  streak_10: 'legendary',
+  endless_30: 'legendary',
+  timed_20: 'legendary',
+  checkin_100: 'legendary',
+  play_days_100: 'legendary',
+  weekly_streak_12: 'legendary',
+  quiz_consecutive_30: 'legendary',
+  quiz_consecutive_100: 'legendary',
+  combo_20: 'legendary',
+  total_combo_200: 'legendary',
+  daily_goal_7days: 'legendary',
+};
+
+/** 获取成就稀有度 */
+export function getAchievementRarity(id: string): AchievementRarity {
+  return ACHIEVEMENT_RARITY[id] || 'common';
 }
 
 // 成就定义
@@ -524,13 +620,14 @@ function saveState(state: AchievementState) {
 
 // 成就管理器
 export const AchievementManager = {
-  // 获取所有成就（含解锁状态）
+  // 获取所有成就（含解锁状态和稀有度）
   getAll(): Achievement[] {
     const state = loadState();
     return ACHIEVEMENT_DEFS.map(def => ({
       ...def,
       unlocked: def.id in state.unlocked,
       unlockedAt: state.unlocked[def.id],
+      rarity: getAchievementRarity(def.id),
     }));
   },
 
@@ -544,7 +641,7 @@ export const AchievementManager = {
     
     const def = ACHIEVEMENT_DEFS.find(d => d.id === achievementId);
     if (def) {
-      return [{ ...def, unlocked: true, unlockedAt: state.unlocked[achievementId] }];
+      return [{ ...def, unlocked: true, unlockedAt: state.unlocked[achievementId], rarity: getAchievementRarity(achievementId) }];
     }
     return [];
   },

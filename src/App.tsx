@@ -262,6 +262,14 @@ export default function App() {
   const [usedHintThisLevel, setUsedHintThisLevel] = useState(false);
   const [recoveredFromDeadlock, setRecoveredFromDeadlock] = useState(false);
 
+  // 成就解锁音效 — 监听 newAchievements 变化，根据稀有度播放差异化音效
+  useEffect(() => {
+    if (newAchievements.length > 0) {
+      const achievement = newAchievements[0];
+      SoundEngine.achievement(achievement.rarity);
+    }
+  }, [newAchievements]);
+
   // 周末奖励状态
   const [weekendBonusInfo, setWeekendBonusInfo] = useState(getWeekendBonusInfo());
 
@@ -1656,19 +1664,30 @@ export default function App() {
           <div className="share-toast">📋 战绩已复制到剪贴板!</div>
         )}
 
-        {/* 成就解锁通知 */}
-        {newAchievements.length > 0 && (
-          <div className="achievement-notification" onClick={dismissAchievement}>
-            <div className="achievement-notif-card">
-              <div className="achievement-notif-icon">{newAchievements[0].icon}</div>
-              <div className="achievement-notif-text">
-                <div className="achievement-notif-title">🏆 成就解锁!</div>
-                <div className="achievement-notif-name">{newAchievements[0].name}</div>
-                <div className="achievement-notif-desc">{newAchievements[0].description}</div>
+        {/* 成就解锁通知 — 根据稀有度显示不同边框颜色和标签 */}
+        {newAchievements.length > 0 && (() => {
+          const ach = newAchievements[0];
+          const rarityLabels: Record<string, { label: string; color: string }> = {
+            common: { label: '', color: '#4CAF50' },
+            rare: { label: '⭐ 稀有', color: '#2196F3' },
+            epic: { label: '⭐⭐ 史诗', color: '#9C27B0' },
+            legendary: { label: '⭐⭐⭐ 传说', color: '#FF9800' },
+          };
+          const rarity = rarityLabels[ach.rarity || 'common'] || rarityLabels.common;
+          return (
+            <div className="achievement-notification" onClick={dismissAchievement}>
+              <div className="achievement-notif-card" style={{ borderColor: rarity.color }}>
+                <div className="achievement-notif-icon">{ach.icon}</div>
+                <div className="achievement-notif-text">
+                  <div className="achievement-notif-title">🏆 成就解锁!</div>
+                  <div className="achievement-notif-name">{ach.name}</div>
+                  <div className="achievement-notif-desc">{ach.description}</div>
+                  {rarity.label && <div className="achievement-notif-rarity" style={{ color: rarity.color }}>{rarity.label}</div>}
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          );
+        })()}
 
         {/* 连击里程碑庆祝弹窗 */}
         {comboCelebration && (

@@ -3004,6 +3004,31 @@ html[style*="1a1a2e"] .ach-hint-time {
   opacity: 0.8;
 }
 
+/* 成就稀有度标签 */
+.achievement-notif-rarity {
+  font-size: 11px;
+  font-weight: 600;
+  margin-top: 4px;
+  letter-spacing: 0.5px;
+}
+
+/* 成就卡片稀有度边框光效 */
+.achievement-notif-card {
+  border-left: 4px solid #4CAF50;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+/* 传说级成就解锁时的特殊光效动画 */
+@keyframes legendaryGlow {
+  0%, 100% { box-shadow: 0 4px 20px rgba(255, 152, 0, 0.3), 0 0 0 0 rgba(255, 152, 0, 0.4); }
+  50% { box-shadow: 0 4px 30px rgba(255, 152, 0, 0.5), 0 0 0 4px rgba(255, 152, 0, 0.15); }
+}
+
+@keyframes epicGlow {
+  0%, 100% { box-shadow: 0 4px 20px rgba(156, 39, 176, 0.2); }
+  50% { box-shadow: 0 4px 25px rgba(156, 39, 176, 0.35); }
+}
+
 /* ============ 设置页 ============ */
 .settings-card {
   background: rgba(255, 255, 255, 0.95);

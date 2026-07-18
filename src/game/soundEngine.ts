@@ -231,6 +231,42 @@ export const SoundEngine = {
     playTone(1318.51, 0.15, 'sine', 0.25); // E6
   },
 
+  // 成就解锁音效 — 根据稀有度差异化
+  // common: 简短清脆两音，rare: 上行三音琶音，epic: 华彩四音，legendary: 宏大五音和弦
+  achievement(rarity?: string) {
+    switch (rarity) {
+      case 'legendary':
+        // 传说级：宏大五音上行+和弦收尾，营造史诗感
+        [523.25, 659.25, 783.99, 1046.50, 1318.51].forEach((freq, i) => {
+          setTimeout(() => playTone(freq, 0.25, 'triangle', 0.3), i * 80);
+        });
+        // 收尾叠加和弦增强史诗感
+        setTimeout(() => {
+          playTone(523.25, 0.5, 'sine', 0.15);
+          playTone(659.25, 0.5, 'sine', 0.15);
+          playTone(783.99, 0.5, 'sine', 0.15);
+        }, 400);
+        break;
+      case 'epic':
+        // 史诗级：华彩四音上行，节奏感强
+        [587.33, 739.99, 880.00, 1174.66].forEach((freq, i) => {
+          setTimeout(() => playTone(freq, 0.2, 'triangle', 0.28), i * 70);
+        });
+        break;
+      case 'rare':
+        // 稀有级：上行三音琶音，愉悦感
+        [659.25, 880.00, 1046.50].forEach((freq, i) => {
+          setTimeout(() => playTone(freq, 0.18, 'sine', 0.25), i * 60);
+        });
+        break;
+      default:
+        // 普通级：清脆两音，简洁明快
+        playTone(880.00, 0.12, 'sine', 0.22);
+        setTimeout(() => playTone(1108.73, 0.15, 'sine', 0.2), 80);
+        break;
+    }
+  },
+
   // 限时模式时间到
   timeUp() {
     playTone(200.00, 0.3, 'square', 0.2);
