@@ -34,7 +34,7 @@ const FaqList: React.FC = () => {
       </div>
       <div className="faq-item">
         <div className="faq-question">🎮 色彩排序有哪些游戏模式？</div>
-        <div className="faq-answer">色彩排序包含五种模式：100关闯关模式、每天一题的每日挑战、每周一题的周挑战、难度无限递增的无尽模式（每过5关奖励提示道具）、120秒极限的限时挑战模式。每种模式都有独特的乐趣！</div>
+        <div className="faq-answer">色彩排序包含五种模式：100关闯关模式、每天一题的每日挑战、每周一题的周挑战、难度无限递增的无尽模式（每过5关奖励提示道具）、120秒极限的限时挑战模式（同样每过5关奖励提示道具）。每种模式都有独特的乐趣！</div>
       </div>
       <div className="faq-item">
         <div className="faq-question">🏆 成就系统怎么玩？</div>
@@ -231,6 +231,14 @@ const FaqList: React.FC = () => {
       <div className="faq-item">
         <div className="faq-question">📊 每日目标进度条有什么用？</div>
         <div className="faq-answer">每日目标卡片新增整体进度条和单目标进度条，进度条带平滑动画，完成时颜色从橙色变为绿色，直观展示目标完成进度。</div>
+      </div>
+      <div className="faq-item">
+        <div className="faq-question">⏱ 限时模式有里程碑奖励吗？</div>
+        <div className="faq-answer">有！限时模式和无尽模式一样，每过5关奖励1个提示道具，鼓励玩家在120秒内挑战更多关卡。</div>
+      </div>
+      <div className="faq-item">
+        <div className="faq-question">👆 新手玩家有什么引导？</div>
+        <div className="faq-answer">第1关未操作时显示动画箭头引导点击试管，首次倒水成功后显示"做得好！"鼓励提示，帮助新手快速上手并建立信心。</div>
       </div>
     </div>
   );
