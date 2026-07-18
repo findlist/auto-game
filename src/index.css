@@ -1165,6 +1165,33 @@ body {
   100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
+/* 新手引导提示 */
+.beginner-hint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 8px;
+  animation: beginnerHintBounce 1.5s ease-in-out infinite;
+}
+.beginner-hint-arrow {
+  font-size: 28px;
+  line-height: 1;
+}
+.beginner-hint-text {
+  font-size: 13px;
+  color: #667eea;
+  font-weight: 600;
+  background: rgba(102, 126, 234, 0.1);
+  padding: 4px 12px;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+@keyframes beginnerHintBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
 .tubes-grid {
   display: flex;
   flex-wrap: wrap;
@@ -10689,4 +10716,16 @@ mark.search-highlight {
 }
 .dark-theme .timeline-connector {
   background: linear-gradient(180deg, var(--primary) 0%, var(--primary) 100%);
+}
+
+/* 新手引导提示暗色主题适配 */
+.dark-theme .beginner-hint-text {
+  color: #8b9aff;
+  background: rgba(139, 154, 255, 0.15);
+}
+@media (prefers-color-scheme: dark) {
+  .beginner-hint-text {
+    color: #8b9aff;
+    background: rgba(139, 154, 255, 0.15);
+  }
 }

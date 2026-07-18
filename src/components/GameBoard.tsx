@@ -527,6 +527,14 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
         )}
       </div>
 
+      {/* 新手引导提示：第1关且未操作时显示动画箭头指向第一个有颜色的试管 */}
+      {level === 1 && moves === 0 && !isWon && !isPaused && (
+        <div className="beginner-hint" aria-hidden="true">
+          <span className="beginner-hint-arrow">👆</span>
+          <span className="beginner-hint-text">点击有颜色的试管开始</span>
+        </div>
+      )}
+
       <div className="tubes-grid" role="group" aria-label="试管列表">
         {tubes.map((tube, i) => (
           <TubeView
