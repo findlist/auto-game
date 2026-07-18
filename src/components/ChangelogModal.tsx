@@ -13,6 +13,16 @@ const ChangelogModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         <h2>色彩排序更新日志</h2>
         <div className="changelog-content">
           <div className="changelog-item">
+            <h3>🎉 v1.40.0</h3>
+            <ul>
+              <li>🏆 成就系统新增稀有度分级（普通/稀有/史诗/传说），解锁时播放差异化音效，通知卡片显示稀有度标签和边框颜色</li>
+              <li>🎯 每日目标卡片增强，完成时打钩弹跳动画、进度条充能光效、领取按钮脉冲提示、全部完成彩虹进度条和粒子飘落庆祝</li>
+              <li>💡 新手引导增强，第2关进入时显示简短操作提示，蓝色主题与第1关绿色鼓励提示区分</li>
+              <li>🔍 成就页面展示稀有度标签和边框光效，不同稀有度成就显示对应颜色徽章</li>
+              <li>📝 SEO更新+FAQ补充4条问答+版本号同步</li>
+            </ul>
+          </div>
+          <div className="changelog-item">
             <h3>🎉 v1.39.0</h3>
             <ul>
               <li>⏱ 限时模式新增每5关里程碑奖励提示道具，与无尽模式保持一致的留存激励</li>
