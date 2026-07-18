@@ -1222,6 +1222,18 @@ body {
   50% { transform: scale(1.2); }
 }
 
+/* 第2关提示使用蓝色主题，与第1关绿色区分 */
+.beginner-encouragement.level2-tip .encouragement-text {
+  color: #2196F3;
+  background: rgba(33, 150, 243, 0.1);
+}
+
+/* 暗色主题适配 */
+.dark-theme .beginner-encouragement.level2-tip .encouragement-text {
+  color: #64B5F6;
+  background: rgba(33, 150, 243, 0.15);
+}
+
 .tubes-grid {
   display: flex;
   flex-wrap: wrap;
