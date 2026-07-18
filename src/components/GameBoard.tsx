@@ -56,6 +56,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
   const [shareImageUrl, setShareImageUrl] = useState('');
   const [pouringTo, setPouringTo] = useState<number | null>(null); // 倾倒动画目标试管
   const [movesPulse, setMovesPulse] = useState(false); // 步数变化脉冲
+  const [showFirstPourTip, setShowFirstPourTip] = useState(false); // 新手首次倒水成功鼓励提示
   const [elapsedTime, setElapsedTime] = useState(0); // 已用时间（秒）
   const gameStartTime = useRef<number>(Date.now()); // 游戏开始时间戳
   const shareImageRef = useRef<HTMLAnchorElement | null>(null);
@@ -81,6 +82,16 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
 
   // 同步当前 tubes 到父组件的 ref（用于提示功能）
   tubesRef.current = tubes;
+
+  // 新手鼓励：第1关首次成功倒水后显示鼓励提示，增强新手信心
+  useEffect(() => {
+    if (level === 1 && moves === 1 && !showFirstPourTip) {
+      setShowFirstPourTip(true);
+      // 4秒后自动消失
+      const timer = setTimeout(() => setShowFirstPourTip(false), 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [level, moves, showFirstPourTip]);
 
   // 限时模式倒计时（暂停时冻结）
   useEffect(() => {
@@ -532,6 +543,14 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
         <div className="beginner-hint" aria-hidden="true">
           <span className="beginner-hint-arrow">👆</span>
           <span className="beginner-hint-text">点击有颜色的试管开始</span>
+        </div>
+      )}
+
+      {/* 新手鼓励：首次倒水成功后显示正面反馈，增强继续游玩动力 */}
+      {showFirstPourTip && (
+        <div className="beginner-encouragement" aria-hidden="true">
+          <span className="encouragement-emoji">🎉</span>
+          <span className="encouragement-text">做得好！继续把每种颜色归到一个试管</span>
         </div>
       )}
 

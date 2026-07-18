@@ -1192,6 +1192,36 @@ body {
   50% { transform: translateY(-6px); }
 }
 
+/* 新手首次倒水成功鼓励提示 */
+.beginner-encouragement {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  animation: encouragementSlideIn 0.5s ease-out;
+}
+.encouragement-emoji {
+  font-size: 24px;
+  animation: encouragementBounce 0.8s ease-in-out infinite;
+}
+.encouragement-text {
+  font-size: 13px;
+  color: #4CAF50;
+  font-weight: 600;
+  background: rgba(76, 175, 80, 0.1);
+  padding: 4px 12px;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+@keyframes encouragementSlideIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes encouragementBounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
 .tubes-grid {
   display: flex;
   flex-wrap: wrap;
@@ -10729,3 +10759,675 @@ mark.search-highlight {
     background: rgba(139, 154, 255, 0.15);
   }
 }
+
+/* 新手鼓励提示暗色主题适配 */
+.dark-theme .encouragement-text {
+  color: #81c784;
+  background: rgba(129, 199, 132, 0.15);
+}
+@media (prefers-color-scheme: dark) {
+  .encouragement-text {
+    color: #81c784;
+    background: rgba(129, 199, 132, 0.15);
+  }
+}
+
+/* ============================================================ */
+/* ============ 2026-07-19 样式优化增强（第七批） ============ */
+/* ============================================================ */
+/* 本批次聚焦：首页 hero 装饰强化、模式按钮主次分明、试管液体流动、
+   关卡按钮勋章质感、信息页排版精致化、成就解锁光晕、页面过渡动画、
+   滚动条美化、触摸 ripple 反馈、数字等宽对齐等微交互打磨 */
+
+/* 1. 首页 logo 周围旋转色环光晕 - 让首屏视觉锚点更具仪式感 */
+.logo {
+  position: relative;
+}
+.logo::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 96px;
+  height: 96px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    #FF6B6B 0deg,
+    #FFE66D 90deg,
+    #95E1A3 180deg,
+    #4ECDC4 270deg,
+    #FF6B6B 360deg
+  );
+  filter: blur(14px);
+  opacity: 0.45;
+  z-index: -1;
+  animation: logo-ring-spin 12s linear infinite;
+}
+@keyframes logo-ring-spin {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* 2. 首页标题渐变文字 - 替代单色标题，增加视觉层次 */
+.home-header .title {
+  background: linear-gradient(135deg, #ffffff 0%, #ffe66d 50%, #ff9a9e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  /* 渐变文字下 text-shadow 会脱离字形显示，改用 drop-shadow 跟随文字轮廓 */
+  text-shadow: none;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+}
+
+/* 3. 副标题装饰下划线 - 让 subtitle 有"标题之下"的视觉收束感 */
+.subtitle {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 6px;
+}
+.subtitle::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.7), transparent);
+  border-radius: 1px;
+}
+
+/* 4. 主按钮"开始游戏"强化 - 在 2×2 网格中视觉重量最大 */
+.mode-grid-btn.btn-primary {
+  position: relative;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #ff6b9d 100%);
+  background-size: 200% 200%;
+  animation: primary-btn-shimmer 4s ease-in-out infinite;
+  box-shadow:
+    0 4px 16px rgba(102, 126, 234, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+@keyframes primary-btn-shimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.mode-grid-btn.btn-primary:hover {
+  box-shadow:
+    0 8px 24px rgba(102, 126, 234, 0.6),
+    0 0 0 3px rgba(255, 255, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+.mode-grid-btn.btn-primary .mode-grid-icon {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.25));
+}
+
+/* 5. 模式按钮 ripple 波纹反馈 - CSS-only 实现，按下时从触点扩散 */
+.mode-grid-btn,
+.btn,
+.btn-back,
+.btn-hint,
+.level-btn,
+.footer-link,
+.quick-nav-card {
+  position: relative;
+  overflow: hidden;
+}
+/* ripple 通过 :active 触发伪元素扩散 */
+.mode-grid-btn::after,
+.btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  pointer-events: none;
+  transition: width 0.4s ease-out, height 0.4s ease-out, opacity 0.6s ease-out;
+}
+.mode-grid-btn:active::after,
+.btn:active::after {
+  width: 220%;
+  height: 220%;
+  opacity: 0.6;
+  transition: width 0s, height 0s, opacity 0s;
+}
+
+/* 6. 取消上一批 .mode-grid-btn::after 与本批 ripple 的冲突
+   上一批定义了"按钮闪亮动画"的 ::after 用于 hover 时光带扫过，
+   此处重写为统一的 ripple 反馈，移除光带扫过避免双重伪元素冲突 */
+.mode-entry .btn::after {
+  display: none;
+}
+.mode-entry .btn:hover::after {
+  display: none;
+}
+
+/* 7. 试管倾倒时液体流入动画 - 颜色层从顶部"流入"而非瞬间出现 */
+.tube-container.pouring .color-layer {
+  animation: liquid-pour-in 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+@keyframes liquid-pour-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-14px) scaleY(0.4);
+    transform-origin: top center;
+  }
+  50% {
+    opacity: 0.9;
+    transform: translateY(2px) scaleY(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scaleY(1);
+  }
+}
+
+/* 8. 液体表面微光斑 - 顶层颜色层增加周期性闪烁的高光点，让液体更"活" */
+.tube-inner > .color-layer:last-child::before {
+  animation: liquid-shine 2.8s ease-in-out infinite;
+}
+@keyframes liquid-shine {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 0.85; transform: scale(1.15); }
+}
+
+/* 9. 关卡按钮完成态勋章质感 - 金色描边（用 box-shadow 模拟，保留原 border-left 难度色）+ 微光 */
+.level-btn.completed {
+  background: linear-gradient(135deg, #ffd89b 0%, #95E1A3 60%, #4ECDC4 100%);
+  /* 不使用 border，避免覆盖 .diff-easy/.diff-normal 等难度颜色 border-left */
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    0 2px 8px rgba(255, 195, 110, 0.35),
+    0 0 0 1px rgba(255, 216, 155, 0.5);
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+}
+.level-btn.completed:hover {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    0 6px 16px rgba(255, 195, 110, 0.5),
+    0 0 0 2px rgba(255, 216, 155, 0.6);
+}
+
+/* 10. 当前关卡引导光环 - 用 box-shadow 多层发光实现，避免 overflow:hidden 裁剪 */
+.level-btn.current {
+  position: relative;
+  box-shadow:
+    0 0 0 3px rgba(102, 126, 234, 0.4),
+    0 0 12px rgba(255, 230, 109, 0.5),
+    0 0 20px rgba(255, 107, 107, 0.35),
+    0 4px 12px rgba(102, 126, 234, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  animation: current-glow-pulse 2.4s ease-in-out infinite;
+}
+@keyframes current-glow-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 0 3px rgba(102, 126, 234, 0.4),
+      0 0 12px rgba(255, 230, 109, 0.5),
+      0 0 20px rgba(255, 107, 107, 0.35),
+      0 4px 12px rgba(102, 126, 234, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  }
+  50% {
+    box-shadow:
+      0 0 0 4px rgba(102, 126, 234, 0.55),
+      0 0 18px rgba(255, 230, 109, 0.7),
+      0 0 28px rgba(255, 107, 107, 0.5),
+      0 6px 16px rgba(102, 126, 234, 0.45),
+      inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  }
+}
+
+/* 11. 信息页 h2 装饰序号 - 长文档增加阅读节奏感 */
+.info-page h2 {
+  position: relative;
+  padding-left: 28px;
+}
+.info-page h2::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 4px;
+  bottom: 4px;
+  width: 4px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #ffe66d 0%, #ff9a9e 50%, #667eea 100%);
+  box-shadow: 0 0 8px rgba(255, 230, 109, 0.4);
+}
+
+/* 12. 信息页列表项项目符号彩色化 - 替代默认黑色圆点 */
+.info-page ul {
+  list-style: none;
+  padding-left: 4px;
+}
+.info-page li {
+  position: relative;
+  padding-left: 18px;
+}
+.info-page li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.7em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ffe66d, #ff9a9e);
+  box-shadow: 0 0 4px rgba(255, 154, 158, 0.4);
+}
+
+/* 13. 信息页段落字距优化 - 大段文字更易读 */
+.info-page p {
+  letter-spacing: 0.2px;
+  word-break: break-word;
+}
+
+/* 14. 成就卡片解锁光晕 - 已解锁卡片金色勋章感 */
+.achievement-card.unlocked {
+  position: relative;
+  border: 1px solid rgba(255, 216, 155, 0.5);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 248, 235, 0.95) 100%);
+  box-shadow:
+    0 2px 8px rgba(255, 195, 110, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+.achievement-card.unlocked:hover {
+  box-shadow:
+    0 6px 20px rgba(255, 195, 110, 0.4),
+    0 0 0 2px rgba(255, 216, 155, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+.achievement-card.unlocked .achievement-icon {
+  filter: drop-shadow(0 2px 6px rgba(255, 195, 110, 0.6));
+}
+
+/* 15. 锁定成就灰度处理 - 与解锁形成强对比 */
+.achievement-card.locked {
+  filter: saturate(0.4) brightness(0.85);
+  transition: filter 0.3s ease;
+}
+.achievement-card.locked:hover {
+  filter: saturate(0.6) brightness(0.95);
+}
+
+/* 16. 页面进入过渡动画 - 信息页/设置页/统计页切换时淡入上推 */
+.info-page,
+.achievement-list,
+.stats-container,
+.settings-container {
+  animation: page-enter-fade 0.45s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+@keyframes page-enter-fade {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 17. 自定义滚动条美化 - WebKit 内核浏览器 */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(102, 126, 234, 0.5), rgba(118, 75, 162, 0.5));
+  border-radius: 5px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, rgba(102, 126, 234, 0.75), rgba(118, 75, 162, 0.75));
+  background-clip: padding-box;
+}
+/* Firefox 滚动条 */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(102, 126, 234, 0.5) rgba(0, 0, 0, 0.05);
+}
+
+/* 18. 数字等宽对齐 - 统计页/徽章数字使用 tabular-nums */
+.stat-value,
+.stats-number,
+.stats-value,
+.achievement-overall-pct,
+.achievement-overall-text,
+.moves-badge,
+.timer-badge,
+.optimal-badge,
+.level-badge,
+.home-stats,
+.daily-leaderboard-row,
+.today-ach-progress,
+.daily-goals-progress {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' on;
+}
+
+/* 19. 移动端触摸反馈增强 - footer 链接和快速导航触摸区域 */
+@media (hover: none) and (pointer: coarse) {
+  .footer-link {
+    padding: 8px 10px;
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .quick-nav-card {
+    min-height: 88px;
+    padding: 12px 8px;
+  }
+  .quick-nav-card:active {
+    transform: scale(0.97);
+    filter: brightness(0.95);
+    transition: transform 0.08s ease, filter 0.08s ease;
+  }
+  .level-btn:active:not(:disabled) {
+    transform: scale(0.94);
+    transition: transform 0.08s ease;
+  }
+}
+
+/* 20. 模式按钮在移动端触摸时按下反馈 - 与 ripple 配合 */
+@media (hover: none) and (pointer: coarse) {
+  .mode-grid-btn:active {
+    transform: scale(0.96);
+    transition: transform 0.08s ease;
+  }
+  .mode-grid-btn.btn-primary:active {
+    transform: scale(0.96);
+    filter: brightness(0.95);
+  }
+}
+
+/* 21. 关卡搜索框与难度筛选器视觉统一 */
+.level-search-box {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.level-search-input {
+  padding: 6px 10px;
+  border: 1px solid rgba(102, 126, 234, 0.25);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  font-size: 13px;
+  width: 90px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.level-search-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+}
+.level-search-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
+}
+.level-search-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(102, 126, 234, 0.35);
+}
+.level-search-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* 22. 快速导航卡片悬停效果增强 */
+.quick-nav-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 8px;
+  background: var(--card-bg);
+  border: 1px solid rgba(102, 126, 234, 0.12);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.25s ease, border-color 0.2s ease;
+}
+.quick-nav-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(102, 126, 234, 0.35);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.18);
+}
+.quick-nav-icon {
+  font-size: 28px;
+  line-height: 1;
+  transition: transform 0.3s cubic-bezier(0.34, 1.5, 0.64, 1);
+}
+.quick-nav-card:hover .quick-nav-icon {
+  transform: scale(1.15) translateY(-2px);
+}
+.quick-nav-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+}
+.quick-nav-desc {
+  font-size: 11px;
+  color: #888;
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* 23. 难度筛选按钮 hover 状态增强 */
+.diff-filter-btn {
+  padding: 5px 11px;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.8);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.diff-filter-btn:hover:not(.active) {
+  background: rgba(255, 255, 255, 1);
+  border-color: rgba(102, 126, 234, 0.3);
+  transform: translateY(-1px);
+}
+
+/* 24. 暗色主题适配 - 本批次新增项目在暗色模式下保持可读性 */
+@media (prefers-color-scheme: dark) {
+  /* logo 光环在暗色下减淡 */
+  .logo::before { opacity: 0.35; }
+  /* 标题渐变文字在暗色下提亮 */
+  .home-header .title {
+    background: linear-gradient(135deg, #ffffff 0%, #ffe66d 50%, #ff9a9e 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  /* 关卡按钮完成态暗色适配 */
+  .level-btn.completed {
+    background: linear-gradient(135deg, #6b5d3f 0%, #4a6b5a 60%, #2d5a5a 100%);
+    border-color: rgba(255, 216, 155, 0.3);
+    color: #ffe66d;
+  }
+  /* 信息页 h2 装饰条暗色减淡 */
+  .info-page h2::before {
+    background: linear-gradient(180deg, #ffe66d 0%, #ff9a9e 50%, #8b9aff 100%);
+    box-shadow: 0 0 6px rgba(255, 230, 109, 0.3);
+  }
+  /* 信息页列表项圆点暗色减淡 */
+  .info-page li::before {
+    background: linear-gradient(135deg, #ffe66d, #ff9a9e);
+    box-shadow: 0 0 3px rgba(255, 154, 158, 0.3);
+  }
+  /* 成就卡片解锁光晕暗色适配 */
+  .achievement-card.unlocked {
+    background: linear-gradient(135deg, rgba(58, 50, 40, 0.95) 0%, rgba(45, 40, 30, 0.9) 100%);
+    border-color: rgba(255, 216, 155, 0.35);
+    color: #ffe66d;
+  }
+  .achievement-card.unlocked .achievement-name {
+    color: #ffe66d;
+  }
+  .achievement-card.locked {
+    background: rgba(40, 40, 55, 0.6);
+  }
+  /* 滚动条暗色适配 */
+  ::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.04);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, rgba(102, 126, 234, 0.6), rgba(118, 75, 162, 0.6));
+  }
+  * {
+    scrollbar-color: rgba(102, 126, 234, 0.6) rgba(255, 255, 255, 0.04);
+  }
+  /* 快速导航卡片暗色适配 */
+  .quick-nav-card {
+    background: rgba(40, 40, 55, 0.7);
+    border-color: rgba(139, 154, 255, 0.2);
+  }
+  .quick-nav-card:hover {
+    border-color: rgba(139, 154, 255, 0.4);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  }
+  .quick-nav-label { color: #e0e0e0; }
+  .quick-nav-desc { color: #999; }
+  /* 难度筛选按钮暗色适配 */
+  .diff-filter-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.12);
+    color: #ddd;
+  }
+  .diff-filter-btn:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(139, 154, 255, 0.4);
+  }
+  /* 关卡搜索输入框暗色适配 */
+  .level-search-input {
+    background: rgba(40, 40, 55, 0.8);
+    color: #e0e0e0;
+    border-color: rgba(139, 154, 255, 0.25);
+  }
+  .level-search-input:focus {
+    border-color: #8b9aff;
+    box-shadow: 0 0 0 3px rgba(139, 154, 255, 0.2);
+  }
+}
+
+/* 显式暗色主题类适配 - 与 prefers-color-scheme 同步 */
+.dark-theme .logo::before { opacity: 0.35; }
+.dark-theme .level-btn.completed {
+  background: linear-gradient(135deg, #6b5d3f 0%, #4a6b5a 60%, #2d5a5a 100%);
+  border-color: rgba(255, 216, 155, 0.3);
+  color: #ffe66d;
+}
+.dark-theme .info-page h2::before {
+  background: linear-gradient(180deg, #ffe66d 0%, #ff9a9e 50%, #8b9aff 100%);
+  box-shadow: 0 0 6px rgba(255, 230, 109, 0.3);
+}
+.dark-theme .info-page li::before {
+  background: linear-gradient(135deg, #ffe66d, #ff9a9e);
+  box-shadow: 0 0 3px rgba(255, 154, 158, 0.3);
+}
+.dark-theme .achievement-card.unlocked {
+  background: linear-gradient(135deg, rgba(58, 50, 40, 0.95) 0%, rgba(45, 40, 30, 0.9) 100%);
+  border-color: rgba(255, 216, 155, 0.35);
+}
+.dark-theme .achievement-card.unlocked .achievement-name {
+  color: #ffe66d;
+}
+.dark-theme .achievement-card.locked {
+  background: rgba(40, 40, 55, 0.6);
+}
+.dark-theme .quick-nav-card {
+  background: rgba(40, 40, 55, 0.7);
+  border-color: rgba(139, 154, 255, 0.2);
+}
+.dark-theme .quick-nav-card:hover {
+  border-color: rgba(139, 154, 255, 0.4);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+.dark-theme .quick-nav-label { color: #e0e0e0; }
+.dark-theme .quick-nav-desc { color: #999; }
+.dark-theme .diff-filter-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #ddd;
+}
+.dark-theme .diff-filter-btn:hover:not(.active) {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(139, 154, 255, 0.4);
+}
+.dark-theme .level-search-input {
+  background: rgba(40, 40, 55, 0.8);
+  color: #e0e0e0;
+  border-color: rgba(139, 154, 255, 0.25);
+}
+.dark-theme .level-search-input:focus {
+  border-color: #8b9aff;
+  box-shadow: 0 0 0 3px rgba(139, 154, 255, 0.2);
+}
+
+/* 25. 减少动画偏好 - 禁用本批次新增的装饰性动画与过渡 */
+@media (prefers-reduced-motion: reduce) {
+  .logo::before,
+  .mode-grid-btn.btn-primary,
+  .tube-container.pouring .color-layer,
+  .tube-inner > .color-layer:last-child::before,
+  .level-btn.current,
+  .info-page,
+  .achievement-list,
+  .stats-container,
+  .settings-container,
+  .quick-nav-icon,
+  .quick-nav-card:hover .quick-nav-icon {
+    animation: none !important;
+    transition: none !important;
+  }
+  /* 标题渐变文字保留，但移除动画 */
+  .home-header .title {
+    -webkit-text-fill-color: initial;
+    background: none;
+    color: var(--text-light);
+  }
+  /* ripple 立即结束 */
+  .mode-grid-btn::after,
+  .btn::after {
+    transition: none !important;
+  }
+}
+
+/* 26. 高对比度模式适配 - 确保焦点指示清晰可见 */
+@media (prefers-contrast: high) {
+  .level-btn.current {
+    box-shadow: 0 0 0 4px #000, inset 0 0 0 2px #fff;
+  }
+  .achievement-card.unlocked {
+    border: 2px solid #000;
+  }
+  .quick-nav-card {
+    border: 2px solid rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* ============ 第七批样式优化结束 ====  */
+
+
+
