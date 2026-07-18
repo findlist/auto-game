@@ -516,6 +516,13 @@ export default function App() {
       if (timedAchievements.length > 0) {
         setNewAchievements(prev => [...prev, ...timedAchievements]);
       }
+      // 限时模式里程碑奖励：每过5关奖励1个提示道具，与无尽模式保持一致的留存激励
+      if (newScore > 0 && newScore % 5 === 0) {
+        const bonus = addHintItems(1);
+        setHintItemsState(bonus);
+        setGoalClaimToast(`🎉 限时模式 ${newScore} 关里程碑！奖励 +1 提示道具`);
+        setTimeout(() => setGoalClaimToast(null), 3000);
+      }
     }
   }, [progress, currentLevel, usedHintThisLevel, recoveredFromDeadlock, isDailyMode, isEndlessMode, endlessScore, isTimedMode, timedScore, isWeeklyMode]);
 
@@ -1003,7 +1010,7 @@ export default function App() {
             >
               <span className="mode-grid-icon">⏱</span>
               <span className="mode-grid-label">限时挑战</span>
-              <span className="mode-grid-sub">120秒极限</span>
+              <span className="mode-grid-sub">120秒极限·每5关奖道具</span>
             </button>
           </div>
 
