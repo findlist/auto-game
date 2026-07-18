@@ -13,6 +13,18 @@ const ChangelogModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         <h2>色彩排序更新日志</h2>
         <div className="changelog-content">
           <div className="changelog-item">
+            <h3>🎉 v1.38.0</h3>
+            <ul>
+              <li>🎉 连击里程碑庆祝弹窗，3/5/7/10/15/20连击时弹出动画庆祝，每个里程碑不同颜色和文案</li>
+              <li>📊 每日目标卡片增加进度条动画，整体进度条+单目标进度条，完成时颜色变绿</li>
+              <li>🏆 新增9个成就：连击里程碑3个+累计连击3个+每日目标3个，共73个成就</li>
+              <li>🎁 无尽模式新增每5关里程碑奖励，过关时自动发放提示道具</li>
+              <li>👆 新手引导优化，第1关0步时显示动画箭头引导玩家点击试管</li>
+              <li>🔧 代码重构：提取游戏页面渲染为独立GamePageComponent组件+每日目标卡片和今日概览卡片，App.tsx累计减少约210行</li>
+              <li>📝 SEO更新+FAQ补充7条问答+版本号同步</li>
+            </ul>
+          </div>
+          <div className="changelog-item">
             <h3>🎉 v1.37.0</h3>
             <ul>
               <li>🎯 新增每日目标系统，完成 3 关/获得 6 星/每日挑战/不使用提示通关四个目标，领取提示道具奖励</li>
