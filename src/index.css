@@ -2607,6 +2607,28 @@ html[style*="1a1a2e"] .encyclopedia-progress-track {
   margin-bottom: 4px;
 }
 
+/* 成就名称行布局：名称 + 稀有度标签 */
+.achievement-name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.achievement-name-row .achievement-name {
+  margin-bottom: 0;
+}
+
+/* 稀有度徽章 */
+.ach-rarity-badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 8px;
+  white-space: nowrap;
+  letter-spacing: 0.5px;
+}
+
 .achievement-desc {
   font-size: 12px;
   color: #888;

@@ -1,5 +1,13 @@
 import React, { useState } from 'react';
-import { AchievementManager } from '../game/achievements';
+import { AchievementManager, AchievementRarity } from '../game/achievements';
+
+// 稀有度配置：标签、颜色、背景色
+const RARITY_CONFIG: Record<AchievementRarity, { label: string; color: string; bg: string; glow: string }> = {
+  common: { label: '普通', color: '#9E9E9E', bg: 'rgba(158, 158, 158, 0.08)', glow: 'none' },
+  rare: { label: '稀有', color: '#2196F3', bg: 'rgba(33, 150, 243, 0.08)', glow: '0 2px 8px rgba(33, 150, 243, 0.1)' },
+  epic: { label: '史诗', color: '#9C27B0', bg: 'rgba(156, 39, 176, 0.08)', glow: '0 2px 12px rgba(156, 39, 176, 0.15)' },
+  legendary: { label: '传说', color: '#FF9800', bg: 'rgba(255, 152, 0, 0.1)', glow: '0 2px 16px rgba(255, 152, 0, 0.2)' },
+};
 
 interface AchievementsPageProps {
   onBack: () => void;
@@ -220,11 +228,18 @@ export const AchievementsPage: React.FC<AchievementsPageProps> = ({ onBack }) =>
 
         {/* 成就列表 */}
         <div className="achievement-list">
-          {sortedFiltered.map(ach => (
-            <div key={ach.id} className={`achievement-card ${ach.unlocked ? 'unlocked' : 'locked'}`}>
+          {sortedFiltered.map(ach => {
+            const rarity = RARITY_CONFIG[ach.rarity || 'common'];
+            return (
+            <div key={ach.id} className={`achievement-card ${ach.unlocked ? 'unlocked' : 'locked'}`} style={{ borderLeftColor: ach.unlocked ? rarity.color : undefined, boxShadow: ach.unlocked ? rarity.glow : undefined }}>
               <div className="achievement-icon">{ach.unlocked ? ach.icon : '🔒'}</div>
               <div className="achievement-info">
-                <div className="achievement-name">{ach.name}</div>
+                <div className="achievement-name-row">
+                  <span className="achievement-name">{ach.name}</span>
+                  {ach.rarity && ach.rarity !== 'common' && (
+                    <span className="ach-rarity-badge" style={{ color: rarity.color, background: rarity.bg }}>{rarity.label}</span>
+                  )}
+                </div>
                 <div className="achievement-desc">{ach.description}</div>
                 {ach.unlocked && ach.unlockedAt && (
                   <div className="achievement-date">
@@ -234,7 +249,8 @@ export const AchievementsPage: React.FC<AchievementsPageProps> = ({ onBack }) =>
               </div>
               {ach.unlocked && <span className="achievement-check">✅</span>}
             </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* 底部提示 */}
