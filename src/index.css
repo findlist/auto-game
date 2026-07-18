@@ -3782,6 +3782,103 @@ html[style*="1a1a2e"] .ach-hint-time {
   to { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
 
+/* ===== 每日目标完成动画 ===== */
+
+/* 打钩弹跳动画 */
+@keyframes checkPop {
+  0% { transform: scale(0); opacity: 0; }
+  50% { transform: scale(1.4); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* 目标刚完成时的发光高亮 */
+.goal-just-completed {
+  animation: goalFlash 0.6s ease-out;
+}
+
+@keyframes goalFlash {
+  0% { background: rgba(76, 175, 80, 0.4); transform: scale(1.02); }
+  100% { background: rgba(76, 175, 80, 0.1); transform: scale(1); }
+}
+
+/* 进度条充能动画 */
+@keyframes progressCharging {
+  0% { box-shadow: 0 0 0 0 rgba(102, 187, 106, 0.5); }
+  50% { box-shadow: 0 0 8px 2px rgba(102, 187, 106, 0.6); }
+  100% { box-shadow: 0 0 0 0 rgba(102, 187, 106, 0); }
+}
+
+.goal-progress-charging {
+  animation: progressCharging 0.8s ease-out;
+}
+
+/* 领取按钮脉冲提示 */
+@keyframes claimPulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 138, 0, 0.4); }
+  50% { transform: scale(1.08); box-shadow: 0 0 0 4px rgba(255, 138, 0, 0.15); }
+}
+
+.claim-btn-pulse {
+  animation: claimPulse 0.6s ease-out 2;
+}
+
+/* 全部完成时的卡片光效 */
+.all-goals-done {
+  border: 2px solid rgba(76, 175, 80, 0.3);
+  box-shadow: 0 4px 20px rgba(76, 175, 80, 0.15);
+}
+
+.all-goals-done-text {
+  text-align: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: #4CAF50;
+  margin: 6px 0 2px;
+  animation: checkPop 0.5s ease-out;
+}
+
+/* 进度条彩虹渐变（全部完成时） */
+@keyframes rainbowFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.bar-fill-rainbow {
+  background: linear-gradient(90deg, #4CAF50, #2196F3, #9C27B0, #FF9800, #4CAF50) !important;
+  background-size: 200% 200% !important;
+  animation: rainbowFlow 2s ease infinite;
+}
+
+/* 全部完成粒子飘落庆祝 */
+.goals-celebration-burst {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.burst-particle {
+  position: absolute;
+  top: -20px;
+  font-size: 16px;
+  animation: burstFall 2s ease-out forwards;
+}
+
+@keyframes burstFall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(120px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
 .recent-icon {
   font-size: 20px;
   color: var(--primary);
