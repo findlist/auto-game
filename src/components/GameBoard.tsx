@@ -59,6 +59,8 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
   const [showFirstPourTip, setShowFirstPourTip] = useState(false); // 新手首次倒水成功鼓励提示
   const [showLevel2Tip, setShowLevel2Tip] = useState(false); // 第2关操作提示
   const [showLevel3Tip, setShowLevel3Tip] = useState(false); // 第3关策略提示
+  const [showLevel4Tip, setShowLevel4Tip] = useState(false); // 第4关多色提示
+  const [showLevel5Tip, setShowLevel5Tip] = useState(false); // 第5关规划提示
   const [elapsedTime, setElapsedTime] = useState(0); // 已用时间（秒）
   const gameStartTime = useRef<number>(Date.now()); // 游戏开始时间戳
   const shareImageRef = useRef<HTMLAnchorElement | null>(null);
@@ -111,6 +113,24 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
       const t = setTimeout(() => setShowLevel3Tip(false), 4000);
       return () => clearTimeout(t);
     } else setShowLevel3Tip(false);
+  }, [level]);
+
+  // 第4关多色提示：从2色升级到3色，引导玩家适应多色排序
+  useEffect(() => {
+    if (level === 4) {
+      setShowLevel4Tip(true);
+      const t = setTimeout(() => setShowLevel4Tip(false), 4000);
+      return () => clearTimeout(t);
+    } else setShowLevel4Tip(false);
+  }, [level]);
+
+  // 第5关规划提示：引导玩家在倒水前思考顺序，培养规划意识
+  useEffect(() => {
+    if (level === 5) {
+      setShowLevel5Tip(true);
+      const t = setTimeout(() => setShowLevel5Tip(false), 4000);
+      return () => clearTimeout(t);
+    } else setShowLevel5Tip(false);
   }, [level]);
 
   // 限时模式倒计时（暂停时冻结）
@@ -587,6 +607,22 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
         <div className="beginner-encouragement level3-tip" aria-hidden="true">
           <span className="encouragement-emoji">🎯</span>
           <span className="encouragement-text">优先把一种颜色全部倒进一根试管</span>
+        </div>
+      )}
+
+      {/* 第4关多色提示：3色5试管阶段，引导玩家适应多色排序 */}
+      {showLevel4Tip && (
+        <div className="beginner-encouragement level4-tip" aria-hidden="true">
+          <span className="encouragement-emoji">🌈</span>
+          <span className="encouragement-text">颜色变多了！先从最上面的颜色开始整理</span>
+        </div>
+      )}
+
+      {/* 第5关规划提示：引导玩家在动手前思考倒水顺序 */}
+      {showLevel5Tip && (
+        <div className="beginner-encouragement level5-tip" aria-hidden="true">
+          <span className="encouragement-emoji">🤔</span>
+          <span className="encouragement-text">倒水前先想好顺序，避免堵住出口</span>
         </div>
       )}
 

@@ -18,7 +18,6 @@
   --card-bg: rgba(255, 255, 255, 0.95);
   --shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   --radius: 12px;
-  /* 鏂板锛氭洿绮剧粏鐨勫眰娆″彉閲?*/
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
   --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.18);
   --shadow-glow: 0 0 24px rgba(102, 126, 234, 0.35);
@@ -27,19 +26,16 @@
   --tube-highlight: rgba(255, 255, 255, 0.55);
   --tube-shadow-inner: rgba(0, 0, 0, 0.18);
   --color-layer-shine: rgba(255, 255, 255, 0.45);
-  /* 鏂板闈欐€佽緟鍔╁彉閲忥紙涓嶄細琚?themeManager 瑕嗙洊锛夛紝鐢ㄤ簬澧炲己鐜荤拑璐ㄦ劅涓庢恫浣撴晥鏋?*/
   --tube-highlight-right: rgba(255, 255, 255, 0.22);
   --tube-bottom-reflection: rgba(255, 255, 255, 0.12);
   --meniscus-shine: rgba(255, 255, 255, 0.5);
   --meniscus-shadow: rgba(0, 0, 0, 0.1);
   --glass-rim: rgba(255, 255, 255, 0.35);
   --bg-atmosphere: radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.08) 0%, transparent 60%);
-  /* 涓婚鍒囨崲鏃剁殑骞虫粦杩囨浮鏃堕暱 */
   --theme-transition: 0.4s ease;
 }
 
 body {
-  /* 瀛椾綋鏍堬細浼樺厛浣跨敤鏇村叿鐗硅壊鐨勬樉绀哄瓧浣擄紝鍏奸【涓枃娓叉煋涓庣郴缁熷洖閫€ */
   font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   background: var(--bg-gradient);
   background-attachment: fixed;
@@ -51,11 +47,9 @@ body {
   user-select: none;
   /* 瀛椾綋娓叉煋浼樺寲锛氭暟瀛楃瓑瀹藉榻?*/
   font-feature-settings: 'tnum' on, 'cv11' on;
-  /* 涓婚鍒囨崲鏃惰儗鏅笌鏂囧瓧骞虫粦杩囨浮锛岄伩鍏嶇獊鍏€闂儊 */
   transition: background var(--theme-transition), color var(--theme-transition);
 }
 
-/* 鑳屾櫙姘涘洿灞傦細鍦ㄨ儗鏅笎鍙樹箣涓婂彔鍔犳煍鍜屽厜鏅曪紝澧炲姞绌洪棿绾垫繁鎰?*/
 .app::before {
   content: '';
   position: fixed;
@@ -90,7 +84,6 @@ body {
   position: relative;
 }
 
-/* 棣栭〉鎮诞闊虫晥鍒囨崲鎸夐挳 鈥?鏃犻渶杩涘叆璁剧疆椤靛嵆鍙揩閫熼潤闊?*/
 .sound-toggle-btn {
   width: 40px;
   height: 40px;
@@ -130,7 +123,6 @@ body {
   font-size: 64px;
   margin-bottom: 8px;
   animation: bounce 2s ease-in-out infinite;
-  /* 澧炲姞 logo 鐨勫厜鏅曟晥鏋滐紝璁╅灞忚瑙夋洿绐佸嚭 */
   filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.25));
 }
 
@@ -376,7 +368,6 @@ body {
   50% { box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.55), 0 6px 16px rgba(102, 126, 234, 0.45); }
 }
 
-/* 鍏冲崱闅惧害棰滆壊鏍囪 - 澧炲姞搴曢儴杈规璁╅鑹叉洿绐佸嚭 */
 .level-btn.diff-easy { border-left: 4px solid #4ECDC4; }
 .level-btn.diff-normal { border-left: 4px solid #667eea; }
 .level-btn.diff-medium { border-left: 4px solid #FFA07A; }
@@ -622,7 +613,6 @@ body {
   line-height: 1.5;
 }
 
-/* 蹇嵎鍔熻兘瀵艰埅鍖?*/
 .quick-nav-section {
   margin: 16px 0;
 }
@@ -802,7 +792,6 @@ body {
   align-items: center;
   padding: 12px 16px;
   color: var(--text-light);
-  /* 鍗婇€忔槑鑳屾櫙 + 姣涚幓鐠冩ā绯婏紝鎻愬崌澶撮儴鍦ㄦ笎鍙樿儗鏅笂鐨勫彲璇绘€?*/
   background: rgba(0, 0, 0, 0.08);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
@@ -951,7 +940,6 @@ body {
   box-shadow: var(--shadow-lg);
   /* 椤堕儴楂樺厜绾挎潯澧炲己鍗＄墖璐ㄦ劅 */
   position: relative;
-  /* 涓婚鍒囨崲鏃跺崱鐗囪儗鏅钩婊戣繃娓?*/
   transition: background var(--theme-transition), box-shadow 0.3s ease;
 }
 
@@ -1154,7 +1142,6 @@ body {
   50% { transform: translateY(8px); }
 }
 
-/* 鍏冲崱鍒囨崲杩囨浮鍔ㄧ敾 */
 .level-transition {
   animation: level-enter 0.45s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
@@ -1222,16 +1209,45 @@ body {
   50% { transform: scale(1.2); }
 }
 
-/* 绗?鍏虫彁绀轰娇鐢ㄨ摑鑹蹭富棰橈紝涓庣1鍏崇豢鑹插尯鍒?*/
 .beginner-encouragement.level2-tip .encouragement-text {
   color: #2196F3;
   background: rgba(33, 150, 243, 0.1);
 }
 
-/* 鏆楄壊涓婚閫傞厤 */
+/* 第3关策略提示：紫色主题 */
+.beginner-encouragement.level3-tip .encouragement-text {
+  color: #9C27B0;
+  background: rgba(156, 39, 176, 0.1);
+}
+
+/* 第4关多色提示：橙色主题，呼应多色彩引入 */
+.beginner-encouragement.level4-tip .encouragement-text {
+  color: #FF9800;
+  background: rgba(255, 152, 0, 0.1);
+}
+
+/* 第5关规划提示：青色主题，呼应思考规划 */
+.beginner-encouragement.level5-tip .encouragement-text {
+  color: #00BCD4;
+  background: rgba(0, 188, 212, 0.1);
+}
+
+/* 暗色主题适配 */
 .dark-theme .beginner-encouragement.level2-tip .encouragement-text {
   color: #64B5F6;
   background: rgba(33, 150, 243, 0.15);
+}
+.dark-theme .beginner-encouragement.level3-tip .encouragement-text {
+  color: #CE93D8;
+  background: rgba(156, 39, 176, 0.15);
+}
+.dark-theme .beginner-encouragement.level4-tip .encouragement-text {
+  color: #FFB74D;
+  background: rgba(255, 152, 0, 0.15);
+}
+.dark-theme .beginner-encouragement.level5-tip .encouragement-text {
+  color: #4DD0E1;
+  background: rgba(0, 188, 212, 0.15);
 }
 
 .tubes-grid {
@@ -1242,7 +1258,6 @@ body {
   padding: 20px 8px;
   min-height: 300px;
   align-items: flex-end;
-  /* 璇曠鍖哄煙澧炲姞鏌斿拰鐨勫唴宓岃儗鏅紝钀ラ€?妗岄潰"鐨勬矇娴告劅 */
   background: radial-gradient(ellipse at center bottom, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
   border-radius: 12px;
   position: relative;
@@ -1261,7 +1276,6 @@ body {
   flex-direction: column;
   align-items: center;
   cursor: pointer;
-  /* 杩囨浮鏇茬嚎鏇村脊鎬э紝璁╅€変腑/鎮仠鍙嶉鏇寸敓鍔?*/
   transition: transform 0.25s cubic-bezier(0.34, 1.3, 0.64, 1);
   will-change: transform;
   position: relative;
@@ -1272,7 +1286,6 @@ body {
 }
 
 .tube-container:hover .tube {
-  /* 鎮仠鏃惰瘯绠¤竟妗嗙暐寰浜紝鎻愮ず鍙氦浜?*/
   border-color: rgba(255, 255, 255, 0.6);
 }
 
@@ -1280,7 +1293,6 @@ body {
   transform: translateY(-8px);
 }
 
-/* 閫変腑璇曠涓嬫柟澧炲姞涓€涓煍鍜岀殑鎶曞奖鍦嗭紝寮哄寲"琚姮璧?鐨勮瑙夋劅 */
 .tube-container.selected::after {
   content: '';
   position: absolute;
@@ -1296,7 +1308,6 @@ body {
 }
 
 .tube-container.selected .tube {
-  /* 浣跨敤 color-mix 璁╁彂鍏夐鑹查殢涓婚 --primary 鑷€傚簲锛屼笉鍐嶇‖缂栫爜绱壊 */
   box-shadow: 0 0 0 3px var(--primary), 0 0 24px color-mix(in srgb, var(--primary) 50%, transparent), 0 4px 20px color-mix(in srgb, var(--primary) 40%, transparent);
   animation: selected-glow 1.5s ease-in-out infinite;
 }
@@ -1348,9 +1359,7 @@ body {
   background: var(--tube-bg);
   overflow: hidden;
   backdrop-filter: blur(4px);
-  /* 杩囨浮鍖呭惈鑳屾櫙涓庤竟妗嗭紝涓婚鍒囨崲鏃跺钩婊戝彉鍖?*/
   transition: box-shadow 0.2s, background var(--theme-transition), border-color var(--theme-transition);
-  /* 鐜荤拑璐ㄦ劅锛氬乏渚т富楂樺厜 + 鍙充晶娆￠珮鍏?+ 鍐呴槾褰卞寮虹珛浣撴劅 + 搴曢儴鍙嶅厜 */
   box-shadow:
     inset 2px 0 4px rgba(255, 255, 255, 0.25),
     inset -2px 0 4px var(--tube-shadow-inner),
@@ -1371,7 +1380,6 @@ body {
   pointer-events: none;
 }
 
-/* 璇曠鍙充晶娆￠珮鍏夛紝涓庡乏渚т富楂樺厜鍛煎簲锛屽舰鎴愮珛浣撶幓鐠冪鏁堟灉 */
 .tube::after {
   content: '';
   position: absolute;
@@ -1413,7 +1421,6 @@ body {
   /* 浠呰繃娓?transform 鍜?opacity锛岄伩鍏嶈繃娓?background 寮曞彂閲嶇粯 */
   transition: transform 0.3s cubic-bezier(0.34, 1.2, 0.64, 1), opacity 0.3s ease;
   will-change: transform, opacity;
-  /* 澶氬眰闃村奖钀ラ€犵珛浣撴劅锛氶《閮ㄥ唴楂樺厜锛堟恫浣撹〃闈㈠厜娉斤級銆佸簳閮ㄥ唴闃村奖锛堟恫浣撴矇闄嶆劅锛夈€佸乏鍙虫笎鍙橈紙鐞冧綋寮у害锛?*/
   box-shadow:
     inset 0 2px 4px var(--color-layer-shine),
     inset 0 -2px 4px rgba(0, 0, 0, 0.18),
@@ -1434,7 +1441,6 @@ body {
   pointer-events: none;
 }
 
-/* 娑蹭綋琛ㄩ潰寮湀闈㈡晥鏋滐細浠呴《灞傞鑹插眰鏄剧ず锛屾ā鎷熸恫浣撹〃闈㈠姬褰㈠弽鍏?*/
 .tube-inner > .color-layer:last-child::after {
   content: '';
   position: absolute;
@@ -1448,7 +1454,6 @@ body {
   z-index: 1;
 }
 
-/* ========== 鑹插急鍙嬪ソ妯″紡锛氭瘡绉嶉鑹插彔鍔犱笉鍚岀汗鐞嗗浘妗?========== */
 .cb-pattern-red::after {
   content: '';
   position: absolute;
@@ -1584,7 +1589,6 @@ body {
   font-weight: 600;
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease;
-  /* 鎸夐挳鎸変笅鏃舵彁渚涜Е瑙夊昂搴︾殑鍙嶉 */
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -1606,7 +1610,6 @@ body {
 }
 
 .btn-primary {
-  /* 浣跨敤涓婚鍙橀噺 --primary/--secondary锛屾寜閽厤鑹查殢涓婚鑷€傚簲 */
   background: linear-gradient(135deg, var(--primary), var(--secondary));
   color: var(--text-light);
   box-shadow: 0 4px 15px color-mix(in srgb, var(--primary) 40%, transparent);
@@ -1798,7 +1801,6 @@ body {
   opacity: 0.9;
 }
 
-/* ============ 淇℃伅椤垫牱寮?- 浼樺寲鍙鎬у拰灞傛 ============ */
 .info-page {
   max-width: 500px;
   margin: 0 auto;
@@ -1819,7 +1821,6 @@ body {
   margin: 18px 0 8px;
   font-size: 16px;
   font-weight: 600;
-  /* 灏忔爣棰樺鍔犺交寰儗鏅尯鍒嗭紝鎻愬崌灞傛鎰?*/
   padding-left: 8px;
   border-left: 3px solid rgba(255, 255, 255, 0.4);
 }
@@ -1839,7 +1840,6 @@ body {
   margin-bottom: 8px;
 }
 
-/* ========== 鑹插僵鐧剧椤甸潰鏍峰紡 ========== */
 .color-encyclopedia-list {
   display: flex;
   flex-direction: column;
@@ -2288,7 +2288,6 @@ html[style*="1a1a2e"] .encyclopedia-progress-track {
   outline-offset: 2px;
 }
 
-/* 灞忓箷闃呰鍣ㄤ笓鐢紙瑙嗚闅愯棌浣嗗彲璇伙級 */
 .sr-only {
   position: absolute;
   width: 1px;
@@ -2303,7 +2302,6 @@ html[style*="1a1a2e"] .encyclopedia-progress-track {
 
 /* ============ 鑳滃埄寮圭獥鎸夐挳 ============ */
 
-/* 鏂扮邯褰?鏈€浣宠褰曞窘绔?*/
 .new-record-badge {
   color: #FF6B6B;
   font-weight: 700;
@@ -2546,7 +2544,6 @@ html[style*="1a1a2e"] .encyclopedia-progress-track {
   transform: scale(1.05);
 }
 
-/* ============ 鎴愬氨椤甸潰 ============ */
 .achievement-summary {
   text-align: center;
   font-size: 18px;
@@ -2582,7 +2579,6 @@ html[style*="1a1a2e"] .encyclopedia-progress-track {
 
 .achievement-card.unlocked {
   border-left: 4px solid #4ECDC4;
-  /* 宸茶В閿佹垚灏卞鍔犺交寰厜鏅?*/
   box-shadow: var(--shadow-sm), 0 0 0 1px rgba(78, 205, 196, 0.15);
 }
 
@@ -2607,7 +2603,6 @@ html[style*="1a1a2e"] .encyclopedia-progress-track {
   margin-bottom: 4px;
 }
 
-/* 鎴愬氨鍚嶇О琛屽竷灞€锛氬悕绉?+ 绋€鏈夊害鏍囩 */
 .achievement-name-row {
   display: flex;
   align-items: center;
@@ -2634,7 +2629,6 @@ html[style*="1a1a2e"] .encyclopedia-progress-track {
   color: #888;
 }
 
-/* ============ 鎴愬氨椤垫€讳綋杩涘害 ============ */
 .achievement-overall {
   background: rgba(255, 255, 255, 0.15);
   border-radius: 12px;
@@ -2719,7 +2713,6 @@ html[style*="1a1a2e"] .encyclopedia-progress-track {
   }
 }
 
-/* 鎴愬氨鎻愮ず鍗＄墖锛氭渶杩戣В閿?+ 涓嬩竴涓洰鏍?*/
 .achievement-hint-cards {
   display: flex;
   gap: 10px;
@@ -2803,7 +2796,6 @@ html[style*="1a1a2e"] .ach-hint-time {
   color: rgba(255,255,255,0.6);
 }
 
-/* ============ 鎴愬氨鍒嗙被绛涢€?============ */
 .achievement-category-filter {
   display: flex;
   flex-wrap: wrap;
@@ -2811,7 +2803,6 @@ html[style*="1a1a2e"] .ach-hint-time {
   margin-bottom: 10px;
 }
 
-/* 绋€鏈夊害绛涢€夋爣绛炬爮 */
 .achievement-rarity-filter {
   display: flex;
   flex-wrap: wrap;
@@ -2887,7 +2878,6 @@ html[style*="1a1a2e"] .ach-hint-time {
   border-radius: 8px;
 }
 
-/* ============ 鍒嗙被杩涘害鏉?============ */
 .achievement-category-progress {
   margin-bottom: 14px;
   padding: 10px 14px;
@@ -2917,7 +2907,6 @@ html[style*="1a1a2e"] .ach-hint-time {
   transition: width 0.4s ease;
 }
 
-/* ============ 鎴愬氨瑙ｉ攣鏃ユ湡 ============ */
 .achievement-date {
   font-size: 11px;
   color: #aaa;
@@ -2929,7 +2918,6 @@ html[style*="1a1a2e"] .ach-hint-time {
   flex-shrink: 0;
 }
 
-/* ============ 绌虹姸鎬佹彁绀?============ */
 .achievement-empty-hint {
   text-align: center;
   padding: 30px 20px;
@@ -3118,7 +3106,6 @@ html[style*="1a1a2e"] .ach-hint-time {
   opacity: 0.8;
 }
 
-/* 鎴愬氨绋€鏈夊害鏍囩 */
 .achievement-notif-rarity {
   font-size: 11px;
   font-weight: 600;
@@ -3126,13 +3113,11 @@ html[style*="1a1a2e"] .ach-hint-time {
   letter-spacing: 0.5px;
 }
 
-/* 鎴愬氨鍗＄墖绋€鏈夊害杈规鍏夋晥 */
 .achievement-notif-card {
   border-left: 4px solid #4CAF50;
   transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-/* 浼犺绾ф垚灏辫В閿佹椂鐨勭壒娈婂厜鏁堝姩鐢?*/
 @keyframes legendaryGlow {
   0%, 100% { box-shadow: 0 4px 20px rgba(255, 152, 0, 0.3), 0 0 0 0 rgba(255, 152, 0, 0.4); }
   50% { box-shadow: 0 4px 30px rgba(255, 152, 0, 0.5), 0 0 0 4px rgba(255, 152, 0, 0.15); }
@@ -3159,7 +3144,6 @@ html[style*="1a1a2e"] .ach-hint-time {
   justify-content: space-between;
   padding: 14px 20px;
   cursor: pointer;
-  /* 鎮仠杩囨浮鏇村钩婊戯紝澧炲姞宸﹁竟妗嗘寚绀哄櫒 */
   transition: background 0.2s, padding-left 0.2s;
   border-left: 3px solid transparent;
 }
@@ -3248,7 +3232,6 @@ html[style*="1a1a2e"] .ach-hint-time {
   position: absolute;
   top: 2px;
   left: 2px;
-  /* 杩囨浮鏇茬嚎甯﹀脊鎬э紝璁╁紑鍏冲垏鎹㈡洿鏈?鍜斿搾"鐨勮Е鎰?*/
   transition: transform 0.3s cubic-bezier(0.34, 1.5, 0.64, 1), box-shadow 0.2s;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
@@ -3266,7 +3249,6 @@ html[style*="1a1a2e"] .ach-hint-time {
   margin: 12px 0 8px;
 }
 
-/* 鑳滃埄缁撶畻姝ユ暟鏁堢巼鍙鍖?*/
 .win-efficiency-bar {
   margin: 12px auto 8px;
   width: 90%;
@@ -3423,7 +3405,6 @@ html[style*="1a1a2e"] .ach-hint-time {
   color: #666;
 }
 
-/* 閿洏蹇嵎閿彁绀?*/
 .keyboard-hint {
   text-align: center;
   font-size: 11px;
@@ -3480,7 +3461,6 @@ html[style*="1a1a2e"] .ach-hint-time {
   100% { transform: scale(1.15); }
 }
 
-/* ============ 缁熻椤甸潰 ============ */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -3498,7 +3478,6 @@ html[style*="1a1a2e"] .ach-hint-time {
   /* 椤堕儴楂樺厜澧炲己鍗＄墖璐ㄦ劅 */
   position: relative;
   overflow: hidden;
-  /* 鍗＄墖鎮仠鏃跺鍔犺交寰殑杈规楂樹寒 */
   border: 1px solid transparent;
 }
 
@@ -3625,7 +3604,6 @@ html[style*="1a1a2e"] .ach-hint-time {
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* ============ 鏈€杩戞父鐜╁揩鎹峰叆鍙?============ */
 .recent-play-card {
   display: flex;
   align-items: center;
@@ -3648,7 +3626,6 @@ html[style*="1a1a2e"] .ach-hint-time {
   transform: translateY(0);
 }
 
-/* 蹇€熼噸鐜╀笂涓€鍏冲崱鐗?*/
 .replay-last-card {
   display: flex;
   align-items: center;
@@ -3766,7 +3743,6 @@ html[style*="1a1a2e"] .ach-hint-time {
   gap: 8px;
 }
 
-/* 姣忔棩鐩爣鏁翠綋杩涘害鏉?*/
 .daily-goals-bar {
   height: 4px;
   background: rgba(255, 184, 0, 0.15);
@@ -3896,7 +3872,6 @@ html[style*="1a1a2e"] .ach-hint-time {
   to { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
 
-/* ===== 姣忔棩鐩爣瀹屾垚鍔ㄧ敾 ===== */
 
 /* 鎵撻挬寮硅烦鍔ㄧ敾 */
 @keyframes checkPop {
@@ -3905,7 +3880,6 @@ html[style*="1a1a2e"] .ach-hint-time {
   100% { transform: scale(1); opacity: 1; }
 }
 
-/* 鐩爣鍒氬畬鎴愭椂鐨勫彂鍏夐珮浜?*/
 .goal-just-completed {
   animation: goalFlash 0.6s ease-out;
 }
@@ -3915,7 +3889,6 @@ html[style*="1a1a2e"] .ach-hint-time {
   100% { background: rgba(76, 175, 80, 0.1); transform: scale(1); }
 }
 
-/* 杩涘害鏉″厖鑳藉姩鐢?*/
 @keyframes progressCharging {
   0% { box-shadow: 0 0 0 0 rgba(102, 187, 106, 0.5); }
   50% { box-shadow: 0 0 8px 2px rgba(102, 187, 106, 0.6); }
@@ -3951,7 +3924,6 @@ html[style*="1a1a2e"] .ach-hint-time {
   animation: checkPop 0.5s ease-out;
 }
 
-/* 杩涘害鏉″僵铏规笎鍙橈紙鍏ㄩ儴瀹屾垚鏃讹級 */
 @keyframes rainbowFlow {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
@@ -4371,7 +4343,6 @@ html[style*="1a1a2e"] .ach-hint-time {
   border-radius: 2px;
 }
 
-/* === 棣栭〉闅惧害鍒嗗尯杩涘害 === */
 .difficulty-progress {
   display: flex;
   flex-direction: column;
@@ -4501,7 +4472,6 @@ html[style*="1a1a2e"] .ach-hint-time {
   border-radius: 6px;
 }
 
-/* ============ 姝ユ暟鏁堢巼鎸囩ず鍣?============ */
 .efficiency-badge {
   font-size: 11px;
   padding: 2px 8px;
@@ -4638,7 +4608,6 @@ html[style*="1a1a2e"] .ach-hint-time {
   transition: height 0.3s ease;
 }
 
-/* 缁熻椤?0澶╄闂儹鍔涘浘 */
 .stats-heatmap {
   margin-top: 8px;
 }
@@ -4809,7 +4778,6 @@ html[style*="1a1a2e"] .stats-heatmap-cell {
   transform: translateX(4px);
 }
 
-/* 鍛ㄦ寫鎴樺叆鍙ｅ崱鐗?*/
 .weekly-challenge-banner {
   display: flex;
   align-items: center;
@@ -4986,7 +4954,6 @@ html[style*="1a1a2e"] .stats-heatmap-cell {
 }
 
 /* 鏅鸿兘鎺ㄨ崘鍏冲崱鍗＄墖 */
-/* 浠婃棩鎺ㄨ崘娓哥帺鏅鸿兘鍗＄墖 鈥?鏍规嵁鏃舵鍜屾父鐜╁巻鍙叉帹鑽愪笉鍚岀帺娉?*/
 .smart-recommend-card {
   display: flex;
   align-items: center;
@@ -5231,7 +5198,6 @@ html[style*="1a1a2e"] .stats-heatmap-cell {
   font-weight: bold;
 }
 
-/* 鏇存柊鏃ュ織鏍峰紡志鏇存柊鏃ュ織鏍峰紡式 */
 .changelog-content {
   max-height: 400px;
   overflow-y: auto;
@@ -5461,7 +5427,6 @@ html[style*="1a1a2e"] .stats-heatmap-cell {
 }
 
 /* 锟斤拷锟斤拷锟斤拷钮锟斤拷锟斤拷戏锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷应 */
-/* 璁剧疆椤靛皬璐村＋鍒楄〃 */
 .tips-list {
   display: flex;
   flex-direction: column;
@@ -5936,7 +5901,6 @@ html[style*="1a1a2e"] .stats-heatmap-cell {
   line-height: 1.6;
 }
 
-/* ============ 棣栭〉鑷畾鍏冲崱蹇€熷叆鍙?============ */
 .custom-levels-section {
   width: 100%;
   background: var(--card-bg);
@@ -6055,7 +6019,6 @@ html[style*="1a1a2e"] .stats-heatmap-cell {
 
 /* ====== 绉诲姩绔瘯绠＄綉鏍间紭鍖栵紙澶氱鍦烘櫙锛?====== */
 @media (max-width: 768px) {
-  /* 褰撹瘯绠℃暟閲忚緝澶氭椂锛屽厑璁告í鍚戞粴鍔ㄨ€岄潪杩囧害鎹㈣ */
   .tubes-grid {
     overflow-x: auto;
     overflow-y: hidden;
@@ -6144,7 +6107,6 @@ html[style*="1a1a2e"] .stats-heatmap-cell {
   }
 }
 
-/* ====== 閿洏鐒︾偣鍙鎬у寮?====== */
 .btn:focus-visible,
 .level-btn:focus-visible,
 .checkin-btn:focus-visible,
@@ -6163,14 +6125,12 @@ html[style*="1a1a2e"] .stats-heatmap-cell {
 
 /* ============ 鍏ㄥ眬瑙嗚澧炲己 ============ */
 
-/* 骞虫粦婊氬姩 + 绉诲姩绔瓧浣撶缉鏀句慨姝?*/
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
 
-/* 棣栭〉澶撮儴瑁呴グ鍏夋檿锛屽鍔犺瑙夊眰娆?*/
 .home-header {
   position: relative;
 }
@@ -6255,7 +6215,6 @@ html {
   font-size: 12px;
 }
 
-/* 缁熻椤佃緟鍔╂枃瀛?*/
 .stats-note {
   font-size: 12px;
   color: #999;
@@ -6272,7 +6231,6 @@ html {
   color: #FF6B6B;
 }
 
-/* 椤甸潰鍔犺浇鍗犱綅缁勪欢 */
 .page-loading-container {
   display: flex;
   align-items: center;
@@ -6287,7 +6245,6 @@ html {
 .page-loading-emoji {
   font-size: 48px;
   margin-bottom: 12px;
-  /* 鍔犺浇 emoji 缂撴參鍛煎惛鏁堟灉 */
   animation: loading-breathe 1.6s ease-in-out infinite;
 }
 
@@ -6425,7 +6382,6 @@ html {
   left: 100%;
 }
 
-/* ============ 甯姪寮圭獥鍙鍖栧浘绀?============ */
 .help-visual-steps {
   display: flex;
   justify-content: space-around;
@@ -6468,7 +6424,6 @@ html {
   margin: 0;
 }
 
-/* 绉诲姩绔府鍔╁浘绀哄搷搴斿紡閫傞厤 */
 @media (max-width: 480px) {
   .help-visual-steps {
     flex-direction: column;
@@ -6539,7 +6494,6 @@ html {
   }
 }
 
-/* ============ 涓汉鏈€浣虫鏁板窘绔?============ */
 .best-score-badge {
   background: linear-gradient(135deg, #FFD700, #FFA500);
   color: #fff;
@@ -6934,7 +6888,6 @@ html {
   transform: scale(1.05);
   box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
 }
-/* 搴忓垪璁板繂杩涘害鎭㈠鎸夐挳鍜屾彁绀?*/
 .csg-start-buttons {
   display: flex;
   flex-direction: column;
@@ -7028,7 +6981,6 @@ html {
   text-align: center;
   margin-top: 4px;
 }
-/* 閲岀▼纰戝簡绁濇彁绀?*/
 .csg-milestone {
   position: relative;
   text-align: center;
@@ -7177,7 +7129,6 @@ html {
   text-align: center;
   margin-top: 4px;
 }
-/* 鍙嶅簲娴嬭瘯鏈€浣冲垎鏁版牱寮?*/
 .crt-new-record {
   font-size: 15px;
   color: #f59e0b;
@@ -7618,7 +7569,6 @@ html {
   margin: 8px 0;
   animation: bounce-in 0.5s ease;
 }
-/* 鍘嗗彶鏈€浣冲垎鏁板睍绀?*/
 .cpt-best-score {
   font-size: 14px;
   font-weight: 600;
@@ -7700,7 +7650,6 @@ html {
 .daily-quiz-entry-card:active {
   transform: translateY(0);
 }
-/* 鏈瓟棰樻椂鐨勮剦鍐叉彁閱掑姩鐢?*/
 .daily-quiz-entry-card.quiz-unanswered {
   animation: quiz-pulse 2s ease-in-out infinite;
   border-left-color: #f59e0b;
@@ -7790,9 +7739,7 @@ html {
 /* ============================================================ */
 /* ============ 2026-07-13 鏍峰紡浼樺寲澧炲己锛堢浜屾壒锛?============ */
 /* ============================================================ */
-/* 鏈尯鍧椾负杩藉姞鐨勮瑙変笌浜や簰澧炲己锛屼笉淇敼宸叉湁鍔熻兘閫昏緫锛屼粎鎻愬崌琛ㄧ幇鍔?*/
 
-/* 1. 绉诲姩绔寜閽粺涓€瑙︽懜鍙嶉锛氭寜涓嬫椂缂╂斁 + 杞诲井閫忔槑搴﹀彉鍖?*/
 @media (hover: none) and (pointer: coarse) {
   .btn:active {
     transform: scale(0.96);
@@ -7812,7 +7759,6 @@ html {
   }
 }
 
-/* 2. 鍔犺浇鍗犱綅缁勪欢锛氬懠鍚稿厜鏅曠幆缁曪紝姣旂函缂╂斁鏇存湁"绛夊緟鎰? */
 .page-loading-emoji {
   position: relative;
 }
@@ -7831,7 +7777,6 @@ html {
   50% { transform: scale(1.15); opacity: 0.35; }
 }
 
-/* 3. 鑳滃埄寮圭獥锛氬唴瀹瑰厓绱犱氦閿欏叆鍦猴紝澧炲己搴嗙灞傛鎰?*/
 .win-card .star-rating .star {
   animation-fill-mode: both;
 }
@@ -7856,7 +7801,6 @@ html {
   100% { opacity: 1; transform: translateY(0); }
 }
 
-/* 4. 鎴愬氨鍗＄墖锛氭偓鍋滄椂寮哄寲宸茶В閿佺姸鎬佺殑鍏夋檿 */
 .achievement-card.unlocked {
   transition: transform 0.2s ease, box-shadow 0.3s ease;
 }
@@ -7864,7 +7808,6 @@ html {
   box-shadow: var(--shadow), 0 0 0 1px rgba(78, 205, 196, 0.35), 0 0 16px rgba(78, 205, 196, 0.15);
 }
 
-/* 5. 鍏冲崱鎸夐挳锛氬凡瀹屾垚鍏冲崱鎮仠鏃舵槦鏍囪交寰诞鍔?*/
 .level-btn.completed {
   position: relative;
 }
@@ -7872,7 +7815,6 @@ html {
   filter: brightness(1.05);
 }
 
-/* 6. 杩涘害鏉″～鍏咃細澧炲姞娴佸厜鎵繃鍔ㄦ晥锛岃杩涘害鍙樺寲鏇撮啋鐩?*/
 .progress-bar-fill {
   position: relative;
   overflow: hidden;
@@ -7892,14 +7834,12 @@ html {
   100% { left: 100%; }
 }
 
-/* 7. 姣忔棩鎸戞垬/鍛ㄦ寫鎴樻í骞咃細绠ご鎮仠鏃舵洿鏄庢樉鐨勪綅绉?*/
 .daily-challenge-banner:hover .daily-banner-icon,
 .weekly-challenge-banner:hover .weekly-banner-icon {
   transform: scale(1.1);
   transition: transform 0.3s ease;
 }
 
-/* 8. FAB 瀵艰埅鎸夐挳锛氭偓鍋滄椂澧炲姞杞诲井鏃嬭浆锛屾彁鍗囪叮鍛虫€?*/
 .fab-nav-btn {
   transition: transform 0.2s ease, box-shadow 0.2s ease, rotate 0.3s ease;
 }
@@ -7907,7 +7847,6 @@ html {
   rotate: -8deg;
 }
 
-/* 9. 妯℃€佸脊绐楋細鍐呭鍖烘粴鍔ㄦ潯缇庡寲锛坵ebkit 娴忚鍣級 */
 .tutorial-card .changelog-content::-webkit-scrollbar,
 .help-modal-body::-webkit-scrollbar,
 .tips-list::-webkit-scrollbar {
@@ -7935,7 +7874,6 @@ html {
   100% { transform: scale(1.1); }
 }
 
-/* 11. 鏃犻殰纰嶏細鍑忓皯鍔ㄧ敾鍋忓ソ涓嬬鐢ㄨ楗版€у姩鐢?*/
 @media (prefers-reduced-motion: reduce) {
   .progress-bar-fill::after,
   .page-loading-emoji::after,
@@ -7957,7 +7895,6 @@ html {
   }
 }
 
-/* 12. 澶у睆妗岄潰锛氳瘯绠＄綉鏍煎眳涓檺鍒舵渶澶у搴︼紝閬垮厤杩囧害鎷変几 */
 @media (min-width: 1025px) {
   .tubes-grid {
     max-width: 720px;
@@ -7965,7 +7902,6 @@ html {
   }
 }
 
-/* 13. 姝诲眬棰勮锛氬鍔犳寔缁殑杈规鑴夊啿锛屾瘮涓€娆℃€у姩鐢绘洿鑳藉紩璧锋敞鎰?*/
 .deadlock-warning-tip {
   animation: deadlock-warning-pulse 0.6s ease, deadlock-border-pulse 1.5s ease-in-out infinite 0.6s;
 }
@@ -7983,7 +7919,6 @@ html {
   border: 1px solid var(--tube-border, rgba(0,0,0,0.1));
 }
 
-/* 鏆楄壊涓婚涓嬬櫨绉戦〉杩蜂綘娓告垙澧炲己 */
 @media (prefers-color-scheme: dark) {
   .cpm-card {
     background: rgba(255, 255, 255, 0.12) !important;
@@ -8035,7 +7970,6 @@ html {
   }
 }
 
-/* 褰撻€氳繃 JS 璁剧疆鏆楄壊涓婚鏃朵篃搴旂敤澧炲己锛堜富棰樹笉渚濊禆 prefers-color-scheme锛?*/
 :root[style*="dark"] .cpm-card,
 html[style*="1a1a2e"] .cpm-card {
   background: rgba(255, 255, 255, 0.12) !important;
@@ -8050,12 +7984,10 @@ html[style*="1a1a2e"] .color-theory-card,
 html[style*="1a1a2e"] .color-trivia-item {
   background: rgba(255, 255, 255, 0.06);
 }
-/* 鏆楄壊涓婚涓嬫渶杩戞祻瑙堝拰鍗＄墖灞曞紑閫傞厤 */
 html[style*="1a1a2e"] .encyclopedia-recent-colors {
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
-/* 鏆楄壊涓婚涓嬪皬璐村＋瀵艰埅鎸夐挳閫傞厤 */
 html[style*="1a1a2e"] .daily-tip-nav-btn {
   background: rgba(255, 255, 255, 0.08);
   border-color: rgba(255, 255, 255, 0.15);
@@ -8066,14 +7998,12 @@ html[style*="1a1a2e"] .daily-tip-nav-btn:hover {
   color: #fff;
   border-color: var(--primary, #667eea);
 }
-/* 鏆楄壊涓婚涓嬭鲸璇嗘祴璇曟柊绾綍鍜屾渶浣冲垎鏁伴€傞厤 */
 html[style*="1a1a2e"] .cpt-new-record {
   color: #FFB084;
 }
 html[style*="1a1a2e"] .cpt-best-score {
   color: rgba(255, 255, 255, 0.5);
 }
-/* 鏆楄壊涓婚涓嬮棶绛旇秼鍔垮浘閫傞厤 */
 html[style*="1a1a2e"] .quiz-trend-chart,
 html[style*="1a1a2e"] .quiz-difficulty-stats {
   background: rgba(255, 255, 255, 0.04);
@@ -8081,12 +8011,10 @@ html[style*="1a1a2e"] .quiz-difficulty-stats {
 html[style*="1a1a2e"] .quiz-trend-date {
   color: rgba(255, 255, 255, 0.4);
 }
-/* 鏆楄壊涓婚涓嬪簭鍒楄蹇嗛噷绋嬬閫傞厤 */
 html[style*="1a1a2e"] .csg-milestone-text {
   color: #FFB084;
   text-shadow: 0 0 10px rgba(255, 176, 132, 0.3);
 }
-/* 鏆楄壊涓婚涓嬮煶鏁堝垏鎹㈡寜閽€傞厤 */
 html[style*="1a1a2e"] .sound-toggle-btn {
   background: rgba(255, 255, 255, 0.1);
 }
@@ -8390,7 +8318,6 @@ html[style*="1a1a2e"] .daily-quiz-difficulty-hard {
 .dq-explanation-icon {
   flex-shrink: 0;
 }
-/* 姣忔棩闂瓟闅惧害鍒嗙骇缁熻 */
 .quiz-difficulty-stats {
   margin-top: 10px;
   padding: 10px 12px;
@@ -8478,7 +8405,6 @@ html[style*="1a1a2e"] .daily-quiz-difficulty-hard {
   white-space: nowrap;
 }
 
-/* 姣忔棩闂瓟30澶╃瓟棰樻棩鍘嗙儹鍔涘浘 */
 .quiz-calendar-heatmap {
   margin-top: 12px;
   padding: 12px;
@@ -8580,7 +8506,6 @@ html[style*="1a1a2e"] .quiz-calendar-legend {
   transform: translateY(0);
 }
 
-/* 閿欓鏈叆鍙ｆ寜閽?*/
 .daily-quiz-wrongbook-btn {
   display: block;
   width: 100%;
@@ -8722,7 +8647,6 @@ html[style*="1a1a2e"] .quiz-calendar-legend {
   border-radius: 6px;
   line-height: 1.5;
 }
-/* 閿欓鏈殫鑹蹭富棰橀€傞厤 */
 [data-theme="dark"] .quiz-wrongbook-modal { background: #1e1e1e; }
 [data-theme="dark"] .quiz-wrongbook-header { border-color: #333; }
 [data-theme="dark"] .quiz-wrongbook-header h3 { color: #eee; }
@@ -8888,7 +8812,6 @@ html[style*="1a1a2e"] .quiz-calendar-legend {
   margin-bottom: 12px;
 }
 
-/* 鐧剧鍒嗙被瀵艰埅鏍囩 */
 .encyclopedia-category-tags {
   display: flex;
   flex-wrap: wrap;
@@ -8933,30 +8856,23 @@ html[style*="1a1a2e"] .quiz-calendar-legend {
 /* ============================================================ */
 /* ============ 2026-07-14 鏍峰紡浼樺寲澧炲己锛堢涓夋壒锛?============ */
 /* ============================================================ */
-/* 鏈鑱氱劍锛氶灞忚瑙夊啿鍑诲姏銆佷俊鎭〉鍙鎬с€佸簡绁濆姩鏁堛€佷富棰橀€夋嫨鍙嶉 */
-/* 绾︽潫寤剁画锛氫笉淇敼浼氳 themeManager 瑕嗙洊鐨?8 涓牳蹇?:root 鍙橀噺   */
-/* 鎵€鏈夋柊澧炶壊褰╅€氳繃 var(--primary/--secondary) + color-mix 鑷€傚簲 */
 
 /* 1. 棣栭〉鏍囬锛氫富棰樿壊娓愬彉鏂囧瓧锛屾浛浠ｇ函鐧斤紝澧炲己鍝佺墝璇嗗埆搴?*/
 .title {
-  /* 娓愬彉鍓鍒版枃瀛楋紝閰嶅悎鍘熸湁闃村奖鍙犲姞绔嬩綋鎰?*/
   background: linear-gradient(135deg, #ffffff 0%, color-mix(in srgb, var(--primary) 55%, #ffffff) 60%, #ffffff 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  /* 鍏滃簳锛氫笉鏀寔 background-clip 鐨勭幆澧冧粛鍙 */
   filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.25)) drop-shadow(0 1px 2px rgba(0, 0, 0, 0.15));
 }
 
 /* 2. 棣栭〉 logo锛氬灞備富棰樿壊鍏夋檿锛岃棣栧睆瑙嗚鐒︾偣鏇寸獊鍑?*/
 .logo {
-  /* 鍦ㄥ師鏈?drop-shadow 涔嬩笂鍙犲姞涓婚鑹茶緣鍏夛紝褰㈡垚"鍙戝厜 emoji"鏁堟灉 */
   filter:
     drop-shadow(0 6px 12px rgba(0, 0, 0, 0.25))
     drop-shadow(0 0 18px color-mix(in srgb, var(--primary) 45%, transparent));
 }
 
-/* 3. 棣栭〉缁熻鏁板瓧锛氫富棰樿壊娓愬彉鏂囧瓧锛屼笌鏍囬鍛煎簲锛屾暟瀛楁洿鍏峰垎閲?*/
 .stat-value {
   /* 娓愬彉鍓锛岃绾櫧鏁板瓧甯︿笂涓婚鑹查珮鍏?*/
   background: linear-gradient(180deg, #ffffff 0%, color-mix(in srgb, var(--secondary) 40%, #ffffff) 100%);
@@ -8965,9 +8881,7 @@ html[style*="1a1a2e"] .quiz-calendar-legend {
   -webkit-text-fill-color: transparent;
 }
 
-/* 4. 妯″紡缃戞牸鎸夐挳锛氬寮虹珛浣撴劅涓庝富棰樿壊铻嶅叆 */
 .mode-grid-btn {
-  /* 椤堕儴鍐呴珮鍏夎鎸夐挳鏈?鐜荤拑鎸夐敭"璐ㄦ劅 */
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.35),
     inset 0 -2px 6px rgba(0, 0, 0, 0.12),
@@ -8975,7 +8889,6 @@ html[style*="1a1a2e"] .quiz-calendar-legend {
 }
 
 .mode-grid-btn:hover {
-  /* hover 鏃跺彔鍔犱富棰樿壊杈夊厜锛岄绀哄彲浜や簰 */
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.4),
     0 4px 14px color-mix(in srgb, var(--primary) 30%, transparent);
@@ -8996,7 +8909,6 @@ html[style*="1a1a2e"] .quiz-calendar-legend {
   pointer-events: none;
 }
 
-/* 6. 淇℃伅椤甸摼鎺ワ細涓撻棬鏍峰紡锛屾浛浠ｆ祻瑙堝櫒榛樿钃濊壊涓嬪垝绾?*/
 .info-page a {
   color: color-mix(in srgb, var(--primary) 70%, #ffffff);
   text-decoration: none;
@@ -9010,9 +8922,7 @@ html[style*="1a1a2e"] .quiz-calendar-legend {
   border-bottom-style: solid;
 }
 
-/* 7. 淇℃伅椤靛垪琛ㄩ」锛氳嚜瀹氫箟鏍囪棰滆壊锛屼笌灏忔爣棰樺乏杈规鍛煎簲 */
 .info-page li::marker {
-  /* 鐢ㄤ富棰樿壊娓叉煋榛樿鍦嗙偣鏍囪锛屾彁鍗囪瑙変竴鑷存€?*/
   color: color-mix(in srgb, var(--primary) 70%, #ffffff);
 }
 
@@ -9027,9 +8937,7 @@ html[style*="1a1a2e"] .quiz-calendar-legend {
   100% { transform: scale(1) rotate(0); }
 }
 
-/* 9. 涓婚閫夋嫨鎸夐挳锛氶€変腑鎬佽瀺鍏ヤ富棰樿壊杈夊厜锛屽弽棣堟洿鏄庣‘ */
 .theme-btn.theme-active {
-  /* 鍦ㄥ師鏈夋弿杈瑰熀纭€涓婂彔鍔犱富棰樿壊澶栧彂鍏?*/
   box-shadow:
     0 0 0 2px var(--primary),
     0 4px 15px rgba(0, 0, 0, 0.15),
@@ -9049,7 +8957,6 @@ html[style*="1a1a2e"] .quiz-calendar-legend {
   }
 }
 
-/* 11. 淇℃伅椤?feature-section锛氬垎鍖哄崱鐗囧寲锛屾彁鍗囬暱鍐呭鍙鎬?*/
 .feature-section {
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -9065,7 +8972,6 @@ html[style*="1a1a2e"] .quiz-calendar-legend {
   font-weight: 700;
 }
 
-/* 12. 鏃犻殰纰嶏細鍑忓皯鍔ㄧ敾鍋忓ソ涓嬬鐢ㄦ湰娆℃柊澧炵殑瑁呴グ鎬у姩鐢?*/
 @media (prefers-reduced-motion: reduce) {
   .win-emoji {
     animation: none !important;
@@ -9075,9 +8981,7 @@ html[style*="1a1a2e"] .quiz-calendar-legend {
 /* ============================================================ */
 /* ============ 2026-07-15 鏍峰紡浼樺寲澧炲己锛堢涓夋壒锛?============ */
 /* ============================================================ */
-/* 鏈壒娆¤仛鐒︼細姘涘洿灞傘€佽瘯绠℃恫浣撴椿鍔涖€侀椤佃瑙夊眰娆°€佺Щ鍔ㄧ瑙︽懜鍙嶉銆侀〉闈㈣繃娓?*/
 
-/* 1. 鑳屾櫙姘涘洿灞傦細涓や釜鏌斿拰婕傛诞鐨勫厜鏅曪紝澧炲姞绌洪棿绾垫繁鎰燂紙涓嶅共鎵颁氦浜掞級 */
 .app::after {
   content: '';
   position: fixed;
@@ -9095,16 +8999,13 @@ html[style*="1a1a2e"] .quiz-calendar-legend {
   100% { transform: translate(-1%, 2%) scale(1); }
 }
 
-/* 2. 棣栭〉鏍囬锛氭笎鍙樻枃瀛楁晥鏋滐紝璁?logo 鍖烘洿鍏峰搧鐗屾劅 */
 .home-header .title {
   background: linear-gradient(135deg, #ffffff 0%, #f0f4ff 50%, #ffe4f1 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  /* 鍏煎鏃ф祻瑙堝櫒锛氫繚鐣欐枃瀛楅槾褰变綔涓哄洖閫€ */
   filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.25));
 }
-/* 褰撴笎鍙樹笉琚敮鎸佹椂鍥為€€鍒扮函鐧?*/
 @supports not (-webkit-background-clip: text) {
   .home-header .title {
     -webkit-text-fill-color: initial;
@@ -9122,7 +9023,6 @@ html[style*="1a1a2e"] .quiz-calendar-legend {
   100% { opacity: 0.95; transform: translateY(0); }
 }
 
-/* 4. 璇曠娑蹭綋椤堕儴锛氬鍔犲井寮辩殑娑查潰娉㈠姩锛岃娑蹭綋鐪嬭捣鏉?娲荤潃" */
 .tube-inner > .color-layer:last-child::after {
   animation: liquid-ripple 3.5s ease-in-out infinite;
 }
@@ -9131,7 +9031,6 @@ html[style*="1a1a2e"] .quiz-calendar-legend {
   50% { transform: scaleX(1.08); opacity: 1; }
 }
 
-/* 5. 璇曠鎮仠锛氬鍔犺交寰殑"鍛煎惛"鍏夋檿锛屽己鍖栧彲浜や簰鎰?*/
 .tube-container:hover .tube {
   box-shadow:
     inset 2px 0 4px rgba(255, 255, 255, 0.3),
@@ -9140,7 +9039,6 @@ html[style*="1a1a2e"] .quiz-calendar-legend {
     0 0 12px rgba(255, 255, 255, 0.12);
 }
 
-/* 6. 妯″紡鍏ュ彛鎸夐挳锛氶€変腑鎬佸鍔犳洿鏄庢樉鐨勫唴楂樺厜锛屾彁鍗囪川鎰?*/
 .mode-grid-btn {
   transition: transform 0.18s cubic-bezier(0.34, 1.3, 0.64, 1),
               box-shadow 0.25s ease,
@@ -9175,7 +9073,6 @@ html[style*="1a1a2e"] .quiz-calendar-legend {
   transform: scale(1.15) translateY(-2px);
 }
 
-/* 9. 椤甸潰鍔犺浇鍗犱綅锛氭棆杞厜鐜?+ 涓績 emoji 鍛煎惛 */
 .page-loading-container {
   min-height: 60vh;
   display: flex;
@@ -9223,7 +9120,6 @@ main.privacy-page {
   100% { opacity: 1; transform: translateY(0); }
 }
 
-/* 11. 淇℃伅椤碉紙鍏充簬/闅愮锛夋鏂囷細琛岃窛涓庢钀介棿璺濅紭鍖栵紝鎻愬崌鍙鎬?*/
 .info-page p,
 .info-page li {
   line-height: 1.65;
@@ -9254,7 +9150,6 @@ main.privacy-page {
   font-weight: 700;
 }
 
-/* 13. 鎸夐挳鐒︾偣鐜細涓庡搧鐗岃壊缁熶竴鐨勮仛鐒﹀弽棣堬紝鎻愬崌鏃犻殰纰嶅彲瑙佹€?*/
 .btn:focus-visible,
 .btn-primary:focus-visible,
 .btn-secondary:focus-visible {
@@ -9263,7 +9158,6 @@ main.privacy-page {
   box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 25%, transparent);
 }
 
-/* 14. 绉诲姩绔細璇曠鍖哄煙澧炲姞搴曢儴瀹夊叏鍖虹暀鐧斤紝閬垮厤琚簳閮ㄦ爮閬尅 */
 @media (max-width: 480px) {
   .tubes-grid {
     padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
@@ -9290,7 +9184,6 @@ main.privacy-page {
   }
 }
 
-/* 16. 妯睆灏忛珮搴︼細璇曠灏哄杩涗竴姝ュ帇缂╋紝纭繚娓告垙鍖哄彲瑙?*/
 @media (orientation: landscape) and (max-height: 500px) {
   .tube {
     width: 32px;
@@ -9305,12 +9198,10 @@ main.privacy-page {
   }
 }
 
-/* 17. 鑳滃埄绮掑瓙鐢诲竷锛氫繚璇佷笉鎷︽埅搴曞眰鐐瑰嚮涓斾笉琚叾浠栧厓绱犺鐩?*/
 canvas[aria-hidden="true"] {
   z-index: 150 !important;
 }
 
-/* 18. 鏆楄壊涓婚閫傞厤锛氭柊澧炲己鍖栭」鍦ㄦ殫鑹叉ā寮忎笅淇濇寔鍙鎬?*/
 @media (prefers-color-scheme: dark) {
   .home-header .title {
     background: linear-gradient(135deg, #ffffff 0%, #d6e4ff 50%, #ffd6e7 100%);
@@ -9329,7 +9220,6 @@ canvas[aria-hidden="true"] {
   }
 }
 
-/* 19. 鍑忓皯鍔ㄧ敾鍋忓ソ锛氱鐢ㄦ湰鎵规鏂板鐨勮楗版€у姩鐢?*/
 @media (prefers-reduced-motion: reduce) {
   .app::after,
   .tube-inner > .color-layer:last-child::after,
@@ -9395,7 +9285,6 @@ canvas[aria-hidden="true"] {
   flex-shrink: 0;
 }
 
-/* 閰嶆柟鏌ョ湅寮圭獥鍒楄〃 */
 .saved-recipes-list {
   max-height: 360px;
   overflow-y: auto;
@@ -9489,7 +9378,6 @@ canvas[aria-hidden="true"] {
   margin: 0;
 }
 
-/* 杩斿洖椤堕儴娴姩鎸夐挳 */
 .scroll-top-fab {
   position: fixed;
   bottom: 80px;
@@ -9597,9 +9485,7 @@ canvas[aria-hidden="true"] {
 /* ============================================================ */
 /* ============ 2026-07-16 鏍峰紡浼樺寲澧炲己锛堢鍥涙壒锛?============ */
 /* ============================================================ */
-/* 鏈壒娆¤仛鐒︼細鑳滃埄/姝诲眬鍗＄墖鎴忓墽鍖栥€佹父鎴忓窘绔犲眰娆°€佸叧鍗℃寜閽毦搴﹀厜鏅曘€?   杩涘害鏉℃祦鍏夈€佹垚灏遍€氱煡銆佸脊绐楁ā绯娿€侀〉鑴氫笌FAQ浜や簰銆佽瘯绠″彛绮句慨 */
 
-/* 1. 鑳滃埄/姝诲眬閬僵锛氬寮鸿儗鏅ā绯婏紝璁╁脊绐楁洿鑱氱劍 */
 .win-overlay, .deadlock-overlay,
 .tutorial-overlay, .help-modal-overlay,
 .share-image-overlay, .replay-overlay {
@@ -9608,7 +9494,6 @@ canvas[aria-hidden="true"] {
   background: rgba(0, 0, 0, 0.55);
 }
 
-/* 2. 鑳滃埄鍗＄墖锛氭笎鍙樺厜鏅曡儗鏅?+ 鏇存垙鍓у寲鐨勫脊鍏ュ姩鐢?*/
 .win-card {
   background: linear-gradient(160deg, #ffffff 0%, #f8fbff 100%);
   box-shadow:
@@ -9618,7 +9503,6 @@ canvas[aria-hidden="true"] {
   position: relative;
   overflow: hidden;
 }
-/* 鍗＄墖椤堕儴鏌斿拰鍏夋檿锛屽鍔犲簡绁濇皼鍥?*/
 .win-card::before {
   content: '';
   position: absolute;
@@ -9647,7 +9531,6 @@ canvas[aria-hidden="true"] {
   100% { transform: scale(1) rotate(0); }
 }
 
-/* 4. 鏄熸槦寮瑰嚭锛氭洿鎴忓墽鍖栫殑鏄熷舰鍔ㄧ敾锛屽甫鍏夋檿鎵╂暎 */
 .star.star-pop {
   filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
 }
@@ -9679,7 +9562,6 @@ canvas[aria-hidden="true"] {
   100% { transform: scale(3); opacity: 0; }
 }
 
-/* 3鏄熼€氬叧鏃剁殑搴嗙鍏夎姃 */
 .win-card.three-stars-celebration {
   position: relative;
   overflow: hidden;
@@ -9715,7 +9597,6 @@ canvas[aria-hidden="true"] {
   to { transform: rotate(360deg); }
 }
 
-/* 5. 姝诲眬鍗＄墖锛氶粍鑹茶鍛婅壊璋冿紝涓庤儨鍒╁崱鐗囪瑙夊尯鍒?*/
 .deadlock-card {
   background: linear-gradient(160deg, #fffde7 0%, #fff8e1 100%);
   border-top: 4px solid #ffc107;
@@ -9779,7 +9660,6 @@ canvas[aria-hidden="true"] {
 .level-btn.diff-hard:hover { box-shadow: 0 4px 14px rgba(255, 107, 107, 0.4); }
 .level-btn.diff-expert:hover { box-shadow: 0 4px 14px rgba(197, 137, 232, 0.4); }
 .level-btn.diff-master:hover { box-shadow: 0 4px 14px rgba(51, 51, 51, 0.4); }
-/* 宸查€氬叧鎸夐挳 hover 鏃跺鍔犲厜娉芥壂杩?*/
 .level-btn.completed {
   position: relative;
   overflow: hidden;
@@ -9799,7 +9679,6 @@ canvas[aria-hidden="true"] {
   left: 150%;
 }
 
-/* 8. 閫氬叧杩涘害鏉★細濉厖閮ㄥ垎澧炲姞娴佸厜鍔ㄧ敾 */
 .progress-bar-fill {
   background: linear-gradient(135deg, var(--primary), var(--secondary));
   position: relative;
@@ -9817,7 +9696,6 @@ canvas[aria-hidden="true"] {
   0% { transform: translateX(-100%); }
   100% { transform: translateX(100%); }
 }
-/* 闅惧害鍒嗘杩涘害鏉′篃澧炲姞娴佸厜 */
 .diff-progress-fill {
   transition: width 0.6s cubic-bezier(0.34, 1.2, 0.64, 1);
   position: relative;
@@ -9831,7 +9709,6 @@ canvas[aria-hidden="true"] {
   animation: progress-shimmer 3s ease-in-out infinite;
 }
 
-/* 9. 鎴愬氨瑙ｉ攣閫氱煡锛氭洿鎴忓墽鍖栫殑婊戝叆 + 缂╂斁 */
 .achievement-notification {
   animation: achievement-slide-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
@@ -9848,7 +9725,6 @@ canvas[aria-hidden="true"] {
   100% { transform: rotate(0) scale(1); }
 }
 
-/* 10. 寮圭獥鍗＄墖锛氱粺涓€澧炲己鍐呴槾褰变笌鍦嗚璐ㄦ劅 */
 .tutorial-card, .help-modal-card {
   box-shadow:
     0 16px 48px rgba(0, 0, 0, 0.35),
@@ -9876,7 +9752,6 @@ canvas[aria-hidden="true"] {
   transform: scale(1.15);
 }
 
-/* 12. 椤佃剼閾炬帴锛氭偓鍋滄椂涓嬪垝绾挎粦鍏ュ姩鐢?*/
 .footer-link {
   position: relative;
   transition: color 0.2s ease, opacity 0.2s ease;
@@ -9900,7 +9775,6 @@ canvas[aria-hidden="true"] {
   left: 0;
 }
 
-/* 13. FAQ 鍒楄〃椤癸細鎮仠鏃惰儗鏅彉鍖栵紝鎻愬崌鍙鎬?*/
 .faq-item {
   transition: background 0.2s ease, padding-left 0.2s ease;
   border-radius: 8px;
@@ -9918,7 +9792,6 @@ canvas[aria-hidden="true"] {
   color: var(--text-light);
 }
 
-/* 14. 绛惧埌鍗＄墖锛氬畬鎴愭€佸嬀閫夊姩鐢?+ 鏈鍒拌剦鍔ㄥ紩瀵?*/
 .checkin-card-compact.checkin-done {
   opacity: 0.85;
 }
@@ -9945,7 +9818,6 @@ canvas[aria-hidden="true"] {
   100% { transform: scale(1); }
 }
 
-/* 15. 闅惧害绛涢€夋寜閽細婵€娲绘€佹洿鏄庢樉锛屽甫搴曢儴鎸囩ず鏉?*/
 .diff-filter-btn {
   position: relative;
   transition: all 0.2s ease;
@@ -9969,7 +9841,6 @@ canvas[aria-hidden="true"] {
 .diff-filter-btn.diff-expert.active { box-shadow: 0 2px 8px rgba(197, 137, 232, 0.4); }
 .diff-filter-btn.diff-master.active { box-shadow: 0 2px 8px rgba(51, 51, 51, 0.4); }
 
-/* 16. 璇曠鍙ｏ細澧炲己鐜荤拑鍙嶅厜绮捐嚧搴?*/
 .tube-mouth {
   box-shadow:
     inset 0 2px 3px rgba(255, 255, 255, 0.3),
@@ -9988,7 +9859,6 @@ canvas[aria-hidden="true"] {
   pointer-events: none;
 }
 
-/* 17. 鏆楄壊涓婚閫傞厤锛氱鍥涙壒鏂板椤瑰湪鏆楄壊妯″紡涓嬩繚鎸佸彲璇绘€?*/
 @media (prefers-color-scheme: dark) {
   .win-card {
     background: linear-gradient(160deg, #2a2a3e 0%, #252538 100%);
@@ -10005,7 +9875,6 @@ canvas[aria-hidden="true"] {
     background: rgba(255, 255, 255, 0.06);
   }
 }
-/* 鏄惧紡鏆楄壊涓婚绫婚€傞厤 */
 .dark-theme .win-card {
   background: linear-gradient(160deg, #2a2a3e 0%, #252538 100%);
   box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
@@ -10021,7 +9890,6 @@ canvas[aria-hidden="true"] {
   background: rgba(255, 255, 255, 0.06);
 }
 
-/* 18. 鍑忓皯鍔ㄧ敾鍋忓ソ锛氱鐢ㄦ湰鎵规鏂板鐨勮楗版€у姩鐢?*/
 @media (prefers-reduced-motion: reduce) {
   .win-card,
   .win-emoji,
@@ -10059,7 +9927,6 @@ canvas[aria-hidden="true"] {
   }
 }
 
-/* ============ 鍙嶅簲鍔涢敊棰樻湰鏆楄壊涓婚 ============ */
 .dark-theme .crt-wrongbook-item {
   border-bottom-color: rgba(255,255,255,0.08);
 }
@@ -10085,9 +9952,7 @@ canvas[aria-hidden="true"] {
 /* ============================================================ */
 /* ============ 2026-07-17 鏍峰紡浼樺寲澧炲己锛堢浜旀壒锛?============ */
 /* ============================================================ */
-/* 鏈壒娆¤仛鐒︼細璇曠鍊惧€掗婧呫€佹恫浣撳集鏈堥潰銆佹父鎴忛潰鏉挎繁搴︺€佸窘绔犱富娆°€?   鍥炴斁楂樹寒銆侀〉闈㈠崱鐗囨偓鍋溿€佺Щ鍔ㄧ娓告垙澶撮儴绱у噾鍖栥€侀敭鐩樻彁绀哄彲璇绘€х瓑 */
 
-/* 1. 璇曠鍊惧€掑畬鎴愰婧咃細鍦ㄦ帴鏀惰瘯绠￠《閮ㄥ嚭鐜扮煭鏆傜殑椋炴簠鍏夌偣 */
 .tube-container.pouring::before {
   content: '';
   position: absolute;
@@ -10108,7 +9973,6 @@ canvas[aria-hidden="true"] {
   100% { transform: translateX(-50%) scale(2.4); opacity: 0; }
 }
 
-/* 2. 娑蹭綋椤堕儴寮湀闈㈤珮鍏夛細鍦ㄦ渶椤跺眰棰滆壊灞傜殑椤堕儴澧炲姞涓€鏉℃煍鍜岀殑鍙嶅厜绾?*/
 .tube-inner > .color-layer:last-child::before {
   content: '';
   position: absolute;
@@ -10125,13 +9989,11 @@ canvas[aria-hidden="true"] {
   z-index: 1;
 }
 
-/* 3. 娓告垙闈㈡澘搴曢儴鍐呴槾褰憋細澧炲姞"鎺ュ湴"鎰燂紝璁╁崱鐗囨洿鏈夐噸閲?*/
 .game-board {
   box-shadow:
     var(--shadow-lg),
     inset 0 -2px 8px rgba(0, 0, 0, 0.04);
 }
-/* 娓告垙闈㈡澘鍐呴儴澧炲姞鏋佽交鐨勭綉鏍肩汗鐞嗭紝钀ラ€?妗屽竷"鎰燂紙涓嶅奖鍝嶆€ц兘锛?*/
 .game-board::after {
   content: '';
   position: absolute;
@@ -10148,25 +10010,20 @@ canvas[aria-hidden="true"] {
   z-index: 1;
 }
 
-/* 4. 娓告垙淇℃伅寰界珷涓绘鍒嗘槑锛歭evel-badge 涓轰富锛岄毦搴︿负杈咃紝姝ユ暟鍔ㄦ€?*/
 .level-badge {
   font-weight: 700;
   letter-spacing: 0.3px;
-  /* 涓诲窘绔犲鍔犳洿寮虹殑涓婚鑹插厜鏅?*/
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.35),
     0 2px 8px color-mix(in srgb, var(--primary) 35%, transparent);
 }
 .difficulty-badge {
-  /* 杈呭窘绔犲急鍖栬瑙夋潈閲嶏紝璁╀富寰界珷绐佸嚭 */
   opacity: 0.92;
 }
 .moves-badge {
-  /* 姝ユ暟寰界珷鏁板瓧绛夊锛岄伩鍏嶆暟瀛楀彉鍖栨椂瀹藉害璺冲姩 */
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.2px;
 }
-/* 闄愭椂妯″紡鍊掕鏃朵綆鍊兼椂寮哄寲璀︾ず锛氶棯鐑?+ 杈规 */
 .timer-badge.timer-danger {
   border: 1.5px solid rgba(198, 40, 40, 0.4);
   animation: timer-danger-enhanced 0.6s ease-in-out infinite;
@@ -10206,7 +10063,6 @@ canvas[aria-hidden="true"] {
   color: #fff;
   transform: scale(1.08);
 }
-/* 鏆楄壊涓婚涓嬭瘯绠＄紪鍙峰簳鑹查€傞厤 */
 @media (prefers-color-scheme: dark) {
   .tube-index {
     background: rgba(255, 255, 255, 0.08);
@@ -10218,7 +10074,6 @@ canvas[aria-hidden="true"] {
   color: #ccc;
 }
 
-/* 6. 鍥炴斁璇曠楂樹寒鍖哄垎锛氭簮璇曠涓庣洰鏍囪瘯绠′娇鐢ㄥ姣旇壊杈规 */
 .replay-tube.replay-from .tube {
   box-shadow:
     inset 2px 0 4px rgba(255, 255, 255, 0.25),
@@ -10240,7 +10095,6 @@ canvas[aria-hidden="true"] {
   100% { transform: scale(1); }
 }
 
-/* 7. 鑳滃埄鍔ㄤ綔鎸夐挳鍒嗙粍锛氳瑙夊垎缁勶紝閬垮厤涓€闀夸覆鎸夐挳鎷ユ尋 */
 .win-actions {
   display: flex;
   flex-wrap: wrap;
@@ -10256,7 +10110,6 @@ canvas[aria-hidden="true"] {
   max-width: 200px;
 }
 
-/* 8. 鎴愬氨/缁熻/璁剧疆椤靛崱鐗囨偓鍋滐細缁熶竴涓婃诞 + 闃村奖澧炲己 */
 .achievement-card,
 .stats-card,
 .custom-level-card,
@@ -10272,7 +10125,6 @@ canvas[aria-hidden="true"] {
   transform: translateY(-2px);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
 }
-/* 閿佸畾鐘舵€佺殑鎴愬氨鍗＄墖涓嶅搷搴旀偓鍋?*/
 .achievement-card.locked {
   cursor: default;
   opacity: 0.78;
@@ -10281,7 +10133,6 @@ canvas[aria-hidden="true"] {
   transform: none;
 }
 
-/* 9. 甯姪寮圭獥鍙鍖栨楠ゅ鍣細绮捐嚧鍖栬竟妗嗕笌鑳屾櫙 */
 .help-visual-demo {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.5), rgba(245, 247, 255, 0.5));
   border-radius: 10px;
@@ -10332,14 +10183,12 @@ canvas[aria-hidden="true"] {
   }
 }
 
-/* 11. 椤佃剼閾炬帴鐒︾偣鐜細閿洏鍙鎬?*/
 .footer-link:focus-visible {
   outline: 2px solid var(--text-light);
   outline-offset: 3px;
   border-radius: 3px;
 }
 
-/* 12. 鍏冲崱鎸夐挳宸插畬鎴愭€侊細澧炲姞鏌斿拰鐨勫唴楂樺厜锛屽己鍖?宸查€氬叧"鎰?*/
 .level-btn.completed {
   background: linear-gradient(135deg, #95E1A3 0%, #4ECDC4 100%);
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
@@ -10348,7 +10197,6 @@ canvas[aria-hidden="true"] {
   background: linear-gradient(135deg, #7DD89A 0%, #3FBDB4 100%);
 }
 
-/* 13. 閿洏鎻愮ず鏂囧瓧鍙鎬э細澧炲己瀵规瘮搴︿笌瀛楄窛 */
 .keyboard-hint {
   color: var(--text);
   opacity: 0.7;
@@ -10371,7 +10219,6 @@ canvas[aria-hidden="true"] {
   color: #ddd;
 }
 
-/* 14. 绉诲姩绔瘯绠¤Е鎽告€佸弽棣堬細鎸変笅鏃剁珛鍗崇粰浜堣瑙夊弽棣?*/
 @media (hover: none) and (pointer: coarse) {
   .tube-container:active:not(.selected) {
     transform: scale(0.96);
@@ -10383,7 +10230,6 @@ canvas[aria-hidden="true"] {
   }
 }
 
-/* 15. 璁剧疆椤典富棰橀€夋嫨鎸夐挳锛氶€変腑鎬佸井缂╂斁鍙嶉 */
 .theme-btn {
   transition:
     transform 0.18s cubic-bezier(0.34, 1.3, 0.64, 1),
@@ -10397,7 +10243,6 @@ canvas[aria-hidden="true"] {
   transition: transform 0.08s ease;
 }
 
-/* 16. 璇曠閫変腑鎬侊細澧炲己"琚姮璧?鐨勮瑙夊啿鍑诲姏 - 澧炲姞搴曢儴鎶曞奖寮哄害 */
 .tube-container.selected::after {
   background: radial-gradient(ellipse, rgba(0, 0, 0, 0.35) 0%, transparent 70%);
   width: 40px;
@@ -10419,7 +10264,6 @@ canvas[aria-hidden="true"] {
   transform: translateY(-1px) scale(1.05);
 }
 
-/* 18. 鍑忓皯鍔ㄧ敾鍋忓ソ锛氱鐢ㄦ湰鎵规鏂板鐨勮楗版€у姩鐢?*/
 @media (prefers-reduced-motion: reduce) {
   .tube-container.pouring::before,
   .timer-badge.timer-danger,
@@ -10435,7 +10279,6 @@ canvas[aria-hidden="true"] {
   }
 }
 
-/* 19. 鏆楄壊涓婚閫傞厤锛氱浜旀壒鏂板椤瑰湪鏆楄壊妯″紡涓嬩繚鎸佸彲璇绘€?*/
 @media (prefers-color-scheme: dark) {
   .game-board {
     box-shadow:
@@ -10470,7 +10313,6 @@ canvas[aria-hidden="true"] {
   border-top-color: rgba(255, 255, 255, 0.1);
 }
 
-/* 浠婃棩鎴愬氨蹇嵎鍏ュ彛鍗＄墖 鈥?棣栭〉灞曠ず鎴愬氨杩涘害涓庢渶杩戣В閿侊紝鎻愬崌鍙戠幇鐜?*/
 .today-achievement-card {
   background: linear-gradient(135deg, rgba(102, 126, 234, 0.08), rgba(118, 75, 162, 0.08));
   border: 1px solid rgba(102, 126, 234, 0.2);
@@ -10571,7 +10413,6 @@ canvas[aria-hidden="true"] {
   color: #888;
 }
 
-/* 鏆楄壊涓婚锛氬揩閫熼噸鐜╁崱鐗?*/
 .dark-theme .replay-last-card {
   background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
@@ -10617,7 +10458,6 @@ canvas[aria-hidden="true"] {
   color: #555;
 }
 
-/* 鎼滅储缁撴灉鍏抽敭璇嶉珮浜?鈥?甯姪鐢ㄦ埛蹇€熷畾浣嶅尮閰嶅唴瀹?*/
 mark.search-highlight {
   background: rgba(255, 235, 59, 0.4);
   color: inherit;
@@ -10634,11 +10474,7 @@ mark.search-highlight {
 /* ============ 2026-07-18 鏍峰紡浼樺寲澧炲己锛堢鍏壒锛?============ */
 /* ============================================================ */
 /* 鏈壒娆＄洰鏍囷細
-   - 澧炲己閫氬叧鐬棿鐨勮瑙夊啿鍑诲姏锛堝叏灞忛棯鍏夈€佽儨鍒╁崱鐗?stagger 鍏ュ満锛?   - 璁╂恫浣撴洿"娲?锛堥《灞傛恫浣撳懆鏈熸€ф尝鍔ㄣ€佽瘯绠″簳閮ㄥ弽鍏夊寮猴級
    - 鎻愬崌棣栭〉娴姩瀵艰埅鐨勭幓鐠冭川鎰熶笌浜や簰鍙嶉
-   - 鍚勯〉闈㈠鍔犺楗版€х粏鑺備笌鍔犺浇鍔ㄧ敾
-   - 瀹屽杽瓒呭皬灞忎笌鏆楄壊涓婚閫傞厤
-   鎵€鏈変慨鏀瑰潎涓鸿拷鍔犳牱寮忥紝涓嶄慨鏀瑰凡鏈夎鍒欙紝涓嶇牬鍧忕幇鏈夊姛鑳姐€?*/
 
 /* 1. 棣栭〉妯″紡鎸夐挳锛氭偓鍋滃厜鏅曡窡闅忓悇鑷富棰樿壊 */
 .mode-grid-btn.btn-primary:hover {
@@ -10699,7 +10535,6 @@ mark.search-highlight {
   transition: transform 0.08s ease;
 }
 
-/* 3. 閫氬叧鐬棿鍏ㄥ睆闂厜锛氬寮洪€氬叧鐨勮瑙夊啿鍑?*/
 .win-overlay::before {
   content: '';
   position: fixed;
@@ -10746,7 +10581,6 @@ mark.search-highlight {
   100% { opacity: 1; transform: translateY(0); }
 }
 
-/* 5. 娑蹭綋琛ㄩ潰鍛ㄦ湡鎬ф尝鍔細璁╂恫浣撶湅璧锋潵鏇?娲? */
 .tube-inner > .color-layer:last-child::after {
   animation: liquid-surface-wave 3.5s ease-in-out infinite;
 }
@@ -10757,7 +10591,6 @@ mark.search-highlight {
 
 /* 6. 璇曠搴曢儴鍙嶅厜锛氬寮虹幓鐠冭川鎰?*/
 .tube::after {
-  /* 鍦ㄥ師鍙充晶娆￠珮鍏夊熀纭€涓婏紝搴曢儴澧炲姞涓€涓井寮辩殑鍙嶅厜寮?*/
   box-shadow:
     0 0 0 0 transparent,
     /* 搴曢儴鍦嗗姬鍙嶅厜 */
@@ -10794,7 +10627,6 @@ mark.search-highlight {
   padding-left: 12px;
 }
 
-/* 8. 缁熻椤垫潯褰㈠浘濉厖鍔ㄧ敾 */
 .chart-bar-fill {
   animation: chart-bar-grow 0.8s cubic-bezier(0.34, 1.2, 0.64, 1) both;
   transform-origin: left center;
@@ -10803,7 +10635,6 @@ mark.search-highlight {
   0% { transform: scaleX(0); opacity: 0.3; }
   100% { transform: scaleX(1); opacity: 1; }
 }
-/* 杩涘害鏉″悓姝ュ姩鐢?*/
 .progress-bar-fill,
 .achievement-overall-fill,
 .ach-cat-progress-fill,
@@ -10821,7 +10652,6 @@ mark.search-highlight {
   100% { opacity: 1; transform: scale(1); }
 }
 
-/* 9. 鎴愬氨鏃堕棿绾胯繛鎺ョ嚎缁樺埗鍔ㄧ敾 */
 .timeline-connector {
   background: linear-gradient(180deg, var(--primary) 0%, var(--primary) 100%);
   background-size: 100% 100%;
@@ -10840,7 +10670,6 @@ mark.search-highlight {
   100% { transform: scale(1); }
 }
 
-/* 10. 璁剧疆椤?toggle-switch 寮规€у姩鐢?*/
 .toggle-switch {
   transition: background 0.25s cubic-bezier(0.34, 1.2, 0.64, 1);
 }
@@ -10848,7 +10677,6 @@ mark.search-highlight {
   transition: transform 0.3s cubic-bezier(0.34, 1.5, 0.64, 1), box-shadow 0.2s ease;
 }
 .toggle-switch.on .toggle-knob {
-  /* 寮€鍚椂鏃嬮挳鏈夎交寰殑杩囧啿鍙嶉 */
   animation: toggle-on-bounce 0.4s cubic-bezier(0.34, 1.5, 0.64, 1);
 }
 @keyframes toggle-on-bounce {
@@ -10858,7 +10686,6 @@ mark.search-highlight {
   100% { transform: translateX(20px); }
 }
 
-/* 11. 鍙姌鍙犲尯鍩燂細灞曞紑/鎶樺彔鍥炬爣鏃嬭浆鍔ㄧ敾 */
 .collapse-toggle {
   transition: transform 0.3s cubic-bezier(0.34, 1.3, 0.64, 1);
   display: inline-block;
@@ -10873,7 +10700,6 @@ mark.search-highlight {
   transform: rotate(-90deg) scale(1.15);
 }
 
-/* 12. 鍏冲崱鎸夐挳鎮仠鏃舵樉绀烘洿娓呮櫚鐨勭姸鎬佹寚绀?*/
 .level-btn {
   transition: transform 0.18s ease, box-shadow 0.2s ease, filter 0.2s ease;
   position: relative;
@@ -10883,7 +10709,6 @@ mark.search-highlight {
   filter: brightness(1.08);
 }
 .level-btn.current::after {
-  /* 褰撳墠鍏冲崱锛氬彸涓婅"鍦ㄦ"鎸囩ず鐐?*/
   content: '';
   position: absolute;
   top: 4px;
@@ -10918,7 +10743,6 @@ mark.search-highlight {
     right: -5px;
     height: 5px;
   }
-  /* 澶氱鏃惰繘涓€姝ョ揣鍑?*/
   .tubes-grid[data-tube-count="9"] .tube,
   .tubes-grid[data-tube-count="10"] .tube,
   .tubes-grid[data-tube-count="11"] .tube,
@@ -10928,7 +10752,6 @@ mark.search-highlight {
   }
 }
 
-/* 14. 鍑忓皯鍔ㄧ敾鍋忓ソ锛氱鐢ㄦ湰鎵规鏂板鐨勮楗版€у姩鐢?*/
 @media (prefers-reduced-motion: reduce) {
   .win-overlay::before,
   .win-card .win-emoji,
@@ -10960,7 +10783,6 @@ mark.search-highlight {
   }
 }
 
-/* 15. 鏆楄壊涓婚閫傞厤锛氭湰鎵规鏂板椤圭洰鍦ㄦ殫鑹叉ā寮忎笅淇濇寔鍙鎬?*/
 @media (prefers-color-scheme: dark) {
   .fab-nav {
     background: rgba(0, 0, 0, 0.25);
@@ -10981,7 +10803,6 @@ mark.search-highlight {
   background: linear-gradient(180deg, var(--primary) 0%, var(--primary) 100%);
 }
 
-/* 鏂版墜寮曞鎻愮ず鏆楄壊涓婚閫傞厤 */
 .dark-theme .beginner-hint-text {
   color: #8b9aff;
   background: rgba(139, 154, 255, 0.15);
@@ -10993,7 +10814,6 @@ mark.search-highlight {
   }
 }
 
-/* 鏂版墜榧撳姳鎻愮ず鏆楄壊涓婚閫傞厤 */
 .dark-theme .encouragement-text {
   color: #81c784;
   background: rgba(129, 199, 132, 0.15);
@@ -11008,9 +10828,7 @@ mark.search-highlight {
 /* ============================================================ */
 /* ============ 2026-07-19 鏍峰紡浼樺寲澧炲己锛堢涓冩壒锛?============ */
 /* ============================================================ */
-/* 鏈壒娆¤仛鐒︼細棣栭〉 hero 瑁呴グ寮哄寲銆佹ā寮忔寜閽富娆″垎鏄庛€佽瘯绠℃恫浣撴祦鍔ㄣ€?   鍏冲崱鎸夐挳鍕嬬珷璐ㄦ劅銆佷俊鎭〉鎺掔増绮捐嚧鍖栥€佹垚灏辫В閿佸厜鏅曘€侀〉闈㈣繃娓″姩鐢汇€?   婊氬姩鏉＄編鍖栥€佽Е鎽?ripple 鍙嶉銆佹暟瀛楃瓑瀹藉榻愮瓑寰氦浜掓墦纾?*/
 
-/* 1. 棣栭〉 logo 鍛ㄥ洿鏃嬭浆鑹茬幆鍏夋檿 - 璁╅灞忚瑙夐敋鐐规洿鍏蜂华寮忔劅 */
 .logo {
   position: relative;
 }
@@ -11041,18 +10859,15 @@ mark.search-highlight {
   100% { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
-/* 2. 棣栭〉鏍囬娓愬彉鏂囧瓧 - 鏇夸唬鍗曡壊鏍囬锛屽鍔犺瑙夊眰娆?*/
 .home-header .title {
   background: linear-gradient(135deg, #ffffff 0%, #ffe66d 50%, #ff9a9e 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  /* 娓愬彉鏂囧瓧涓?text-shadow 浼氳劚绂诲瓧褰㈡樉绀猴紝鏀圭敤 drop-shadow 璺熼殢鏂囧瓧杞粨 */
   text-shadow: none;
   filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
 }
 
-/* 3. 鍓爣棰樿楗颁笅鍒掔嚎 - 璁?subtitle 鏈?鏍囬涔嬩笅"鐨勮瑙夋敹鏉熸劅 */
 .subtitle {
   position: relative;
   display: inline-block;
@@ -11070,7 +10885,6 @@ mark.search-highlight {
   border-radius: 1px;
 }
 
-/* 4. 涓绘寜閽?寮€濮嬫父鎴?寮哄寲 - 鍦?2脳2 缃戞牸涓瑙夐噸閲忔渶澶?*/
 .mode-grid-btn.btn-primary {
   position: relative;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #ff6b9d 100%);
@@ -11094,7 +10908,6 @@ mark.search-highlight {
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.25));
 }
 
-/* 5. 妯″紡鎸夐挳 ripple 娉㈢汗鍙嶉 - CSS-only 瀹炵幇锛屾寜涓嬫椂浠庤Е鐐规墿鏁?*/
 .mode-grid-btn,
 .btn,
 .btn-back,
@@ -11129,8 +10942,6 @@ mark.search-highlight {
   transition: width 0s, height 0s, opacity 0s;
 }
 
-/* 6. 鍙栨秷涓婁竴鎵?.mode-grid-btn::after 涓庢湰鎵?ripple 鐨勫啿绐?   涓婁竴鎵瑰畾涔変簡"鎸夐挳闂寒鍔ㄧ敾"鐨?::after 鐢ㄤ簬 hover 鏃跺厜甯︽壂杩囷紝
-   姝ゅ閲嶅啓涓虹粺涓€鐨?ripple 鍙嶉锛岀Щ闄ゅ厜甯︽壂杩囬伩鍏嶅弻閲嶄吉鍏冪礌鍐茬獊 */
 .mode-entry .btn::after {
   display: none;
 }
@@ -11138,7 +10949,6 @@ mark.search-highlight {
   display: none;
 }
 
-/* 7. 璇曠鍊惧€掓椂娑蹭綋娴佸叆鍔ㄧ敾 - 棰滆壊灞備粠椤堕儴"娴佸叆"鑰岄潪鐬棿鍑虹幇 */
 .tube-container.pouring .color-layer {
   animation: liquid-pour-in 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
@@ -11158,7 +10968,6 @@ mark.search-highlight {
   }
 }
 
-/* 8. 娑蹭綋琛ㄩ潰寰厜鏂?- 椤跺眰棰滆壊灞傚鍔犲懆鏈熸€ч棯鐑佺殑楂樺厜鐐癸紝璁╂恫浣撴洿"娲? */
 .tube-inner > .color-layer:last-child::before {
   animation: liquid-shine 2.8s ease-in-out infinite;
 }
@@ -11167,10 +10976,8 @@ mark.search-highlight {
   50% { opacity: 0.85; transform: scale(1.15); }
 }
 
-/* 9. 鍏冲崱鎸夐挳瀹屾垚鎬佸媼绔犺川鎰?- 閲戣壊鎻忚竟锛堢敤 box-shadow 妯℃嫙锛屼繚鐣欏師 border-left 闅惧害鑹诧級+ 寰厜 */
 .level-btn.completed {
   background: linear-gradient(135deg, #ffd89b 0%, #95E1A3 60%, #4ECDC4 100%);
-  /* 涓嶄娇鐢?border锛岄伩鍏嶈鐩?.diff-easy/.diff-normal 绛夐毦搴﹂鑹?border-left */
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.5),
     0 2px 8px rgba(255, 195, 110, 0.35),
@@ -11185,7 +10992,6 @@ mark.search-highlight {
     0 0 0 2px rgba(255, 216, 155, 0.6);
 }
 
-/* 10. 褰撳墠鍏冲崱寮曞鍏夌幆 - 鐢?box-shadow 澶氬眰鍙戝厜瀹炵幇锛岄伩鍏?overflow:hidden 瑁佸壀 */
 .level-btn.current {
   position: relative;
   box-shadow:
@@ -11215,7 +11021,6 @@ mark.search-highlight {
   }
 }
 
-/* 11. 淇℃伅椤?h2 瑁呴グ搴忓彿 - 闀挎枃妗ｅ鍔犻槄璇昏妭濂忔劅 */
 .info-page h2 {
   position: relative;
   padding-left: 28px;
@@ -11232,7 +11037,6 @@ mark.search-highlight {
   box-shadow: 0 0 8px rgba(255, 230, 109, 0.4);
 }
 
-/* 12. 淇℃伅椤靛垪琛ㄩ」椤圭洰绗﹀彿褰╄壊鍖?- 鏇夸唬榛樿榛戣壊鍦嗙偣 */
 .info-page ul {
   list-style: none;
   padding-left: 4px;
@@ -11259,7 +11063,6 @@ mark.search-highlight {
   word-break: break-word;
 }
 
-/* 14. 鎴愬氨鍗＄墖瑙ｉ攣鍏夋檿 - 宸茶В閿佸崱鐗囬噾鑹插媼绔犳劅 */
 .achievement-card.unlocked {
   position: relative;
   border: 1px solid rgba(255, 216, 155, 0.5);
@@ -11278,7 +11081,6 @@ mark.search-highlight {
   filter: drop-shadow(0 2px 6px rgba(255, 195, 110, 0.6));
 }
 
-/* 15. 閿佸畾鎴愬氨鐏板害澶勭悊 - 涓庤В閿佸舰鎴愬己瀵规瘮 */
 .achievement-card.locked {
   filter: saturate(0.4) brightness(0.85);
   transition: filter 0.3s ease;
@@ -11287,7 +11089,6 @@ mark.search-highlight {
   filter: saturate(0.6) brightness(0.95);
 }
 
-/* 16. 椤甸潰杩涘叆杩囨浮鍔ㄧ敾 - 淇℃伅椤?璁剧疆椤?缁熻椤靛垏鎹㈡椂娣″叆涓婃帹 */
 .info-page,
 .achievement-list,
 .stats-container,
@@ -11330,7 +11131,6 @@ mark.search-highlight {
   scrollbar-color: rgba(102, 126, 234, 0.5) rgba(0, 0, 0, 0.05);
 }
 
-/* 18. 鏁板瓧绛夊瀵归綈 - 缁熻椤?寰界珷鏁板瓧浣跨敤 tabular-nums */
 .stat-value,
 .stats-number,
 .stats-value,
@@ -11372,7 +11172,6 @@ mark.search-highlight {
   }
 }
 
-/* 20. 妯″紡鎸夐挳鍦ㄧЩ鍔ㄧ瑙︽懜鏃舵寜涓嬪弽棣?- 涓?ripple 閰嶅悎 */
 @media (hover: none) and (pointer: coarse) {
   .mode-grid-btn:active {
     transform: scale(0.96);
@@ -11384,7 +11183,6 @@ mark.search-highlight {
   }
 }
 
-/* 21. 鍏冲崱鎼滅储妗嗕笌闅惧害绛涢€夊櫒瑙嗚缁熶竴 */
 .level-search-box {
   display: flex;
   gap: 6px;
@@ -11462,7 +11260,6 @@ mark.search-highlight {
   line-height: 1.3;
 }
 
-/* 23. 闅惧害绛涢€夋寜閽?hover 鐘舵€佸寮?*/
 .diff-filter-btn {
   padding: 5px 11px;
   border-radius: 14px;
@@ -11479,7 +11276,6 @@ mark.search-highlight {
   transform: translateY(-1px);
 }
 
-/* 24. 鏆楄壊涓婚閫傞厤 - 鏈壒娆℃柊澧為」鐩湪鏆楄壊妯″紡涓嬩繚鎸佸彲璇绘€?*/
 @media (prefers-color-scheme: dark) {
   /* logo 鍏夌幆鍦ㄦ殫鑹蹭笅鍑忔贰 */
   .logo::before { opacity: 0.35; }
@@ -11490,7 +11286,6 @@ mark.search-highlight {
     background-clip: text;
     -webkit-text-fill-color: transparent;
   }
-  /* 鍏冲崱鎸夐挳瀹屾垚鎬佹殫鑹查€傞厤 */
   .level-btn.completed {
     background: linear-gradient(135deg, #6b5d3f 0%, #4a6b5a 60%, #2d5a5a 100%);
     border-color: rgba(255, 216, 155, 0.3);
@@ -11501,12 +11296,10 @@ mark.search-highlight {
     background: linear-gradient(180deg, #ffe66d 0%, #ff9a9e 50%, #8b9aff 100%);
     box-shadow: 0 0 6px rgba(255, 230, 109, 0.3);
   }
-  /* 淇℃伅椤靛垪琛ㄩ」鍦嗙偣鏆楄壊鍑忔贰 */
   .info-page li::before {
     background: linear-gradient(135deg, #ffe66d, #ff9a9e);
     box-shadow: 0 0 3px rgba(255, 154, 158, 0.3);
   }
-  /* 鎴愬氨鍗＄墖瑙ｉ攣鍏夋檿鏆楄壊閫傞厤 */
   .achievement-card.unlocked {
     background: linear-gradient(135deg, rgba(58, 50, 40, 0.95) 0%, rgba(45, 40, 30, 0.9) 100%);
     border-color: rgba(255, 216, 155, 0.35);
@@ -11528,7 +11321,6 @@ mark.search-highlight {
   * {
     scrollbar-color: rgba(102, 126, 234, 0.6) rgba(255, 255, 255, 0.04);
   }
-  /* 蹇€熷鑸崱鐗囨殫鑹查€傞厤 */
   .quick-nav-card {
     background: rgba(40, 40, 55, 0.7);
     border-color: rgba(139, 154, 255, 0.2);
@@ -11539,7 +11331,6 @@ mark.search-highlight {
   }
   .quick-nav-label { color: #e0e0e0; }
   .quick-nav-desc { color: #999; }
-  /* 闅惧害绛涢€夋寜閽殫鑹查€傞厤 */
   .diff-filter-btn {
     background: rgba(255, 255, 255, 0.08);
     border-color: rgba(255, 255, 255, 0.12);
@@ -11549,7 +11340,6 @@ mark.search-highlight {
     background: rgba(255, 255, 255, 0.15);
     border-color: rgba(139, 154, 255, 0.4);
   }
-  /* 鍏冲崱鎼滅储杈撳叆妗嗘殫鑹查€傞厤 */
   .level-search-input {
     background: rgba(40, 40, 55, 0.8);
     color: #e0e0e0;
@@ -11561,7 +11351,6 @@ mark.search-highlight {
   }
 }
 
-/* 鏄惧紡鏆楄壊涓婚绫婚€傞厤 - 涓?prefers-color-scheme 鍚屾 */
 .dark-theme .logo::before { opacity: 0.35; }
 .dark-theme .level-btn.completed {
   background: linear-gradient(135deg, #6b5d3f 0%, #4a6b5a 60%, #2d5a5a 100%);
@@ -11615,7 +11404,6 @@ mark.search-highlight {
   box-shadow: 0 0 0 3px rgba(139, 154, 255, 0.2);
 }
 
-/* 25. 鍑忓皯鍔ㄧ敾鍋忓ソ - 绂佺敤鏈壒娆℃柊澧炵殑瑁呴グ鎬у姩鐢讳笌杩囨浮 */
 @media (prefers-reduced-motion: reduce) {
   .logo::before,
   .mode-grid-btn.btn-primary,
@@ -11644,7 +11432,6 @@ mark.search-highlight {
   }
 }
 
-/* 26. 楂樺姣斿害妯″紡閫傞厤 - 纭繚鐒︾偣鎸囩ず娓呮櫚鍙 */
 @media (prefers-contrast: high) {
   .level-btn.current {
     box-shadow: 0 0 0 4px #000, inset 0 0 0 2px #fff;
