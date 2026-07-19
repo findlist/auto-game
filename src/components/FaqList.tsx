@@ -238,7 +238,7 @@ const FaqList: React.FC = () => {
       </div>
       <div className="faq-item">
         <div className="faq-question">👆 新手玩家有什么引导？</div>
-        <div className="faq-answer">第1关未操作时显示动画箭头引导点击试管，首次倒水成功后显示“做得好！”鼓励提示，第2关进入时显示简短操作提示，帮助新手快速上手并建立信心。</div>
+        <div className="faq-answer">第1关未操作时显示动画箭头引导点击试管，首次倒水成功后显示“做得好！”鼓励提示，第2关进入时显示简短操作提示，第3关进入时显示策略提示"优先把一种颜色全部倒进一根试管"，帮助新手逐步掌握技巧。</div>
       </div>
       <div className="faq-item">
         <div className="faq-question">🏆 成就有稀有度等级吗？</div>
@@ -251,5 +251,9 @@ const FaqList: React.FC = () => {
     </div>
   );
 };
+      <div className="faq-item">
+        <div className="faq-question">🔍 成就可以按稀有度筛选吗？</div>
+        <div className="faq-answer">可以！成就页面支持按稀有度（普通/稀有/史诗/传说）筛选，还提供稀有度统计面板，直观展示各稀有度的解锁进度和完成率。</div>
+      </div>
 
 export default FaqList;

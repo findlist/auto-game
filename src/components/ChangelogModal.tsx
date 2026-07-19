@@ -13,6 +13,16 @@ const ChangelogModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         <h2>色彩排序更新日志</h2>
         <div className="changelog-content">
           <div className="changelog-item">
+            <h3>🎉 v1.41.0</h3>
+            <ul>
+              <li>🔧 周挑战模块拆分优化，消除动态导入警告，首屏bundle减少0.57KB</li>
+              <li>🔍 成就页面新增稀有度筛选功能，支持按普通/稀有/史诗/传说过滤成就</li>
+              <li>📊 成就页面新增稀有度统计面板，直观展示各稀有度解锁进度</li>
+              <li>💡 新手引导增强，第3关进入时显示策略提示"优先把一种颜色全部倒进一根试管"，紫色主题</li>
+              <li>📝 SEO更新+FAQ补充2条问答+版本号同步</li>
+            </ul>
+          </div>
+          <div className="changelog-item">
             <h3>🎉 v1.40.0</h3>
             <ul>
               <li>🏆 成就系统新增稀有度分级（普通/稀有/史诗/传说），解锁时播放差异化音效，通知卡片显示稀有度标签和边框颜色</li>
