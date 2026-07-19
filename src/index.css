@@ -255,6 +255,56 @@ body {
 }
 
 /* 鍏冲崱閫夋嫨 */
+/* 关卡总体进度概览条 */
+.level-overview-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 10px 14px;
+  margin-bottom: 10px;
+  background: rgba(102, 126, 234, 0.06);
+  border-radius: 10px;
+  border: 1px solid rgba(102, 126, 234, 0.1);
+}
+.level-overview-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--text);
+}
+.level-overview-icon {
+  font-size: 16px;
+}
+.level-overview-text strong {
+  color: var(--primary);
+  font-weight: 700;
+}
+.level-overview-progress {
+  flex: 1 1 100%;
+  margin-top: 4px;
+}
+.level-overview-track {
+  height: 6px;
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.level-overview-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4ECDC4, #667eea);
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+.dark-theme .level-overview-bar {
+  background: rgba(102, 126, 234, 0.1);
+  border-color: rgba(102, 126, 234, 0.2);
+}
+.dark-theme .level-overview-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
 .level-select {
   width: 100%;
   background: var(--card-bg);

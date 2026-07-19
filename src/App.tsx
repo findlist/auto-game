@@ -1372,6 +1372,26 @@ export default function App() {
             </div>
             <div className={`collapse-content ${levelSelectCollapsed ? 'collapsed' : ''}`}>
           <div className="level-select">
+            {/* 关卡总体进度概览：通关数/总星数/最高关卡 */}
+            <div className="level-overview-bar">
+              <div className="level-overview-item">
+                <span className="level-overview-icon">🎯</span>
+                <span className="level-overview-text">通关 <strong>{progress.completedLevels.length}</strong>/100</span>
+              </div>
+              <div className="level-overview-item">
+                <span className="level-overview-icon">⭐</span>
+                <span className="level-overview-text">总星数 <strong>{Object.values(levelStars).reduce((s, v) => s + v, 0)}</strong></span>
+              </div>
+              <div className="level-overview-item">
+                <span className="level-overview-icon">🏆</span>
+                <span className="level-overview-text">最高 <strong>第{progress.currentLevel}关</strong></span>
+              </div>
+              <div className="level-overview-progress">
+                <div className="level-overview-track">
+                  <div className="level-overview-fill" style={{ width: `${Math.min(progress.completedLevels.length, 100)}%` }} />
+                </div>
+              </div>
+            </div>
             <div className="level-select-header">
               <h3>选择关卡</h3>
               <div className="level-search-box">
