@@ -145,7 +145,7 @@ export default function App() {
   const [customLevels, setCustomLevels] = useState<CustomLevel[]>(() => {
     // 懒初始化：避免首屏直接加载 levelEditor 模块
     try {
-      const raw = localStorage.getItem('custom_levels');
+      const raw = localStorage.getItem(STORAGE_KEYS.CUSTOM_LEVELS);
       return raw ? JSON.parse(raw) : [];
     } catch { return []; }
   });
@@ -377,6 +377,7 @@ export default function App() {
   }, []);
 
   const handleWin = useCallback(async (winMoves: number, minSteps: number, stars: number, playTimeSec: number) => {
+   try {
     // 仅普通模式(currentLevel > 0)更新通关进度和最佳成绩,避免写入 bestScores[-1/-2/-3/-4] 污染数据
     const newCompleted = [...progress.completedLevels];
     if (currentLevel > 0) {
@@ -580,6 +581,10 @@ export default function App() {
         setTimeout(() => setGoalClaimToast(null), 3000);
       }
     }
+   } catch (e) {
+     // 动态导入或状态更新失败时，避免静默吞错导致游戏状态不一致
+     console.error('handleWin error:', e);
+   }
   }, [progress, currentLevel, usedHintThisLevel, recoveredFromDeadlock, isDailyMode, isEndlessMode, endlessScore, isTimedMode, timedScore, isWeeklyMode]);
 
   // 胜利时清除自动存档
