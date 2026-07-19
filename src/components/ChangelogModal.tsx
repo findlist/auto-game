@@ -13,6 +13,16 @@ const ChangelogModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         <h2>色彩排序更新日志</h2>
         <div className="changelog-content">
           <div className="changelog-item">
+            <h3>🎉 v1.42.0</h3>
+            <ul>
+              <li>💡 新手引导完善，第4关多色提示（橙色主题）和第5关规划提示（青色主题），形成前5关渐进式引导体系</li>
+              <li>📊 关卡选择区新增总体进度概览条，展示通关数/总星数/最高关卡和可视化进度条</li>
+              <li>🧹 批量清理CSS源文件中243行GBK编码乱码注释，提升代码可维护性</li>
+              <li>📝 FAQ补充新手引导和关卡进度概览问答，修复FAQ组件结构错误</li>
+              <li>📝 SEO更新+版本号同步</li>
+            </ul>
+          </div>
+          <div className="changelog-item">
             <h3>🎉 v1.41.0</h3>
             <ul>
               <li>🔧 周挑战模块拆分优化，消除动态导入警告，首屏bundle减少0.57KB</li>

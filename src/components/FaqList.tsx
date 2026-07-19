@@ -238,7 +238,7 @@ const FaqList: React.FC = () => {
       </div>
       <div className="faq-item">
         <div className="faq-question">👆 新手玩家有什么引导？</div>
-        <div className="faq-answer">第1关未操作时显示动画箭头引导点击试管，首次倒水成功后显示“做得好！”鼓励提示，第2关进入时显示简短操作提示，第3关进入时显示策略提示"优先把一种颜色全部倒进一根试管"，帮助新手逐步掌握技巧。</div>
+        <div className="faq-answer">第1关未操作时显示动画箭头引导点击试管，首次倒水成功后显示"做得好！"鼓励提示；第2关显示操作提示"点击试管选择，再点目标试管倒水"；第3关显示策略提示"优先把一种颜色全部倒进一根试管"；第4关显示多色提示"颜色变多了！先从最上面的颜色开始整理"；第5关显示规划提示"倒水前先想好顺序，避免堵住出口"。前5关渐进式引导，帮助新手逐步掌握技巧。</div>
       </div>
       <div className="faq-item">
         <div className="faq-question">🏆 成就有稀有度等级吗？</div>
@@ -248,12 +248,16 @@ const FaqList: React.FC = () => {
         <div className="faq-question">🎯 每日目标完成有动画效果吗？</div>
         <div className="faq-answer">有！目标完成时播放打钩弹跳动画、进度条充能光效和领取按钮脉冲提示。全部目标完成时，进度条变为彩虹渐变色并触发粒子飘落庆祝动画，增强成就感。</div>
       </div>
-    </div>
-  );
-};
       <div className="faq-item">
         <div className="faq-question">🔍 成就可以按稀有度筛选吗？</div>
         <div className="faq-answer">可以！成就页面支持按稀有度（普通/稀有/史诗/传说）筛选，还提供稀有度统计面板，直观展示各稀有度的解锁进度和完成率。</div>
       </div>
+      <div className="faq-item">
+        <div className="faq-question">📊 关卡选择区有进度概览吗？</div>
+        <div className="faq-answer">有！关卡选择区域顶部新增总体进度概览条，展示通关数（如35/100）、总星数和当前最高关卡，以及可视化进度条，让你一目了然地了解整体进度。</div>
+      </div>
+    </div>
+  );
+};
 
 export default FaqList;
