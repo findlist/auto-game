@@ -110,6 +110,27 @@ export const AchievementsPage: React.FC<AchievementsPageProps> = ({ onBack }) =>
           </div>
         </div>
 
+        {/* 稀有度统计面板：展示各稀有度解锁进度 */}
+        <div className="ach-rarity-stats">
+          {(['legendary', 'epic', 'rare', 'common'] as AchievementRarity[]).map(r => {
+            const rs = rarityStats.find(s => s.id === r);
+            if (!rs || rs.total === 0) return null;
+            const pct = rs.total > 0 ? Math.round(rs.unlocked / rs.total * 100) : 0;
+            const cfg = RARITY_CONFIG[r];
+            return (
+              <div key={r} className="ach-rarity-stat-item" style={{ borderColor: cfg.color }}>
+                <div className="ach-rarity-stat-header">
+                  <span className="ach-rarity-stat-label" style={{ color: cfg.color }}>{cfg.label}</span>
+                  <span className="ach-rarity-stat-count">{rs.unlocked}/{rs.total}</span>
+                </div>
+                <div className="ach-rarity-stat-bar">
+                  <div className="ach-rarity-stat-fill" style={{ width: `${pct}%`, background: cfg.color }} />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
         {/* 最近解锁与即将达成提示卡片 */}
         <div className="achievement-hint-cards">
           {/* 最近解锁的成就 */}

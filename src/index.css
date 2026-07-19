@@ -1,4 +1,4 @@
-/* 全局重置 */
+/* 鍏ㄥ眬閲嶇疆 */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -18,7 +18,7 @@
   --card-bg: rgba(255, 255, 255, 0.95);
   --shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   --radius: 12px;
-  /* 新增：更精细的层次变量 */
+  /* 鏂板锛氭洿绮剧粏鐨勫眰娆″彉閲?*/
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
   --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.18);
   --shadow-glow: 0 0 24px rgba(102, 126, 234, 0.35);
@@ -27,19 +27,19 @@
   --tube-highlight: rgba(255, 255, 255, 0.55);
   --tube-shadow-inner: rgba(0, 0, 0, 0.18);
   --color-layer-shine: rgba(255, 255, 255, 0.45);
-  /* 新增静态辅助变量（不会被 themeManager 覆盖），用于增强玻璃质感与液体效果 */
+  /* 鏂板闈欐€佽緟鍔╁彉閲忥紙涓嶄細琚?themeManager 瑕嗙洊锛夛紝鐢ㄤ簬澧炲己鐜荤拑璐ㄦ劅涓庢恫浣撴晥鏋?*/
   --tube-highlight-right: rgba(255, 255, 255, 0.22);
   --tube-bottom-reflection: rgba(255, 255, 255, 0.12);
   --meniscus-shine: rgba(255, 255, 255, 0.5);
   --meniscus-shadow: rgba(0, 0, 0, 0.1);
   --glass-rim: rgba(255, 255, 255, 0.35);
   --bg-atmosphere: radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.08) 0%, transparent 60%);
-  /* 主题切换时的平滑过渡时长 */
+  /* 涓婚鍒囨崲鏃剁殑骞虫粦杩囨浮鏃堕暱 */
   --theme-transition: 0.4s ease;
 }
 
 body {
-  /* 字体栈：优先使用更具特色的显示字体，兼顾中文渲染与系统回退 */
+  /* 瀛椾綋鏍堬細浼樺厛浣跨敤鏇村叿鐗硅壊鐨勬樉绀哄瓧浣擄紝鍏奸【涓枃娓叉煋涓庣郴缁熷洖閫€ */
   font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   background: var(--bg-gradient);
   background-attachment: fixed;
@@ -49,13 +49,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
   -webkit-tap-highlight-color: transparent;
   user-select: none;
-  /* 字体渲染优化：数字等宽对齐 */
+  /* 瀛椾綋娓叉煋浼樺寲锛氭暟瀛楃瓑瀹藉榻?*/
   font-feature-settings: 'tnum' on, 'cv11' on;
-  /* 主题切换时背景与文字平滑过渡，避免突兀闪烁 */
+  /* 涓婚鍒囨崲鏃惰儗鏅笌鏂囧瓧骞虫粦杩囨浮锛岄伩鍏嶇獊鍏€闂儊 */
   transition: background var(--theme-transition), color var(--theme-transition);
 }
 
-/* 背景氛围层：在背景渐变之上叠加柔和光晕，增加空间纵深感 */
+/* 鑳屾櫙姘涘洿灞傦細鍦ㄨ儗鏅笎鍙樹箣涓婂彔鍔犳煍鍜屽厜鏅曪紝澧炲姞绌洪棿绾垫繁鎰?*/
 .app::before {
   content: '';
   position: fixed;
@@ -82,7 +82,7 @@ body {
   flex-direction: column;
 }
 
-/* ============ 首页样式 ============ */
+/* ============ 棣栭〉鏍峰紡 ============ */
 .home-header {
   text-align: center;
   padding: 40px 20px 20px;
@@ -90,7 +90,7 @@ body {
   position: relative;
 }
 
-/* 首页悬浮音效切换按钮 — 无需进入设置页即可快速静音 */
+/* 棣栭〉鎮诞闊虫晥鍒囨崲鎸夐挳 鈥?鏃犻渶杩涘叆璁剧疆椤靛嵆鍙揩閫熼潤闊?*/
 .sound-toggle-btn {
   width: 40px;
   height: 40px;
@@ -107,7 +107,7 @@ body {
   justify-content: center;
 }
 
-/* 首页header控制按钮容器 */
+/* 棣栭〉header鎺у埗鎸夐挳瀹瑰櫒 */
 .header-controls {
   position: absolute;
   top: 16px;
@@ -130,7 +130,7 @@ body {
   font-size: 64px;
   margin-bottom: 8px;
   animation: bounce 2s ease-in-out infinite;
-  /* 增加 logo 的光晕效果，让首屏视觉更突出 */
+  /* 澧炲姞 logo 鐨勫厜鏅曟晥鏋滐紝璁╅灞忚瑙夋洿绐佸嚭 */
   filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.25));
 }
 
@@ -143,7 +143,7 @@ body {
   font-size: 32px;
   font-weight: 800;
   margin-bottom: 8px;
-  /* 字间距让标题更舒展，配合多层阴影增强立体感 */
+  /* 瀛楅棿璺濊鏍囬鏇磋垝灞曪紝閰嶅悎澶氬眰闃村奖澧炲己绔嬩綋鎰?*/
   letter-spacing: 2px;
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.15);
 }
@@ -174,7 +174,7 @@ body {
   width: 100%;
 }
 
-/* 模式入口区域 */
+/* 妯″紡鍏ュ彛鍖哄煙 */
 .mode-entry {
   width: 100%;
   display: flex;
@@ -182,7 +182,7 @@ body {
   gap: 6px;
 }
 
-/* 游戏模式 2×2 网格 */
+/* 娓告垙妯″紡 2脳2 缃戞牸 */
 .mode-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -221,7 +221,7 @@ body {
   line-height: 1;
 }
 
-/* 按钮闪亮动画 */
+/* 鎸夐挳闂寒鍔ㄧ敾 */
 .mode-grid-btn::after,
 .mode-entry .btn::after {
   content: '';
@@ -262,7 +262,7 @@ body {
   opacity: 0.8;
 }
 
-/* 关卡选择 */
+/* 鍏冲崱閫夋嫨 */
 .level-select {
   width: 100%;
   background: var(--card-bg);
@@ -345,7 +345,7 @@ body {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  /* 默认增加轻微内阴影让按钮有质感 */
+  /* 榛樿澧炲姞杞诲井鍐呴槾褰辫鎸夐挳鏈夎川鎰?*/
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 1px 2px rgba(0, 0, 0, 0.06);
 }
 
@@ -376,7 +376,7 @@ body {
   50% { box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.55), 0 6px 16px rgba(102, 126, 234, 0.45); }
 }
 
-/* 关卡难度颜色标记 - 增加底部边框让颜色更突出 */
+/* 鍏冲崱闅惧害棰滆壊鏍囪 - 澧炲姞搴曢儴杈规璁╅鑹叉洿绐佸嚭 */
 .level-btn.diff-easy { border-left: 4px solid #4ECDC4; }
 .level-btn.diff-normal { border-left: 4px solid #667eea; }
 .level-btn.diff-medium { border-left: 4px solid #FFA07A; }
@@ -384,7 +384,7 @@ body {
 .level-btn.diff-expert { border-left: 4px solid #C589E8; }
 .level-btn.diff-master { border-left: 4px solid #333; }
 
-/* 关卡难度小圆点 */
+/* 鍏冲崱闅惧害灏忓渾鐐?*/
 .level-diff-dot {
   width: 6px;
   height: 6px;
@@ -399,7 +399,7 @@ body {
 .level-diff-dot[data-diff="diff-expert"] { background: #C589E8; }
 .level-diff-dot[data-diff="diff-master"] { background: #333; }
 
-/* 关卡搜索框 */
+/* 鍏冲崱鎼滅储妗?*/
 .level-search-box {
   display: flex;
   gap: 4px;
@@ -442,9 +442,9 @@ body {
   cursor: not-allowed;
 }
 
-/* 难度图例 */
+/* 闅惧害鍥句緥 */
 
-/* 模式描述文字 */
+/* 妯″紡鎻忚堪鏂囧瓧 */
 .mode-desc {
   text-align: center;
   font-size: 12px;
@@ -465,7 +465,7 @@ body {
   box-shadow: var(--shadow);
 }
 
-/* 难度筛选标签 */
+/* 闅惧害绛涢€夋爣绛?*/
 .difficulty-filter {
   display: flex;
   flex-wrap: wrap;
@@ -525,7 +525,7 @@ body {
 .legend-dot.diff-expert { background: #C589E8; }
 .legend-dot.diff-master { background: #333; }
 
-/* 通关进度条 */
+/* 閫氬叧杩涘害鏉?*/
 .progress-bar-section {
   width: 100%;
   background: var(--card-bg);
@@ -565,7 +565,7 @@ body {
   box-shadow: 0 0 10px rgba(78, 205, 196, 0.4);
 }
 
-/* 捐赠区域 */
+/* 鎹愯禒鍖哄煙 */
 .donate-section {
   text-align: center;
   color: var(--text-light);
@@ -595,7 +595,7 @@ body {
   transform: scale(1.05);
 }
 
-/* 常见问题列表 */
+/* 甯歌闂鍒楄〃 */
 .faq-list {
   display: flex;
   flex-direction: column;
@@ -622,7 +622,7 @@ body {
   line-height: 1.5;
 }
 
-/* 快捷功能导航区 */
+/* 蹇嵎鍔熻兘瀵艰埅鍖?*/
 .quick-nav-section {
   margin: 16px 0;
 }
@@ -675,7 +675,7 @@ body {
   }
 }
 
-/* 页脚 */
+/* 椤佃剼 */
 .home-footer {
   text-align: center;
   padding: 12px 16px;
@@ -703,7 +703,7 @@ body {
   margin: 0 8px;
 }
 
-/* 签到+提示道具合并行 */
+/* 绛惧埌+鎻愮ず閬撳叿鍚堝苟琛?*/
 .status-bar {
   display: flex;
   gap: 8px;
@@ -748,7 +748,7 @@ body {
   }
 }
 
-/* 小屏幕底部导航固定底栏 */
+/* 灏忓睆骞曞簳閮ㄥ鑸浐瀹氬簳鏍?*/
 @media (max-width: 480px) {
   .home-footer {
     position: sticky;
@@ -789,20 +789,20 @@ body {
     flex-shrink: 0;
     opacity: 0.4;
   }
-  /* FAB 上移避免遮挡 */
+  /* FAB 涓婄Щ閬垮厤閬尅 */
   .fab-nav {
     bottom: calc(60px + env(safe-area-inset-bottom, 0px));
   }
 }
 
-/* ============ 游戏页样式 ============ */
+/* ============ 娓告垙椤垫牱寮?============ */
 .game-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 12px 16px;
   color: var(--text-light);
-  /* 半透明背景 + 毛玻璃模糊，提升头部在渐变背景上的可读性 */
+  /* 鍗婇€忔槑鑳屾櫙 + 姣涚幓鐠冩ā绯婏紝鎻愬崌澶撮儴鍦ㄦ笎鍙樿儗鏅笂鐨勫彲璇绘€?*/
   background: rgba(0, 0, 0, 0.08);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
@@ -833,7 +833,7 @@ body {
   transition: transform 0.08s;
 }
 
-/* 关卡信息条 */
+/* 鍏冲崱淇℃伅鏉?*/
 .level-info-bar {
   display: flex;
   align-items: center;
@@ -855,7 +855,7 @@ body {
   opacity: 0.5;
 }
 
-/* 连击徽章 */
+/* 杩炲嚮寰界珷 */
 .combo-badge {
   color: #ff5e3a;
   font-weight: 700;
@@ -867,7 +867,7 @@ body {
   100% { transform: scale(1); }
 }
 
-/* 连击里程碑庆祝弹窗 */
+/* 杩炲嚮閲岀▼纰戝簡绁濆脊绐?*/
 .combo-celebration-overlay {
   position: fixed;
   top: 0;
@@ -917,7 +917,7 @@ body {
   100% { transform: scale(1); }
 }
 
-/* 暗色主题适配 */
+/* 鏆楄壊涓婚閫傞厤 */
 .dark-theme .combo-celebration-card {
   background: #1e1e2e;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
@@ -942,16 +942,16 @@ body {
   width: 100%;
 }
 
-/* 游戏面板 - 增强层次和质感 */
+/* 娓告垙闈㈡澘 - 澧炲己灞傛鍜岃川鎰?*/
 .game-board {
   width: 100%;
   background: var(--card-bg);
   border-radius: var(--radius);
   padding: 16px;
   box-shadow: var(--shadow-lg);
-  /* 顶部高光线条增强卡片质感 */
+  /* 椤堕儴楂樺厜绾挎潯澧炲己鍗＄墖璐ㄦ劅 */
   position: relative;
-  /* 主题切换时卡片背景平滑过渡 */
+  /* 涓婚鍒囨崲鏃跺崱鐗囪儗鏅钩婊戣繃娓?*/
   transition: background var(--theme-transition), box-shadow 0.3s ease;
 }
 
@@ -979,7 +979,7 @@ body {
   border-radius: 16px;
   font-size: 13px;
   font-weight: 600;
-  /* 徽章增加轻微的内高光，让小元素也有质感 */
+  /* 寰界珷澧炲姞杞诲井鐨勫唴楂樺厜锛岃灏忓厓绱犱篃鏈夎川鎰?*/
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
   transition: transform 0.15s ease;
 }
@@ -1049,8 +1049,8 @@ body {
   50% { transform: scale(1.1); }
 }
 
-/* 试管网格 */
-/* 游戏内上下文提示 */
+/* 璇曠缃戞牸 */
+/* 娓告垙鍐呬笂涓嬫枃鎻愮ず */
 .game-context-tip {
   text-align: center;
   padding: 8px 16px;
@@ -1064,7 +1064,7 @@ body {
   border: 1px solid rgba(102, 126, 234, 0.15);
 }
 
-/* 死局预警提示 */
+/* 姝诲眬棰勮鎻愮ず */
 .deadlock-warning-tip {
   text-align: center;
   padding: 10px 16px;
@@ -1090,7 +1090,7 @@ body {
   100% { opacity: 1; transform: translateY(0); }
 }
 
-/* 连胜徽章 */
+/* 杩炶儨寰界珷 */
 .streak-badge {
   background: linear-gradient(135deg, #FF6B6B, #FF8E53);
   color: #fff;
@@ -1108,7 +1108,7 @@ body {
   50% { transform: scale(1.05); }
 }
 
-/* 首次游玩交互引导 */
+/* 棣栨娓哥帺浜や簰寮曞 */
 .first-play-guide {
   display: flex;
   flex-direction: column;
@@ -1154,7 +1154,7 @@ body {
   50% { transform: translateY(8px); }
 }
 
-/* 关卡切换过渡动画 */
+/* 鍏冲崱鍒囨崲杩囨浮鍔ㄧ敾 */
 .level-transition {
   animation: level-enter 0.45s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
@@ -1165,7 +1165,7 @@ body {
   100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* 新手引导提示 */
+/* 鏂版墜寮曞鎻愮ず */
 .beginner-hint {
   display: flex;
   flex-direction: column;
@@ -1192,7 +1192,7 @@ body {
   50% { transform: translateY(-6px); }
 }
 
-/* 新手首次倒水成功鼓励提示 */
+/* 鏂版墜棣栨鍊掓按鎴愬姛榧撳姳鎻愮ず */
 .beginner-encouragement {
   display: flex;
   align-items: center;
@@ -1222,27 +1222,16 @@ body {
   50% { transform: scale(1.2); }
 }
 
-/* 第2关提示使用蓝色主题，与第1关绿色区分 */
+/* 绗?鍏虫彁绀轰娇鐢ㄨ摑鑹蹭富棰橈紝涓庣1鍏崇豢鑹插尯鍒?*/
 .beginner-encouragement.level2-tip .encouragement-text {
   color: #2196F3;
   background: rgba(33, 150, 243, 0.1);
 }
 
-/* 第3关提示使用紫色主题，引导策略思考 */
-.beginner-encouragement.level3-tip .encouragement-text {
-  color: #9C27B0;
-  background: rgba(156, 39, 176, 0.1);
-}
-
-/* 暗色主题适配 */
+/* 鏆楄壊涓婚閫傞厤 */
 .dark-theme .beginner-encouragement.level2-tip .encouragement-text {
   color: #64B5F6;
   background: rgba(33, 150, 243, 0.15);
-}
-
-.dark-theme .beginner-encouragement.level3-tip .encouragement-text {
-  color: #CE93D8;
-  background: rgba(156, 39, 176, 0.15);
 }
 
 .tubes-grid {
@@ -1253,26 +1242,26 @@ body {
   padding: 20px 8px;
   min-height: 300px;
   align-items: flex-end;
-  /* 试管区域增加柔和的内嵌背景，营造"桌面"的沉浸感 */
+  /* 璇曠鍖哄煙澧炲姞鏌斿拰鐨勫唴宓岃儗鏅紝钀ラ€?妗岄潰"鐨勬矇娴告劅 */
   background: radial-gradient(ellipse at center bottom, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
   border-radius: 12px;
   position: relative;
 }
 
-/* 滑动手势包装层 */
+/* 婊戝姩鎵嬪娍鍖呰灞?*/
 .tube-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-/* 单个试管容器 */
+/* 鍗曚釜璇曠瀹瑰櫒 */
 .tube-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   cursor: pointer;
-  /* 过渡曲线更弹性，让选中/悬停反馈更生动 */
+  /* 杩囨浮鏇茬嚎鏇村脊鎬э紝璁╅€変腑/鎮仠鍙嶉鏇寸敓鍔?*/
   transition: transform 0.25s cubic-bezier(0.34, 1.3, 0.64, 1);
   will-change: transform;
   position: relative;
@@ -1283,7 +1272,7 @@ body {
 }
 
 .tube-container:hover .tube {
-  /* 悬停时试管边框略微增亮，提示可交互 */
+  /* 鎮仠鏃惰瘯绠¤竟妗嗙暐寰浜紝鎻愮ず鍙氦浜?*/
   border-color: rgba(255, 255, 255, 0.6);
 }
 
@@ -1291,7 +1280,7 @@ body {
   transform: translateY(-8px);
 }
 
-/* 选中试管下方增加一个柔和的投影圆，强化"被抬起"的视觉感 */
+/* 閫変腑璇曠涓嬫柟澧炲姞涓€涓煍鍜岀殑鎶曞奖鍦嗭紝寮哄寲"琚姮璧?鐨勮瑙夋劅 */
 .tube-container.selected::after {
   content: '';
   position: absolute;
@@ -1307,7 +1296,7 @@ body {
 }
 
 .tube-container.selected .tube {
-  /* 使用 color-mix 让发光颜色随主题 --primary 自适应，不再硬编码紫色 */
+  /* 浣跨敤 color-mix 璁╁彂鍏夐鑹查殢涓婚 --primary 鑷€傚簲锛屼笉鍐嶇‖缂栫爜绱壊 */
   box-shadow: 0 0 0 3px var(--primary), 0 0 24px color-mix(in srgb, var(--primary) 50%, transparent), 0 4px 20px color-mix(in srgb, var(--primary) 40%, transparent);
   animation: selected-glow 1.5s ease-in-out infinite;
 }
@@ -1348,7 +1337,7 @@ body {
   50% { box-shadow: 0 0 0 5px var(--success), 0 4px 25px rgba(78, 205, 196, 0.5); }
 }
 
-/* 试管图形 - 纯CSS绘制，增强玻璃质感 */
+/* 璇曠鍥惧舰 - 绾疌SS缁樺埗锛屽寮虹幓鐠冭川鎰?*/
 .tube {
   width: 44px;
   height: 140px;
@@ -1359,16 +1348,16 @@ body {
   background: var(--tube-bg);
   overflow: hidden;
   backdrop-filter: blur(4px);
-  /* 过渡包含背景与边框，主题切换时平滑变化 */
+  /* 杩囨浮鍖呭惈鑳屾櫙涓庤竟妗嗭紝涓婚鍒囨崲鏃跺钩婊戝彉鍖?*/
   transition: box-shadow 0.2s, background var(--theme-transition), border-color var(--theme-transition);
-  /* 玻璃质感：左侧主高光 + 右侧次高光 + 内阴影增强立体感 + 底部反光 */
+  /* 鐜荤拑璐ㄦ劅锛氬乏渚т富楂樺厜 + 鍙充晶娆￠珮鍏?+ 鍐呴槾褰卞寮虹珛浣撴劅 + 搴曢儴鍙嶅厜 */
   box-shadow:
     inset 2px 0 4px rgba(255, 255, 255, 0.25),
     inset -2px 0 4px var(--tube-shadow-inner),
     inset 0 -3px 6px var(--tube-bottom-reflection);
 }
 
-/* 试管左侧高光线条，模拟玻璃反光 */
+/* 璇曠宸︿晶楂樺厜绾挎潯锛屾ā鎷熺幓鐠冨弽鍏?*/
 .tube::before {
   content: '';
   position: absolute;
@@ -1382,7 +1371,7 @@ body {
   pointer-events: none;
 }
 
-/* 试管右侧次高光，与左侧主高光呼应，形成立体玻璃管效果 */
+/* 璇曠鍙充晶娆￠珮鍏夛紝涓庡乏渚т富楂樺厜鍛煎簲锛屽舰鎴愮珛浣撶幓鐠冪鏁堟灉 */
 .tube::after {
   content: '';
   position: absolute;
@@ -1403,7 +1392,7 @@ body {
   border-radius: 0 0 17px 17px;
 }
 
-/* 试管口 */
+/* 璇曠鍙?*/
 .tube-mouth {
   position: absolute;
   top: -3px;
@@ -1416,15 +1405,15 @@ body {
   background: var(--tube-bg);
 }
 
-/* 颜色层 - 增强立体球体感：顶部高光 + 底部阴影 + 渐变 */
+/* 棰滆壊灞?- 澧炲己绔嬩綋鐞冧綋鎰燂細椤堕儴楂樺厜 + 搴曢儴闃村奖 + 娓愬彉 */
 .color-layer {
   position: absolute;
   left: 0;
   right: 0;
-  /* 仅过渡 transform 和 opacity，避免过渡 background 引发重绘 */
+  /* 浠呰繃娓?transform 鍜?opacity锛岄伩鍏嶈繃娓?background 寮曞彂閲嶇粯 */
   transition: transform 0.3s cubic-bezier(0.34, 1.2, 0.64, 1), opacity 0.3s ease;
   will-change: transform, opacity;
-  /* 多层阴影营造立体感：顶部内高光（液体表面光泽）、底部内阴影（液体沉降感）、左右渐变（球体弧度） */
+  /* 澶氬眰闃村奖钀ラ€犵珛浣撴劅锛氶《閮ㄥ唴楂樺厜锛堟恫浣撹〃闈㈠厜娉斤級銆佸簳閮ㄥ唴闃村奖锛堟恫浣撴矇闄嶆劅锛夈€佸乏鍙虫笎鍙橈紙鐞冧綋寮у害锛?*/
   box-shadow:
     inset 0 2px 4px var(--color-layer-shine),
     inset 0 -2px 4px rgba(0, 0, 0, 0.18),
@@ -1432,7 +1421,7 @@ body {
     inset -2px 0 4px rgba(0, 0, 0, 0.1);
 }
 
-/* 颜色层左侧高光，让球体/液体更有光泽 */
+/* 棰滆壊灞傚乏渚ч珮鍏夛紝璁╃悆浣?娑蹭綋鏇存湁鍏夋辰 */
 .color-layer::before {
   content: '';
   position: absolute;
@@ -1445,7 +1434,7 @@ body {
   pointer-events: none;
 }
 
-/* 液体表面弯月面效果：仅顶层颜色层显示，模拟液体表面弧形反光 */
+/* 娑蹭綋琛ㄩ潰寮湀闈㈡晥鏋滐細浠呴《灞傞鑹插眰鏄剧ず锛屾ā鎷熸恫浣撹〃闈㈠姬褰㈠弽鍏?*/
 .tube-inner > .color-layer:last-child::after {
   content: '';
   position: absolute;
@@ -1459,7 +1448,7 @@ body {
   z-index: 1;
 }
 
-/* ========== 色弱友好模式：每种颜色叠加不同纹理图案 ========== */
+/* ========== 鑹插急鍙嬪ソ妯″紡锛氭瘡绉嶉鑹插彔鍔犱笉鍚岀汗鐞嗗浘妗?========== */
 .cb-pattern-red::after {
   content: '';
   position: absolute;
@@ -1545,7 +1534,7 @@ body {
   color: #999;
 }
 
-/* ========== 色弱模式：颜色名称标签 ========== */
+/* ========== 鑹插急妯″紡锛氶鑹插悕绉版爣绛?========== */
 .tube-color-labels {
   margin-top: 4px;
   display: flex;
@@ -1566,7 +1555,7 @@ body {
   white-space: nowrap;
 }
 
-/* 各颜色标签用对应颜色的浅色背景区分 */
+/* 鍚勯鑹叉爣绛剧敤瀵瑰簲棰滆壊鐨勬祬鑹茶儗鏅尯鍒?*/
 .cb-label-red { background: rgba(255, 107, 107, 0.2); border-left: 2px solid #FF6B6B; }
 .cb-label-blue { background: rgba(78, 205, 196, 0.2); border-left: 2px solid #4ECDC4; }
 .cb-label-yellow { background: rgba(255, 230, 109, 0.25); border-left: 2px solid #FFE66D; }
@@ -1578,7 +1567,7 @@ body {
 .cb-label-brown { background: rgba(212, 165, 116, 0.2); border-left: 2px solid #D4A574; }
 .cb-label-gray { background: rgba(176, 176, 176, 0.2); border-left: 2px solid #B0B0B0; }
 
-/* 游戏控制按钮 */
+/* 娓告垙鎺у埗鎸夐挳 */
 .game-controls {
   display: flex;
   justify-content: center;
@@ -1586,7 +1575,7 @@ body {
   margin-top: 16px;
 }
 
-/* 通用按钮 - 增强交互反馈 */
+/* 閫氱敤鎸夐挳 - 澧炲己浜や簰鍙嶉 */
 .btn {
   border: none;
   border-radius: var(--radius-sm);
@@ -1595,7 +1584,7 @@ body {
   font-weight: 600;
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease;
-  /* 按钮按下时提供触觉尺度的反馈 */
+  /* 鎸夐挳鎸変笅鏃舵彁渚涜Е瑙夊昂搴︾殑鍙嶉 */
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -1617,7 +1606,7 @@ body {
 }
 
 .btn-primary {
-  /* 使用主题变量 --primary/--secondary，按钮配色随主题自适应 */
+  /* 浣跨敤涓婚鍙橀噺 --primary/--secondary锛屾寜閽厤鑹查殢涓婚鑷€傚簲 */
   background: linear-gradient(135deg, var(--primary), var(--secondary));
   color: var(--text-light);
   box-shadow: 0 4px 15px color-mix(in srgb, var(--primary) 40%, transparent);
@@ -1650,7 +1639,7 @@ body {
   color: #e65100;
 }
 
-/* 暂停按钮 */
+/* 鏆傚仠鎸夐挳 */
 .btn-pause {
   background: #e8f5e9;
   color: #2e7d32;
@@ -1684,7 +1673,7 @@ body {
   margin-left: 2px;
 }
 
-/* 提示道具卡片 */
+/* 鎻愮ず閬撳叿鍗＄墖 */
 .hint-items-card {
   display: flex;
   align-items: center;
@@ -1717,7 +1706,7 @@ body {
   margin-left: auto;
 }
 
-/* 胜利覆盖层 */
+/* 鑳滃埄瑕嗙洊灞?*/
 .win-overlay, .deadlock-overlay, .pause-overlay {
   position: fixed;
   inset: 0;
@@ -1757,7 +1746,7 @@ body {
   animation: bounce 1s ease;
 }
 
-/* 暂停遵罩卡片 */
+/* 鏆傚仠閬电僵鍗＄墖 */
 .pause-card {
   background: #fff;
   border-radius: 20px;
@@ -1809,7 +1798,7 @@ body {
   opacity: 0.9;
 }
 
-/* ============ 信息页样式 - 优化可读性和层次 ============ */
+/* ============ 淇℃伅椤垫牱寮?- 浼樺寲鍙鎬у拰灞傛 ============ */
 .info-page {
   max-width: 500px;
   margin: 0 auto;
@@ -1830,7 +1819,7 @@ body {
   margin: 18px 0 8px;
   font-size: 16px;
   font-weight: 600;
-  /* 小标题增加轻微背景区分，提升层次感 */
+  /* 灏忔爣棰樺鍔犺交寰儗鏅尯鍒嗭紝鎻愬崌灞傛鎰?*/
   padding-left: 8px;
   border-left: 3px solid rgba(255, 255, 255, 0.4);
 }
@@ -1850,7 +1839,7 @@ body {
   margin-bottom: 8px;
 }
 
-/* ========== 色彩百科页面样式 ========== */
+/* ========== 鑹插僵鐧剧椤甸潰鏍峰紡 ========== */
 .color-encyclopedia-list {
   display: flex;
   flex-direction: column;
@@ -2137,7 +2126,7 @@ html[style*="1a1a2e"] .encyclopedia-progress-track {
   font-size: 12px;
 }
 
-/* ============ 广告位 ============ */
+/* ============ 骞垮憡浣?============ */
 .ad-slot {
   width: 100%;
   min-height: 60px;
@@ -2155,9 +2144,9 @@ html[style*="1a1a2e"] .encyclopedia-progress-track {
   color: rgba(255, 255, 255, 0.4);
 }
 
-/* ============ 响应式适配 ============ */
+/* ============ 鍝嶅簲寮忛€傞厤 ============ */
 
-/* 大屏平板 (769px - 1024px) */
+/* 澶у睆骞虫澘 (769px - 1024px) */
 @media (min-width: 769px) and (max-width: 1024px) {
   .tube {
     width: 48px;
@@ -2177,7 +2166,7 @@ html[style*="1a1a2e"] .encyclopedia-progress-track {
   }
 }
 
-/* 平板 */
+/* 骞虫澘 */
 @media (max-width: 768px) {
   .title {
     font-size: 28px;
@@ -2191,7 +2180,7 @@ html[style*="1a1a2e"] .encyclopedia-progress-track {
   }
 }
 
-/* 手机 - 优化试管显示和触摸区域 */
+/* 鎵嬫満 - 浼樺寲璇曠鏄剧ず鍜岃Е鎽稿尯鍩?*/
 @media (max-width: 375px) {
   .home-header {
     padding: 24px 16px 12px;
@@ -2219,13 +2208,13 @@ html[style*="1a1a2e"] .encyclopedia-progress-track {
   .game-board {
     padding: 10px;
   }
-  /* 小屏幕下试管容器增加底部内边距，避免编号被遮挡 */
+  /* 灏忓睆骞曚笅璇曠瀹瑰櫒澧炲姞搴曢儴鍐呰竟璺濓紝閬垮厤缂栧彿琚伄鎸?*/
   .tube-container {
     padding-bottom: 2px;
   }
 }
 
-/* 大屏桌面 */
+/* 澶у睆妗岄潰 */
 @media (min-width: 1025px) {
   .tube {
     width: 50px;
@@ -2242,7 +2231,7 @@ html[style*="1a1a2e"] .encyclopedia-progress-track {
   }
 }
 
-/* 触摸优化 */
+/* 瑙︽懜浼樺寲 */
 @media (hover: none) and (pointer: coarse) {
   .tube-container:hover {
     transform: none;
@@ -2250,7 +2239,7 @@ html[style*="1a1a2e"] .encyclopedia-progress-track {
   .tube-container.selected {
     transform: translateY(-6px);
   }
-  /* 移动端触摸反馈：按下时缩小 */
+  /* 绉诲姩绔Е鎽稿弽棣堬細鎸変笅鏃剁缉灏?*/
   .tube-container:active {
     transform: scale(0.92);
     transition: transform 0.08s ease;
@@ -2258,7 +2247,7 @@ html[style*="1a1a2e"] .encyclopedia-progress-track {
   .tube-container.selected:active {
     transform: translateY(-4px) scale(0.92);
   }
-  /* 移动端按钮增大触摸区域 */
+  /* 绉诲姩绔寜閽澶цЕ鎽稿尯鍩?*/
   .btn-back, .btn-hint {
     padding: 10px 18px;
     min-height: 44px;
@@ -2277,7 +2266,7 @@ html[style*="1a1a2e"] .encyclopedia-progress-track {
   }
 }
 
-/* ============ 无障碍访问 ============ */
+/* ============ 鏃犻殰纰嶈闂?============ */
 .tube-container:focus-visible {
   outline: 3px solid #fff;
   outline-offset: 3px;
@@ -2299,7 +2288,7 @@ html[style*="1a1a2e"] .encyclopedia-progress-track {
   outline-offset: 2px;
 }
 
-/* 屏幕阅读器专用（视觉隐藏但可读） */
+/* 灞忓箷闃呰鍣ㄤ笓鐢紙瑙嗚闅愯棌浣嗗彲璇伙級 */
 .sr-only {
   position: absolute;
   width: 1px;
@@ -2312,9 +2301,9 @@ html[style*="1a1a2e"] .encyclopedia-progress-track {
   border: 0;
 }
 
-/* ============ 胜利弹窗按钮 ============ */
+/* ============ 鑳滃埄寮圭獥鎸夐挳 ============ */
 
-/* 新纪录/最佳记录徽章 */
+/* 鏂扮邯褰?鏈€浣宠褰曞窘绔?*/
 .new-record-badge {
   color: #FF6B6B;
   font-weight: 700;
@@ -2358,7 +2347,7 @@ html[style*="1a1a2e"] .encyclopedia-progress-track {
   color: #666;
 }
 
-/* 胜利弹窗移动端适配 */
+/* 鑳滃埄寮圭獥绉诲姩绔€傞厤 */
 @media (max-width: 768px) {
   .win-card, .deadlock-card {
     padding: 20px 18px;
@@ -2420,7 +2409,7 @@ html[style*="1a1a2e"] .encyclopedia-progress-track {
   }
 }
 
-/* ============ 新手引导 ============ */
+/* ============ 鏂版墜寮曞 ============ */
 .tutorial-overlay {
   position: fixed;
   inset: 0;
@@ -2477,7 +2466,7 @@ html[style*="1a1a2e"] .encyclopedia-progress-track {
   flex-shrink: 0;
 }
 
-/* ============ 分享提示 ============ */
+/* ============ 鍒嗕韩鎻愮ず ============ */
 .share-toast {
   position: fixed;
   bottom: 30px;
@@ -2492,7 +2481,7 @@ html[style*="1a1a2e"] .encyclopedia-progress-track {
   animation: fade-in 0.3s ease;
 }
 
-/* ============ 每日挑战按钮 ============ */
+/* ============ 姣忔棩鎸戞垬鎸夐挳 ============ */
 .btn-daily {
   background: linear-gradient(135deg, #FF6B6B, #FFA07A);
   color: #fff;
@@ -2522,7 +2511,7 @@ html[style*="1a1a2e"] .encyclopedia-progress-track {
   opacity: 0.8;
 }
 
-/* 无尽模式按钮 */
+/* 鏃犲敖妯″紡鎸夐挳 */
 .btn-endless {
   background: linear-gradient(135deg, #6B73FF, #000DFF);
   color: #fff;
@@ -2557,7 +2546,7 @@ html[style*="1a1a2e"] .encyclopedia-progress-track {
   transform: scale(1.05);
 }
 
-/* ============ 成就页面 ============ */
+/* ============ 鎴愬氨椤甸潰 ============ */
 .achievement-summary {
   text-align: center;
   font-size: 18px;
@@ -2593,7 +2582,7 @@ html[style*="1a1a2e"] .encyclopedia-progress-track {
 
 .achievement-card.unlocked {
   border-left: 4px solid #4ECDC4;
-  /* 已解锁成就增加轻微光晕 */
+  /* 宸茶В閿佹垚灏卞鍔犺交寰厜鏅?*/
   box-shadow: var(--shadow-sm), 0 0 0 1px rgba(78, 205, 196, 0.15);
 }
 
@@ -2618,7 +2607,7 @@ html[style*="1a1a2e"] .encyclopedia-progress-track {
   margin-bottom: 4px;
 }
 
-/* 成就名称行布局：名称 + 稀有度标签 */
+/* 鎴愬氨鍚嶇О琛屽竷灞€锛氬悕绉?+ 绋€鏈夊害鏍囩 */
 .achievement-name-row {
   display: flex;
   align-items: center;
@@ -2630,7 +2619,7 @@ html[style*="1a1a2e"] .encyclopedia-progress-track {
   margin-bottom: 0;
 }
 
-/* 稀有度徽章 */
+/* 绋€鏈夊害寰界珷 */
 .ach-rarity-badge {
   font-size: 10px;
   font-weight: 600;
@@ -2645,7 +2634,7 @@ html[style*="1a1a2e"] .encyclopedia-progress-track {
   color: #888;
 }
 
-/* ============ 成就页总体进度 ============ */
+/* ============ 鎴愬氨椤垫€讳綋杩涘害 ============ */
 .achievement-overall {
   background: rgba(255, 255, 255, 0.15);
   border-radius: 12px;
@@ -2686,7 +2675,51 @@ html[style*="1a1a2e"] .encyclopedia-progress-track {
   transition: width 0.5s ease;
 }
 
-/* 成就提示卡片：最近解锁 + 下一个目标 */
+/* 稀有度统计面板 */
+.ach-rarity-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin: 10px 0;
+}
+.ach-rarity-stat-item {
+  padding: 8px 10px;
+  border-left: 3px solid;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+}
+.ach-rarity-stat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+.ach-rarity-stat-label {
+  font-size: 12px;
+  font-weight: 600;
+}
+.ach-rarity-stat-count {
+  font-size: 11px;
+  opacity: 0.7;
+}
+.ach-rarity-stat-bar {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.ach-rarity-stat-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.5s ease;
+}
+@media (max-width: 375px) {
+  .ach-rarity-stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 鎴愬氨鎻愮ず鍗＄墖锛氭渶杩戣В閿?+ 涓嬩竴涓洰鏍?*/
 .achievement-hint-cards {
   display: flex;
   gap: 10px;
@@ -2753,7 +2786,7 @@ html[style*="1a1a2e"] .encyclopedia-progress-track {
     flex-direction: column;
   }
 }
-/* 暗色主题适配 */
+/* 鏆楄壊涓婚閫傞厤 */
 html[style*="1a1a2e"] .ach-hint-recent {
   background: linear-gradient(135deg, rgba(78,205,196,0.1), rgba(255,215,0,0.06));
   border-color: rgba(78,205,196,0.2);
@@ -2770,7 +2803,7 @@ html[style*="1a1a2e"] .ach-hint-time {
   color: rgba(255,255,255,0.6);
 }
 
-/* ============ 成就分类筛选 ============ */
+/* ============ 鎴愬氨鍒嗙被绛涢€?============ */
 .achievement-category-filter {
   display: flex;
   flex-wrap: wrap;
@@ -2778,7 +2811,7 @@ html[style*="1a1a2e"] .ach-hint-time {
   margin-bottom: 10px;
 }
 
-/* 稀有度筛选标签栏 */
+/* 绋€鏈夊害绛涢€夋爣绛炬爮 */
 .achievement-rarity-filter {
   display: flex;
   flex-wrap: wrap;
@@ -2854,7 +2887,7 @@ html[style*="1a1a2e"] .ach-hint-time {
   border-radius: 8px;
 }
 
-/* ============ 分类进度条 ============ */
+/* ============ 鍒嗙被杩涘害鏉?============ */
 .achievement-category-progress {
   margin-bottom: 14px;
   padding: 10px 14px;
@@ -2884,7 +2917,7 @@ html[style*="1a1a2e"] .ach-hint-time {
   transition: width 0.4s ease;
 }
 
-/* ============ 成就解锁日期 ============ */
+/* ============ 鎴愬氨瑙ｉ攣鏃ユ湡 ============ */
 .achievement-date {
   font-size: 11px;
   color: #aaa;
@@ -2896,7 +2929,7 @@ html[style*="1a1a2e"] .ach-hint-time {
   flex-shrink: 0;
 }
 
-/* ============ 空状态提示 ============ */
+/* ============ 绌虹姸鎬佹彁绀?============ */
 .achievement-empty-hint {
   text-align: center;
   padding: 30px 20px;
@@ -2905,7 +2938,7 @@ html[style*="1a1a2e"] .ach-hint-time {
   opacity: 0.8;
 }
 
-/* ============ 成就时间线视图 ============ */
+/* ============ 鎴愬氨鏃堕棿绾胯鍥?============ */
 .achievement-view-toggle {
   display: flex;
   gap: 8px;
@@ -3019,7 +3052,7 @@ html[style*="1a1a2e"] .ach-hint-time {
   color: #9ca3af;
   margin-top: 4px;
 }
-/* 暗色主题适配 */
+/* 鏆楄壊涓婚閫傞厤 */
 [data-theme="dark"] .ach-view-btn { background: #374151; color: #9ca3af; border-color: #4b5563; }
 [data-theme="dark"] .ach-view-btn:hover { background: #4b5563; }
 [data-theme="dark"] .ach-view-btn.active { background: #667eea; color: #fff; border-color: #667eea; }
@@ -3031,7 +3064,7 @@ html[style*="1a1a2e"] .ach-hint-time {
 [data-theme="dark"] .timeline-item-desc { color: #9ca3af; }
 [data-theme="dark"] .timeline-item-time { color: #6b7280; }
 
-/* ============ 成就解锁通知 ============ */
+/* ============ 鎴愬氨瑙ｉ攣閫氱煡 ============ */
 .achievement-notification {
   position: fixed;
   bottom: 30px;
@@ -3085,7 +3118,7 @@ html[style*="1a1a2e"] .ach-hint-time {
   opacity: 0.8;
 }
 
-/* 成就稀有度标签 */
+/* 鎴愬氨绋€鏈夊害鏍囩 */
 .achievement-notif-rarity {
   font-size: 11px;
   font-weight: 600;
@@ -3093,13 +3126,13 @@ html[style*="1a1a2e"] .ach-hint-time {
   letter-spacing: 0.5px;
 }
 
-/* 成就卡片稀有度边框光效 */
+/* 鎴愬氨鍗＄墖绋€鏈夊害杈规鍏夋晥 */
 .achievement-notif-card {
   border-left: 4px solid #4CAF50;
   transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-/* 传说级成就解锁时的特殊光效动画 */
+/* 浼犺绾ф垚灏辫В閿佹椂鐨勭壒娈婂厜鏁堝姩鐢?*/
 @keyframes legendaryGlow {
   0%, 100% { box-shadow: 0 4px 20px rgba(255, 152, 0, 0.3), 0 0 0 0 rgba(255, 152, 0, 0.4); }
   50% { box-shadow: 0 4px 30px rgba(255, 152, 0, 0.5), 0 0 0 4px rgba(255, 152, 0, 0.15); }
@@ -3110,7 +3143,7 @@ html[style*="1a1a2e"] .ach-hint-time {
   50% { box-shadow: 0 4px 25px rgba(156, 39, 176, 0.35); }
 }
 
-/* ============ 设置页 ============ */
+/* ============ 璁剧疆椤?============ */
 .settings-card {
   background: rgba(255, 255, 255, 0.95);
   border-radius: 12px;
@@ -3126,7 +3159,7 @@ html[style*="1a1a2e"] .ach-hint-time {
   justify-content: space-between;
   padding: 14px 20px;
   cursor: pointer;
-  /* 悬停过渡更平滑，增加左边框指示器 */
+  /* 鎮仠杩囨浮鏇村钩婊戯紝澧炲姞宸﹁竟妗嗘寚绀哄櫒 */
   transition: background 0.2s, padding-left 0.2s;
   border-left: 3px solid transparent;
 }
@@ -3178,7 +3211,7 @@ html[style*="1a1a2e"] .ach-hint-time {
   color: #FF6B6B;
 }
 
-/* 存档管理按钮 */
+/* 瀛樻。绠＄悊鎸夐挳 */
 .backup-actions {
   display: flex;
   gap: 10px;
@@ -3192,7 +3225,7 @@ html[style*="1a1a2e"] .ach-hint-time {
   cursor: pointer;
 }
 
-/* 开关样式 */
+/* 寮€鍏虫牱寮?*/
 .toggle-switch {
   width: 48px;
   height: 26px;
@@ -3215,7 +3248,7 @@ html[style*="1a1a2e"] .ach-hint-time {
   position: absolute;
   top: 2px;
   left: 2px;
-  /* 过渡曲线带弹性，让开关切换更有"咔哒"的触感 */
+  /* 杩囨浮鏇茬嚎甯﹀脊鎬э紝璁╁紑鍏冲垏鎹㈡洿鏈?鍜斿搾"鐨勮Е鎰?*/
   transition: transform 0.3s cubic-bezier(0.34, 1.5, 0.64, 1), box-shadow 0.2s;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
@@ -3225,7 +3258,7 @@ html[style*="1a1a2e"] .ach-hint-time {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25), 0 0 0 2px rgba(255, 255, 255, 0.3);
 }
 
-/* ============ 星级评价 ============ */
+/* ============ 鏄熺骇璇勪环 ============ */
 .star-rating {
   display: flex;
   justify-content: center;
@@ -3233,7 +3266,7 @@ html[style*="1a1a2e"] .ach-hint-time {
   margin: 12px 0 8px;
 }
 
-/* 胜利结算步数效率可视化 */
+/* 鑳滃埄缁撶畻姝ユ暟鏁堢巼鍙鍖?*/
 .win-efficiency-bar {
   margin: 12px auto 8px;
   width: 90%;
@@ -3301,7 +3334,7 @@ html[style*="1a1a2e"] .ach-hint-time {
   100% { transform: scale(1) rotate(0deg); opacity: 1; }
 }
 
-/* ============ 战绩图分享 ============ */
+/* ============ 鎴樼哗鍥惧垎浜?============ */
 .share-image-overlay {
   position: fixed;
   inset: 0;
@@ -3390,7 +3423,7 @@ html[style*="1a1a2e"] .ach-hint-time {
   color: #666;
 }
 
-/* 键盘快捷键提示 */
+/* 閿洏蹇嵎閿彁绀?*/
 .keyboard-hint {
   text-align: center;
   font-size: 11px;
@@ -3408,7 +3441,7 @@ html[style*="1a1a2e"] .ach-hint-time {
   .keyboard-hint { font-size: 12px; line-height: 1.5; padding: 0 12px; }
 }
 
-/* ============ 关卡过渡动画 ============ */
+/* ============ 鍏冲崱杩囨浮鍔ㄧ敾 ============ */
 .game-board {
   animation: board-enter 0.4s ease-out;
 }
@@ -3418,7 +3451,7 @@ html[style*="1a1a2e"] .ach-hint-time {
   100% { opacity: 1; transform: translateX(0); }
 }
 
-/* 胜利弹窗增强动画 */
+/* 鑳滃埄寮圭獥澧炲己鍔ㄧ敾 */
 .win-card {
   animation: pop-in 0.4s ease, win-glow 1.5s ease-in-out infinite alternate 0.4s;
 }
@@ -3437,7 +3470,7 @@ html[style*="1a1a2e"] .ach-hint-time {
   100% { transform: rotate(360deg) scale(1); }
 }
 
-/* ============ 限时模式倒计时样式补充 ============ */
+/* ============ 闄愭椂妯″紡鍊掕鏃舵牱寮忚ˉ鍏?============ */
 .timer-badge.timer-danger {
   animation: timer-pulse 0.5s ease-in-out infinite alternate;
 }
@@ -3447,7 +3480,7 @@ html[style*="1a1a2e"] .ach-hint-time {
   100% { transform: scale(1.15); }
 }
 
-/* ============ 统计页面 ============ */
+/* ============ 缁熻椤甸潰 ============ */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -3462,10 +3495,10 @@ html[style*="1a1a2e"] .ach-hint-time {
   text-align: center;
   box-shadow: var(--shadow-sm);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  /* 顶部高光增强卡片质感 */
+  /* 椤堕儴楂樺厜澧炲己鍗＄墖璐ㄦ劅 */
   position: relative;
   overflow: hidden;
-  /* 卡片悬停时增加轻微的边框高亮 */
+  /* 鍗＄墖鎮仠鏃跺鍔犺交寰殑杈规楂樹寒 */
   border: 1px solid transparent;
 }
 
@@ -3551,7 +3584,7 @@ html[style*="1a1a2e"] .ach-hint-time {
   color: var(--text);
 }
 
-/* ============ 主题选择器 ============ */
+/* ============ 涓婚閫夋嫨鍣?============ */
 .theme-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -3592,7 +3625,7 @@ html[style*="1a1a2e"] .ach-hint-time {
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* ============ 最近游玩快捷入口 ============ */
+/* ============ 鏈€杩戞父鐜╁揩鎹峰叆鍙?============ */
 .recent-play-card {
   display: flex;
   align-items: center;
@@ -3615,7 +3648,7 @@ html[style*="1a1a2e"] .ach-hint-time {
   transform: translateY(0);
 }
 
-/* 快速重玩上一关卡片 */
+/* 蹇€熼噸鐜╀笂涓€鍏冲崱鐗?*/
 .replay-last-card {
   display: flex;
   align-items: center;
@@ -3665,7 +3698,7 @@ html[style*="1a1a2e"] .ach-hint-time {
   color: #999;
 }
 
-/* 每日目标卡片 */
+/* 姣忔棩鐩爣鍗＄墖 */
 .daily-goals-card {
   background: linear-gradient(135deg, rgba(255, 184, 0, 0.06) 0%, rgba(255, 120, 50, 0.06) 100%);
   border-radius: 14px;
@@ -3674,7 +3707,7 @@ html[style*="1a1a2e"] .ach-hint-time {
   box-shadow: 0 2px 8px rgba(255, 184, 0, 0.08);
 }
 
-/* 今日概览卡片 */
+/* 浠婃棩姒傝鍗＄墖 */
 .today-summary-card {
   display: flex;
   justify-content: space-around;
@@ -3733,7 +3766,7 @@ html[style*="1a1a2e"] .ach-hint-time {
   gap: 8px;
 }
 
-/* 每日目标整体进度条 */
+/* 姣忔棩鐩爣鏁翠綋杩涘害鏉?*/
 .daily-goals-bar {
   height: 4px;
   background: rgba(255, 184, 0, 0.15);
@@ -3748,7 +3781,7 @@ html[style*="1a1a2e"] .ach-hint-time {
   transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* 单目标进度条 */
+/* 鍗曠洰鏍囪繘搴︽潯 */
 .goal-content {
   flex: 1;
   display: flex;
@@ -3863,16 +3896,16 @@ html[style*="1a1a2e"] .ach-hint-time {
   to { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
 
-/* ===== 每日目标完成动画 ===== */
+/* ===== 姣忔棩鐩爣瀹屾垚鍔ㄧ敾 ===== */
 
-/* 打钩弹跳动画 */
+/* 鎵撻挬寮硅烦鍔ㄧ敾 */
 @keyframes checkPop {
   0% { transform: scale(0); opacity: 0; }
   50% { transform: scale(1.4); opacity: 1; }
   100% { transform: scale(1); opacity: 1; }
 }
 
-/* 目标刚完成时的发光高亮 */
+/* 鐩爣鍒氬畬鎴愭椂鐨勫彂鍏夐珮浜?*/
 .goal-just-completed {
   animation: goalFlash 0.6s ease-out;
 }
@@ -3882,7 +3915,7 @@ html[style*="1a1a2e"] .ach-hint-time {
   100% { background: rgba(76, 175, 80, 0.1); transform: scale(1); }
 }
 
-/* 进度条充能动画 */
+/* 杩涘害鏉″厖鑳藉姩鐢?*/
 @keyframes progressCharging {
   0% { box-shadow: 0 0 0 0 rgba(102, 187, 106, 0.5); }
   50% { box-shadow: 0 0 8px 2px rgba(102, 187, 106, 0.6); }
@@ -3893,7 +3926,7 @@ html[style*="1a1a2e"] .ach-hint-time {
   animation: progressCharging 0.8s ease-out;
 }
 
-/* 领取按钮脉冲提示 */
+/* 棰嗗彇鎸夐挳鑴夊啿鎻愮ず */
 @keyframes claimPulse {
   0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 138, 0, 0.4); }
   50% { transform: scale(1.08); box-shadow: 0 0 0 4px rgba(255, 138, 0, 0.15); }
@@ -3903,7 +3936,7 @@ html[style*="1a1a2e"] .ach-hint-time {
   animation: claimPulse 0.6s ease-out 2;
 }
 
-/* 全部完成时的卡片光效 */
+/* 鍏ㄩ儴瀹屾垚鏃剁殑鍗＄墖鍏夋晥 */
 .all-goals-done {
   border: 2px solid rgba(76, 175, 80, 0.3);
   box-shadow: 0 4px 20px rgba(76, 175, 80, 0.15);
@@ -3918,7 +3951,7 @@ html[style*="1a1a2e"] .ach-hint-time {
   animation: checkPop 0.5s ease-out;
 }
 
-/* 进度条彩虹渐变（全部完成时） */
+/* 杩涘害鏉″僵铏规笎鍙橈紙鍏ㄩ儴瀹屾垚鏃讹級 */
 @keyframes rainbowFlow {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
@@ -3931,7 +3964,7 @@ html[style*="1a1a2e"] .ach-hint-time {
   animation: rainbowFlow 2s ease infinite;
 }
 
-/* 全部完成粒子飘落庆祝 */
+/* 鍏ㄩ儴瀹屾垚绮掑瓙椋樿惤搴嗙 */
 .goals-celebration-burst {
   position: absolute;
   top: 0;
@@ -4003,7 +4036,7 @@ html[style*="1a1a2e"] .ach-hint-time {
   color: #ccc;
 }
 
-/* ============ PWA 安装引导 ============ */
+/* ============ PWA 瀹夎寮曞 ============ */
 .pwa-install-banner {
   position: fixed;
   bottom: 0;
@@ -4089,7 +4122,7 @@ html[style*="1a1a2e"] .ach-hint-time {
   color: #333;
 }
 
-/* ============ 游戏内帮助弹窗 ============ */
+/* ============ 娓告垙鍐呭府鍔╁脊绐?============ */
 .help-fab {
   position: fixed;
   bottom: 80px;
@@ -4166,7 +4199,7 @@ html[style*="1a1a2e"] .ach-hint-time {
   margin-top: 8px;
 }
 
-/* ============ 回放弹窗 ============ */
+/* ============ 鍥炴斁寮圭獥 ============ */
 .replay-overlay {
   position: fixed;
   inset: 0;
@@ -4243,7 +4276,7 @@ html[style*="1a1a2e"] .ach-hint-time {
   padding: 8px 14px;
 }
 
-/* === 统计页图表样式 === */
+/* === 缁熻椤靛浘琛ㄦ牱寮?=== */
 .chart-bar-row {
   display: flex;
   align-items: center;
@@ -4338,7 +4371,7 @@ html[style*="1a1a2e"] .ach-hint-time {
   border-radius: 2px;
 }
 
-/* === 首页难度分区进度 === */
+/* === 棣栭〉闅惧害鍒嗗尯杩涘害 === */
 .difficulty-progress {
   display: flex;
   flex-direction: column;
@@ -4380,7 +4413,7 @@ html[style*="1a1a2e"] .ach-hint-time {
   flex-shrink: 0;
 }
 
-/* ============ 每日签到卡片 ============ */
+/* ============ 姣忔棩绛惧埌鍗＄墖 ============ */
 .checkin-card {
   display: flex;
   align-items: center;
@@ -4468,7 +4501,7 @@ html[style*="1a1a2e"] .ach-hint-time {
   border-radius: 6px;
 }
 
-/* ============ 步数效率指示器 ============ */
+/* ============ 姝ユ暟鏁堢巼鎸囩ず鍣?============ */
 .efficiency-badge {
   font-size: 11px;
   padding: 2px 8px;
@@ -4497,13 +4530,13 @@ html[style*="1a1a2e"] .ach-hint-time {
   color: #c04040;
 }
 
-/* ============ 签到奖励弹窗 ============ */
+/* ============ 绛惧埌濂栧姳寮圭獥 ============ */
 .checkin-reward-card {
   text-align: center;
   padding: 24px;
 }
 
-/* ============ 签到日历 ============ */
+/* ============ 绛惧埌鏃ュ巻 ============ */
 .checkin-calendar {
   margin-top: 12px;
   background: rgba(0, 0, 0, 0.03);
@@ -4573,7 +4606,7 @@ html[style*="1a1a2e"] .ach-hint-time {
   color: #fff;
 }
 
-/* 用时趋势图 */
+/* 鐢ㄦ椂瓒嬪娍鍥?*/
 .trend-chart {
   display: flex;
   align-items: flex-end;
@@ -4605,7 +4638,7 @@ html[style*="1a1a2e"] .ach-hint-time {
   transition: height 0.3s ease;
 }
 
-/* 统计页30天访问热力图 */
+/* 缁熻椤?0澶╄闂儹鍔涘浘 */
 .stats-heatmap {
   margin-top: 8px;
 }
@@ -4652,7 +4685,7 @@ html[style*="1a1a2e"] .stats-heatmap-cell {
   line-height: 1;
 }
 
-/* 每日策略小贴士卡片 */
+/* 姣忔棩绛栫暐灏忚创澹崱鐗?*/
 .daily-tip-card {
   display: flex;
   align-items: flex-start;
@@ -4669,7 +4702,7 @@ html[style*="1a1a2e"] .stats-heatmap-cell {
   background: linear-gradient(135deg, rgba(78, 205, 196, 0.12), rgba(196, 89, 232, 0.12));
   border-color: rgba(78, 205, 196, 0.3);
 }
-/* 小贴士手动切换导航按钮 */
+/* 灏忚创澹墜鍔ㄥ垏鎹㈠鑸寜閽?*/
 .daily-tip-nav {
   display: flex;
   flex-direction: column;
@@ -4700,7 +4733,7 @@ html[style*="1a1a2e"] .stats-heatmap-cell {
   transform: scale(0.92);
 }
 
-/* 每日挑战醒目入口横幅 */
+/* 姣忔棩鎸戞垬閱掔洰鍏ュ彛妯箙 */
 .daily-challenge-banner {
   display: flex;
   align-items: center;
@@ -4776,7 +4809,7 @@ html[style*="1a1a2e"] .stats-heatmap-cell {
   transform: translateX(4px);
 }
 
-/* 周挑战入口卡片 */
+/* 鍛ㄦ寫鎴樺叆鍙ｅ崱鐗?*/
 .weekly-challenge-banner {
   display: flex;
   align-items: center;
@@ -4848,7 +4881,7 @@ html[style*="1a1a2e"] .stats-heatmap-cell {
   .weekly-banner-sub { font-size: 12px; }
 }
 
-/* 周末奖励横幅 */
+/* 鍛ㄦ湯濂栧姳妯箙 */
 .weekend-bonus-banner {
   display: flex;
   align-items: center;
@@ -4952,8 +4985,8 @@ html[style*="1a1a2e"] .stats-heatmap-cell {
   line-height: 1.5;
 }
 
-/* 智能推荐关卡卡片 */
-/* 今日推荐游玩智能卡片 — 根据时段和游玩历史推荐不同玩法 */
+/* 鏅鸿兘鎺ㄨ崘鍏冲崱鍗＄墖 */
+/* 浠婃棩鎺ㄨ崘娓哥帺鏅鸿兘鍗＄墖 鈥?鏍规嵁鏃舵鍜屾父鐜╁巻鍙叉帹鑽愪笉鍚岀帺娉?*/
 .smart-recommend-card {
   display: flex;
   align-items: center;
@@ -5056,7 +5089,7 @@ html[style*="1a1a2e"] .stats-heatmap-cell {
   flex-shrink: 0;
 }
 
-/* 每日推荐关卡卡片 */
+/* 姣忔棩鎺ㄨ崘鍏冲崱鍗＄墖 */
 .daily-recommend-card {
   display: flex;
   align-items: center;
@@ -5124,7 +5157,7 @@ html[style*="1a1a2e"] .stats-heatmap-cell {
   margin-bottom: 16px;
 }
 
-/* 关于页 FAQ 样式 */
+/* 鍏充簬椤?FAQ 鏍峰紡 */
 .faq-section {
   margin-top: 24px;
   padding-top: 16px;
@@ -5191,14 +5224,14 @@ html[style*="1a1a2e"] .stats-heatmap-cell {
 }
 
 .feature-section li::before {
-  content: '·';
+  content: '路';
   position: absolute;
   left: 4px;
   color: #999;
   font-weight: bold;
 }
 
-/* 更新日志样式־更新日志样式ʽ */
+/* 鏇存柊鏃ュ織鏍峰紡志鏇存柊鏃ュ織鏍峰紡式 */
 .changelog-content {
   max-height: 400px;
   overflow-y: auto;
@@ -5246,7 +5279,7 @@ html[style*="1a1a2e"] .stats-heatmap-cell {
   color: #667eea;
 }
 
-/* 回放查看样式طŲ鿴回放查看样式ʽ */
+/* 鍥炴斁鏌ョ湅鏍峰紡胤挪榭村洖鏀炬煡鐪嬫牱寮徥?*/
 .replay-info-text {
   font-size: 16px;
   color: #333;
@@ -5280,7 +5313,7 @@ html[style*="1a1a2e"] .stats-heatmap-cell {
   border-radius: 8px;
 }
 
-/* ============ ��Ϸ�ڰ������� ============ */
+/* ============ 锟斤拷戏锟节帮拷锟斤拷锟斤拷锟斤拷 ============ */
 .btn-help {
   background: linear-gradient(135deg, #e3f2fd, #bbdefb);
   color: #1565c0;
@@ -5427,8 +5460,8 @@ html[style*="1a1a2e"] .stats-heatmap-cell {
   to { opacity: 1; transform: scale(1) translateY(0); }
 }
 
-/* ������ť����Ϸ������������Ӧ */
-/* 设置页小贴士列表 */
+/* 锟斤拷锟斤拷锟斤拷钮锟斤拷锟斤拷戏锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷应 */
+/* 璁剧疆椤靛皬璐村＋鍒楄〃 */
 .tips-list {
   display: flex;
   flex-direction: column;
@@ -5481,7 +5514,7 @@ html[style*="1a1a2e"] .stats-heatmap-cell {
   line-height: 1.5;
 }
 
-/* 浮动快捷导航按钮 */
+/* 娴姩蹇嵎瀵艰埅鎸夐挳 */
 .fab-nav {
   position: fixed;
   bottom: 20px;
@@ -5536,7 +5569,7 @@ html[style*="1a1a2e"] .stats-heatmap-cell {
   }
 }
 
-/* 关卡完成波纹动画 */
+/* 鍏冲崱瀹屾垚娉㈢汗鍔ㄧ敾 */
 @keyframes tube-settle {
   0% { transform: scale(1); }
   50% { transform: scale(1.08); box-shadow: 0 0 16px rgba(78, 205, 196, 0.6); }
@@ -5560,7 +5593,7 @@ html[style*="1a1a2e"] .stats-heatmap-cell {
   animation: ripple-effect 0.8s ease-out forwards;
 }
 
-/* 步数脉冲增强 */
+/* 姝ユ暟鑴夊啿澧炲己 */
 @keyframes moves-pulse-enhanced {
   0% { transform: scale(1); color: #333; }
   30% { transform: scale(1.15); color: #4ECDC4; }
@@ -5594,7 +5627,7 @@ html[style*="1a1a2e"] .stats-heatmap-cell {
   }
 }
 
-/* ============ 按钮补充样式 ============ */
+/* ============ 鎸夐挳琛ュ厖鏍峰紡 ============ */
 .btn-small {
   padding: 6px 12px;
   font-size: 12px;
@@ -5611,7 +5644,7 @@ html[style*="1a1a2e"] .stats-heatmap-cell {
   box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
 }
 
-/* ============ 关卡编辑器样式 ============ */
+/* ============ 鍏冲崱缂栬緫鍣ㄦ牱寮?============ */
 .editor-actions {
   display: flex;
   gap: 10px;
@@ -5676,7 +5709,7 @@ html[style*="1a1a2e"] .stats-heatmap-cell {
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
 }
 
-/* 颜色选择器 */
+/* 棰滆壊閫夋嫨鍣?*/
 .color-picker {
   display: flex;
   gap: 8px;
@@ -5703,7 +5736,7 @@ html[style*="1a1a2e"] .stats-heatmap-cell {
   transform: scale(1.1);
 }
 
-/* 容量选择器 */
+/* 瀹归噺閫夋嫨鍣?*/
 .capacity-picker {
   display: flex;
   gap: 8px;
@@ -5732,7 +5765,7 @@ html[style*="1a1a2e"] .stats-heatmap-cell {
   box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
 }
 
-/* 编辑器试管区域 */
+/* 缂栬緫鍣ㄨ瘯绠″尯鍩?*/
 .editor-tubes {
   display: flex;
   flex-wrap: wrap;
@@ -5788,7 +5821,7 @@ html[style*="1a1a2e"] .stats-heatmap-cell {
   border-color: rgba(255, 255, 255, 0.7);
 }
 
-/* 自定关卡网格 */
+/* 鑷畾鍏冲崱缃戞牸 */
 .custom-levels-grid {
   display: flex;
   flex-direction: column;
@@ -5850,7 +5883,7 @@ html[style*="1a1a2e"] .stats-heatmap-cell {
   min-width: 80px;
 }
 
-/* 空状态 */
+/* 绌虹姸鎬?*/
 .empty-state {
   text-align: center;
   padding: 40px 20px;
@@ -5874,7 +5907,7 @@ html[style*="1a1a2e"] .stats-heatmap-cell {
   opacity: 0.7;
 }
 
-/* 验证消息 */
+/* 楠岃瘉娑堟伅 */
 .validation-msg {
   padding: 10px 14px;
   background: rgba(255, 107, 107, 0.15);
@@ -5886,7 +5919,7 @@ html[style*="1a1a2e"] .stats-heatmap-cell {
   font-weight: 500;
 }
 
-/* 编辑器提示 */
+/* 缂栬緫鍣ㄦ彁绀?*/
 .editor-tips {
   background: rgba(255, 255, 255, 0.1);
   border-radius: var(--radius);
@@ -5903,7 +5936,7 @@ html[style*="1a1a2e"] .stats-heatmap-cell {
   line-height: 1.6;
 }
 
-/* ============ 首页自定关卡快速入口 ============ */
+/* ============ 棣栭〉鑷畾鍏冲崱蹇€熷叆鍙?============ */
 .custom-levels-section {
   width: 100%;
   background: var(--card-bg);
@@ -5976,7 +6009,7 @@ html[style*="1a1a2e"] .stats-heatmap-cell {
   flex-shrink: 0;
 }
 
-/* 编辑器移动端适配 */
+/* 缂栬緫鍣ㄧЩ鍔ㄧ閫傞厤 */
 @media (max-width: 375px) {
   .editor-actions .btn {
     min-width: 100%;
@@ -5996,7 +6029,7 @@ html[style*="1a1a2e"] .stats-heatmap-cell {
   }
 }
 
-/* ====== 已归位试管计数徽章 ====== */
+/* ====== 宸插綊浣嶈瘯绠¤鏁板窘绔?====== */
 .sorted-badge {
   background: rgba(78, 205, 196, 0.15);
   color: #4ECDC4;
@@ -6020,9 +6053,9 @@ html[style*="1a1a2e"] .stats-heatmap-cell {
   100% { transform: scale(1); }
 }
 
-/* ====== 移动端试管网格优化（多管场景） ====== */
+/* ====== 绉诲姩绔瘯绠＄綉鏍间紭鍖栵紙澶氱鍦烘櫙锛?====== */
 @media (max-width: 768px) {
-  /* 当试管数量较多时，允许横向滚动而非过度换行 */
+  /* 褰撹瘯绠℃暟閲忚緝澶氭椂锛屽厑璁告í鍚戞粴鍔ㄨ€岄潪杩囧害鎹㈣ */
   .tubes-grid {
     overflow-x: auto;
     overflow-y: hidden;
@@ -6033,7 +6066,7 @@ html[style*="1a1a2e"] .stats-heatmap-cell {
     padding: 16px 8px;
     max-width: 100vw;
   }
-  /* 7管以下保持居中换行 */
+  /* 7绠′互涓嬩繚鎸佸眳涓崲琛?*/
   .tubes-grid:not(.tubes-grid-many) {
     flex-wrap: wrap;
     overflow-x: visible;
@@ -6045,14 +6078,14 @@ html[style*="1a1a2e"] .stats-heatmap-cell {
     gap: 4px;
     padding: 12px 4px;
   }
-  /* 小屏幕下进一步缩小试管尺寸以适应多管 */
+  /* 灏忓睆骞曚笅杩涗竴姝ョ缉灏忚瘯绠″昂瀵镐互閫傚簲澶氱 */
   .tube {
     width: 30px;
     height: 95px;
   }
 }
 
-/* ====== 首页可折叠区域 ====== */
+/* ====== 棣栭〉鍙姌鍙犲尯鍩?====== */
 .collapsible-section {
   margin: 8px 0;
 }
@@ -6111,7 +6144,7 @@ html[style*="1a1a2e"] .stats-heatmap-cell {
   }
 }
 
-/* ====== 键盘焦点可见性增强 ====== */
+/* ====== 閿洏鐒︾偣鍙鎬у寮?====== */
 .btn:focus-visible,
 .level-btn:focus-visible,
 .checkin-btn:focus-visible,
@@ -6128,16 +6161,16 @@ html[style*="1a1a2e"] .stats-heatmap-cell {
   border-radius: 8px;
 }
 
-/* ============ 全局视觉增强 ============ */
+/* ============ 鍏ㄥ眬瑙嗚澧炲己 ============ */
 
-/* 平滑滚动 + 移动端字体缩放修正 */
+/* 骞虫粦婊氬姩 + 绉诲姩绔瓧浣撶缉鏀句慨姝?*/
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
 
-/* 首页头部装饰光晕，增加视觉层次 */
+/* 棣栭〉澶撮儴瑁呴グ鍏夋檿锛屽鍔犺瑙夊眰娆?*/
 .home-header {
   position: relative;
 }
@@ -6155,7 +6188,7 @@ html {
   z-index: -1;
 }
 
-/* 模式按钮悬停增强 */
+/* 妯″紡鎸夐挳鎮仠澧炲己 */
 .mode-grid-btn {
   transition: transform 0.2s ease, box-shadow 0.3s ease, filter 0.2s ease;
 }
@@ -6165,15 +6198,15 @@ html {
   filter: brightness(1.1);
 }
 
-/* ============ 工具类：替换内联样式 ============ */
+/* ============ 宸ュ叿绫伙細鏇挎崲鍐呰仈鏍峰紡 ============ */
 
-/* 页头占位符（标题居中布局用） */
+/* 椤靛ご鍗犱綅绗︼紙鏍囬灞呬腑甯冨眬鐢級 */
 .header-spacer {
   width: 40px;
   flex-shrink: 0;
 }
 
-/* 弹窗正文文字 */
+/* 寮圭獥姝ｆ枃鏂囧瓧 */
 .modal-body-text {
   text-align: center;
   color: #666;
@@ -6195,7 +6228,7 @@ html {
   line-height: 1.6;
 }
 
-/* 弹窗操作按钮容器 */
+/* 寮圭獥鎿嶄綔鎸夐挳瀹瑰櫒 */
 .modal-actions {
   display: flex;
   gap: 12px;
@@ -6208,7 +6241,7 @@ html {
   flex-direction: column;
 }
 
-/* 弹窗辅助说明文字 */
+/* 寮圭獥杈呭姪璇存槑鏂囧瓧 */
 .modal-hint-text {
   text-align: center;
   color: #999;
@@ -6222,24 +6255,24 @@ html {
   font-size: 12px;
 }
 
-/* 统计页辅助文字 */
+/* 缁熻椤佃緟鍔╂枃瀛?*/
 .stats-note {
   font-size: 12px;
   color: #999;
 }
 
-/* 统计页小标题 */
+/* 缁熻椤靛皬鏍囬 */
 .stats-subtitle {
   margin-top: 12px;
   color: var(--primary);
 }
 
-/* 连胜数值颜色（火焰色） */
+/* 杩炶儨鏁板€奸鑹诧紙鐏劙鑹诧級 */
 .stat-value-streak-hot {
   color: #FF6B6B;
 }
 
-/* 页面加载占位组件 */
+/* 椤甸潰鍔犺浇鍗犱綅缁勪欢 */
 .page-loading-container {
   display: flex;
   align-items: center;
@@ -6254,7 +6287,7 @@ html {
 .page-loading-emoji {
   font-size: 48px;
   margin-bottom: 12px;
-  /* 加载 emoji 缓慢呼吸效果 */
+  /* 鍔犺浇 emoji 缂撴參鍛煎惛鏁堟灉 */
   animation: loading-breathe 1.6s ease-in-out infinite;
 }
 
@@ -6268,7 +6301,7 @@ html {
   50% { transform: scale(1.08); opacity: 1; }
 }
 
-/* ============ 横屏适配 ============ */
+/* ============ 妯睆閫傞厤 ============ */
 @media (orientation: landscape) and (max-height: 500px) {
   .home-header {
     padding: 16px 20px 8px;
@@ -6297,7 +6330,7 @@ html {
   }
 }
 
-/* ============ 超小屏幕适配 (≤340px) ============ */
+/* ============ 瓒呭皬灞忓箷閫傞厤 (鈮?40px) ============ */
 @media (max-width: 340px) {
   .home-header {
     padding: 20px 12px 8px;
@@ -6353,7 +6386,7 @@ html {
   }
 }
 
-/* ============ 游戏信息徽章移动端优化 ============ */
+/* ============ 娓告垙淇℃伅寰界珷绉诲姩绔紭鍖?============ */
 @media (max-width: 480px) {
   .game-info {
     gap: 6px;
@@ -6366,7 +6399,7 @@ html {
   }
 }
 
-/* ============ 卡片悬停光效增强 ============ */
+/* ============ 鍗＄墖鎮仠鍏夋晥澧炲己 ============ */
 .recent-play-card,
 .recommend-card,
 .daily-tip-card {
@@ -6392,7 +6425,7 @@ html {
   left: 100%;
 }
 
-/* ============ 帮助弹窗可视化图示 ============ */
+/* ============ 甯姪寮圭獥鍙鍖栧浘绀?============ */
 .help-visual-steps {
   display: flex;
   justify-content: space-around;
@@ -6435,7 +6468,7 @@ html {
   margin: 0;
 }
 
-/* 移动端帮助图示响应式适配 */
+/* 绉诲姩绔府鍔╁浘绀哄搷搴斿紡閫傞厤 */
 @media (max-width: 480px) {
   .help-visual-steps {
     flex-direction: column;
@@ -6458,7 +6491,7 @@ html {
   }
 }
 
-/* 小屏手机帮助弹窗优化 */
+/* 灏忓睆鎵嬫満甯姪寮圭獥浼樺寲 */
 @media (max-width: 375px) {
   .help-modal-card {
     max-width: 95vw;
@@ -6483,7 +6516,7 @@ html {
   margin-top: 8px;
 }
 
-/* ============ 星星弹出动画 ============ */
+/* ============ 鏄熸槦寮瑰嚭鍔ㄧ敾 ============ */
 .star-pop {
   animation: star-pop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
 }
@@ -6506,7 +6539,7 @@ html {
   }
 }
 
-/* ============ 个人最佳步数徽章 ============ */
+/* ============ 涓汉鏈€浣虫鏁板窘绔?============ */
 .best-score-badge {
   background: linear-gradient(135deg, #FFD700, #FFA500);
   color: #fff;
@@ -6518,7 +6551,7 @@ html {
   box-shadow: 0 2px 6px rgba(255, 165, 0, 0.3);
 }
 
-/* ============ 色彩记忆配对游戏 ============ */
+/* ============ 鑹插僵璁板繂閰嶅娓告垙 ============ */
 .color-pair-match {
   background: var(--card-bg, #fff);
   border-radius: 12px;
@@ -6648,7 +6681,7 @@ html {
   }
 }
 
-/* 配对游戏低分回顾 */
+/* 閰嶅娓告垙浣庡垎鍥為【 */
 .cpm-lowscore-btn {
   display: block;
   margin: 8px auto 4px;
@@ -6717,7 +6750,7 @@ html {
   transition: width 0.3s;
 }
 
-/* 配对难度选择器 */
+/* 閰嶅闅惧害閫夋嫨鍣?*/
 .cpm-difficulty-select {
   display: flex;
   gap: 8px;
@@ -6747,7 +6780,7 @@ html {
   opacity: 1;
 }
 
-/* 自定义难度滑块 */
+/* 鑷畾涔夐毦搴︽粦鍧?*/
 .cpm-custom-pairs {
   margin: 8px 0 4px;
   padding: 12px 16px;
@@ -6840,7 +6873,7 @@ html {
   50% { opacity: 0.5; }
 }
 
-/* ============ 色彩序列记忆游戏 ============ */
+/* ============ 鑹插僵搴忓垪璁板繂娓告垙 ============ */
 .color-sequence-game {
   background: var(--card-bg, #fff);
   border-radius: 12px;
@@ -6857,7 +6890,7 @@ html {
   line-height: 1.5;
   opacity: 0.8;
 }
-/* 颜色数量选择器 */
+/* 棰滆壊鏁伴噺閫夋嫨鍣?*/
 .csg-color-count-select {
   display: flex;
   align-items: center;
@@ -6870,7 +6903,7 @@ html {
   font-size: 12px;
   color: var(--text-light, #888);
 }
-/* 序列记忆游戏颜色按钮容器 */
+/* 搴忓垪璁板繂娓告垙棰滆壊鎸夐挳瀹瑰櫒 */
 .csg-colors {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -6901,7 +6934,7 @@ html {
   transform: scale(1.05);
   box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
 }
-/* 序列记忆进度恢复按钮和提示 */
+/* 搴忓垪璁板繂杩涘害鎭㈠鎸夐挳鍜屾彁绀?*/
 .csg-start-buttons {
   display: flex;
   flex-direction: column;
@@ -6995,7 +7028,7 @@ html {
   text-align: center;
   margin-top: 4px;
 }
-/* 里程碑庆祝提示 */
+/* 閲岀▼纰戝簡绁濇彁绀?*/
 .csg-milestone {
   position: relative;
   text-align: center;
@@ -7018,7 +7051,7 @@ html {
   }
 }
 
-/* ============ 色彩反应力测试 ============ */
+/* ============ 鑹插僵鍙嶅簲鍔涙祴璇?============ */
 .color-reaction-test {
   background: var(--card-bg, #fff);
   border-radius: 12px;
@@ -7144,7 +7177,7 @@ html {
   text-align: center;
   margin-top: 4px;
 }
-/* 反应测试最佳分数样式 */
+/* 鍙嶅簲娴嬭瘯鏈€浣冲垎鏁版牱寮?*/
 .crt-new-record {
   font-size: 15px;
   color: #f59e0b;
@@ -7164,7 +7197,7 @@ html {
   text-align: center;
   margin-top: 8px;
 }
-/* 反应力测试错题本按钮 */
+/* 鍙嶅簲鍔涙祴璇曢敊棰樻湰鎸夐挳 */
 .crt-wrongbook-btn {
   display: block;
   margin: 8px auto 4px;
@@ -7181,7 +7214,7 @@ html {
   background: var(--primary, #667eea);
   color: #fff;
 }
-/* 反应力测试错题本条目 */
+/* 鍙嶅簲鍔涙祴璇曢敊棰樻湰鏉＄洰 */
 .crt-wrongbook-item {
   padding: 8px 12px;
   border-bottom: 1px solid var(--border, #eee);
@@ -7212,7 +7245,7 @@ html {
   position: relative;
 }
 .crt-wrongbook-swatch.wrong::after {
-  content: '✕';
+  content: '✗';
   position: absolute;
   top: 50%;
   left: 50%;
@@ -7242,7 +7275,7 @@ html {
   }
 }
 
-/* ============ 交互式颜色混合器 ============ */
+/* ============ 浜や簰寮忛鑹叉贩鍚堝櫒 ============ */
 .color-mixer-container {
   background: var(--card-bg, #fff);
   border-radius: 12px;
@@ -7402,7 +7435,7 @@ html {
   color: #fff;
   opacity: 1;
 }
-/* 混合器操作按钮组 */
+/* 娣峰悎鍣ㄦ搷浣滄寜閽粍 */
 .mixer-action-buttons {
   display: flex;
   gap: 8px;
@@ -7441,7 +7474,7 @@ html {
   line-height: 1.5;
 }
 
-/* ============ 统计分享 ============ */
+/* ============ 缁熻鍒嗕韩 ============ */
 .stats-share-bar {
   text-align: center;
   margin-bottom: 16px;
@@ -7455,7 +7488,7 @@ html {
   font-size: 14px;
 }
 
-/* ============ 色彩辨识测试 ============ */
+/* ============ 鑹插僵杈ㄨ瘑娴嬭瘯 ============ */
 .color-perception-test {
   background: var(--card-bg, #fff);
   border-radius: 12px;
@@ -7577,7 +7610,7 @@ html {
   font-weight: 600;
   color: #FFD700;
 }
-/* 新纪录提示 */
+/* 鏂扮邯褰曟彁绀?*/
 .cpt-new-record {
   font-size: 18px;
   font-weight: 700;
@@ -7585,7 +7618,7 @@ html {
   margin: 8px 0;
   animation: bounce-in 0.5s ease;
 }
-/* 历史最佳分数展示 */
+/* 鍘嗗彶鏈€浣冲垎鏁板睍绀?*/
 .cpt-best-score {
   font-size: 14px;
   font-weight: 600;
@@ -7593,7 +7626,7 @@ html {
   margin: 4px 0;
 }
 
-/* ============ 每日色彩知识卡片 ============ */
+/* ============ 姣忔棩鑹插僵鐭ヨ瘑鍗＄墖 ============ */
 .daily-color-knowledge-card {
   background: linear-gradient(135deg, #f0f4ff 0%, #fdf0ff 100%);
   border-radius: 12px;
@@ -7647,7 +7680,7 @@ html {
   flex-shrink: 0;
 }
 
-/* 每日色彩问答入口卡片 */
+/* 姣忔棩鑹插僵闂瓟鍏ュ彛鍗＄墖 */
 .daily-quiz-entry-card {
   background: linear-gradient(135deg, #f0fff4 0%, #fffbeb 100%);
   border-radius: 12px;
@@ -7667,7 +7700,7 @@ html {
 .daily-quiz-entry-card:active {
   transform: translateY(0);
 }
-/* 未答题时的脉冲提醒动画 */
+/* 鏈瓟棰樻椂鐨勮剦鍐叉彁閱掑姩鐢?*/
 .daily-quiz-entry-card.quiz-unanswered {
   animation: quiz-pulse 2s ease-in-out infinite;
   border-left-color: #f59e0b;
@@ -7711,7 +7744,7 @@ html {
   align-items: center;
   gap: 6px;
 }
-/* 连续答题天数徽章 */
+/* 杩炵画绛旈澶╂暟寰界珷 */
 .quiz-streak-badge {
   display: inline-flex;
   align-items: center;
@@ -7755,11 +7788,11 @@ html {
 }
 
 /* ============================================================ */
-/* ============ 2026-07-13 样式优化增强（第二批） ============ */
+/* ============ 2026-07-13 鏍峰紡浼樺寲澧炲己锛堢浜屾壒锛?============ */
 /* ============================================================ */
-/* 本区块为追加的视觉与交互增强，不修改已有功能逻辑，仅提升表现力 */
+/* 鏈尯鍧椾负杩藉姞鐨勮瑙変笌浜や簰澧炲己锛屼笉淇敼宸叉湁鍔熻兘閫昏緫锛屼粎鎻愬崌琛ㄧ幇鍔?*/
 
-/* 1. 移动端按钮统一触摸反馈：按下时缩放 + 轻微透明度变化 */
+/* 1. 绉诲姩绔寜閽粺涓€瑙︽懜鍙嶉锛氭寜涓嬫椂缂╂斁 + 杞诲井閫忔槑搴﹀彉鍖?*/
 @media (hover: none) and (pointer: coarse) {
   .btn:active {
     transform: scale(0.96);
@@ -7779,7 +7812,7 @@ html {
   }
 }
 
-/* 2. 加载占位组件：呼吸光晕环绕，比纯缩放更有"等待感" */
+/* 2. 鍔犺浇鍗犱綅缁勪欢锛氬懠鍚稿厜鏅曠幆缁曪紝姣旂函缂╂斁鏇存湁"绛夊緟鎰? */
 .page-loading-emoji {
   position: relative;
 }
@@ -7798,7 +7831,7 @@ html {
   50% { transform: scale(1.15); opacity: 0.35; }
 }
 
-/* 3. 胜利弹窗：内容元素交错入场，增强庆祝层次感 */
+/* 3. 鑳滃埄寮圭獥锛氬唴瀹瑰厓绱犱氦閿欏叆鍦猴紝澧炲己搴嗙灞傛鎰?*/
 .win-card .star-rating .star {
   animation-fill-mode: both;
 }
@@ -7823,7 +7856,7 @@ html {
   100% { opacity: 1; transform: translateY(0); }
 }
 
-/* 4. 成就卡片：悬停时强化已解锁状态的光晕 */
+/* 4. 鎴愬氨鍗＄墖锛氭偓鍋滄椂寮哄寲宸茶В閿佺姸鎬佺殑鍏夋檿 */
 .achievement-card.unlocked {
   transition: transform 0.2s ease, box-shadow 0.3s ease;
 }
@@ -7831,7 +7864,7 @@ html {
   box-shadow: var(--shadow), 0 0 0 1px rgba(78, 205, 196, 0.35), 0 0 16px rgba(78, 205, 196, 0.15);
 }
 
-/* 5. 关卡按钮：已完成关卡悬停时星标轻微浮动 */
+/* 5. 鍏冲崱鎸夐挳锛氬凡瀹屾垚鍏冲崱鎮仠鏃舵槦鏍囪交寰诞鍔?*/
 .level-btn.completed {
   position: relative;
 }
@@ -7839,7 +7872,7 @@ html {
   filter: brightness(1.05);
 }
 
-/* 6. 进度条填充：增加流光扫过动效，让进度变化更醒目 */
+/* 6. 杩涘害鏉″～鍏咃細澧炲姞娴佸厜鎵繃鍔ㄦ晥锛岃杩涘害鍙樺寲鏇撮啋鐩?*/
 .progress-bar-fill {
   position: relative;
   overflow: hidden;
@@ -7859,14 +7892,14 @@ html {
   100% { left: 100%; }
 }
 
-/* 7. 每日挑战/周挑战横幅：箭头悬停时更明显的位移 */
+/* 7. 姣忔棩鎸戞垬/鍛ㄦ寫鎴樻í骞咃細绠ご鎮仠鏃舵洿鏄庢樉鐨勪綅绉?*/
 .daily-challenge-banner:hover .daily-banner-icon,
 .weekly-challenge-banner:hover .weekly-banner-icon {
   transform: scale(1.1);
   transition: transform 0.3s ease;
 }
 
-/* 8. FAB 导航按钮：悬停时增加轻微旋转，提升趣味性 */
+/* 8. FAB 瀵艰埅鎸夐挳锛氭偓鍋滄椂澧炲姞杞诲井鏃嬭浆锛屾彁鍗囪叮鍛虫€?*/
 .fab-nav-btn {
   transition: transform 0.2s ease, box-shadow 0.2s ease, rotate 0.3s ease;
 }
@@ -7874,7 +7907,7 @@ html {
   rotate: -8deg;
 }
 
-/* 9. 模态弹窗：内容区滚动条美化（webkit 浏览器） */
+/* 9. 妯℃€佸脊绐楋細鍐呭鍖烘粴鍔ㄦ潯缇庡寲锛坵ebkit 娴忚鍣級 */
 .tutorial-card .changelog-content::-webkit-scrollbar,
 .help-modal-body::-webkit-scrollbar,
 .tips-list::-webkit-scrollbar {
@@ -7892,7 +7925,7 @@ html {
   background: rgba(102, 126, 234, 0.5);
 }
 
-/* 10. 颜色选择器色块：选中时的脉冲确认动效 */
+/* 10. 棰滆壊閫夋嫨鍣ㄨ壊鍧楋細閫変腑鏃剁殑鑴夊啿纭鍔ㄦ晥 */
 .color-swatch.color-selected {
   animation: swatch-selected-pulse 0.4s ease-out;
 }
@@ -7902,7 +7935,7 @@ html {
   100% { transform: scale(1.1); }
 }
 
-/* 11. 无障碍：减少动画偏好下禁用装饰性动画 */
+/* 11. 鏃犻殰纰嶏細鍑忓皯鍔ㄧ敾鍋忓ソ涓嬬鐢ㄨ楗版€у姩鐢?*/
 @media (prefers-reduced-motion: reduce) {
   .progress-bar-fill::after,
   .page-loading-emoji::after,
@@ -7924,7 +7957,7 @@ html {
   }
 }
 
-/* 12. 大屏桌面：试管网格居中限制最大宽度，避免过度拉伸 */
+/* 12. 澶у睆妗岄潰锛氳瘯绠＄綉鏍煎眳涓檺鍒舵渶澶у搴︼紝閬垮厤杩囧害鎷変几 */
 @media (min-width: 1025px) {
   .tubes-grid {
     max-width: 720px;
@@ -7932,7 +7965,7 @@ html {
   }
 }
 
-/* 13. 死局预警：增加持续的边框脉冲，比一次性动画更能引起注意 */
+/* 13. 姝诲眬棰勮锛氬鍔犳寔缁殑杈规鑴夊啿锛屾瘮涓€娆℃€у姩鐢绘洿鑳藉紩璧锋敞鎰?*/
 .deadlock-warning-tip {
   animation: deadlock-warning-pulse 0.6s ease, deadlock-border-pulse 1.5s ease-in-out infinite 0.6s;
 }
@@ -7941,7 +7974,7 @@ html {
   50% { box-shadow: 0 2px 16px rgba(255, 193, 7, 0.45); }
 }
 
-/* ============ 每日色彩问答 ============ */
+/* ============ 姣忔棩鑹插僵闂瓟 ============ */
 .daily-quiz-container {
   background: var(--card-bg, #fff);
   border-radius: 12px;
@@ -7950,7 +7983,7 @@ html {
   border: 1px solid var(--tube-border, rgba(0,0,0,0.1));
 }
 
-/* 暗色主题下百科页迷你游戏增强 */
+/* 鏆楄壊涓婚涓嬬櫨绉戦〉杩蜂綘娓告垙澧炲己 */
 @media (prefers-color-scheme: dark) {
   .cpm-card {
     background: rgba(255, 255, 255, 0.12) !important;
@@ -8002,7 +8035,7 @@ html {
   }
 }
 
-/* 当通过 JS 设置暗色主题时也应用增强（主题不依赖 prefers-color-scheme） */
+/* 褰撻€氳繃 JS 璁剧疆鏆楄壊涓婚鏃朵篃搴旂敤澧炲己锛堜富棰樹笉渚濊禆 prefers-color-scheme锛?*/
 :root[style*="dark"] .cpm-card,
 html[style*="1a1a2e"] .cpm-card {
   background: rgba(255, 255, 255, 0.12) !important;
@@ -8017,12 +8050,12 @@ html[style*="1a1a2e"] .color-theory-card,
 html[style*="1a1a2e"] .color-trivia-item {
   background: rgba(255, 255, 255, 0.06);
 }
-/* 暗色主题下最近浏览和卡片展开适配 */
+/* 鏆楄壊涓婚涓嬫渶杩戞祻瑙堝拰鍗＄墖灞曞紑閫傞厤 */
 html[style*="1a1a2e"] .encyclopedia-recent-colors {
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
-/* 暗色主题下小贴士导航按钮适配 */
+/* 鏆楄壊涓婚涓嬪皬璐村＋瀵艰埅鎸夐挳閫傞厤 */
 html[style*="1a1a2e"] .daily-tip-nav-btn {
   background: rgba(255, 255, 255, 0.08);
   border-color: rgba(255, 255, 255, 0.15);
@@ -8033,14 +8066,14 @@ html[style*="1a1a2e"] .daily-tip-nav-btn:hover {
   color: #fff;
   border-color: var(--primary, #667eea);
 }
-/* 暗色主题下辨识测试新纪录和最佳分数适配 */
+/* 鏆楄壊涓婚涓嬭鲸璇嗘祴璇曟柊绾綍鍜屾渶浣冲垎鏁伴€傞厤 */
 html[style*="1a1a2e"] .cpt-new-record {
   color: #FFB084;
 }
 html[style*="1a1a2e"] .cpt-best-score {
   color: rgba(255, 255, 255, 0.5);
 }
-/* 暗色主题下问答趋势图适配 */
+/* 鏆楄壊涓婚涓嬮棶绛旇秼鍔垮浘閫傞厤 */
 html[style*="1a1a2e"] .quiz-trend-chart,
 html[style*="1a1a2e"] .quiz-difficulty-stats {
   background: rgba(255, 255, 255, 0.04);
@@ -8048,12 +8081,12 @@ html[style*="1a1a2e"] .quiz-difficulty-stats {
 html[style*="1a1a2e"] .quiz-trend-date {
   color: rgba(255, 255, 255, 0.4);
 }
-/* 暗色主题下序列记忆里程碑适配 */
+/* 鏆楄壊涓婚涓嬪簭鍒楄蹇嗛噷绋嬬閫傞厤 */
 html[style*="1a1a2e"] .csg-milestone-text {
   color: #FFB084;
   text-shadow: 0 0 10px rgba(255, 176, 132, 0.3);
 }
-/* 暗色主题下音效切换按钮适配 */
+/* 鏆楄壊涓婚涓嬮煶鏁堝垏鎹㈡寜閽€傞厤 */
 html[style*="1a1a2e"] .sound-toggle-btn {
   background: rgba(255, 255, 255, 0.1);
 }
@@ -8111,8 +8144,8 @@ html[style*="1a1a2e"] .color-encyclopedia-tip {
   50% { box-shadow: 0 0 12px rgba(255, 87, 34, 0.5); }
 }
 
-/* 色彩知识专题卡片 */
-/* 季节/节日动态推荐横幅 */
+/* 鑹插僵鐭ヨ瘑涓撻鍗＄墖 */
+/* 瀛ｈ妭/鑺傛棩鍔ㄦ€佹帹鑽愭í骞?*/
 .seasonal-topic-banner {
   display: flex;
   align-items: center;
@@ -8173,7 +8206,7 @@ html[style*="1a1a2e"] .color-encyclopedia-tip {
 [data-theme="dark"] .seasonal-topic-title { color: #fcd34d; }
 [data-theme="dark"] .seasonal-topic-desc { color: #fbbf24; }
 
-/* 色彩专题筛选器 */
+/* 鑹插僵涓撻绛涢€夊櫒 */
 .color-topics-filter {
   display: flex;
   gap: 6px;
@@ -8357,7 +8390,7 @@ html[style*="1a1a2e"] .daily-quiz-difficulty-hard {
 .dq-explanation-icon {
   flex-shrink: 0;
 }
-/* 每日问答难度分级统计 */
+/* 姣忔棩闂瓟闅惧害鍒嗙骇缁熻 */
 .quiz-difficulty-stats {
   margin-top: 10px;
   padding: 10px 12px;
@@ -8394,7 +8427,7 @@ html[style*="1a1a2e"] .daily-quiz-difficulty-hard {
   background: rgba(239, 68, 68, 0.12);
   color: #b91c1c;
 }
-/* 每日问答7天趋势图 */
+/* 姣忔棩闂瓟7澶╄秼鍔垮浘 */
 .quiz-trend-chart {
   margin-top: 10px;
   padding: 10px 12px;
@@ -8445,7 +8478,7 @@ html[style*="1a1a2e"] .daily-quiz-difficulty-hard {
   white-space: nowrap;
 }
 
-/* 每日问答30天答题日历热力图 */
+/* 姣忔棩闂瓟30澶╃瓟棰樻棩鍘嗙儹鍔涘浘 */
 .quiz-calendar-heatmap {
   margin-top: 12px;
   padding: 12px;
@@ -8495,7 +8528,7 @@ html[style*="1a1a2e"] .daily-quiz-difficulty-hard {
   height: 10px;
   border-radius: 2px;
 }
-/* 移动端热力图适配 */
+/* 绉诲姩绔儹鍔涘浘閫傞厤 */
 @media (max-width: 768px) {
   .quiz-calendar-grid {
     grid-template-columns: repeat(10, 1fr);
@@ -8505,7 +8538,7 @@ html[style*="1a1a2e"] .daily-quiz-difficulty-hard {
     min-width: 16px;
   }
 }
-/* 暗色主题适配 */
+/* 鏆楄壊涓婚閫傞厤 */
 html[style*="1a1a2e"] .quiz-calendar-heatmap {
   background: rgba(255, 255, 255, 0.06);
 }
@@ -8547,7 +8580,7 @@ html[style*="1a1a2e"] .quiz-calendar-legend {
   transform: translateY(0);
 }
 
-/* 错题本入口按钮 */
+/* 閿欓鏈叆鍙ｆ寜閽?*/
 .daily-quiz-wrongbook-btn {
   display: block;
   width: 100%;
@@ -8570,7 +8603,7 @@ html[style*="1a1a2e"] .quiz-calendar-legend {
   transform: translateY(0);
 }
 
-/* 错题本弹窗 */
+/* 閿欓鏈脊绐?*/
 .quiz-wrongbook-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -8689,7 +8722,7 @@ html[style*="1a1a2e"] .quiz-calendar-legend {
   border-radius: 6px;
   line-height: 1.5;
 }
-/* 错题本暗色主题适配 */
+/* 閿欓鏈殫鑹蹭富棰橀€傞厤 */
 [data-theme="dark"] .quiz-wrongbook-modal { background: #1e1e1e; }
 [data-theme="dark"] .quiz-wrongbook-header { border-color: #333; }
 [data-theme="dark"] .quiz-wrongbook-header h3 { color: #eee; }
@@ -8703,7 +8736,7 @@ html[style*="1a1a2e"] .quiz-calendar-legend {
 [data-theme="dark"] .quiz-wrongbook-explanation { background: #1e3a5f; color: #93c5fd; }
 [data-theme="dark"] .daily-quiz-wrongbook-btn { background: linear-gradient(135deg, #422006, #78350f); color: #fcd34d; border-color: #92400e; }
 
-/* 色彩辨识测试错题本专属样式 */
+/* 鑹插僵杈ㄨ瘑娴嬭瘯閿欓鏈笓灞炴牱寮?*/
 .cpt-wrongbook-btn {
   display: block;
   margin: 12px auto 0;
@@ -8788,7 +8821,7 @@ html[style*="1a1a2e"] .quiz-calendar-legend {
   color: #ef4444;
   border-color: #fca5a5;
 }
-/* 暗色主题适配 */
+/* 鏆楄壊涓婚閫傞厤 */
 [data-theme="dark"] .cpt-wrongbook-btn { background: #374151; color: #9ca3af; border-color: #4b5563; }
 [data-theme="dark"] .cpt-wrongbook-btn:hover { background: #4b5563; color: #d1d5db; }
 [data-theme="dark"] .perception-wrong-item { border-color: #333; }
@@ -8806,7 +8839,7 @@ html[style*="1a1a2e"] .quiz-calendar-legend {
   margin-top: 6px;
 }
 
-/* 百科搜索框 */
+/* 鐧剧鎼滅储妗?*/
 .encyclopedia-search-bar {
   display: flex;
   align-items: center;
@@ -8855,7 +8888,7 @@ html[style*="1a1a2e"] .quiz-calendar-legend {
   margin-bottom: 12px;
 }
 
-/* 百科分类导航标签 */
+/* 鐧剧鍒嗙被瀵艰埅鏍囩 */
 .encyclopedia-category-tags {
   display: flex;
   flex-wrap: wrap;
@@ -8881,7 +8914,7 @@ html[style*="1a1a2e"] .quiz-calendar-legend {
 .encyclopedia-category-tag:active {
   transform: scale(0.95);
 }
-/* 导航标签错点滚动偏移修正 */
+/* 瀵艰埅鏍囩閿欑偣婊氬姩鍋忕Щ淇 */
 .info-page h3[id] {
   scroll-margin-top: 60px;
 }
@@ -8898,43 +8931,43 @@ html[style*="1a1a2e"] .quiz-calendar-legend {
 }
 
 /* ============================================================ */
-/* ============ 2026-07-14 样式优化增强（第三批） ============ */
+/* ============ 2026-07-14 鏍峰紡浼樺寲澧炲己锛堢涓夋壒锛?============ */
 /* ============================================================ */
-/* 本次聚焦：首屏视觉冲击力、信息页可读性、庆祝动效、主题选择反馈 */
-/* 约束延续：不修改会被 themeManager 覆盖的 8 个核心 :root 变量   */
-/* 所有新增色彩通过 var(--primary/--secondary) + color-mix 自适应 */
+/* 鏈鑱氱劍锛氶灞忚瑙夊啿鍑诲姏銆佷俊鎭〉鍙鎬с€佸簡绁濆姩鏁堛€佷富棰橀€夋嫨鍙嶉 */
+/* 绾︽潫寤剁画锛氫笉淇敼浼氳 themeManager 瑕嗙洊鐨?8 涓牳蹇?:root 鍙橀噺   */
+/* 鎵€鏈夋柊澧炶壊褰╅€氳繃 var(--primary/--secondary) + color-mix 鑷€傚簲 */
 
-/* 1. 首页标题：主题色渐变文字，替代纯白，增强品牌识别度 */
+/* 1. 棣栭〉鏍囬锛氫富棰樿壊娓愬彉鏂囧瓧锛屾浛浠ｇ函鐧斤紝澧炲己鍝佺墝璇嗗埆搴?*/
 .title {
-  /* 渐变剪裁到文字，配合原有阴影叠加立体感 */
+  /* 娓愬彉鍓鍒版枃瀛楋紝閰嶅悎鍘熸湁闃村奖鍙犲姞绔嬩綋鎰?*/
   background: linear-gradient(135deg, #ffffff 0%, color-mix(in srgb, var(--primary) 55%, #ffffff) 60%, #ffffff 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  /* 兜底：不支持 background-clip 的环境仍可读 */
+  /* 鍏滃簳锛氫笉鏀寔 background-clip 鐨勭幆澧冧粛鍙 */
   filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.25)) drop-shadow(0 1px 2px rgba(0, 0, 0, 0.15));
 }
 
-/* 2. 首页 logo：多层主题色光晕，让首屏视觉焦点更突出 */
+/* 2. 棣栭〉 logo锛氬灞備富棰樿壊鍏夋檿锛岃棣栧睆瑙嗚鐒︾偣鏇寸獊鍑?*/
 .logo {
-  /* 在原有 drop-shadow 之上叠加主题色辉光，形成"发光 emoji"效果 */
+  /* 鍦ㄥ師鏈?drop-shadow 涔嬩笂鍙犲姞涓婚鑹茶緣鍏夛紝褰㈡垚"鍙戝厜 emoji"鏁堟灉 */
   filter:
     drop-shadow(0 6px 12px rgba(0, 0, 0, 0.25))
     drop-shadow(0 0 18px color-mix(in srgb, var(--primary) 45%, transparent));
 }
 
-/* 3. 首页统计数字：主题色渐变文字，与标题呼应，数字更具分量 */
+/* 3. 棣栭〉缁熻鏁板瓧锛氫富棰樿壊娓愬彉鏂囧瓧锛屼笌鏍囬鍛煎簲锛屾暟瀛楁洿鍏峰垎閲?*/
 .stat-value {
-  /* 渐变剪裁，让纯白数字带上主题色高光 */
+  /* 娓愬彉鍓锛岃绾櫧鏁板瓧甯︿笂涓婚鑹查珮鍏?*/
   background: linear-gradient(180deg, #ffffff 0%, color-mix(in srgb, var(--secondary) 40%, #ffffff) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-/* 4. 模式网格按钮：增强立体感与主题色融入 */
+/* 4. 妯″紡缃戞牸鎸夐挳锛氬寮虹珛浣撴劅涓庝富棰樿壊铻嶅叆 */
 .mode-grid-btn {
-  /* 顶部内高光让按钮有"玻璃按键"质感 */
+  /* 椤堕儴鍐呴珮鍏夎鎸夐挳鏈?鐜荤拑鎸夐敭"璐ㄦ劅 */
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.35),
     inset 0 -2px 6px rgba(0, 0, 0, 0.12),
@@ -8942,13 +8975,13 @@ html[style*="1a1a2e"] .quiz-calendar-legend {
 }
 
 .mode-grid-btn:hover {
-  /* hover 时叠加主题色辉光，预示可交互 */
+  /* hover 鏃跺彔鍔犱富棰樿壊杈夊厜锛岄绀哄彲浜や簰 */
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.4),
     0 4px 14px color-mix(in srgb, var(--primary) 30%, transparent);
 }
 
-/* 5. 关卡选择卡片：顶部高光线，与 .game-board 风格统一 */
+/* 5. 鍏冲崱閫夋嫨鍗＄墖锛氶《閮ㄩ珮鍏夌嚎锛屼笌 .game-board 椋庢牸缁熶竴 */
 .level-select {
   position: relative;
 }
@@ -8963,7 +8996,7 @@ html[style*="1a1a2e"] .quiz-calendar-legend {
   pointer-events: none;
 }
 
-/* 6. 信息页链接：专门样式，替代浏览器默认蓝色下划线 */
+/* 6. 淇℃伅椤甸摼鎺ワ細涓撻棬鏍峰紡锛屾浛浠ｆ祻瑙堝櫒榛樿钃濊壊涓嬪垝绾?*/
 .info-page a {
   color: color-mix(in srgb, var(--primary) 70%, #ffffff);
   text-decoration: none;
@@ -8977,13 +9010,13 @@ html[style*="1a1a2e"] .quiz-calendar-legend {
   border-bottom-style: solid;
 }
 
-/* 7. 信息页列表项：自定义标记颜色，与小标题左边框呼应 */
+/* 7. 淇℃伅椤靛垪琛ㄩ」锛氳嚜瀹氫箟鏍囪棰滆壊锛屼笌灏忔爣棰樺乏杈规鍛煎簲 */
 .info-page li::marker {
-  /* 用主题色渲染默认圆点标记，提升视觉一致性 */
+  /* 鐢ㄤ富棰樿壊娓叉煋榛樿鍦嗙偣鏍囪锛屾彁鍗囪瑙変竴鑷存€?*/
   color: color-mix(in srgb, var(--primary) 70%, #ffffff);
 }
 
-/* 8. 胜利 emoji：旋转+缩放组合庆祝动效，比单纯 bounce 更有仪式感 */
+/* 8. 鑳滃埄 emoji锛氭棆杞?缂╂斁缁勫悎搴嗙鍔ㄦ晥锛屾瘮鍗曠函 bounce 鏇存湁浠紡鎰?*/
 .win-emoji {
   animation: win-emoji-celebrate 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
@@ -8994,16 +9027,16 @@ html[style*="1a1a2e"] .quiz-calendar-legend {
   100% { transform: scale(1) rotate(0); }
 }
 
-/* 9. 主题选择按钮：选中态融入主题色辉光，反馈更明确 */
+/* 9. 涓婚閫夋嫨鎸夐挳锛氶€変腑鎬佽瀺鍏ヤ富棰樿壊杈夊厜锛屽弽棣堟洿鏄庣‘ */
 .theme-btn.theme-active {
-  /* 在原有描边基础上叠加主题色外发光 */
+  /* 鍦ㄥ師鏈夋弿杈瑰熀纭€涓婂彔鍔犱富棰樿壊澶栧彂鍏?*/
   box-shadow:
     0 0 0 2px var(--primary),
     0 4px 15px rgba(0, 0, 0, 0.15),
     0 0 18px color-mix(in srgb, var(--primary) 35%, transparent);
 }
 
-/* 10. 平板尺寸（401-768px）首页头部紧凑化，避免首屏空间浪费 */
+/* 10. 骞虫澘灏哄锛?01-768px锛夐椤靛ご閮ㄧ揣鍑戝寲锛岄伩鍏嶉灞忕┖闂存氮璐?*/
 @media (min-width: 401px) and (max-width: 768px) {
   .home-header {
     padding: 28px 16px 14px;
@@ -9016,7 +9049,7 @@ html[style*="1a1a2e"] .quiz-calendar-legend {
   }
 }
 
-/* 11. 信息页 feature-section：分区卡片化，提升长内容可读性 */
+/* 11. 淇℃伅椤?feature-section锛氬垎鍖哄崱鐗囧寲锛屾彁鍗囬暱鍐呭鍙鎬?*/
 .feature-section {
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -9032,7 +9065,7 @@ html[style*="1a1a2e"] .quiz-calendar-legend {
   font-weight: 700;
 }
 
-/* 12. 无障碍：减少动画偏好下禁用本次新增的装饰性动画 */
+/* 12. 鏃犻殰纰嶏細鍑忓皯鍔ㄧ敾鍋忓ソ涓嬬鐢ㄦ湰娆℃柊澧炵殑瑁呴グ鎬у姩鐢?*/
 @media (prefers-reduced-motion: reduce) {
   .win-emoji {
     animation: none !important;
@@ -9040,11 +9073,11 @@ html[style*="1a1a2e"] .quiz-calendar-legend {
 }
 
 /* ============================================================ */
-/* ============ 2026-07-15 样式优化增强（第三批） ============ */
+/* ============ 2026-07-15 鏍峰紡浼樺寲澧炲己锛堢涓夋壒锛?============ */
 /* ============================================================ */
-/* 本批次聚焦：氛围层、试管液体活力、首页视觉层次、移动端触摸反馈、页面过渡 */
+/* 鏈壒娆¤仛鐒︼細姘涘洿灞傘€佽瘯绠℃恫浣撴椿鍔涖€侀椤佃瑙夊眰娆°€佺Щ鍔ㄧ瑙︽懜鍙嶉銆侀〉闈㈣繃娓?*/
 
-/* 1. 背景氛围层：两个柔和漂浮的光晕，增加空间纵深感（不干扰交互） */
+/* 1. 鑳屾櫙姘涘洿灞傦細涓や釜鏌斿拰婕傛诞鐨勫厜鏅曪紝澧炲姞绌洪棿绾垫繁鎰燂紙涓嶅共鎵颁氦浜掞級 */
 .app::after {
   content: '';
   position: fixed;
@@ -9062,16 +9095,16 @@ html[style*="1a1a2e"] .quiz-calendar-legend {
   100% { transform: translate(-1%, 2%) scale(1); }
 }
 
-/* 2. 首页标题：渐变文字效果，让 logo 区更具品牌感 */
+/* 2. 棣栭〉鏍囬锛氭笎鍙樻枃瀛楁晥鏋滐紝璁?logo 鍖烘洿鍏峰搧鐗屾劅 */
 .home-header .title {
   background: linear-gradient(135deg, #ffffff 0%, #f0f4ff 50%, #ffe4f1 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  /* 兼容旧浏览器：保留文字阴影作为回退 */
+  /* 鍏煎鏃ф祻瑙堝櫒锛氫繚鐣欐枃瀛楅槾褰变綔涓哄洖閫€ */
   filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.25));
 }
-/* 当渐变不被支持时回退到纯白 */
+/* 褰撴笎鍙樹笉琚敮鎸佹椂鍥為€€鍒扮函鐧?*/
 @supports not (-webkit-background-clip: text) {
   .home-header .title {
     -webkit-text-fill-color: initial;
@@ -9079,7 +9112,7 @@ html[style*="1a1a2e"] .quiz-calendar-legend {
   }
 }
 
-/* 3. 副标题轻微淡入上浮，与主标题形成节奏 */
+/* 3. 鍓爣棰樿交寰贰鍏ヤ笂娴紝涓庝富鏍囬褰㈡垚鑺傚 */
 .home-header .subtitle,
 .home-header .tagline {
   animation: header-fade-up 0.6s ease 0.15s both;
@@ -9089,7 +9122,7 @@ html[style*="1a1a2e"] .quiz-calendar-legend {
   100% { opacity: 0.95; transform: translateY(0); }
 }
 
-/* 4. 试管液体顶部：增加微弱的液面波动，让液体看起来"活着" */
+/* 4. 璇曠娑蹭綋椤堕儴锛氬鍔犲井寮辩殑娑查潰娉㈠姩锛岃娑蹭綋鐪嬭捣鏉?娲荤潃" */
 .tube-inner > .color-layer:last-child::after {
   animation: liquid-ripple 3.5s ease-in-out infinite;
 }
@@ -9098,7 +9131,7 @@ html[style*="1a1a2e"] .quiz-calendar-legend {
   50% { transform: scaleX(1.08); opacity: 1; }
 }
 
-/* 5. 试管悬停：增加轻微的"呼吸"光晕，强化可交互感 */
+/* 5. 璇曠鎮仠锛氬鍔犺交寰殑"鍛煎惛"鍏夋檿锛屽己鍖栧彲浜や簰鎰?*/
 .tube-container:hover .tube {
   box-shadow:
     inset 2px 0 4px rgba(255, 255, 255, 0.3),
@@ -9107,7 +9140,7 @@ html[style*="1a1a2e"] .quiz-calendar-legend {
     0 0 12px rgba(255, 255, 255, 0.12);
 }
 
-/* 6. 模式入口按钮：选中态增加更明显的内高光，提升质感 */
+/* 6. 妯″紡鍏ュ彛鎸夐挳锛氶€変腑鎬佸鍔犳洿鏄庢樉鐨勫唴楂樺厜锛屾彁鍗囪川鎰?*/
 .mode-grid-btn {
   transition: transform 0.18s cubic-bezier(0.34, 1.3, 0.64, 1),
               box-shadow 0.25s ease,
@@ -9119,7 +9152,7 @@ html[style*="1a1a2e"] .quiz-calendar-legend {
   filter: brightness(1.05);
 }
 
-/* 7. 首页统计数字：增加细微的数字脉动，让数据更"鲜活" */
+/* 7. 棣栭〉缁熻鏁板瓧锛氬鍔犵粏寰殑鏁板瓧鑴夊姩锛岃鏁版嵁鏇?椴滄椿" */
 .home-stats .stat-value {
   transition: transform 0.3s cubic-bezier(0.34, 1.4, 0.64, 1);
 }
@@ -9134,7 +9167,7 @@ html[style*="1a1a2e"] .quiz-calendar-legend {
   50% { transform: scale(1.05); }
 }
 
-/* 8. 快捷导航卡片：悬停时图标轻微弹跳 */
+/* 8. 蹇嵎瀵艰埅鍗＄墖锛氭偓鍋滄椂鍥炬爣杞诲井寮硅烦 */
 .quick-nav-card .quick-nav-icon {
   transition: transform 0.3s cubic-bezier(0.34, 1.5, 0.64, 1);
 }
@@ -9142,7 +9175,7 @@ html[style*="1a1a2e"] .quiz-calendar-legend {
   transform: scale(1.15) translateY(-2px);
 }
 
-/* 9. 页面加载占位：旋转光环 + 中心 emoji 呼吸 */
+/* 9. 椤甸潰鍔犺浇鍗犱綅锛氭棆杞厜鐜?+ 涓績 emoji 鍛煎惛 */
 .page-loading-container {
   min-height: 60vh;
   display: flex;
@@ -9175,7 +9208,7 @@ html[style*="1a1a2e"] .quiz-calendar-legend {
   50% { opacity: 1; }
 }
 
-/* 10. 懒加载页面进入：从底部淡入上浮，避免突兀切换 */
+/* 10. 鎳掑姞杞介〉闈㈣繘鍏ワ細浠庡簳閮ㄦ贰鍏ヤ笂娴紝閬垮厤绐佸厐鍒囨崲 */
 .app > main,
 main.info-page,
 main.achievements-page,
@@ -9190,7 +9223,7 @@ main.privacy-page {
   100% { opacity: 1; transform: translateY(0); }
 }
 
-/* 11. 信息页（关于/隐私）正文：行距与段落间距优化，提升可读性 */
+/* 11. 淇℃伅椤碉紙鍏充簬/闅愮锛夋鏂囷細琛岃窛涓庢钀介棿璺濅紭鍖栵紝鎻愬崌鍙鎬?*/
 .info-page p,
 .info-page li {
   line-height: 1.65;
@@ -9208,7 +9241,7 @@ main.privacy-page {
   margin-bottom: 0.35em;
 }
 
-/* 12. 试管编号：悬停时更清晰，弱化默认状态以聚焦液体 */
+/* 12. 璇曠缂栧彿锛氭偓鍋滄椂鏇存竻鏅帮紝寮卞寲榛樿鐘舵€佷互鑱氱劍娑蹭綋 */
 .tube-index {
   transition: color 0.2s ease, transform 0.2s ease;
 }
@@ -9221,7 +9254,7 @@ main.privacy-page {
   font-weight: 700;
 }
 
-/* 13. 按钮焦点环：与品牌色统一的聚焦反馈，提升无障碍可见性 */
+/* 13. 鎸夐挳鐒︾偣鐜細涓庡搧鐗岃壊缁熶竴鐨勮仛鐒﹀弽棣堬紝鎻愬崌鏃犻殰纰嶅彲瑙佹€?*/
 .btn:focus-visible,
 .btn-primary:focus-visible,
 .btn-secondary:focus-visible {
@@ -9230,7 +9263,7 @@ main.privacy-page {
   box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 25%, transparent);
 }
 
-/* 14. 移动端：试管区域增加底部安全区留白，避免被底部栏遮挡 */
+/* 14. 绉诲姩绔細璇曠鍖哄煙澧炲姞搴曢儴瀹夊叏鍖虹暀鐧斤紝閬垮厤琚簳閮ㄦ爮閬尅 */
 @media (max-width: 480px) {
   .tubes-grid {
     padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
@@ -9240,7 +9273,7 @@ main.privacy-page {
   }
 }
 
-/* 15. 移动端：模式按钮触摸反馈更明确 */
+/* 15. 绉诲姩绔細妯″紡鎸夐挳瑙︽懜鍙嶉鏇存槑纭?*/
 @media (hover: none) and (pointer: coarse) {
   .mode-grid-btn:active {
     transform: scale(0.96);
@@ -9257,7 +9290,7 @@ main.privacy-page {
   }
 }
 
-/* 16. 横屏小高度：试管尺寸进一步压缩，确保游戏区可见 */
+/* 16. 妯睆灏忛珮搴︼細璇曠灏哄杩涗竴姝ュ帇缂╋紝纭繚娓告垙鍖哄彲瑙?*/
 @media (orientation: landscape) and (max-height: 500px) {
   .tube {
     width: 32px;
@@ -9272,12 +9305,12 @@ main.privacy-page {
   }
 }
 
-/* 17. 胜利粒子画布：保证不拦截底层点击且不被其他元素覆盖 */
+/* 17. 鑳滃埄绮掑瓙鐢诲竷锛氫繚璇佷笉鎷︽埅搴曞眰鐐瑰嚮涓斾笉琚叾浠栧厓绱犺鐩?*/
 canvas[aria-hidden="true"] {
   z-index: 150 !important;
 }
 
-/* 18. 暗色主题适配：新增强化项在暗色模式下保持可读性 */
+/* 18. 鏆楄壊涓婚閫傞厤锛氭柊澧炲己鍖栭」鍦ㄦ殫鑹叉ā寮忎笅淇濇寔鍙鎬?*/
 @media (prefers-color-scheme: dark) {
   .home-header .title {
     background: linear-gradient(135deg, #ffffff 0%, #d6e4ff 50%, #ffd6e7 100%);
@@ -9296,7 +9329,7 @@ canvas[aria-hidden="true"] {
   }
 }
 
-/* 19. 减少动画偏好：禁用本批次新增的装饰性动画 */
+/* 19. 鍑忓皯鍔ㄧ敾鍋忓ソ锛氱鐢ㄦ湰鎵规鏂板鐨勮楗版€у姩鐢?*/
 @media (prefers-reduced-motion: reduce) {
   .app::after,
   .tube-inner > .color-layer:last-child::after,
@@ -9316,7 +9349,7 @@ canvas[aria-hidden="true"] {
   }
 }
 
-/* 已保存混合配方快速查看入口 */
+/* 宸蹭繚瀛樻贩鍚堥厤鏂瑰揩閫熸煡鐪嬪叆鍙?*/
 .saved-recipes-entry {
   display: flex;
   align-items: center;
@@ -9362,7 +9395,7 @@ canvas[aria-hidden="true"] {
   flex-shrink: 0;
 }
 
-/* 配方查看弹窗列表 */
+/* 閰嶆柟鏌ョ湅寮圭獥鍒楄〃 */
 .saved-recipes-list {
   max-height: 360px;
   overflow-y: auto;
@@ -9425,7 +9458,7 @@ canvas[aria-hidden="true"] {
   flex-shrink: 0;
 }
 
-/* 暗色主题适配 */
+/* 鏆楄壊涓婚閫傞厤 */
 .dark-theme .saved-recipes-entry {
   background: linear-gradient(135deg, rgba(78, 205, 196, 0.12), rgba(149, 225, 163, 0.12));
   border-color: rgba(78, 205, 196, 0.25);
@@ -9435,7 +9468,7 @@ canvas[aria-hidden="true"] {
   border-color: rgba(102, 126, 234, 0.15);
 }
 
-/* 色彩能力对比统计卡片 */
+/* 鑹插僵鑳藉姏瀵规瘮缁熻鍗＄墖 */
 .color-skill-compare {
   margin: 16px 0;
   padding: 16px;
@@ -9456,7 +9489,7 @@ canvas[aria-hidden="true"] {
   margin: 0;
 }
 
-/* 返回顶部浮动按钮 */
+/* 杩斿洖椤堕儴娴姩鎸夐挳 */
 .scroll-top-fab {
   position: fixed;
   bottom: 80px;
@@ -9497,7 +9530,7 @@ canvas[aria-hidden="true"] {
   }
 }
 
-/* 暗色主题适配 */
+/* 鏆楄壊涓婚閫傞厤 */
 .dark-theme .scroll-top-fab {
   background: linear-gradient(135deg, #4a5bc7 0%, #5a3d82 100%);
   box-shadow: 0 4px 16px rgba(74, 91, 199, 0.4);
@@ -9541,7 +9574,7 @@ canvas[aria-hidden="true"] {
   transition: width 0.5s ease;
 }
 
-/* 暗色主题适配 */
+/* 鏆楄壊涓婚閫傞厤 */
 .dark-theme .color-skill-compare {
   background: linear-gradient(135deg, rgba(102, 126, 234, 0.12), rgba(118, 75, 162, 0.12));
   border-color: rgba(102, 126, 234, 0.2);
@@ -9554,7 +9587,7 @@ canvas[aria-hidden="true"] {
   background: rgba(255, 255, 255, 0.08);
 }
 
-/* 移动端适配 */
+/* 绉诲姩绔€傞厤 */
 @media (max-width: 480px) {
   .skill-compare-grid {
     grid-template-columns: 1fr;
@@ -9562,12 +9595,11 @@ canvas[aria-hidden="true"] {
 }
 
 /* ============================================================ */
-/* ============ 2026-07-16 样式优化增强（第四批） ============ */
+/* ============ 2026-07-16 鏍峰紡浼樺寲澧炲己锛堢鍥涙壒锛?============ */
 /* ============================================================ */
-/* 本批次聚焦：胜利/死局卡片戏剧化、游戏徽章层次、关卡按钮难度光晕、
-   进度条流光、成就通知、弹窗模糊、页脚与FAQ交互、试管口精修 */
+/* 鏈壒娆¤仛鐒︼細鑳滃埄/姝诲眬鍗＄墖鎴忓墽鍖栥€佹父鎴忓窘绔犲眰娆°€佸叧鍗℃寜閽毦搴﹀厜鏅曘€?   杩涘害鏉℃祦鍏夈€佹垚灏遍€氱煡銆佸脊绐楁ā绯娿€侀〉鑴氫笌FAQ浜や簰銆佽瘯绠″彛绮句慨 */
 
-/* 1. 胜利/死局遮罩：增强背景模糊，让弹窗更聚焦 */
+/* 1. 鑳滃埄/姝诲眬閬僵锛氬寮鸿儗鏅ā绯婏紝璁╁脊绐楁洿鑱氱劍 */
 .win-overlay, .deadlock-overlay,
 .tutorial-overlay, .help-modal-overlay,
 .share-image-overlay, .replay-overlay {
@@ -9576,7 +9608,7 @@ canvas[aria-hidden="true"] {
   background: rgba(0, 0, 0, 0.55);
 }
 
-/* 2. 胜利卡片：渐变光晕背景 + 更戏剧化的弹入动画 */
+/* 2. 鑳滃埄鍗＄墖锛氭笎鍙樺厜鏅曡儗鏅?+ 鏇存垙鍓у寲鐨勫脊鍏ュ姩鐢?*/
 .win-card {
   background: linear-gradient(160deg, #ffffff 0%, #f8fbff 100%);
   box-shadow:
@@ -9586,7 +9618,7 @@ canvas[aria-hidden="true"] {
   position: relative;
   overflow: hidden;
 }
-/* 卡片顶部柔和光晕，增加庆祝氛围 */
+/* 鍗＄墖椤堕儴鏌斿拰鍏夋檿锛屽鍔犲簡绁濇皼鍥?*/
 .win-card::before {
   content: '';
   position: absolute;
@@ -9604,7 +9636,7 @@ canvas[aria-hidden="true"] {
   100% { transform: scale(1) translateY(0); opacity: 1; }
 }
 
-/* 3. 胜利 emoji：旋转 + 弹跳，更有庆祝感 */
+/* 3. 鑳滃埄 emoji锛氭棆杞?+ 寮硅烦锛屾洿鏈夊簡绁濇劅 */
 .win-emoji {
   animation: win-emoji-celebrate 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
@@ -9615,7 +9647,7 @@ canvas[aria-hidden="true"] {
   100% { transform: scale(1) rotate(0); }
 }
 
-/* 4. 星星弹出：更戏剧化的星形动画，带光晕扩散 */
+/* 4. 鏄熸槦寮瑰嚭锛氭洿鎴忓墽鍖栫殑鏄熷舰鍔ㄧ敾锛屽甫鍏夋檿鎵╂暎 */
 .star.star-pop {
   filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
 }
@@ -9628,7 +9660,7 @@ canvas[aria-hidden="true"] {
   100% { transform: scale(1) rotate(0); opacity: 1; }
 }
 
-/* 星星光芒扩散效果 */
+/* 鏄熸槦鍏夎姃鎵╂暎鏁堟灉 */
 .star.star-filled.star-pop::after {
   content: '';
   position: absolute;
@@ -9647,7 +9679,7 @@ canvas[aria-hidden="true"] {
   100% { transform: scale(3); opacity: 0; }
 }
 
-/* 3星通关时的庆祝光芒 */
+/* 3鏄熼€氬叧鏃剁殑搴嗙鍏夎姃 */
 .win-card.three-stars-celebration {
   position: relative;
   overflow: hidden;
@@ -9683,7 +9715,7 @@ canvas[aria-hidden="true"] {
   to { transform: rotate(360deg); }
 }
 
-/* 5. 死局卡片：黄色警告色调，与胜利卡片视觉区分 */
+/* 5. 姝诲眬鍗＄墖锛氶粍鑹茶鍛婅壊璋冿紝涓庤儨鍒╁崱鐗囪瑙夊尯鍒?*/
 .deadlock-card {
   background: linear-gradient(160deg, #fffde7 0%, #fff8e1 100%);
   border-top: 4px solid #ffc107;
@@ -9706,7 +9738,7 @@ canvas[aria-hidden="true"] {
   75% { transform: rotate(8deg); }
 }
 
-/* 6. 游戏信息徽章：增强视觉层次与微交互 */
+/* 6. 娓告垙淇℃伅寰界珷锛氬寮鸿瑙夊眰娆′笌寰氦浜?*/
 .level-badge {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 2px 6px rgba(102, 126, 234, 0.25);
 }
@@ -9716,7 +9748,7 @@ canvas[aria-hidden="true"] {
 .moves-badge {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 3px rgba(46, 125, 50, 0.12);
 }
-/* 步数徽章脉冲时增强反馈 */
+/* 姝ユ暟寰界珷鑴夊啿鏃跺寮哄弽棣?*/
 .moves-badge.moves-pulse-active {
   animation: moves-pulse-enhanced 0.3s ease-out;
 }
@@ -9725,7 +9757,7 @@ canvas[aria-hidden="true"] {
   40% { transform: scale(1.25); box-shadow: 0 0 12px rgba(78, 205, 196, 0.5); }
   100% { transform: scale(1); }
 }
-/* 效率徽章各自带轻微光晕 */
+/* 鏁堢巼寰界珷鍚勮嚜甯﹁交寰厜鏅?*/
 .efficiency-badge.eff-perfect {
   box-shadow: 0 0 8px rgba(78, 205, 196, 0.4);
 }
@@ -9735,19 +9767,19 @@ canvas[aria-hidden="true"] {
 .efficiency-badge.eff-warn {
   box-shadow: 0 0 6px rgba(255, 152, 0, 0.3);
 }
-/* 限时模式倒计时危险态增强 */
+/* 闄愭椂妯″紡鍊掕鏃跺嵄闄╂€佸寮?*/
 .timer-badge.timer-danger {
   box-shadow: 0 0 10px rgba(198, 40, 40, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
-/* 7. 关卡按钮：hover 时显示对应难度的彩色光晕 */
+/* 7. 鍏冲崱鎸夐挳锛歨over 鏃舵樉绀哄搴旈毦搴︾殑褰╄壊鍏夋檿 */
 .level-btn.diff-easy:hover { box-shadow: 0 4px 14px rgba(78, 205, 196, 0.4); }
 .level-btn.diff-normal:hover { box-shadow: 0 4px 14px rgba(102, 126, 234, 0.4); }
 .level-btn.diff-medium:hover { box-shadow: 0 4px 14px rgba(255, 160, 122, 0.4); }
 .level-btn.diff-hard:hover { box-shadow: 0 4px 14px rgba(255, 107, 107, 0.4); }
 .level-btn.diff-expert:hover { box-shadow: 0 4px 14px rgba(197, 137, 232, 0.4); }
 .level-btn.diff-master:hover { box-shadow: 0 4px 14px rgba(51, 51, 51, 0.4); }
-/* 已通关按钮 hover 时增加光泽扫过 */
+/* 宸查€氬叧鎸夐挳 hover 鏃跺鍔犲厜娉芥壂杩?*/
 .level-btn.completed {
   position: relative;
   overflow: hidden;
@@ -9767,7 +9799,7 @@ canvas[aria-hidden="true"] {
   left: 150%;
 }
 
-/* 8. 通关进度条：填充部分增加流光动画 */
+/* 8. 閫氬叧杩涘害鏉★細濉厖閮ㄥ垎澧炲姞娴佸厜鍔ㄧ敾 */
 .progress-bar-fill {
   background: linear-gradient(135deg, var(--primary), var(--secondary));
   position: relative;
@@ -9785,7 +9817,7 @@ canvas[aria-hidden="true"] {
   0% { transform: translateX(-100%); }
   100% { transform: translateX(100%); }
 }
-/* 难度分段进度条也增加流光 */
+/* 闅惧害鍒嗘杩涘害鏉′篃澧炲姞娴佸厜 */
 .diff-progress-fill {
   transition: width 0.6s cubic-bezier(0.34, 1.2, 0.64, 1);
   position: relative;
@@ -9799,7 +9831,7 @@ canvas[aria-hidden="true"] {
   animation: progress-shimmer 3s ease-in-out infinite;
 }
 
-/* 9. 成就解锁通知：更戏剧化的滑入 + 缩放 */
+/* 9. 鎴愬氨瑙ｉ攣閫氱煡锛氭洿鎴忓墽鍖栫殑婊戝叆 + 缂╂斁 */
 .achievement-notification {
   animation: achievement-slide-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
@@ -9816,14 +9848,14 @@ canvas[aria-hidden="true"] {
   100% { transform: rotate(0) scale(1); }
 }
 
-/* 10. 弹窗卡片：统一增强内阴影与圆角质感 */
+/* 10. 寮圭獥鍗＄墖锛氱粺涓€澧炲己鍐呴槾褰变笌鍦嗚璐ㄦ劅 */
 .tutorial-card, .help-modal-card {
   box-shadow:
     0 16px 48px rgba(0, 0, 0, 0.35),
     0 0 0 1px rgba(255, 255, 255, 0.3) inset;
 }
 
-/* 11. 游戏控制按钮：悬停时图标轻微弹跳 */
+/* 11. 娓告垙鎺у埗鎸夐挳锛氭偓鍋滄椂鍥炬爣杞诲井寮硅烦 */
 .game-controls .btn {
   transition: transform 0.18s cubic-bezier(0.34, 1.3, 0.64, 1),
               box-shadow 0.2s ease, filter 0.2s ease;
@@ -9835,7 +9867,7 @@ canvas[aria-hidden="true"] {
   transform: translateY(0) scale(0.96);
   transition: transform 0.06s ease;
 }
-/* 提示按钮的道具计数徽章增强 */
+/* 鎻愮ず鎸夐挳鐨勯亾鍏疯鏁板窘绔犲寮?*/
 .hint-count {
   box-shadow: 0 1px 4px rgba(255, 152, 0, 0.4);
   transition: transform 0.2s ease;
@@ -9844,7 +9876,7 @@ canvas[aria-hidden="true"] {
   transform: scale(1.15);
 }
 
-/* 12. 页脚链接：悬停时下划线滑入动画 */
+/* 12. 椤佃剼閾炬帴锛氭偓鍋滄椂涓嬪垝绾挎粦鍏ュ姩鐢?*/
 .footer-link {
   position: relative;
   transition: color 0.2s ease, opacity 0.2s ease;
@@ -9868,7 +9900,7 @@ canvas[aria-hidden="true"] {
   left: 0;
 }
 
-/* 13. FAQ 列表项：悬停时背景变化，提升可读性 */
+/* 13. FAQ 鍒楄〃椤癸細鎮仠鏃惰儗鏅彉鍖栵紝鎻愬崌鍙鎬?*/
 .faq-item {
   transition: background 0.2s ease, padding-left 0.2s ease;
   border-radius: 8px;
@@ -9886,7 +9918,7 @@ canvas[aria-hidden="true"] {
   color: var(--text-light);
 }
 
-/* 14. 签到卡片：完成态勾选动画 + 未签到脉动引导 */
+/* 14. 绛惧埌鍗＄墖锛氬畬鎴愭€佸嬀閫夊姩鐢?+ 鏈鍒拌剦鍔ㄥ紩瀵?*/
 .checkin-card-compact.checkin-done {
   opacity: 0.85;
 }
@@ -9913,7 +9945,7 @@ canvas[aria-hidden="true"] {
   100% { transform: scale(1); }
 }
 
-/* 15. 难度筛选按钮：激活态更明显，带底部指示条 */
+/* 15. 闅惧害绛涢€夋寜閽細婵€娲绘€佹洿鏄庢樉锛屽甫搴曢儴鎸囩ず鏉?*/
 .diff-filter-btn {
   position: relative;
   transition: all 0.2s ease;
@@ -9937,13 +9969,13 @@ canvas[aria-hidden="true"] {
 .diff-filter-btn.diff-expert.active { box-shadow: 0 2px 8px rgba(197, 137, 232, 0.4); }
 .diff-filter-btn.diff-master.active { box-shadow: 0 2px 8px rgba(51, 51, 51, 0.4); }
 
-/* 16. 试管口：增强玻璃反光精致度 */
+/* 16. 璇曠鍙ｏ細澧炲己鐜荤拑鍙嶅厜绮捐嚧搴?*/
 .tube-mouth {
   box-shadow:
     inset 0 2px 3px rgba(255, 255, 255, 0.3),
     inset 0 -1px 2px rgba(0, 0, 0, 0.08);
 }
-/* 试管口顶部高光线 */
+/* 璇曠鍙ｉ《閮ㄩ珮鍏夌嚎 */
 .tube-mouth::before {
   content: '';
   position: absolute;
@@ -9956,7 +9988,7 @@ canvas[aria-hidden="true"] {
   pointer-events: none;
 }
 
-/* 17. 暗色主题适配：第四批新增项在暗色模式下保持可读性 */
+/* 17. 鏆楄壊涓婚閫傞厤锛氱鍥涙壒鏂板椤瑰湪鏆楄壊妯″紡涓嬩繚鎸佸彲璇绘€?*/
 @media (prefers-color-scheme: dark) {
   .win-card {
     background: linear-gradient(160deg, #2a2a3e 0%, #252538 100%);
@@ -9973,7 +10005,7 @@ canvas[aria-hidden="true"] {
     background: rgba(255, 255, 255, 0.06);
   }
 }
-/* 显式暗色主题类适配 */
+/* 鏄惧紡鏆楄壊涓婚绫婚€傞厤 */
 .dark-theme .win-card {
   background: linear-gradient(160deg, #2a2a3e 0%, #252538 100%);
   box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
@@ -9989,7 +10021,7 @@ canvas[aria-hidden="true"] {
   background: rgba(255, 255, 255, 0.06);
 }
 
-/* 18. 减少动画偏好：禁用本批次新增的装饰性动画 */
+/* 18. 鍑忓皯鍔ㄧ敾鍋忓ソ锛氱鐢ㄦ湰鎵规鏂板鐨勮楗版€у姩鐢?*/
 @media (prefers-reduced-motion: reduce) {
   .win-card,
   .win-emoji,
@@ -10006,7 +10038,7 @@ canvas[aria-hidden="true"] {
   }
 }
 
-/* 19. 移动端触摸反馈增强：弹窗内按钮与签到按钮 */
+/* 19. 绉诲姩绔Е鎽稿弽棣堝寮猴細寮圭獥鍐呮寜閽笌绛惧埌鎸夐挳 */
 @media (hover: none) and (pointer: coarse) {
   .game-controls .btn:active:not(:disabled) {
     transform: scale(0.94);
@@ -10027,7 +10059,7 @@ canvas[aria-hidden="true"] {
   }
 }
 
-/* ============ 反应力错题本暗色主题 ============ */
+/* ============ 鍙嶅簲鍔涢敊棰樻湰鏆楄壊涓婚 ============ */
 .dark-theme .crt-wrongbook-item {
   border-bottom-color: rgba(255,255,255,0.08);
 }
@@ -10051,12 +10083,11 @@ canvas[aria-hidden="true"] {
 }
 
 /* ============================================================ */
-/* ============ 2026-07-17 样式优化增强（第五批） ============ */
+/* ============ 2026-07-17 鏍峰紡浼樺寲澧炲己锛堢浜旀壒锛?============ */
 /* ============================================================ */
-/* 本批次聚焦：试管倾倒飞溅、液体弯月面、游戏面板深度、徽章主次、
-   回放高亮、页面卡片悬停、移动端游戏头部紧凑化、键盘提示可读性等 */
+/* 鏈壒娆¤仛鐒︼細璇曠鍊惧€掗婧呫€佹恫浣撳集鏈堥潰銆佹父鎴忛潰鏉挎繁搴︺€佸窘绔犱富娆°€?   鍥炴斁楂樹寒銆侀〉闈㈠崱鐗囨偓鍋溿€佺Щ鍔ㄧ娓告垙澶撮儴绱у噾鍖栥€侀敭鐩樻彁绀哄彲璇绘€х瓑 */
 
-/* 1. 试管倾倒完成飞溅：在接收试管顶部出现短暂的飞溅光点 */
+/* 1. 璇曠鍊惧€掑畬鎴愰婧咃細鍦ㄦ帴鏀惰瘯绠￠《閮ㄥ嚭鐜扮煭鏆傜殑椋炴簠鍏夌偣 */
 .tube-container.pouring::before {
   content: '';
   position: absolute;
@@ -10077,7 +10108,7 @@ canvas[aria-hidden="true"] {
   100% { transform: translateX(-50%) scale(2.4); opacity: 0; }
 }
 
-/* 2. 液体顶部弯月面高光：在最顶层颜色层的顶部增加一条柔和的反光线 */
+/* 2. 娑蹭綋椤堕儴寮湀闈㈤珮鍏夛細鍦ㄦ渶椤跺眰棰滆壊灞傜殑椤堕儴澧炲姞涓€鏉℃煍鍜岀殑鍙嶅厜绾?*/
 .tube-inner > .color-layer:last-child::before {
   content: '';
   position: absolute;
@@ -10094,13 +10125,13 @@ canvas[aria-hidden="true"] {
   z-index: 1;
 }
 
-/* 3. 游戏面板底部内阴影：增加"接地"感，让卡片更有重量 */
+/* 3. 娓告垙闈㈡澘搴曢儴鍐呴槾褰憋細澧炲姞"鎺ュ湴"鎰燂紝璁╁崱鐗囨洿鏈夐噸閲?*/
 .game-board {
   box-shadow:
     var(--shadow-lg),
     inset 0 -2px 8px rgba(0, 0, 0, 0.04);
 }
-/* 游戏面板内部增加极轻的网格纹理，营造"桌布"感（不影响性能） */
+/* 娓告垙闈㈡澘鍐呴儴澧炲姞鏋佽交鐨勭綉鏍肩汗鐞嗭紝钀ラ€?妗屽竷"鎰燂紙涓嶅奖鍝嶆€ц兘锛?*/
 .game-board::after {
   content: '';
   position: absolute;
@@ -10117,25 +10148,25 @@ canvas[aria-hidden="true"] {
   z-index: 1;
 }
 
-/* 4. 游戏信息徽章主次分明：level-badge 为主，难度为辅，步数动态 */
+/* 4. 娓告垙淇℃伅寰界珷涓绘鍒嗘槑锛歭evel-badge 涓轰富锛岄毦搴︿负杈咃紝姝ユ暟鍔ㄦ€?*/
 .level-badge {
   font-weight: 700;
   letter-spacing: 0.3px;
-  /* 主徽章增加更强的主题色光晕 */
+  /* 涓诲窘绔犲鍔犳洿寮虹殑涓婚鑹插厜鏅?*/
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.35),
     0 2px 8px color-mix(in srgb, var(--primary) 35%, transparent);
 }
 .difficulty-badge {
-  /* 辅徽章弱化视觉权重，让主徽章突出 */
+  /* 杈呭窘绔犲急鍖栬瑙夋潈閲嶏紝璁╀富寰界珷绐佸嚭 */
   opacity: 0.92;
 }
 .moves-badge {
-  /* 步数徽章数字等宽，避免数字变化时宽度跳动 */
+  /* 姝ユ暟寰界珷鏁板瓧绛夊锛岄伩鍏嶆暟瀛楀彉鍖栨椂瀹藉害璺冲姩 */
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.2px;
 }
-/* 限时模式倒计时低值时强化警示：闪烁 + 边框 */
+/* 闄愭椂妯″紡鍊掕鏃朵綆鍊兼椂寮哄寲璀︾ず锛氶棯鐑?+ 杈规 */
 .timer-badge.timer-danger {
   border: 1.5px solid rgba(198, 40, 40, 0.4);
   animation: timer-danger-enhanced 0.6s ease-in-out infinite;
@@ -10151,7 +10182,7 @@ canvas[aria-hidden="true"] {
   }
 }
 
-/* 5. 试管编号胶囊化：更精致、与按钮呼应 */
+/* 5. 璇曠缂栧彿鑳跺泭鍖栵細鏇寸簿鑷淬€佷笌鎸夐挳鍛煎簲 */
 .tube-index {
   margin-top: 6px;
   min-width: 20px;
@@ -10163,7 +10194,7 @@ canvas[aria-hidden="true"] {
   font-weight: 600;
   text-align: center;
   font-variant-numeric: tabular-nums;
-  /* 跟随试管状态过渡 */
+  /* 璺熼殢璇曠鐘舵€佽繃娓?*/
   transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
 .tube-container:hover .tube-index {
@@ -10175,7 +10206,7 @@ canvas[aria-hidden="true"] {
   color: #fff;
   transform: scale(1.08);
 }
-/* 暗色主题下试管编号底色适配 */
+/* 鏆楄壊涓婚涓嬭瘯绠＄紪鍙峰簳鑹查€傞厤 */
 @media (prefers-color-scheme: dark) {
   .tube-index {
     background: rgba(255, 255, 255, 0.08);
@@ -10187,7 +10218,7 @@ canvas[aria-hidden="true"] {
   color: #ccc;
 }
 
-/* 6. 回放试管高亮区分：源试管与目标试管使用对比色边框 */
+/* 6. 鍥炴斁璇曠楂樹寒鍖哄垎锛氭簮璇曠涓庣洰鏍囪瘯绠′娇鐢ㄥ姣旇壊杈规 */
 .replay-tube.replay-from .tube {
   box-shadow:
     inset 2px 0 4px rgba(255, 255, 255, 0.25),
@@ -10209,7 +10240,7 @@ canvas[aria-hidden="true"] {
   100% { transform: scale(1); }
 }
 
-/* 7. 胜利动作按钮分组：视觉分组，避免一长串按钮拥挤 */
+/* 7. 鑳滃埄鍔ㄤ綔鎸夐挳鍒嗙粍锛氳瑙夊垎缁勶紝閬垮厤涓€闀夸覆鎸夐挳鎷ユ尋 */
 .win-actions {
   display: flex;
   flex-wrap: wrap;
@@ -10225,7 +10256,7 @@ canvas[aria-hidden="true"] {
   max-width: 200px;
 }
 
-/* 8. 成就/统计/设置页卡片悬停：统一上浮 + 阴影增强 */
+/* 8. 鎴愬氨/缁熻/璁剧疆椤靛崱鐗囨偓鍋滐細缁熶竴涓婃诞 + 闃村奖澧炲己 */
 .achievement-card,
 .stats-card,
 .custom-level-card,
@@ -10241,7 +10272,7 @@ canvas[aria-hidden="true"] {
   transform: translateY(-2px);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
 }
-/* 锁定状态的成就卡片不响应悬停 */
+/* 閿佸畾鐘舵€佺殑鎴愬氨鍗＄墖涓嶅搷搴旀偓鍋?*/
 .achievement-card.locked {
   cursor: default;
   opacity: 0.78;
@@ -10250,7 +10281,7 @@ canvas[aria-hidden="true"] {
   transform: none;
 }
 
-/* 9. 帮助弹窗可视化步骤容器：精致化边框与背景 */
+/* 9. 甯姪寮圭獥鍙鍖栨楠ゅ鍣細绮捐嚧鍖栬竟妗嗕笌鑳屾櫙 */
 .help-visual-demo {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.5), rgba(245, 247, 255, 0.5));
   border-radius: 10px;
@@ -10270,7 +10301,7 @@ canvas[aria-hidden="true"] {
   color: var(--primary);
 }
 
-/* 10. 超小屏幕游戏头部紧凑化：避免按钮挤压标题 */
+/* 10. 瓒呭皬灞忓箷娓告垙澶撮儴绱у噾鍖栵細閬垮厤鎸夐挳鎸ゅ帇鏍囬 */
 @media (max-width: 380px) {
   .game-header {
     padding: 8px 10px;
@@ -10301,14 +10332,14 @@ canvas[aria-hidden="true"] {
   }
 }
 
-/* 11. 页脚链接焦点环：键盘可见性 */
+/* 11. 椤佃剼閾炬帴鐒︾偣鐜細閿洏鍙鎬?*/
 .footer-link:focus-visible {
   outline: 2px solid var(--text-light);
   outline-offset: 3px;
   border-radius: 3px;
 }
 
-/* 12. 关卡按钮已完成态：增加柔和的内高光，强化"已通关"感 */
+/* 12. 鍏冲崱鎸夐挳宸插畬鎴愭€侊細澧炲姞鏌斿拰鐨勫唴楂樺厜锛屽己鍖?宸查€氬叧"鎰?*/
 .level-btn.completed {
   background: linear-gradient(135deg, #95E1A3 0%, #4ECDC4 100%);
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
@@ -10317,7 +10348,7 @@ canvas[aria-hidden="true"] {
   background: linear-gradient(135deg, #7DD89A 0%, #3FBDB4 100%);
 }
 
-/* 13. 键盘提示文字可读性：增强对比度与字距 */
+/* 13. 閿洏鎻愮ず鏂囧瓧鍙鎬э細澧炲己瀵规瘮搴︿笌瀛楄窛 */
 .keyboard-hint {
   color: var(--text);
   opacity: 0.7;
@@ -10340,7 +10371,7 @@ canvas[aria-hidden="true"] {
   color: #ddd;
 }
 
-/* 14. 移动端试管触摸态反馈：按下时立即给予视觉反馈 */
+/* 14. 绉诲姩绔瘯绠¤Е鎽告€佸弽棣堬細鎸変笅鏃剁珛鍗崇粰浜堣瑙夊弽棣?*/
 @media (hover: none) and (pointer: coarse) {
   .tube-container:active:not(.selected) {
     transform: scale(0.96);
@@ -10352,7 +10383,7 @@ canvas[aria-hidden="true"] {
   }
 }
 
-/* 15. 设置页主题选择按钮：选中态微缩放反馈 */
+/* 15. 璁剧疆椤典富棰橀€夋嫨鎸夐挳锛氶€変腑鎬佸井缂╂斁鍙嶉 */
 .theme-btn {
   transition:
     transform 0.18s cubic-bezier(0.34, 1.3, 0.64, 1),
@@ -10366,7 +10397,7 @@ canvas[aria-hidden="true"] {
   transition: transform 0.08s ease;
 }
 
-/* 16. 试管选中态：增强"被抬起"的视觉冲击力 - 增加底部投影强度 */
+/* 16. 璇曠閫変腑鎬侊細澧炲己"琚姮璧?鐨勮瑙夊啿鍑诲姏 - 澧炲姞搴曢儴鎶曞奖寮哄害 */
 .tube-container.selected::after {
   background: radial-gradient(ellipse, rgba(0, 0, 0, 0.35) 0%, transparent 70%);
   width: 40px;
@@ -10379,7 +10410,7 @@ canvas[aria-hidden="true"] {
   50% { transform: translateX(-50%) scale(0.85); opacity: 1; }
 }
 
-/* 17. 步数效率徽章悬停：tooltip 风格的反馈 */
+/* 17. 姝ユ暟鏁堢巼寰界珷鎮仠锛歵ooltip 椋庢牸鐨勫弽棣?*/
 .efficiency-badge {
   transition: transform 0.18s ease, box-shadow 0.2s ease;
   cursor: default;
@@ -10388,7 +10419,7 @@ canvas[aria-hidden="true"] {
   transform: translateY(-1px) scale(1.05);
 }
 
-/* 18. 减少动画偏好：禁用本批次新增的装饰性动画 */
+/* 18. 鍑忓皯鍔ㄧ敾鍋忓ソ锛氱鐢ㄦ湰鎵规鏂板鐨勮楗版€у姩鐢?*/
 @media (prefers-reduced-motion: reduce) {
   .tube-container.pouring::before,
   .timer-badge.timer-danger,
@@ -10404,7 +10435,7 @@ canvas[aria-hidden="true"] {
   }
 }
 
-/* 19. 暗色主题适配：第五批新增项在暗色模式下保持可读性 */
+/* 19. 鏆楄壊涓婚閫傞厤锛氱浜旀壒鏂板椤瑰湪鏆楄壊妯″紡涓嬩繚鎸佸彲璇绘€?*/
 @media (prefers-color-scheme: dark) {
   .game-board {
     box-shadow:
@@ -10439,7 +10470,7 @@ canvas[aria-hidden="true"] {
   border-top-color: rgba(255, 255, 255, 0.1);
 }
 
-/* 今日成就快捷入口卡片 — 首页展示成就进度与最近解锁，提升发现率 */
+/* 浠婃棩鎴愬氨蹇嵎鍏ュ彛鍗＄墖 鈥?棣栭〉灞曠ず鎴愬氨杩涘害涓庢渶杩戣В閿侊紝鎻愬崌鍙戠幇鐜?*/
 .today-achievement-card {
   background: linear-gradient(135deg, rgba(102, 126, 234, 0.08), rgba(118, 75, 162, 0.08));
   border: 1px solid rgba(102, 126, 234, 0.2);
@@ -10506,7 +10537,7 @@ canvas[aria-hidden="true"] {
   font-size: 12px;
   color: #999;
 }
-/* 移动端适配 */
+/* 绉诲姩绔€傞厤 */
 @media (max-width: 480px) {
   .today-achievement-card {
     padding: 12px;
@@ -10519,7 +10550,7 @@ canvas[aria-hidden="true"] {
     font-size: 14px;
   }
 }
-/* 暗色主题适配 */
+/* 鏆楄壊涓婚閫傞厤 */
 .dark-theme .today-achievement-card {
   background: linear-gradient(135deg, rgba(102, 126, 234, 0.12), rgba(118, 75, 162, 0.12));
   border-color: rgba(102, 126, 234, 0.3);
@@ -10540,7 +10571,7 @@ canvas[aria-hidden="true"] {
   color: #888;
 }
 
-/* 暗色主题：快速重玩卡片 */
+/* 鏆楄壊涓婚锛氬揩閫熼噸鐜╁崱鐗?*/
 .dark-theme .replay-last-card {
   background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
@@ -10552,7 +10583,7 @@ canvas[aria-hidden="true"] {
   color: #ccc;
 }
 
-/* 每日目标卡片暗色适配 */
+/* 姣忔棩鐩爣鍗＄墖鏆楄壊閫傞厤 */
 .dark-theme .daily-goals-card {
   background: linear-gradient(135deg, rgba(255, 184, 0, 0.1) 0%, rgba(255, 120, 50, 0.1) 100%);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
@@ -10586,7 +10617,7 @@ canvas[aria-hidden="true"] {
   color: #555;
 }
 
-/* 搜索结果关键词高亮 — 帮助用户快速定位匹配内容 */
+/* 鎼滅储缁撴灉鍏抽敭璇嶉珮浜?鈥?甯姪鐢ㄦ埛蹇€熷畾浣嶅尮閰嶅唴瀹?*/
 mark.search-highlight {
   background: rgba(255, 235, 59, 0.4);
   color: inherit;
@@ -10600,17 +10631,16 @@ mark.search-highlight {
 }
 
 /* ============================================================ */
-/* ============ 2026-07-18 样式优化增强（第六批） ============ */
+/* ============ 2026-07-18 鏍峰紡浼樺寲澧炲己锛堢鍏壒锛?============ */
 /* ============================================================ */
-/* 本批次目标：
-   - 增强通关瞬间的视觉冲击力（全屏闪光、胜利卡片 stagger 入场）
-   - 让液体更"活"（顶层液体周期性波动、试管底部反光增强）
-   - 提升首页浮动导航的玻璃质感与交互反馈
-   - 各页面增加装饰性细节与加载动画
-   - 完善超小屏与暗色主题适配
-   所有修改均为追加样式，不修改已有规则，不破坏现有功能。 */
+/* 鏈壒娆＄洰鏍囷細
+   - 澧炲己閫氬叧鐬棿鐨勮瑙夊啿鍑诲姏锛堝叏灞忛棯鍏夈€佽儨鍒╁崱鐗?stagger 鍏ュ満锛?   - 璁╂恫浣撴洿"娲?锛堥《灞傛恫浣撳懆鏈熸€ф尝鍔ㄣ€佽瘯绠″簳閮ㄥ弽鍏夊寮猴級
+   - 鎻愬崌棣栭〉娴姩瀵艰埅鐨勭幓鐠冭川鎰熶笌浜や簰鍙嶉
+   - 鍚勯〉闈㈠鍔犺楗版€х粏鑺備笌鍔犺浇鍔ㄧ敾
+   - 瀹屽杽瓒呭皬灞忎笌鏆楄壊涓婚閫傞厤
+   鎵€鏈変慨鏀瑰潎涓鸿拷鍔犳牱寮忥紝涓嶄慨鏀瑰凡鏈夎鍒欙紝涓嶇牬鍧忕幇鏈夊姛鑳姐€?*/
 
-/* 1. 首页模式按钮：悬停光晕跟随各自主题色 */
+/* 1. 棣栭〉妯″紡鎸夐挳锛氭偓鍋滃厜鏅曡窡闅忓悇鑷富棰樿壊 */
 .mode-grid-btn.btn-primary:hover {
   box-shadow: 0 6px 24px rgba(102, 126, 234, 0.5), 0 0 0 2px rgba(102, 126, 234, 0.3);
 }
@@ -10623,7 +10653,7 @@ mark.search-highlight {
 .mode-grid-btn.btn-timed:hover {
   box-shadow: 0 6px 24px rgba(79, 172, 254, 0.55), 0 0 0 2px rgba(0, 242, 254, 0.35);
 }
-/* 模式按钮内部图标：悬停时轻微弹跳 */
+/* 妯″紡鎸夐挳鍐呴儴鍥炬爣锛氭偓鍋滄椂杞诲井寮硅烦 */
 .mode-grid-btn:hover .mode-grid-icon {
   transform: translateY(-2px) scale(1.1);
   transition: transform 0.3s cubic-bezier(0.34, 1.5, 0.64, 1);
@@ -10632,7 +10662,7 @@ mark.search-highlight {
   transition: transform 0.25s ease;
 }
 
-/* 2. 首页浮动导航（fab-nav）容器玻璃化 */
+/* 2. 棣栭〉娴姩瀵艰埅锛坒ab-nav锛夊鍣ㄧ幓鐠冨寲 */
 .fab-nav {
   padding: 6px;
   border-radius: 28px;
@@ -10645,11 +10675,11 @@ mark.search-highlight {
 .fab-nav-btn {
   position: relative;
   overflow: hidden;
-  /* 内置高光：玻璃质感 */
+  /* 鍐呯疆楂樺厜锛氱幓鐠冭川鎰?*/
   background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(102, 126, 234, 0.9));
 }
 .fab-nav-btn::before {
-  /* 顶部光泽线 */
+  /* 椤堕儴鍏夋辰绾?*/
   content: '';
   position: absolute;
   top: 0;
@@ -10669,7 +10699,7 @@ mark.search-highlight {
   transition: transform 0.08s ease;
 }
 
-/* 3. 通关瞬间全屏闪光：增强通关的视觉冲击 */
+/* 3. 閫氬叧鐬棿鍏ㄥ睆闂厜锛氬寮洪€氬叧鐨勮瑙夊啿鍑?*/
 .win-overlay::before {
   content: '';
   position: fixed;
@@ -10685,7 +10715,7 @@ mark.search-highlight {
   100% { opacity: 0; transform: scale(1.4); }
 }
 
-/* 4. 胜利卡片：标题、星星、按钮依次淡入（stagger 入场） */
+/* 4. 鑳滃埄鍗＄墖锛氭爣棰樸€佹槦鏄熴€佹寜閽緷娆℃贰鍏ワ紙stagger 鍏ュ満锛?*/
 .win-card .win-emoji {
   animation: win-emoji-pop 0.6s cubic-bezier(0.34, 1.5, 0.64, 1);
 }
@@ -10716,7 +10746,7 @@ mark.search-highlight {
   100% { opacity: 1; transform: translateY(0); }
 }
 
-/* 5. 液体表面周期性波动：让液体看起来更"活" */
+/* 5. 娑蹭綋琛ㄩ潰鍛ㄦ湡鎬ф尝鍔細璁╂恫浣撶湅璧锋潵鏇?娲? */
 .tube-inner > .color-layer:last-child::after {
   animation: liquid-surface-wave 3.5s ease-in-out infinite;
 }
@@ -10725,20 +10755,20 @@ mark.search-highlight {
   50% { transform: scaleX(1.04); opacity: 0.9; }
 }
 
-/* 6. 试管底部反光：增强玻璃质感 */
+/* 6. 璇曠搴曢儴鍙嶅厜锛氬寮虹幓鐠冭川鎰?*/
 .tube::after {
-  /* 在原右侧次高光基础上，底部增加一个微弱的反光弧 */
+  /* 鍦ㄥ師鍙充晶娆￠珮鍏夊熀纭€涓婏紝搴曢儴澧炲姞涓€涓井寮辩殑鍙嶅厜寮?*/
   box-shadow:
     0 0 0 0 transparent,
-    /* 底部圆弧反光 */
+    /* 搴曢儴鍦嗗姬鍙嶅厜 */
     0 -2px 4px rgba(255, 255, 255, 0.15) inset;
 }
 .tube-inner {
-  /* 底部内侧增加一条反光弧线 */
+  /* 搴曢儴鍐呬晶澧炲姞涓€鏉″弽鍏夊姬绾?*/
   box-shadow: inset 0 -4px 8px -2px rgba(255, 255, 255, 0.18);
 }
 
-/* 7. 信息页（关于/隐私/FAQ）头部装饰光晕 */
+/* 7. 淇℃伅椤碉紙鍏充簬/闅愮/FAQ锛夊ご閮ㄨ楗板厜鏅?*/
 .info-page > h2:first-of-type {
   position: relative;
   padding-top: 12px;
@@ -10764,7 +10794,7 @@ mark.search-highlight {
   padding-left: 12px;
 }
 
-/* 8. 统计页条形图填充动画 */
+/* 8. 缁熻椤垫潯褰㈠浘濉厖鍔ㄧ敾 */
 .chart-bar-fill {
   animation: chart-bar-grow 0.8s cubic-bezier(0.34, 1.2, 0.64, 1) both;
   transform-origin: left center;
@@ -10773,7 +10803,7 @@ mark.search-highlight {
   0% { transform: scaleX(0); opacity: 0.3; }
   100% { transform: scaleX(1); opacity: 1; }
 }
-/* 进度条同步动画 */
+/* 杩涘害鏉″悓姝ュ姩鐢?*/
 .progress-bar-fill,
 .achievement-overall-fill,
 .ach-cat-progress-fill,
@@ -10782,7 +10812,7 @@ mark.search-highlight {
 .progress-overall-bar {
   animation: chart-bar-grow 1s cubic-bezier(0.34, 1.2, 0.64, 1) both;
 }
-/* 热力图格子依次淡入 */
+/* 鐑姏鍥炬牸瀛愪緷娆℃贰鍏?*/
 .stats-heatmap-cell {
   animation: heatmap-fade-in 0.4s ease both;
 }
@@ -10791,7 +10821,7 @@ mark.search-highlight {
   100% { opacity: 1; transform: scale(1); }
 }
 
-/* 9. 成就时间线连接线绘制动画 */
+/* 9. 鎴愬氨鏃堕棿绾胯繛鎺ョ嚎缁樺埗鍔ㄧ敾 */
 .timeline-connector {
   background: linear-gradient(180deg, var(--primary) 0%, var(--primary) 100%);
   background-size: 100% 100%;
@@ -10810,7 +10840,7 @@ mark.search-highlight {
   100% { transform: scale(1); }
 }
 
-/* 10. 设置页 toggle-switch 弹性动画 */
+/* 10. 璁剧疆椤?toggle-switch 寮规€у姩鐢?*/
 .toggle-switch {
   transition: background 0.25s cubic-bezier(0.34, 1.2, 0.64, 1);
 }
@@ -10818,7 +10848,7 @@ mark.search-highlight {
   transition: transform 0.3s cubic-bezier(0.34, 1.5, 0.64, 1), box-shadow 0.2s ease;
 }
 .toggle-switch.on .toggle-knob {
-  /* 开启时旋钮有轻微的过冲反馈 */
+  /* 寮€鍚椂鏃嬮挳鏈夎交寰殑杩囧啿鍙嶉 */
   animation: toggle-on-bounce 0.4s cubic-bezier(0.34, 1.5, 0.64, 1);
 }
 @keyframes toggle-on-bounce {
@@ -10828,7 +10858,7 @@ mark.search-highlight {
   100% { transform: translateX(20px); }
 }
 
-/* 11. 可折叠区域：展开/折叠图标旋转动画 */
+/* 11. 鍙姌鍙犲尯鍩燂細灞曞紑/鎶樺彔鍥炬爣鏃嬭浆鍔ㄧ敾 */
 .collapse-toggle {
   transition: transform 0.3s cubic-bezier(0.34, 1.3, 0.64, 1);
   display: inline-block;
@@ -10843,7 +10873,7 @@ mark.search-highlight {
   transform: rotate(-90deg) scale(1.15);
 }
 
-/* 12. 关卡按钮悬停时显示更清晰的状态指示 */
+/* 12. 鍏冲崱鎸夐挳鎮仠鏃舵樉绀烘洿娓呮櫚鐨勭姸鎬佹寚绀?*/
 .level-btn {
   transition: transform 0.18s ease, box-shadow 0.2s ease, filter 0.2s ease;
   position: relative;
@@ -10853,7 +10883,7 @@ mark.search-highlight {
   filter: brightness(1.08);
 }
 .level-btn.current::after {
-  /* 当前关卡：右上角"在此"指示点 */
+  /* 褰撳墠鍏冲崱锛氬彸涓婅"鍦ㄦ"鎸囩ず鐐?*/
   content: '';
   position: absolute;
   top: 4px;
@@ -10873,7 +10903,7 @@ mark.search-highlight {
   box-shadow: 0 4px 12px rgba(149, 225, 163, 0.4);
 }
 
-/* 13. 超小屏幕（≤360px）试管尺寸自适应 */
+/* 13. 瓒呭皬灞忓箷锛堚墹360px锛夎瘯绠″昂瀵歌嚜閫傚簲 */
 @media (max-width: 360px) {
   .tube {
     width: 36px;
@@ -10888,7 +10918,7 @@ mark.search-highlight {
     right: -5px;
     height: 5px;
   }
-  /* 多管时进一步紧凑 */
+  /* 澶氱鏃惰繘涓€姝ョ揣鍑?*/
   .tubes-grid[data-tube-count="9"] .tube,
   .tubes-grid[data-tube-count="10"] .tube,
   .tubes-grid[data-tube-count="11"] .tube,
@@ -10898,7 +10928,7 @@ mark.search-highlight {
   }
 }
 
-/* 14. 减少动画偏好：禁用本批次新增的装饰性动画 */
+/* 14. 鍑忓皯鍔ㄧ敾鍋忓ソ锛氱鐢ㄦ湰鎵规鏂板鐨勮楗版€у姩鐢?*/
 @media (prefers-reduced-motion: reduce) {
   .win-overlay::before,
   .win-card .win-emoji,
@@ -10930,7 +10960,7 @@ mark.search-highlight {
   }
 }
 
-/* 15. 暗色主题适配：本批次新增项目在暗色模式下保持可读性 */
+/* 15. 鏆楄壊涓婚閫傞厤锛氭湰鎵规鏂板椤圭洰鍦ㄦ殫鑹叉ā寮忎笅淇濇寔鍙鎬?*/
 @media (prefers-color-scheme: dark) {
   .fab-nav {
     background: rgba(0, 0, 0, 0.25);
@@ -10951,7 +10981,7 @@ mark.search-highlight {
   background: linear-gradient(180deg, var(--primary) 0%, var(--primary) 100%);
 }
 
-/* 新手引导提示暗色主题适配 */
+/* 鏂版墜寮曞鎻愮ず鏆楄壊涓婚閫傞厤 */
 .dark-theme .beginner-hint-text {
   color: #8b9aff;
   background: rgba(139, 154, 255, 0.15);
@@ -10963,7 +10993,7 @@ mark.search-highlight {
   }
 }
 
-/* 新手鼓励提示暗色主题适配 */
+/* 鏂版墜榧撳姳鎻愮ず鏆楄壊涓婚閫傞厤 */
 .dark-theme .encouragement-text {
   color: #81c784;
   background: rgba(129, 199, 132, 0.15);
@@ -10976,13 +11006,11 @@ mark.search-highlight {
 }
 
 /* ============================================================ */
-/* ============ 2026-07-19 样式优化增强（第七批） ============ */
+/* ============ 2026-07-19 鏍峰紡浼樺寲澧炲己锛堢涓冩壒锛?============ */
 /* ============================================================ */
-/* 本批次聚焦：首页 hero 装饰强化、模式按钮主次分明、试管液体流动、
-   关卡按钮勋章质感、信息页排版精致化、成就解锁光晕、页面过渡动画、
-   滚动条美化、触摸 ripple 反馈、数字等宽对齐等微交互打磨 */
+/* 鏈壒娆¤仛鐒︼細棣栭〉 hero 瑁呴グ寮哄寲銆佹ā寮忔寜閽富娆″垎鏄庛€佽瘯绠℃恫浣撴祦鍔ㄣ€?   鍏冲崱鎸夐挳鍕嬬珷璐ㄦ劅銆佷俊鎭〉鎺掔増绮捐嚧鍖栥€佹垚灏辫В閿佸厜鏅曘€侀〉闈㈣繃娓″姩鐢汇€?   婊氬姩鏉＄編鍖栥€佽Е鎽?ripple 鍙嶉銆佹暟瀛楃瓑瀹藉榻愮瓑寰氦浜掓墦纾?*/
 
-/* 1. 首页 logo 周围旋转色环光晕 - 让首屏视觉锚点更具仪式感 */
+/* 1. 棣栭〉 logo 鍛ㄥ洿鏃嬭浆鑹茬幆鍏夋檿 - 璁╅灞忚瑙夐敋鐐规洿鍏蜂华寮忔劅 */
 .logo {
   position: relative;
 }
@@ -11013,18 +11041,18 @@ mark.search-highlight {
   100% { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
-/* 2. 首页标题渐变文字 - 替代单色标题，增加视觉层次 */
+/* 2. 棣栭〉鏍囬娓愬彉鏂囧瓧 - 鏇夸唬鍗曡壊鏍囬锛屽鍔犺瑙夊眰娆?*/
 .home-header .title {
   background: linear-gradient(135deg, #ffffff 0%, #ffe66d 50%, #ff9a9e 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  /* 渐变文字下 text-shadow 会脱离字形显示，改用 drop-shadow 跟随文字轮廓 */
+  /* 娓愬彉鏂囧瓧涓?text-shadow 浼氳劚绂诲瓧褰㈡樉绀猴紝鏀圭敤 drop-shadow 璺熼殢鏂囧瓧杞粨 */
   text-shadow: none;
   filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
 }
 
-/* 3. 副标题装饰下划线 - 让 subtitle 有"标题之下"的视觉收束感 */
+/* 3. 鍓爣棰樿楗颁笅鍒掔嚎 - 璁?subtitle 鏈?鏍囬涔嬩笅"鐨勮瑙夋敹鏉熸劅 */
 .subtitle {
   position: relative;
   display: inline-block;
@@ -11042,7 +11070,7 @@ mark.search-highlight {
   border-radius: 1px;
 }
 
-/* 4. 主按钮"开始游戏"强化 - 在 2×2 网格中视觉重量最大 */
+/* 4. 涓绘寜閽?寮€濮嬫父鎴?寮哄寲 - 鍦?2脳2 缃戞牸涓瑙夐噸閲忔渶澶?*/
 .mode-grid-btn.btn-primary {
   position: relative;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #ff6b9d 100%);
@@ -11066,7 +11094,7 @@ mark.search-highlight {
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.25));
 }
 
-/* 5. 模式按钮 ripple 波纹反馈 - CSS-only 实现，按下时从触点扩散 */
+/* 5. 妯″紡鎸夐挳 ripple 娉㈢汗鍙嶉 - CSS-only 瀹炵幇锛屾寜涓嬫椂浠庤Е鐐规墿鏁?*/
 .mode-grid-btn,
 .btn,
 .btn-back,
@@ -11077,7 +11105,7 @@ mark.search-highlight {
   position: relative;
   overflow: hidden;
 }
-/* ripple 通过 :active 触发伪元素扩散 */
+/* ripple 閫氳繃 :active 瑙﹀彂浼厓绱犳墿鏁?*/
 .mode-grid-btn::after,
 .btn::after {
   content: '';
@@ -11101,9 +11129,8 @@ mark.search-highlight {
   transition: width 0s, height 0s, opacity 0s;
 }
 
-/* 6. 取消上一批 .mode-grid-btn::after 与本批 ripple 的冲突
-   上一批定义了"按钮闪亮动画"的 ::after 用于 hover 时光带扫过，
-   此处重写为统一的 ripple 反馈，移除光带扫过避免双重伪元素冲突 */
+/* 6. 鍙栨秷涓婁竴鎵?.mode-grid-btn::after 涓庢湰鎵?ripple 鐨勫啿绐?   涓婁竴鎵瑰畾涔変簡"鎸夐挳闂寒鍔ㄧ敾"鐨?::after 鐢ㄤ簬 hover 鏃跺厜甯︽壂杩囷紝
+   姝ゅ閲嶅啓涓虹粺涓€鐨?ripple 鍙嶉锛岀Щ闄ゅ厜甯︽壂杩囬伩鍏嶅弻閲嶄吉鍏冪礌鍐茬獊 */
 .mode-entry .btn::after {
   display: none;
 }
@@ -11111,7 +11138,7 @@ mark.search-highlight {
   display: none;
 }
 
-/* 7. 试管倾倒时液体流入动画 - 颜色层从顶部"流入"而非瞬间出现 */
+/* 7. 璇曠鍊惧€掓椂娑蹭綋娴佸叆鍔ㄧ敾 - 棰滆壊灞備粠椤堕儴"娴佸叆"鑰岄潪鐬棿鍑虹幇 */
 .tube-container.pouring .color-layer {
   animation: liquid-pour-in 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
@@ -11131,7 +11158,7 @@ mark.search-highlight {
   }
 }
 
-/* 8. 液体表面微光斑 - 顶层颜色层增加周期性闪烁的高光点，让液体更"活" */
+/* 8. 娑蹭綋琛ㄩ潰寰厜鏂?- 椤跺眰棰滆壊灞傚鍔犲懆鏈熸€ч棯鐑佺殑楂樺厜鐐癸紝璁╂恫浣撴洿"娲? */
 .tube-inner > .color-layer:last-child::before {
   animation: liquid-shine 2.8s ease-in-out infinite;
 }
@@ -11140,10 +11167,10 @@ mark.search-highlight {
   50% { opacity: 0.85; transform: scale(1.15); }
 }
 
-/* 9. 关卡按钮完成态勋章质感 - 金色描边（用 box-shadow 模拟，保留原 border-left 难度色）+ 微光 */
+/* 9. 鍏冲崱鎸夐挳瀹屾垚鎬佸媼绔犺川鎰?- 閲戣壊鎻忚竟锛堢敤 box-shadow 妯℃嫙锛屼繚鐣欏師 border-left 闅惧害鑹诧級+ 寰厜 */
 .level-btn.completed {
   background: linear-gradient(135deg, #ffd89b 0%, #95E1A3 60%, #4ECDC4 100%);
-  /* 不使用 border，避免覆盖 .diff-easy/.diff-normal 等难度颜色 border-left */
+  /* 涓嶄娇鐢?border锛岄伩鍏嶈鐩?.diff-easy/.diff-normal 绛夐毦搴﹂鑹?border-left */
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.5),
     0 2px 8px rgba(255, 195, 110, 0.35),
@@ -11158,7 +11185,7 @@ mark.search-highlight {
     0 0 0 2px rgba(255, 216, 155, 0.6);
 }
 
-/* 10. 当前关卡引导光环 - 用 box-shadow 多层发光实现，避免 overflow:hidden 裁剪 */
+/* 10. 褰撳墠鍏冲崱寮曞鍏夌幆 - 鐢?box-shadow 澶氬眰鍙戝厜瀹炵幇锛岄伩鍏?overflow:hidden 瑁佸壀 */
 .level-btn.current {
   position: relative;
   box-shadow:
@@ -11188,7 +11215,7 @@ mark.search-highlight {
   }
 }
 
-/* 11. 信息页 h2 装饰序号 - 长文档增加阅读节奏感 */
+/* 11. 淇℃伅椤?h2 瑁呴グ搴忓彿 - 闀挎枃妗ｅ鍔犻槄璇昏妭濂忔劅 */
 .info-page h2 {
   position: relative;
   padding-left: 28px;
@@ -11205,7 +11232,7 @@ mark.search-highlight {
   box-shadow: 0 0 8px rgba(255, 230, 109, 0.4);
 }
 
-/* 12. 信息页列表项项目符号彩色化 - 替代默认黑色圆点 */
+/* 12. 淇℃伅椤靛垪琛ㄩ」椤圭洰绗﹀彿褰╄壊鍖?- 鏇夸唬榛樿榛戣壊鍦嗙偣 */
 .info-page ul {
   list-style: none;
   padding-left: 4px;
@@ -11226,13 +11253,13 @@ mark.search-highlight {
   box-shadow: 0 0 4px rgba(255, 154, 158, 0.4);
 }
 
-/* 13. 信息页段落字距优化 - 大段文字更易读 */
+/* 13. 淇℃伅椤垫钀藉瓧璺濅紭鍖?- 澶ф鏂囧瓧鏇存槗璇?*/
 .info-page p {
   letter-spacing: 0.2px;
   word-break: break-word;
 }
 
-/* 14. 成就卡片解锁光晕 - 已解锁卡片金色勋章感 */
+/* 14. 鎴愬氨鍗＄墖瑙ｉ攣鍏夋檿 - 宸茶В閿佸崱鐗囬噾鑹插媼绔犳劅 */
 .achievement-card.unlocked {
   position: relative;
   border: 1px solid rgba(255, 216, 155, 0.5);
@@ -11251,7 +11278,7 @@ mark.search-highlight {
   filter: drop-shadow(0 2px 6px rgba(255, 195, 110, 0.6));
 }
 
-/* 15. 锁定成就灰度处理 - 与解锁形成强对比 */
+/* 15. 閿佸畾鎴愬氨鐏板害澶勭悊 - 涓庤В閿佸舰鎴愬己瀵规瘮 */
 .achievement-card.locked {
   filter: saturate(0.4) brightness(0.85);
   transition: filter 0.3s ease;
@@ -11260,7 +11287,7 @@ mark.search-highlight {
   filter: saturate(0.6) brightness(0.95);
 }
 
-/* 16. 页面进入过渡动画 - 信息页/设置页/统计页切换时淡入上推 */
+/* 16. 椤甸潰杩涘叆杩囨浮鍔ㄧ敾 - 淇℃伅椤?璁剧疆椤?缁熻椤靛垏鎹㈡椂娣″叆涓婃帹 */
 .info-page,
 .achievement-list,
 .stats-container,
@@ -11278,7 +11305,7 @@ mark.search-highlight {
   }
 }
 
-/* 17. 自定义滚动条美化 - WebKit 内核浏览器 */
+/* 17. 鑷畾涔夋粴鍔ㄦ潯缇庡寲 - WebKit 鍐呮牳娴忚鍣?*/
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
@@ -11297,13 +11324,13 @@ mark.search-highlight {
   background: linear-gradient(180deg, rgba(102, 126, 234, 0.75), rgba(118, 75, 162, 0.75));
   background-clip: padding-box;
 }
-/* Firefox 滚动条 */
+/* Firefox 婊氬姩鏉?*/
 * {
   scrollbar-width: thin;
   scrollbar-color: rgba(102, 126, 234, 0.5) rgba(0, 0, 0, 0.05);
 }
 
-/* 18. 数字等宽对齐 - 统计页/徽章数字使用 tabular-nums */
+/* 18. 鏁板瓧绛夊瀵归綈 - 缁熻椤?寰界珷鏁板瓧浣跨敤 tabular-nums */
 .stat-value,
 .stats-number,
 .stats-value,
@@ -11321,7 +11348,7 @@ mark.search-highlight {
   font-feature-settings: 'tnum' on;
 }
 
-/* 19. 移动端触摸反馈增强 - footer 链接和快速导航触摸区域 */
+/* 19. 绉诲姩绔Е鎽稿弽棣堝寮?- footer 閾炬帴鍜屽揩閫熷鑸Е鎽稿尯鍩?*/
 @media (hover: none) and (pointer: coarse) {
   .footer-link {
     padding: 8px 10px;
@@ -11345,7 +11372,7 @@ mark.search-highlight {
   }
 }
 
-/* 20. 模式按钮在移动端触摸时按下反馈 - 与 ripple 配合 */
+/* 20. 妯″紡鎸夐挳鍦ㄧЩ鍔ㄧ瑙︽懜鏃舵寜涓嬪弽棣?- 涓?ripple 閰嶅悎 */
 @media (hover: none) and (pointer: coarse) {
   .mode-grid-btn:active {
     transform: scale(0.96);
@@ -11357,7 +11384,7 @@ mark.search-highlight {
   }
 }
 
-/* 21. 关卡搜索框与难度筛选器视觉统一 */
+/* 21. 鍏冲崱鎼滅储妗嗕笌闅惧害绛涢€夊櫒瑙嗚缁熶竴 */
 .level-search-box {
   display: flex;
   gap: 6px;
@@ -11397,7 +11424,7 @@ mark.search-highlight {
   cursor: not-allowed;
 }
 
-/* 22. 快速导航卡片悬停效果增强 */
+/* 22. 蹇€熷鑸崱鐗囨偓鍋滄晥鏋滃寮?*/
 .quick-nav-card {
   display: flex;
   flex-direction: column;
@@ -11435,7 +11462,7 @@ mark.search-highlight {
   line-height: 1.3;
 }
 
-/* 23. 难度筛选按钮 hover 状态增强 */
+/* 23. 闅惧害绛涢€夋寜閽?hover 鐘舵€佸寮?*/
 .diff-filter-btn {
   padding: 5px 11px;
   border-radius: 14px;
@@ -11452,34 +11479,34 @@ mark.search-highlight {
   transform: translateY(-1px);
 }
 
-/* 24. 暗色主题适配 - 本批次新增项目在暗色模式下保持可读性 */
+/* 24. 鏆楄壊涓婚閫傞厤 - 鏈壒娆℃柊澧為」鐩湪鏆楄壊妯″紡涓嬩繚鎸佸彲璇绘€?*/
 @media (prefers-color-scheme: dark) {
-  /* logo 光环在暗色下减淡 */
+  /* logo 鍏夌幆鍦ㄦ殫鑹蹭笅鍑忔贰 */
   .logo::before { opacity: 0.35; }
-  /* 标题渐变文字在暗色下提亮 */
+  /* 鏍囬娓愬彉鏂囧瓧鍦ㄦ殫鑹蹭笅鎻愪寒 */
   .home-header .title {
     background: linear-gradient(135deg, #ffffff 0%, #ffe66d 50%, #ff9a9e 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
   }
-  /* 关卡按钮完成态暗色适配 */
+  /* 鍏冲崱鎸夐挳瀹屾垚鎬佹殫鑹查€傞厤 */
   .level-btn.completed {
     background: linear-gradient(135deg, #6b5d3f 0%, #4a6b5a 60%, #2d5a5a 100%);
     border-color: rgba(255, 216, 155, 0.3);
     color: #ffe66d;
   }
-  /* 信息页 h2 装饰条暗色减淡 */
+  /* 淇℃伅椤?h2 瑁呴グ鏉℃殫鑹插噺娣?*/
   .info-page h2::before {
     background: linear-gradient(180deg, #ffe66d 0%, #ff9a9e 50%, #8b9aff 100%);
     box-shadow: 0 0 6px rgba(255, 230, 109, 0.3);
   }
-  /* 信息页列表项圆点暗色减淡 */
+  /* 淇℃伅椤靛垪琛ㄩ」鍦嗙偣鏆楄壊鍑忔贰 */
   .info-page li::before {
     background: linear-gradient(135deg, #ffe66d, #ff9a9e);
     box-shadow: 0 0 3px rgba(255, 154, 158, 0.3);
   }
-  /* 成就卡片解锁光晕暗色适配 */
+  /* 鎴愬氨鍗＄墖瑙ｉ攣鍏夋檿鏆楄壊閫傞厤 */
   .achievement-card.unlocked {
     background: linear-gradient(135deg, rgba(58, 50, 40, 0.95) 0%, rgba(45, 40, 30, 0.9) 100%);
     border-color: rgba(255, 216, 155, 0.35);
@@ -11491,7 +11518,7 @@ mark.search-highlight {
   .achievement-card.locked {
     background: rgba(40, 40, 55, 0.6);
   }
-  /* 滚动条暗色适配 */
+  /* 婊氬姩鏉℃殫鑹查€傞厤 */
   ::-webkit-scrollbar-track {
     background: rgba(255, 255, 255, 0.04);
   }
@@ -11501,7 +11528,7 @@ mark.search-highlight {
   * {
     scrollbar-color: rgba(102, 126, 234, 0.6) rgba(255, 255, 255, 0.04);
   }
-  /* 快速导航卡片暗色适配 */
+  /* 蹇€熷鑸崱鐗囨殫鑹查€傞厤 */
   .quick-nav-card {
     background: rgba(40, 40, 55, 0.7);
     border-color: rgba(139, 154, 255, 0.2);
@@ -11512,7 +11539,7 @@ mark.search-highlight {
   }
   .quick-nav-label { color: #e0e0e0; }
   .quick-nav-desc { color: #999; }
-  /* 难度筛选按钮暗色适配 */
+  /* 闅惧害绛涢€夋寜閽殫鑹查€傞厤 */
   .diff-filter-btn {
     background: rgba(255, 255, 255, 0.08);
     border-color: rgba(255, 255, 255, 0.12);
@@ -11522,7 +11549,7 @@ mark.search-highlight {
     background: rgba(255, 255, 255, 0.15);
     border-color: rgba(139, 154, 255, 0.4);
   }
-  /* 关卡搜索输入框暗色适配 */
+  /* 鍏冲崱鎼滅储杈撳叆妗嗘殫鑹查€傞厤 */
   .level-search-input {
     background: rgba(40, 40, 55, 0.8);
     color: #e0e0e0;
@@ -11534,7 +11561,7 @@ mark.search-highlight {
   }
 }
 
-/* 显式暗色主题类适配 - 与 prefers-color-scheme 同步 */
+/* 鏄惧紡鏆楄壊涓婚绫婚€傞厤 - 涓?prefers-color-scheme 鍚屾 */
 .dark-theme .logo::before { opacity: 0.35; }
 .dark-theme .level-btn.completed {
   background: linear-gradient(135deg, #6b5d3f 0%, #4a6b5a 60%, #2d5a5a 100%);
@@ -11588,7 +11615,7 @@ mark.search-highlight {
   box-shadow: 0 0 0 3px rgba(139, 154, 255, 0.2);
 }
 
-/* 25. 减少动画偏好 - 禁用本批次新增的装饰性动画与过渡 */
+/* 25. 鍑忓皯鍔ㄧ敾鍋忓ソ - 绂佺敤鏈壒娆℃柊澧炵殑瑁呴グ鎬у姩鐢讳笌杩囨浮 */
 @media (prefers-reduced-motion: reduce) {
   .logo::before,
   .mode-grid-btn.btn-primary,
@@ -11604,20 +11631,20 @@ mark.search-highlight {
     animation: none !important;
     transition: none !important;
   }
-  /* 标题渐变文字保留，但移除动画 */
+  /* 鏍囬娓愬彉鏂囧瓧淇濈暀锛屼絾绉婚櫎鍔ㄧ敾 */
   .home-header .title {
     -webkit-text-fill-color: initial;
     background: none;
     color: var(--text-light);
   }
-  /* ripple 立即结束 */
+  /* ripple 绔嬪嵆缁撴潫 */
   .mode-grid-btn::after,
   .btn::after {
     transition: none !important;
   }
 }
 
-/* 26. 高对比度模式适配 - 确保焦点指示清晰可见 */
+/* 26. 楂樺姣斿害妯″紡閫傞厤 - 纭繚鐒︾偣鎸囩ず娓呮櫚鍙 */
 @media (prefers-contrast: high) {
   .level-btn.current {
     box-shadow: 0 0 0 4px #000, inset 0 0 0 2px #fff;
@@ -11630,1105 +11657,7 @@ mark.search-highlight {
   }
 }
 
-/* ============ 第七批样式优化结束 ====  */
-
-
-/* ============ 2026-07-20 样式优化增强（第八批） ============ */
-/* 本批次目标：
-   - 强化游戏内核心交互（胜利、控制按钮、试管玻璃质感、暂停/死局弹窗）
-   - 提升信息页/设置页/统计页/成就页的视觉层次与卡片质感
-   - 优化加载、新手引导、时间线、热力图等辅助元素的表现力
-   - 全部为追加样式，不修改既有规则；含暗色/减少动画/高对比度三重适配
-*/
-
-/* 1. 胜利卡片光环呼吸 + 星星爆发动画 */
-.win-card {
-  position: relative;
-  overflow: hidden;
-}
-.win-card::before {
-  content: '';
-  position: absolute;
-  inset: -50%;
-  background: conic-gradient(
-    from 0deg,
-    rgba(255, 230, 109, 0) 0deg,
-    rgba(255, 230, 109, 0.25) 90deg,
-    rgba(255, 154, 158, 0.25) 180deg,
-    rgba(139, 154, 255, 0.25) 270deg,
-    rgba(255, 230, 109, 0) 360deg
-  );
-  animation: win-card-aura-spin 8s linear infinite;
-  z-index: 0;
-  pointer-events: none;
-}
-.win-card > * { position: relative; z-index: 1; }
-@keyframes win-card-aura-spin {
-  to { transform: rotate(360deg); }
-}
-/* 三星庆祝时强化光环亮度 */
-.win-card.three-stars-celebration::before {
-  animation-duration: 5s;
-  opacity: 1.4;
-}
-/* 星星出现时缩放爆发 + 光晕 */
-.star.star-pop {
-  animation: star-burst 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-}
-@keyframes star-burst {
-  0% {
-    transform: scale(0) rotate(-180deg);
-    filter: drop-shadow(0 0 0 rgba(255, 215, 0, 0));
-  }
-  60% {
-    transform: scale(1.4) rotate(20deg);
-    filter: drop-shadow(0 0 18px rgba(255, 215, 0, 0.9));
-  }
-  100% {
-    transform: scale(1) rotate(0);
-    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.5));
-  }
-}
-
-/* 2. 胜利效率条进度填充动画 */
-.win-efficiency-fill {
-  animation: efficiency-fill-grow 1s cubic-bezier(0.22, 0.61, 0.36, 1) both;
-  animation-delay: 0.3s;
-  transform-origin: left center;
-}
-@keyframes efficiency-fill-grow {
-  from { transform: scaleX(0); }
-  to { transform: scaleX(1); }
-}
-.win-efficiency-marker {
-  animation: marker-drop 0.4s ease-out both;
-  animation-delay: 1s;
-}
-@keyframes marker-drop {
-  from { transform: translateY(-12px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
-/* 3. 游戏控制按钮主题色区分 — 让每个操作按钮有独立色彩身份 */
-.btn-undo {
-  background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
-  color: #fff;
-  border: none;
-  box-shadow: 0 3px 10px rgba(73, 80, 87, 0.3);
-}
-.btn-undo:hover:not(:disabled) {
-  background: linear-gradient(135deg, #5a6268 0%, #343a40 100%);
-  box-shadow: 0 5px 14px rgba(73, 80, 87, 0.4);
-}
-.btn-hint {
-  background: linear-gradient(135deg, #ffb74d 0%, #ff9800 100%);
-  color: #fff;
-  border: none;
-  box-shadow: 0 3px 10px rgba(255, 152, 0, 0.35);
-}
-.btn-hint:hover:not(:disabled) {
-  background: linear-gradient(135deg, #ffa726 0%, #fb8c00 100%);
-  box-shadow: 0 5px 14px rgba(255, 152, 0, 0.45);
-}
-.btn-pause {
-  background: linear-gradient(135deg, #64b5f6 0%, #2196f3 100%);
-  color: #fff;
-  border: none;
-  box-shadow: 0 3px 10px rgba(33, 150, 243, 0.3);
-}
-.btn-pause:hover:not(:disabled) {
-  background: linear-gradient(135deg, #42a5f5 0%, #1e88e5 100%);
-  box-shadow: 0 5px 14px rgba(33, 150, 243, 0.4);
-}
-.btn-reset {
-  background: linear-gradient(135deg, #ef5350 0%, #e53935 100%);
-  color: #fff;
-  border: none;
-  box-shadow: 0 3px 10px rgba(229, 57, 53, 0.3);
-}
-.btn-reset:hover:not(:disabled) {
-  background: linear-gradient(135deg, #e57373 0%, #d32f2f 100%);
-  box-shadow: 0 5px 14px rgba(229, 57, 53, 0.4);
-}
-.btn-help {
-  background: linear-gradient(135deg, #ab47bc 0%, #8e24aa 100%);
-  color: #fff;
-  border: none;
-  box-shadow: 0 3px 10px rgba(142, 36, 170, 0.3);
-}
-.btn-help:hover:not(:disabled) {
-  background: linear-gradient(135deg, #ba68c8 0%, #7b1fa2 100%);
-  box-shadow: 0 5px 14px rgba(142, 36, 170, 0.4);
-}
-/* 提示道具数量徽章 */
-.hint-count {
-  display: inline-block;
-  min-width: 18px;
-  padding: 1px 5px;
-  margin-left: 4px;
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 9px;
-  font-size: 11px;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-}
-
-/* 4. 试管玻璃质感增强 — 双高光 + 底部反光 + 边缘锐化 */
-.tube {
-  position: relative;
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0.08) 0%,
-    rgba(255, 255, 255, 0.18) 20%,
-    rgba(255, 255, 255, 0.06) 50%,
-    rgba(255, 255, 255, 0.18) 80%,
-    rgba(255, 255, 255, 0.08) 100%
-  );
-  border: 1.5px solid var(--glass-rim, rgba(255, 255, 255, 0.35));
-  border-top: none;
-  box-shadow:
-    inset 0 0 12px rgba(255, 255, 255, 0.08),
-    inset -2px 0 4px rgba(0, 0, 0, 0.12),
-    0 4px 14px rgba(0, 0, 0, 0.18);
-}
-/* 试管左侧主高光条 */
-.tube::before {
-  content: '';
-  position: absolute;
-  top: 8%;
-  left: 14%;
-  width: 3px;
-  height: 70%;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.7) 0%,
-    rgba(255, 255, 255, 0.3) 50%,
-    rgba(255, 255, 255, 0.05) 100%
-  );
-  border-radius: 2px;
-  z-index: 3;
-  pointer-events: none;
-}
-/* 试管右侧副高光条（更细更淡） */
-.tube::after {
-  content: '';
-  position: absolute;
-  top: 12%;
-  right: 18%;
-  width: 1.5px;
-  height: 50%;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.4) 0%,
-    rgba(255, 255, 255, 0.1) 100%
-  );
-  border-radius: 1px;
-  z-index: 3;
-  pointer-events: none;
-}
-/* 试管口边缘高光 */
-.tube-mouth {
-  position: relative;
-  height: 6px;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.5) 0%,
-    rgba(255, 255, 255, 0.2) 60%,
-    transparent 100%
-  );
-  border: 1.5px solid var(--glass-rim, rgba(255, 255, 255, 0.35));
-  border-bottom: none;
-  border-radius: 6px 6px 0 0;
-  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.25);
-}
-
-/* 5. 试管 hover 微浮（仅鼠标设备）— 增强可点击感 */
-@media (hover: hover) and (pointer: fine) {
-  .tube-container {
-    transition: transform 0.18s ease, filter 0.18s ease;
-  }
-  .tube-container:hover:not(.selected):not(.hinted) {
-    transform: translateY(-3px);
-    filter: brightness(1.06);
-  }
-  .tube-container:hover .tube {
-    box-shadow:
-      inset 0 0 14px rgba(255, 255, 255, 0.12),
-      inset -2px 0 4px rgba(0, 0, 0, 0.14),
-      0 6px 18px rgba(0, 0, 0, 0.22);
-  }
-}
-
-/* 6. 顶层颜色层液体光泽流动 — 让最顶层颜色有"湿润感" */
-.tube-inner > .color-layer:last-child {
-  position: relative;
-  overflow: hidden;
-}
-.tube-inner > .color-layer:last-child::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.18) 45%,
-    rgba(255, 255, 255, 0.35) 50%,
-    rgba(255, 255, 255, 0.18) 55%,
-    transparent 100%
-  );
-  background-size: 250% 100%;
-  background-position: 150% 0;
-  animation: liquid-shine 4.5s ease-in-out infinite;
-  pointer-events: none;
-}
-@keyframes liquid-shine {
-  0%, 100% { background-position: 150% 0; }
-  50% { background-position: -50% 0; }
-}
-
-/* 7. 暂停遮罩背景模糊 — 让暂停状态更突出 */
-.pause-overlay,
-.deadlock-overlay {
-  backdrop-filter: blur(6px) saturate(0.85);
-  -webkit-backdrop-filter: blur(6px) saturate(0.85);
-  background: rgba(0, 0, 0, 0.45);
-}
-.pause-card,
-.deadlock-card {
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow:
-    0 20px 60px rgba(0, 0, 0, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-}
-.pause-emoji,
-.deadlock-emoji {
-  display: inline-block;
-  animation: emoji-float 2.4s ease-in-out infinite;
-}
-@keyframes emoji-float {
-  0%, 100% { transform: translateY(0) rotate(0); }
-  50% { transform: translateY(-8px) rotate(4deg); }
-}
-
-/* 8. 弹窗遮罩统一模糊 — tutorial-overlay / win-overlay / share-image-overlay */
-.tutorial-overlay,
-.win-overlay,
-.share-image-overlay,
-.replay-overlay,
-.help-modal-overlay {
-  backdrop-filter: blur(4px) saturate(0.9);
-  -webkit-backdrop-filter: blur(4px) saturate(0.9);
-}
-/* 弹窗卡片统一阴影与边框 */
-.tutorial-card,
-.win-card,
-.share-image-card,
-.replay-card,
-.help-modal-card {
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow:
-    0 24px 70px rgba(0, 0, 0, 0.45),
-    inset 0 1px 0 rgba(255, 255, 255, 0.22);
-}
-
-/* 9. 信息页 feature-section 卡片化 */
-.feature-section {
-  background: rgba(255, 255, 255, 0.55);
-  border: 1px solid rgba(102, 126, 234, 0.12);
-  border-radius: var(--radius);
-  padding: 14px 16px;
-  margin: 12px 0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-}
-.feature-section h4 {
-  position: relative;
-  padding-left: 24px;
-  margin-bottom: 8px;
-  color: var(--primary);
-}
-.feature-section h4::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 14px;
-  height: 14px;
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  border-radius: 4px;
-  box-shadow: 0 2px 6px rgba(102, 126, 234, 0.35);
-}
-@media (hover: hover) and (pointer: fine) {
-  .feature-section:hover {
-    transform: translateY(-2px);
-    border-color: rgba(102, 126, 234, 0.3);
-    box-shadow: 0 6px 18px rgba(102, 126, 234, 0.12);
-  }
-}
-
-/* 10. 信息页 faq-item 引用块风格 */
-.faq-item {
-  position: relative;
-  margin: 14px 0;
-  padding: 12px 16px 12px 20px;
-  background: rgba(255, 255, 255, 0.45);
-  border-left: 3px solid var(--primary);
-  border-radius: 0 8px 8px 0;
-  transition: background 0.2s ease, transform 0.2s ease;
-}
-.faq-item h4 {
-  color: var(--primary);
-  margin-bottom: 6px;
-  font-weight: 700;
-}
-.faq-item p {
-  margin: 0;
-  font-size: 14px;
-  line-height: 1.7;
-  color: var(--text);
-}
-@media (hover: hover) and (pointer: fine) {
-  .faq-item:hover {
-    background: rgba(255, 255, 255, 0.7);
-    transform: translateX(2px);
-  }
-}
-
-/* 11. 设置卡片分组标题样式 */
-.settings-card {
-  position: relative;
-  overflow: hidden;
-}
-.settings-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 4px;
-  height: 100%;
-  background: linear-gradient(180deg, var(--primary), var(--secondary));
-  opacity: 0.6;
-}
-.setting-item,
-.setting-item-static {
-  transition: background 0.2s ease;
-}
-@media (hover: hover) and (pointer: fine) {
-  .setting-item:hover {
-    background: rgba(102, 126, 234, 0.06);
-  }
-}
-
-/* 12. Toggle switch 颜色与动画优化 */
-.toggle-switch {
-  background: rgba(0, 0, 0, 0.18);
-  transition: background 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.toggle-switch.on {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
-}
-.toggle-knob {
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-.toggle-switch.on .toggle-knob {
-  transform: translateX(20px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-}
-
-/* 13. 主题选择按钮选中态增强 */
-.theme-btn {
-  position: relative;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.theme-btn.theme-active {
-  transform: scale(1.04);
-  box-shadow:
-    0 0 0 2px rgba(255, 255, 255, 0.6),
-    0 0 0 4px var(--primary),
-    0 6px 16px rgba(102, 126, 234, 0.35);
-}
-.theme-btn.theme-active::after {
-  content: '✓';
-  position: absolute;
-  top: 4px;
-  right: 6px;
-  width: 18px;
-  height: 18px;
-  background: rgba(255, 255, 255, 0.95);
-  color: var(--primary);
-  border-radius: 50%;
-  font-size: 12px;
-  font-weight: 900;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
-}
-@media (hover: hover) and (pointer: fine) {
-  .theme-btn:hover:not(.theme-active) {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  }
-}
-
-/* 14. 统计卡片悬停效果 + 图标轻弹 */
-.stat-card {
-  position: relative;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  overflow: hidden;
-}
-.stat-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--primary), var(--secondary));
-  opacity: 0.7;
-}
-@media (hover: hover) and (pointer: fine) {
-  .stat-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 22px rgba(102, 126, 234, 0.18);
-  }
-  .stat-card:hover .stat-card-icon {
-    animation: icon-wobble 0.5s ease-in-out;
-  }
-}
-@keyframes icon-wobble {
-  0%, 100% { transform: scale(1) rotate(0); }
-  25% { transform: scale(1.15) rotate(-8deg); }
-  75% { transform: scale(1.1) rotate(8deg); }
-}
-
-/* 15. 统计页 heatmap cell 悬停放大 */
-.stats-heatmap-cell {
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-  cursor: pointer;
-}
-@media (hover: hover) and (pointer: fine) {
-  .stats-heatmap-cell:hover {
-    transform: scale(1.4);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
-    z-index: 2;
-  }
-}
-
-/* 16. 趋势条生长动画 */
-.trend-bar {
-  animation: trend-bar-grow 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) both;
-  transform-origin: bottom center;
-}
-@keyframes trend-bar-grow {
-  from { transform: scaleY(0); }
-  to { transform: scaleY(1); }
-}
-
-/* 17. 进度条填充动画 */
-.progress-bar-fill,
-.today-ach-bar-fill,
-.achievement-overall-fill,
-.ach-cat-progress-fill,
-.progress-overall-bar {
-  animation: progress-fill-grow 1s cubic-bezier(0.22, 0.61, 0.36, 1) both;
-  transform-origin: left center;
-}
-@keyframes progress-fill-grow {
-  from { transform: scaleX(0); }
-  to { transform: scaleX(1); }
-}
-
-/* 18. 成就时间线连接线渐变 + 圆点脉冲 */
-.timeline-connector {
-  background: linear-gradient(
-    180deg,
-    rgba(102, 126, 234, 0.4) 0%,
-    rgba(118, 75, 162, 0.2) 100%
-  );
-  width: 2px;
-}
-.timeline-item-dot {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.6), 0 2px 8px rgba(102, 126, 234, 0.35);
-  animation: timeline-dot-pulse 2.4s ease-in-out infinite;
-}
-@keyframes timeline-dot-pulse {
-  0%, 100% {
-    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.6), 0 2px 8px rgba(102, 126, 234, 0.35);
-  }
-  50% {
-    box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.4), 0 2px 14px rgba(102, 126, 234, 0.5);
-  }
-}
-.timeline-item {
-  transition: transform 0.2s ease, background 0.2s ease;
-}
-@media (hover: hover) and (pointer: fine) {
-  .timeline-item:hover {
-    transform: translateX(4px);
-    background: rgba(102, 126, 234, 0.05);
-  }
-}
-
-/* 19. 成就分类筛选按钮选中态下划线指示 */
-.ach-cat-btn {
-  position: relative;
-  transition: transform 0.2s ease, color 0.2s ease;
-}
-.ach-cat-btn.active::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 12%;
-  right: 12%;
-  height: 2px;
-  background: linear-gradient(90deg, var(--primary), var(--secondary));
-  border-radius: 1px;
-  animation: cat-underline-slide 0.3s ease-out both;
-}
-@keyframes cat-underline-slide {
-  from { transform: scaleX(0); }
-  to { transform: scaleX(1); }
-}
-@media (hover: hover) and (pointer: fine) {
-  .ach-cat-btn:hover:not(.active) {
-    transform: translateY(-1px);
-  }
-}
-
-/* 20. 成就视图切换按钮组样式 */
-.achievement-view-toggle {
-  display: flex;
-  gap: 4px;
-  padding: 4px;
-  background: rgba(0, 0, 0, 0.05);
-  border-radius: 10px;
-  margin: 12px 0;
-}
-.ach-view-btn {
-  flex: 1;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 8px;
-  background: transparent;
-  color: var(--text);
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
-}
-.ach-view-btn.active {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  color: #fff;
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
-}
-@media (hover: hover) and (pointer: fine) {
-  .ach-view-btn:hover:not(.active) {
-    background: rgba(255, 255, 255, 0.7);
-    transform: translateY(-1px);
-  }
-}
-
-/* 21. 页面加载占位动画增强 */
-.page-loading-container {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--bg-gradient);
-}
-.page-loading-inner {
-  text-align: center;
-  animation: page-loading-enter 0.5s ease-out both;
-}
-@keyframes page-loading-enter {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.page-loading-emoji {
-  font-size: 56px;
-  margin-bottom: 12px;
-  display: inline-block;
-  animation: page-loading-spin 2.4s ease-in-out infinite;
-  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.25));
-}
-@keyframes page-loading-spin {
-  0%, 100% { transform: rotate(0) scale(1); }
-  25% { transform: rotate(-12deg) scale(1.08); }
-  75% { transform: rotate(12deg) scale(1.08); }
-}
-.page-loading-text {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--text-light);
-  letter-spacing: 0.5px;
-  opacity: 0.9;
-}
-
-/* 22. 新手引导浮动动画 */
-.beginner-hint {
-  animation: beginner-hint-float 2s ease-in-out infinite;
-}
-@keyframes beginner-hint-float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
-}
-.beginner-hint-arrow {
-  display: inline-block;
-  animation: beginner-arrow-point 1.4s ease-in-out infinite;
-}
-@keyframes beginner-arrow-point {
-  0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(8px); }
-}
-/* 新手鼓励提示渐入 */
-.beginner-encouragement {
-  animation: encouragement-slide-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-}
-@keyframes encouragement-slide-in {
-  from { opacity: 0; transform: translateY(-10px) scale(0.95); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-/* 23. 状态栏签到/提示卡片视觉一致化 */
-.checkin-card-compact,
-.hint-items-card-compact {
-  position: relative;
-  overflow: hidden;
-}
-.checkin-card-compact::before,
-.hint-items-card-compact::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(
-    circle at top right,
-    rgba(255, 255, 255, 0.18) 0%,
-    transparent 60%
-  );
-  pointer-events: none;
-}
-.checkin-btn {
-  background: linear-gradient(135deg, #ff8a65 0%, #ff5722 100%);
-  color: #fff;
-  border: none;
-  padding: 6px 14px;
-  border-radius: 14px;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-  box-shadow: 0 3px 10px rgba(255, 87, 34, 0.35);
-  transition: transform 0.15s ease, box-shadow 0.2s ease;
-}
-.checkin-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 5px 14px rgba(255, 87, 34, 0.45);
-}
-.checkin-btn:active {
-  transform: scale(0.96);
-}
-.checkin-card-compact.checkin-done {
-  opacity: 0.85;
-}
-
-/* 24. 推荐卡片统一装饰边 */
-.recommend-card,
-.daily-recommend-card,
-.smart-recommend-card,
-.recent-play-card,
-.replay-last-card {
-  position: relative;
-  overflow: hidden;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-.recommend-card::before,
-.daily-recommend-card::before,
-.smart-recommend-card::before,
-.recent-play-card::before,
-.replay-last-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 3px;
-  height: 100%;
-  background: linear-gradient(180deg, var(--primary), var(--secondary));
-}
-@media (hover: hover) and (pointer: fine) {
-  .recommend-card:hover,
-  .daily-recommend-card:hover,
-  .smart-recommend-card:hover,
-  .recent-play-card:hover,
-  .replay-last-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(102, 126, 234, 0.18);
-  }
-}
-
-/* 25. 关卡编辑器颜色选择面板美化 */
-.level-editor-color-picker,
-.editor-color-picker {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  padding: 10px;
-  background: rgba(255, 255, 255, 0.5);
-  border-radius: var(--radius);
-  border: 1px solid rgba(102, 126, 234, 0.15);
-}
-.editor-color-dot,
-.color-picker-dot {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  cursor: pointer;
-  border: 2px solid rgba(255, 255, 255, 0.7);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  transition: transform 0.15s ease, box-shadow 0.2s ease;
-}
-.editor-color-dot:hover,
-.color-picker-dot:hover {
-  transform: scale(1.15);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-.editor-color-dot.selected,
-.color-picker-dot.selected {
-  transform: scale(1.2);
-  box-shadow: 0 0 0 3px var(--primary), 0 4px 12px rgba(102, 126, 234, 0.4);
-}
-
-/* 26. 关卡编辑器工具栏按钮统一 */
-.editor-toolbar,
-.editor-controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  padding: 10px;
-  background: rgba(255, 255, 255, 0.55);
-  border-radius: var(--radius);
-  border: 1px solid rgba(102, 126, 234, 0.12);
-}
-.editor-btn,
-.editor-toolbar .btn {
-  min-height: 38px;
-  font-weight: 600;
-}
-
-/* 27. 广告位与捐赠区域弱化 */
-.ad-slot {
-  background: rgba(0, 0, 0, 0.03);
-  border: 1px dashed rgba(0, 0, 0, 0.1);
-  border-radius: var(--radius);
-  padding: 12px;
-  text-align: center;
-  margin: 16px 0;
-  min-height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.ad-label {
-  font-size: 11px;
-  color: rgba(0, 0, 0, 0.35);
-  letter-spacing: 1px;
-}
-.donate-section {
-  text-align: center;
-  padding: 16px;
-  margin: 16px 0;
-  background: rgba(255, 255, 255, 0.4);
-  border-radius: var(--radius);
-}
-.donate-link {
-  display: inline-block;
-  padding: 8px 18px;
-  margin-top: 8px;
-  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
-  color: #fff;
-  border-radius: 18px;
-  font-weight: 700;
-  text-decoration: none;
-  box-shadow: 0 3px 10px rgba(255, 154, 158, 0.35);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.donate-link:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 14px rgba(255, 154, 158, 0.45);
-}
-
-/* 28. 浮动快捷导航按钮（FAB）质感增强 */
-.fab-nav {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  position: fixed;
-  right: 14px;
-  bottom: 80px;
-  z-index: 50;
-}
-.fab-nav-btn {
-  width: 44px;
-  height: 44px;
-  border: none;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  color: #fff;
-  font-size: 20px;
-  cursor: pointer;
-  box-shadow: 0 4px 14px rgba(102, 126, 234, 0.4);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.fab-nav-btn:hover {
-  transform: scale(1.1) translateY(-2px);
-  box-shadow: 0 6px 18px rgba(102, 126, 234, 0.5);
-}
-.fab-nav-btn:active {
-  transform: scale(0.95);
-}
-
-/* 29. 移动端游戏控制按钮优化布局 — 横向滚动防止挤压 */
-@media (max-width: 480px) {
-  .game-controls {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 6px;
-  }
-  .game-controls .btn {
-    flex: 1 1 calc(50% - 6px);
-    min-width: calc(50% - 6px);
-    max-width: calc(50% - 6px);
-    padding: 10px 8px;
-    font-size: 13px;
-  }
-  .game-controls .btn .hint-count {
-    margin-left: 2px;
-  }
-  /* 极小屏幕下试管更紧凑 */
-  .tubes-grid {
-    gap: 6px;
-    padding: 4px;
-  }
-  /* 胜利弹窗在移动端紧凑 */
-  .win-card {
-    padding: 18px 14px;
-    max-width: 92vw;
-  }
-  .win-actions {
-    flex-direction: column;
-    gap: 6px;
-  }
-  .win-actions .btn {
-    width: 100%;
-  }
-}
-
-/* 30. 暗色主题适配（第八批新增项） */
-@media (prefers-color-scheme: dark) {
-  /* 试管玻璃在暗色下减弱高光 */
-  .tube {
-    border-color: rgba(255, 255, 255, 0.22);
-    box-shadow:
-      inset 0 0 12px rgba(255, 255, 255, 0.04),
-      inset -2px 0 4px rgba(0, 0, 0, 0.2),
-      0 4px 14px rgba(0, 0, 0, 0.35);
-  }
-  .tube::before {
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.15) 100%);
-  }
-  .tube-mouth {
-    border-color: rgba(255, 255, 255, 0.22);
-  }
-  /* 信息页 feature-section 暗色 */
-  .feature-section {
-    background: rgba(40, 40, 55, 0.55);
-    border-color: rgba(139, 154, 255, 0.18);
-  }
-  .feature-section h4 {
-    color: #8b9aff;
-  }
-  .feature-section h4::before {
-    background: linear-gradient(135deg, #8b9aff, #c589e8);
-  }
-  /* 信息页 faq-item 暗色 */
-  .faq-item {
-    background: rgba(40, 40, 55, 0.55);
-    border-left-color: #8b9aff;
-  }
-  .faq-item h4 { color: #8b9aff; }
-  .faq-item p { color: #ddd; }
-  /* 设置卡片暗色 */
-  .settings-card::before {
-    opacity: 0.8;
-  }
-  .setting-item:hover {
-    background: rgba(139, 154, 255, 0.08);
-  }
-  /* 统计卡片暗色 */
-  .stat-card::before {
-    opacity: 0.9;
-  }
-  /* 成就视图切换暗色 */
-  .achievement-view-toggle {
-    background: rgba(255, 255, 255, 0.05);
-  }
-  /* 推荐卡片暗色 */
-  .recommend-card::before,
-  .daily-recommend-card::before,
-  .smart-recommend-card::before,
-  .recent-play-card::before,
-  .replay-last-card::before {
-    opacity: 0.85;
-  }
-  /* 关卡编辑器暗色 */
-  .level-editor-color-picker,
-  .editor-color-picker,
-  .editor-toolbar,
-  .editor-controls {
-    background: rgba(40, 40, 55, 0.6);
-    border-color: rgba(139, 154, 255, 0.18);
-  }
-  /* 广告位暗色 */
-  .ad-slot {
-    background: rgba(255, 255, 255, 0.03);
-    border-color: rgba(255, 255, 255, 0.1);
-  }
-  .ad-label { color: rgba(255, 255, 255, 0.3); }
-  .donate-section {
-    background: rgba(40, 40, 55, 0.55);
-  }
-  /* FAB 暗色 */
-  .fab-nav-btn {
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
-  }
-  /* 弹窗遮罩暗色 */
-  .pause-overlay,
-  .deadlock-overlay {
-    background: rgba(0, 0, 0, 0.65);
-  }
-}
-
-/* 显式暗色主题类适配（与 prefers-color-scheme 同步） */
-.dark-theme .tube {
-  border-color: rgba(255, 255, 255, 0.22);
-  box-shadow:
-    inset 0 0 12px rgba(255, 255, 255, 0.04),
-    inset -2px 0 4px rgba(0, 0, 0, 0.2),
-    0 4px 14px rgba(0, 0, 0, 0.35);
-}
-.dark-theme .feature-section {
-  background: rgba(40, 40, 55, 0.55);
-  border-color: rgba(139, 154, 255, 0.18);
-}
-.dark-theme .feature-section h4 { color: #8b9aff; }
-.dark-theme .faq-item {
-  background: rgba(40, 40, 55, 0.55);
-  border-left-color: #8b9aff;
-}
-.dark-theme .faq-item h4 { color: #8b9aff; }
-.dark-theme .faq-item p { color: #ddd; }
-.dark-theme .achievement-view-toggle {
-  background: rgba(255, 255, 255, 0.05);
-}
-.dark-theme .level-editor-color-picker,
-.dark-theme .editor-color-picker,
-.dark-theme .editor-toolbar,
-.dark-theme .editor-controls {
-  background: rgba(40, 40, 55, 0.6);
-  border-color: rgba(139, 154, 255, 0.18);
-}
-.dark-theme .ad-slot {
-  background: rgba(255, 255, 255, 0.03);
-  border-color: rgba(255, 255, 255, 0.1);
-}
-.dark-theme .ad-label { color: rgba(255, 255, 255, 0.3); }
-.dark-theme .donate-section { background: rgba(40, 40, 55, 0.55); }
-.dark-theme .pause-overlay,
-.dark-theme .deadlock-overlay {
-  background: rgba(0, 0, 0, 0.65);
-}
-
-/* 31. 减少动画偏好适配 — 禁用本批次新增动画 */
-@media (prefers-reduced-motion: reduce) {
-  .win-card::before,
-  .star.star-pop,
-  .win-efficiency-fill,
-  .win-efficiency-marker,
-  .tube-inner > .color-layer:last-child::after,
-  .pause-emoji,
-  .deadlock-emoji,
-  .trend-bar,
-  .progress-bar-fill,
-  .today-ach-bar-fill,
-  .achievement-overall-fill,
-  .ach-cat-progress-fill,
-  .progress-overall-bar,
-  .timeline-item-dot,
-  .page-loading-emoji,
-  .beginner-hint,
-  .beginner-hint-arrow,
-  .beginner-encouragement,
-  .stat-card:hover .stat-card-icon,
-  .ach-cat-btn.active::after {
-    animation: none !important;
-    transition: none !important;
-  }
-  /* 弹窗遮罩保留模糊但不动画 */
-  .pause-overlay,
-  .deadlock-overlay,
-  .tutorial-overlay,
-  .win-overlay,
-  .share-image-overlay,
-  .replay-overlay,
-  .help-modal-overlay {
-    backdrop-filter: blur(3px);
-    -webkit-backdrop-filter: blur(3px);
-  }
-}
-
-/* 32. 高对比度模式适配 — 强化关键状态描边 */
-@media (prefers-contrast: high) {
-  .tube {
-    border-width: 2.5px;
-    border-color: rgba(0, 0, 0, 0.85);
-  }
-  .tube-mouth {
-    border-width: 2.5px;
-    border-color: rgba(0, 0, 0, 0.85);
-  }
-  .feature-section {
-    border-width: 2px;
-    border-color: rgba(0, 0, 0, 0.6);
-  }
-  .faq-item {
-    border-left-width: 5px;
-    border-left-color: #000;
-  }
-  .stat-card {
-    border: 2px solid rgba(0, 0, 0, 0.6);
-  }
-  .ach-cat-btn.active {
-    border-bottom: 3px solid #000;
-  }
-  .fab-nav-btn {
-    border: 2px solid #fff;
-  }
-  .checkin-btn {
-    border: 2px solid #000;
-  }
-}
-
-/* ============ 第八批样式优化结束 ============ */
+/* ============ 绗竷鎵规牱寮忎紭鍖栫粨鏉?====  */
 
 
 
