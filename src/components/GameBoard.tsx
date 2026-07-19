@@ -58,6 +58,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
   const [movesPulse, setMovesPulse] = useState(false); // 步数变化脉冲
   const [showFirstPourTip, setShowFirstPourTip] = useState(false); // 新手首次倒水成功鼓励提示
   const [showLevel2Tip, setShowLevel2Tip] = useState(false); // 第2关操作提示
+  const [showLevel3Tip, setShowLevel3Tip] = useState(false); // 第3关策略提示
   const [elapsedTime, setElapsedTime] = useState(0); // 已用时间（秒）
   const gameStartTime = useRef<number>(Date.now()); // 游戏开始时间戳
   const shareImageRef = useRef<HTMLAnchorElement | null>(null);
@@ -101,6 +102,15 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
       const t = setTimeout(() => setShowLevel2Tip(false), 3500);
       return () => clearTimeout(t);
     } else setShowLevel2Tip(false);
+  }, [level]);
+
+  // 第3关策略提示：引导玩家理解优先填满一种颜色的策略
+  useEffect(() => {
+    if (level === 3) {
+      setShowLevel3Tip(true);
+      const t = setTimeout(() => setShowLevel3Tip(false), 4000);
+      return () => clearTimeout(t);
+    } else setShowLevel3Tip(false);
   }, [level]);
 
   // 限时模式倒计时（暂停时冻结）
@@ -569,6 +579,14 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
         <div className="beginner-encouragement level2-tip" aria-hidden="true">
           <span className="encouragement-emoji">💡</span>
           <span className="encouragement-text">点击试管选择，再点目标试管倒水</span>
+        </div>
+      )}
+
+      {/* 第3关策略提示：引导玩家优先填满一种颜色，降低思考难度 */}
+      {showLevel3Tip && (
+        <div className="beginner-encouragement level3-tip" aria-hidden="true">
+          <span className="encouragement-emoji">🎯</span>
+          <span className="encouragement-text">优先把一种颜色全部倒进一根试管</span>
         </div>
       )}
 
