@@ -3,7 +3,7 @@ import { StatsTracker } from '../game/statsTracker';
 import { DailyCheckin } from '../game/dailyCheckin';
 import { getTodayLeaderboard, getDailyStats, getDailyLeaderboard } from '../game/dailyLeaderboard';
 import { getVisitSummary, getRecentVisitTrend, getAvgSessionDuration, getReturnRate } from '../game/visitTracker';
-import { getWeeklyStreak, getWeeklyRecord, getWeeklyInfo, getWeeklyHistory } from '../game/weeklyChallenge';
+import { getWeeklyStreak, getWeeklyRecord, getWeeklyInfo, getWeeklyHistory } from '../game/weeklyChallengeData';
 
 interface StatsPageProps {
   onBack: () => void;

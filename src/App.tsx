@@ -10,13 +10,19 @@ import { getEndlessHighScore, saveEndlessScore } from './game/levelGenerator';
 import { StatsTracker } from './game/statsTracker';
 import { DailyCheckin } from './game/dailyCheckin';
 import { getHintItems, useHintItem, addHintItems, claimDailyHintBonus, MAX_HINT_ITEMS } from './game/hintItems';
-import { generateReplayUrl, parseReplayFromUrl, formatReplayShareText, ReplayData } from './game/replayShare';
+import type { ReplayData } from './game/replayShare';
+// replayShare 函数改为动态导入，降低首屏 bundle 体积
+const replayShareModule = () => import('./game/replayShare');
 import { getAdaptiveRecommendation } from './game/adaptiveDifficulty';
 import { getDailyRecommend } from './game/dailyRecommend';
-import { hasCompletedWeeklyThisWeek, saveWeeklyRecord, getWeeklyStreak, getWeeklyInfo, getWeeklyRecord } from './game/weeklyChallenge';
+// weeklyChallenge 数据函数从轻量数据模块静态导入（不含关卡生成依赖）
+import { getWeeklyInfo, getWeeklyRecord, getWeeklyStreak, saveWeeklyRecord } from './game/weeklyChallengeData';
 import { getUnreadAnnouncements, markAnnouncementRead, Announcement, getTodayTip, getAllDailyTips, getTodayColorKnowledge, getTodayColorQuiz, getDailyQuizHistory, getQuizStreak } from './game/announcements';
-import { getCustomLevels, saveCustomLevel, deleteCustomLevel, importLevelCode, CustomLevel } from './game/levelEditor';
-import { generateReplayVideo, generateReplayThumbnail } from './game/replayVideo';
+import type { CustomLevel } from './game/levelEditor';
+// levelEditor 函数改为动态导入，降低首屏 bundle 体积（仅在用户操作自定关卡时加载）
+const levelEditorModule = () => import('./game/levelEditor');
+// replayVideo 改为动态导入，降低首屏 bundle 体积（仅在用户导出回放视频时加载）
+const replayVideoModule = () => import('./game/replayVideo');
 import { STORAGE_KEYS } from './game/storageKeys';
 import { recordPlayedMode, getPlayedModes } from './game/playedModes';
 import { claimWeekendBonus, getWeekendBonusInfo } from './game/weekendBonus';
@@ -136,7 +142,13 @@ export default function App() {
   const [showAnnouncements, setShowAnnouncements] = useState(false);
 
   // 自定关卡状态
-  const [customLevels, setCustomLevels] = useState<CustomLevel[]>(getCustomLevels());
+  const [customLevels, setCustomLevels] = useState<CustomLevel[]>(() => {
+    // 懒初始化：避免首屏直接加载 levelEditor 模块
+    try {
+      const raw = localStorage.getItem('custom_levels');
+      return raw ? JSON.parse(raw) : [];
+    } catch { return []; }
+  });
   const [playingCustomLevel, setPlayingCustomLevel] = useState<CustomLevel | null>(null);
 
   // 回放视频导出状态
@@ -184,11 +196,26 @@ export default function App() {
       }
     } catch (e) { /* 忽略 */ }
 
-    // 检查 URL 是否携带回放数据
-    const replayData = parseReplayFromUrl();
-    if (replayData) {
-      setViewReplayData(replayData);
-      setShowViewReplay(true);
+    // 检查 URL 是否携带回放数据（动态导入避免首屏加载 replayShare 模块）
+    replayShareModule().then(({ parseReplayFromUrl }) => {
+      const replayData = parseReplayFromUrl();
+      if (replayData) {
+        setViewReplayData(replayData);
+        setShowViewReplay(true);
+      }
+    });
+
+    // 加载周挑战展示信息（静态导入，轻量数据模块）
+    {
+      const info = getWeeklyInfo();
+      const record = getWeeklyRecord();
+      const streak = getWeeklyStreak();
+      setWeeklyDisplay({
+        week: info.week,
+        recordMoves: record?.moves,
+        recordStars: record?.stars,
+        streak: streak.currentStreak,
+      });
     }
 
     // 加载未读公告
@@ -250,7 +277,25 @@ export default function App() {
   const [isEndlessMode, setIsEndlessMode] = useState(false);
   const [isTimedMode, setIsTimedMode] = useState(false);
   const [isWeeklyMode, setIsWeeklyMode] = useState(false);
-  const [weeklyCompleted, setWeeklyCompleted] = useState(hasCompletedWeeklyThisWeek());
+  const [weeklyCompleted, setWeeklyCompleted] = useState<boolean>(() => {
+    // 懒初始化：直接读 localStorage 避免首屏加载 weeklyChallenge 模块
+    try {
+      const raw = localStorage.getItem('color-sort-weekly-record');
+      if (!raw) return false;
+      const record = JSON.parse(raw);
+      // 计算 ISO 周数
+      const now = new Date();
+      const d = new Date(now);
+      d.setHours(0, 0, 0, 0);
+      d.setDate(d.getDate() + 4 - (d.getDay() || 7));
+      const yearStart = new Date(d.getFullYear(), 0, 1);
+      const weekNo = Math.ceil((((d.getTime() - yearStart.getTime()) / 86400000) + 1) / 7);
+      const currentSeed = `weekly-${d.getFullYear()}-W${weekNo}`;
+      return record.seed === currentSeed;
+    } catch { return false; }
+  });
+  // 周挑战展示信息（异步加载，避免首屏加载 weeklyChallenge 模块）
+  const [weeklyDisplay, setWeeklyDisplay] = useState<{ week: number; recordMoves?: number; recordStars?: number; streak: number } | null>(null);
   const [timedScore, setTimedScore] = useState(0);
   const [timedHighScore, setTimedHighScore] = useState(() => loadTimedHighScore());
   const [endlessScore, setEndlessScore] = useState(0);
@@ -331,7 +376,7 @@ export default function App() {
     }
   }, []);
 
-  const handleWin = useCallback((winMoves: number, minSteps: number, stars: number, playTimeSec: number) => {
+  const handleWin = useCallback(async (winMoves: number, minSteps: number, stars: number, playTimeSec: number) => {
     // 仅普通模式(currentLevel > 0)更新通关进度和最佳成绩,避免写入 bestScores[-1/-2/-3/-4] 污染数据
     const newCompleted = [...progress.completedLevels];
     if (currentLevel > 0) {
@@ -482,6 +527,9 @@ export default function App() {
       saveWeeklyRecord(winMoves, playTimeSec, stars);
       setWeeklyCompleted(true);
       const weeklyStreak = getWeeklyStreak();
+      // 更新首页周挑战展示信息
+      const wInfo = getWeeklyInfo();
+      setWeeklyDisplay({ week: wInfo.week, recordMoves: winMoves, recordStars: stars, streak: weeklyStreak.currentStreak });
       const weeklyAchievements = AchievementManager.checkWeeklyAchievements(weeklyStreak.currentStreak);
       if (weeklyAchievements.length > 0) {
         setNewAchievements(prev => [...prev, ...weeklyAchievements]);
@@ -736,6 +784,7 @@ export default function App() {
 
   // 回放分享:生成回放链接和导出视频的处理
   const handleReplayShare = useCallback(async (moveHistory: Array<{ from: number; to: number }>, level: number, stars: number, stepsUsed: number) => {
+    const { generateReplayUrl, formatReplayShareText } = await replayShareModule();
     const replayData: ReplayData = { level, moves: moveHistory, starRating: stars, stepsUsed };
     // 修复 P0:encodeReplay 在 from/to 越界(>=36)时会抛错,需捕获降级,避免 UI 崩溃
     let url = '';
@@ -769,6 +818,8 @@ export default function App() {
     setGeneratingVideo(true);
     setShowReplayVideoModal(true);
     try {
+      // 动态导入回放视频模块，避免首屏加载此大模块
+      const { generateReplayVideo, generateReplayThumbnail } = await replayVideoModule();
       // 先生成缩略图
       const thumb = generateReplayThumbnail({
         tubes: levelData.tubes,
@@ -792,6 +843,7 @@ export default function App() {
       setReplayVideoUrl(url);
     } catch (e) {
       // 视频失败时使用缩略图
+      const { generateReplayThumbnail } = await replayVideoModule();
       const thumb = generateReplayThumbnail({
         tubes: levelData.tubes,
 
@@ -822,19 +874,22 @@ export default function App() {
   }, []);
 
   // 删除自定关卡
-  const handleDeleteCustomLevel = useCallback((id: string) => {
+  const handleDeleteCustomLevel = useCallback(async (id: string) => {
+    const { deleteCustomLevel, getCustomLevels } = await levelEditorModule();
     deleteCustomLevel(id);
     setCustomLevels(getCustomLevels());
   }, []);
 
   // 保存自定关卡
-  const handleSaveCustomLevel = useCallback((level: CustomLevel) => {
+  const handleSaveCustomLevel = useCallback(async (level: CustomLevel) => {
+    const { saveCustomLevel, getCustomLevels } = await levelEditorModule();
     saveCustomLevel(level);
     setCustomLevels(getCustomLevels());
   }, []);
 
   // 导入关卡码
-  const handleImportLevel = useCallback((code: string) => {
+  const handleImportLevel = useCallback(async (code: string) => {
+    const { importLevelCode, saveCustomLevel, getCustomLevels } = await levelEditorModule();
     const level = importLevelCode(code);
     if (level) {
       saveCustomLevel(level);
@@ -1023,19 +1078,16 @@ export default function App() {
           </div>
 
           {/* 周挑战入口 */}
-          {(() => {
-            const weeklyInfo = getWeeklyInfo();
-            const weeklyRecord = getWeeklyRecord();
-            const weeklyStreak = getWeeklyStreak();
+          {weeklyDisplay && (() => {
             return (
               <div className={`weekly-challenge-banner ${weeklyCompleted ? 'weekly-done' : ''}`} onClick={() => { if (!weeklyCompleted) handleWeeklyChallenge(); }} role="button" tabIndex={0}
                 onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (!weeklyCompleted) handleWeeklyChallenge(); } }}>
                 <div className="weekly-banner-icon">🏆</div>
                 <div className="weekly-banner-content">
-                  <span className="weekly-banner-title">{weeklyCompleted ? '本周挑战已完成' : `第${weeklyInfo.week}周挑战`}</span>
+                  <span className="weekly-banner-title">{weeklyCompleted ? '本周挑战已完成' : `第${weeklyDisplay.week}周挑战`}</span>
                   <span className="weekly-banner-sub">
-                    {weeklyCompleted && weeklyRecord ? `✅ ${weeklyRecord.moves}步 · ${'⭐'.repeat(weeklyRecord.stars)}` : '高难度关卡,等你来战!'}
-                    {weeklyStreak.currentStreak > 0 ? ` · 🔥${weeklyStreak.currentStreak}周连续` : ''}
+                    {weeklyCompleted && weeklyDisplay.recordMoves ? `✅ ${weeklyDisplay.recordMoves}步 · ${'⭐'.repeat(weeklyDisplay.recordStars || 0)}` : '高难度关卡,等你来战!'}
+                    {weeklyDisplay.streak > 0 ? ` · 🔥${weeklyDisplay.streak}周连续` : ''}
                   </span>
                 </div>
                 {!weeklyCompleted && <span className="weekly-banner-arrow">→</span>}
@@ -1906,8 +1958,9 @@ export default function App() {
           <Suspense fallback={<PageLoading />}>
           <CustomLevelPlayer
             level={playingCustomLevel}
-            onWin={(moves: number) => {
+            onWin={async (moves: number) => {
               // 更新自定关卡的通关状态
+              const { saveCustomLevel, getCustomLevels } = await levelEditorModule();
               const updated = { ...playingCustomLevel, completed: true, bestMoves: playingCustomLevel.bestMoves ? Math.min(playingCustomLevel.bestMoves, moves) : moves };
               saveCustomLevel(updated);
               setCustomLevels(getCustomLevels());
