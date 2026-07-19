@@ -14,7 +14,7 @@
 
 ---
 
-**Color Sort Puzzle（色彩排序）** 是一款经典液体排序（Water Sort）解谜休闲小游戏：点击选中试管，再点击目标试管，让同色液体层层归类、完成闯关。**零注册、零后端、纯前端实现，支持 PWA 离线安装到手机桌面**，面向中文休闲玩家，含 100 关卡通关、每日挑战、周挑战、无尽模式、限时挑战、关卡编辑器、色彩百科（混合器/辨识测试/记忆配对/序列记忆）、47 个成就、本地排行榜等丰富玩法。
+**Color Sort Puzzle（色彩排序）** 是一款经典液体排序（Water Sort）解谜休闲小游戏：点击选中试管，再点击目标试管，让同色液体层层归类、完成闯关。**零注册、零后端、纯前端实现，支持 PWA 离线安装到手机桌面**，面向中文休闲玩家，含 100 关卡通关、每日挑战、周挑战、无尽模式、限时挑战、关卡编辑器、色彩百科（混合器/辨识测试/记忆配对/序列记忆/反应力/每日问答）、73 个成就（4 档稀有度）、每日目标、连击计数器、新手分关策略提示、本地排行榜等丰富玩法。
 
 > 单局 1–10 分钟，碎片时间随时开玩；本地运行、数据留在您设备内。
 
@@ -56,8 +56,11 @@
 - ♾️ **无尽模式** — 随机无限生成、难度递增、最高分留念
 - ⏱️ **限时挑战** — 120 秒倒计时连续通关
 - 🛠️ **关卡编辑器** — 自创、导入/导出关卡码、分享链接
-- 🏆 **47 个成就** — 闯关 / 无尽 / 限时 / 签到 / 步数 / 完美 / 满星 / 周挑战 / 色彩百科 全覆盖
+- 🏆 **73 个成就 + 4 档稀有度** — 闯关 / 无尽 / 限时 / 签到 / 步数 / 完美 / 满星 / 周挑战 / 色彩百科 / 连击 / 每日目标 全覆盖，按普通 / 稀有 / 史诗 / 传说 四档分级，解锁差异化音效与展示
 - ✅ **每日签到** — 里程碑奖励 + 签到日历可视化
+- 🎯 **每日目标系统** — 完成 3 关 / 获得 6 星 / 每日挑战 / 不使用提示通关四个目标，完成可领取提示道具奖励
+- 🔥 **连击计数器** — 普通模式连续通关累积连击数，3/5/7/10/15/20 连击触发里程碑庆祝弹窗
+- 💡 **新手分关策略提示** — 第 1-3 关分别显示绿色鼓励 / 蓝色操作 / 紫色策略提示，自动消失
 - 📊 **深度统计** — 通关数 / 步数 / 星数 / 时长 / 效率 / 完美率 / 连胜、柱状图 + 趋势图 + 星级分布
 - 🎨 **6 套主题** — 经典紫 / 暗黑黑 / 马卡龙 / 霓虹光 / 护眼绿 / 海洋蓝（CSS 变量动态切换）
 - 🔊 **Web Audio 音效** — 选择/倒/错误/撤销/重置/死局/胜利/星星/连击/接近完成/限时滴答/时间到 + 4 段 BGM，全部本地合成
@@ -68,7 +71,7 @@
 - 💾 **本地存档** — `localStorage` 自动保存 / 恢复进度（最高分 / 设置 / 最近游玩）
 - 🛰️ **PWA 离线** — manifest + Service Worker 缓存优先离线策略 + 安装引导
 - 🔍 **SEO 友好** — JSON-LD 结构化数据 + OG / Twitter + robots / sitemap + 中文长尾关键词
-- ⚡ **极致性能** — react-vendor 分包 / TubeView React.memo / 稳定 60FPS / 首屏 JS ~272KB（主包 131KB + react-vendor 141KB，< 300KB 红线）/ 首屏 < 3s
+- ⚡ **极致性能** — react-vendor 分包 / TubeView React.memo / 稳定 60FPS / 首屏 JS ~296KB（主包 155KB + react-vendor 141KB，< 300KB 红线，接近上限需谨慎）/ 首屏 < 3s
 
 ---
 
@@ -88,11 +91,11 @@
 
 | 文件 | 大小 |
 | --- | --- |
-| `index.html` | ~12 KB（gzip ~5 KB） |
-| `assets/index-*.js`（主包） | ~131 KB |
+| `index.html` | ~31 KB（gzip ~12 KB） |
+| `assets/index-*.js`（主包） | ~155 KB |
 | `assets/react-vendor-*.js` | ~141 KB |
-| 首屏 JS 合计 | ~272 KB【< 300KB 红线 ✅】 |
-| `assets/index-*.css` | ~89 KB（gzip ~17 KB） |
+| 首屏 JS 合计 | ~296 KB【< 300KB 红线 ✅，接近上限】 |
+| `assets/index-*.css` | ~200 KB（gzip ~35 KB） |
 | `manifest.json` / `sw.js` / `*.png` / `*.svg` | PWA + 图标 + OG 图 |
 
 ---
@@ -171,8 +174,8 @@ auto-game/
 │   │   └── ParticleEffect.tsx         # 通关粒子动画
 │   ├── pages/                         # 按需 lazy + Suspense 加载
 │   │   ├── AboutPage.tsx              # 关于
-│   │   ├── AchievementsPage.tsx       # 成就（47 个）
-│   │   ├── ColorEncyclopediaPage.tsx  # 色彩百科（混合器/辨识测试/记忆配对/序列记忆）
+│   │   ├── AchievementsPage.tsx       # 成就（73 个 + 4 档稀有度）
+│   │   ├── ColorEncyclopediaPage.tsx  # 色彩百科（混合器/辨识测试/记忆配对/序列记忆/反应力/每日问答）
 │   │   ├── LevelEditorPage.tsx        # 关卡编辑器
 │   │   ├── PrivacyPage.tsx            # 隐私政策（广告联盟合规）
 │   │   ├── SettingsPage.tsx           # 设置（音效/振动/主题/BGM/重置）
@@ -181,11 +184,14 @@ auto-game/
 │       ├── types.ts                   # ColorLayer / Tube / Level / GameState
 │       ├── levelGenerator.ts          # 关卡生成 + canPour / pour / checkWin / checkDeadlock
 │       ├── solver.ts                  # BFS：可解性验证 + 理论最少步数
-│       ├── achievements.ts            # 成就系统（47 个）
+│       ├── achievements.ts            # 成就系统（73 个 + 4 档稀有度）
 │       ├── dailyChallenge.ts          # 每日挑战
 │       ├── dailyCheckin.ts            # 每日签到
+│       ├── dailyGoals.ts              # 每日目标系统
 │       ├── dailyLeaderboard.ts        # 每日挑战本地 Top5
-│       ├── weeklyChallenge.ts         # 周挑战（种子生成+连胜+历史记录）
+│       ├── weeklyChallenge.ts         # 周挑战（关卡生成，数据存取已拆分到 weeklyChallengeData）
+│       ├── weeklyChallengeData.ts     # 周挑战纯数据存取模块
+│       ├── comboStreak.ts             # 连击计数器
 │       ├── weekendBonus.ts            # 周末奖励
 │       ├── levelEditor.ts             # 自定义关卡码导出/验证
 │       ├── replayShare.ts / replayVideo.ts  # 回放 + WebM 导出
@@ -206,7 +212,7 @@ auto-game/
 ├── index.html                         # SEO/社交/PWA 完备的入口 HTML
 ├── vite.config.ts
 ├── tsconfig.json
-└── package.json                       # v1.22.0
+└── package.json                       # v1.41.0
 ```
 
 ---
@@ -225,6 +231,11 @@ auto-game/
 | v1.13 → v1.15 | 成就页大改版、智能上下文提示、死局预警、步数效率可视化、帮助 SVG 图示、星星弹出动画 |
 | v1.17 → v1.18 | **周挑战模式、周末奖励、+9 成就、色彩知识百科页、暗色主题跟随系统、色弱颜色标签** |
 | v1.19 → v1.22 | **颜色混合器、色彩辨识测试、色彩记忆配对、序列记忆游戏、每日色彩知识卡片、+11 成就、SEO 长尾词持续扩展** |
+| v1.23 → v1.26 | **色彩反应力测试、配对计时模式、每日色彩问答（30 天循环）、百科搜索、最近浏览、题库扩充 50 题、+12 成就** |
+| v1.27 → v1.31 | **难度标签、序列音高、连续答题徽章、配对最佳用时、难度分级统计、反应力最佳分数、序列自动保存、配方保存分享、悬浮音效开关** |
+| v1.32 → v1.35.5 | **累计天数成就、混合配方收藏、色彩能力档案、错题本、配对自定义难度、首屏懒加载优化（281KB）、问答热力图、BGM 快捷开关、统计活跃热力图、搜索高亮** |
+| v1.36 → v1.39 | **暂停功能（空格/P）、快速重玩、每日目标系统、连击计数器、连击里程碑庆祝、+9 成就（共 73）、无尽/限时模式每 5 关里程碑奖励、新手倒水鼓励提示、GamePageComponent 提取** |
+| v1.40 → v1.41 | **成就稀有度分级（普通/稀有/史诗/传说）+ 差异化音效、每日目标完成动画、第 2-3 关分关策略提示、稀有度筛选与统计面板、周挑战模块拆分优化、SEO 持续扩展** |
 
 路线图详见 [docs/development-plan.md](./docs/development-plan.md)，当前处于阶段二（数据驱动精细化迭代），阶段三（流量变现升级）按规范推进。
 
@@ -233,7 +244,7 @@ auto-game/
 ## 文档
 
 - [部署指南](./docs/deployment-guide.md) — Vercel / Cloudflare Pages / Netlify 三平台部署，含上线后 checklist
-- [开发计划](./docs/development-plan.md) — v1.0 → v1.22 完整版本记录 + 阶段二/三路线图
+- [开发计划](./docs/development-plan.md) — v1.0 → v1.41 完整版本记录 + 阶段二/三路线图
 - [自动迭代规范](./auto-game-spec.md) — TRAE AI Agent 自建 H5 游戏网站定时任务规范 v1.2
 - [站点配置模板](./docs/site-config.md) — 上线后回写，驱动 Agent 阶段切换
 
@@ -258,9 +269,10 @@ auto-game/
 - 项目根路径：e:\work\auto-game（固定目录，纯前端 H5 休闲小游戏网站，无后端依赖）
 - 进度记忆路径：e:\work\auto-game\memory\，读取最近日期目录的 topics.md，写入当天日期目录的 topics.md
 - 单次调度总时长上限：2 小时
-- 当前基线进度：v1.22 已上线 https://game.niuzi.asia，处于阶段二（数据驱动精细化迭代），所有已完成功能不得重复开发
+- 当前基线进度：v1.41 已上线 https://game.niuzi.asia，处于阶段二（数据驱动精细化迭代），所有已完成功能不得重复开发
 - 全局优先级强制排序：线上稳定性 > 玩法完整性 > 性能稳定性 > 适配与体验 > 留存优化 > 流量增长 > 变现优化
 - 阶段判定依据：e:\work\auto-game\docs\site-config.md（已回写线上 URL，当前 DAU=0，尚未接入统计/广告/捐赠）
+- 首屏体积警示：JS bundle 296KB 已逼近 300KB 红线，新增功能必须考虑代码分割、懒加载或精简现有体积
 - 变现分级规则：阶段一/二仅预留广告位与分享能力，不接入实际内购；内购功能仅限阶段三，且必须获得用户明确授权后方可开发
 
 二、核心要素
