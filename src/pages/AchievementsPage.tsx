@@ -32,16 +32,22 @@ export const AchievementsPage: React.FC<AchievementsPageProps> = ({ onBack }) =>
   const totalCount = achievements.length;
   const unlockPct = totalCount > 0 ? Math.round(unlockedCount / totalCount * 100) : 0;
   const [activeCategory, setActiveCategory] = useState('all');
+  // 稀有度筛选：all/common/rare/epic/legendary
+  const [activeRarity, setActiveRarity] = useState<AchievementRarity | 'all'>('all');
   // 视图模式切换：列表视图 / 时间线视图
   const [viewMode, setViewMode] = useState<'list' | 'timeline'>('list');
 
-  // 按分类过滤
-  const filtered = activeCategory === 'all' 
-    ? achievements 
-    : achievements.filter(a => {
-        const cat = CATEGORIES.find(c => c.id === activeCategory);
-        return cat?.match ? cat.match(a.id) : false;
-      });
+  // 按分类+稀有度双重过滤
+  const filtered = achievements.filter(a => {
+    // 分类过滤
+    const catMatch = activeCategory === 'all' ? true : (() => {
+      const cat = CATEGORIES.find(c => c.id === activeCategory);
+      return cat?.match ? cat.match(a.id) : false;
+    })();
+    // 稀有度过滤
+    const rarityMatch = activeRarity === 'all' ? true : (a.rarity || 'common') === activeRarity;
+    return catMatch && rarityMatch;
+  });
 
   // 排序方式：已解锁在前，未解锁按原始顺序；已解锁按解锁时间降序（最近解锁在前）
   const sortedFiltered = [...filtered].sort((a, b) => {
@@ -75,6 +81,15 @@ export const AchievementsPage: React.FC<AchievementsPageProps> = ({ onBack }) =>
     const unlocked = catAchievements.filter(a => a.unlocked).length;
     return { ...cat, unlocked, total: catAchievements.length };
   });
+
+  // 计算各稀有度解锁数
+  const rarityStats: Array<{ id: AchievementRarity | 'all'; label: string; color: string; unlocked: number; total: number }> = [
+    { id: 'all', label: '全部', color: '#9E9E9E', unlocked: unlockedCount, total: totalCount },
+    ...(['common', 'rare', 'epic', 'legendary'] as AchievementRarity[]).map(r => {
+      const rAch = achievements.filter(a => (a.rarity || 'common') === r);
+      return { id: r, label: RARITY_CONFIG[r].label, color: RARITY_CONFIG[r].color, unlocked: rAch.filter(a => a.unlocked).length, total: rAch.length };
+    }),
+  ];
 
   return (
     <div className="app">
@@ -200,6 +215,21 @@ export const AchievementsPage: React.FC<AchievementsPageProps> = ({ onBack }) =>
               <span className="ach-cat-icon">{cat.icon}</span>
               <span className="ach-cat-name">{cat.name}</span>
               <span className="ach-cat-count">{cat.unlocked}/{cat.total}</span>
+            </button>
+          ))}
+        </div>
+
+        {/* 稀有度筛选标签 */}
+        <div className="achievement-rarity-filter">
+          {rarityStats.map(rs => (
+            <button
+              key={rs.id}
+              className={`ach-rarity-btn ${activeRarity === rs.id ? 'active' : ''}`}
+              style={activeRarity === rs.id ? { borderColor: rs.color, color: rs.color } : undefined}
+              onClick={() => setActiveRarity(rs.id)}
+            >
+              <span className="ach-rarity-label">{rs.label}</span>
+              <span className="ach-rarity-count">{rs.unlocked}/{rs.total}</span>
             </button>
           ))}
         </div>
