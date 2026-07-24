@@ -17,7 +17,7 @@ import { getAdaptiveRecommendation } from './game/adaptiveDifficulty';
 import { getDailyRecommend } from './game/dailyRecommend';
 // weeklyChallenge 数据函数从轻量数据模块静态导入（不含关卡生成依赖）
 import { getWeeklyInfo, getWeeklyRecord, getWeeklyStreak, saveWeeklyRecord } from './game/weeklyChallengeData';
-import { getUnreadAnnouncements, markAnnouncementRead, Announcement, getTodayTip, getAllDailyTips, getTodayColorKnowledge, getTodayColorQuiz, getDailyQuizHistory, getQuizStreak } from './game/announcements';
+import { getUnreadAnnouncements, markAnnouncementRead, Announcement, getDailyQuizHistory, getQuizStreak } from './game/announcements';
 import type { CustomLevel } from './game/levelEditor';
 // levelEditor 函数改为动态导入，降低首屏 bundle 体积（仅在用户操作自定关卡时加载）
 const levelEditorModule = () => import('./game/levelEditor');
@@ -36,6 +36,7 @@ import { GamePageComponent } from './components/GamePageComponent';
 import { HomeStatsBar } from './components/HomeStatsBar';
 import { QuickNavSection } from './components/QuickNavSection';
 import { LevelSelectSection } from './components/LevelSelectSection';
+import { DailyContentSection } from './components/DailyContentSection';
 import { getComboStreak, incrementComboStreak, resetComboStreak, checkComboCelebration, addTotalComboCount, getTotalComboCount, ComboCelebration } from './game/comboStreak';
 // 懒加载非首屏页面组件,减小首屏 bundle 大小
 const AboutPage = lazy(() => import('./pages/AboutPage').then(m => ({ default: m.AboutPage })));
@@ -164,12 +165,6 @@ export default function App() {
   const [levelSelectCollapsed, setLevelSelectCollapsed] = useState(false);
   const [faqCollapsed, setFaqCollapsed] = useState(true);
   const [difficultyFilter, setDifficultyFilter] = useState<string>('all'); // 关卡难度筛选
-  // 每日贴士手动浏览:支持点击切换上一篇/下一篇
-  const ALL_TIPS = getAllDailyTips();
-  const [tipIndex, setTipIndex] = useState(() => {
-    const todayTip = getTodayTip();
-    return ALL_TIPS.findIndex(t => t.title === todayTip.title);
-  });
 
   // 内部提示功能:获取当前游戏状态
   const currentTubesRef = useRef<Tube[] | null>(null);
@@ -1130,67 +1125,8 @@ export default function App() {
           )}
           </div>
 
-          {/* 每日策略小贴士 - 支持手动切换浏览 */}
-          {(() => {
-            const tip = ALL_TIPS[tipIndex] || ALL_TIPS[0];
-            return (
-              <div className="daily-tip-card">
-                <span className="daily-tip-icon">{tip.icon}</span>
-                <div className="daily-tip-content">
-                  <span className="daily-tip-label">💡 小贴士 {tipIndex + 1}/{ALL_TIPS.length}</span>
-                  <span className="daily-tip-title">{tip.title}</span>
-                  <span className="daily-tip-text">{tip.content}</span>
-                </div>
-                <div className="daily-tip-nav">
-                  <button className="daily-tip-nav-btn" onClick={() => { SoundEngine.click(); setTipIndex(i => (i - 1 + ALL_TIPS.length) % ALL_TIPS.length); }} aria-label="上一条">←</button>
-                  <button className="daily-tip-nav-btn" onClick={() => { SoundEngine.click(); setTipIndex(i => (i + 1) % ALL_TIPS.length); }} aria-label="下一条">→</button>
-                </div>
-              </div>
-            );
-          })()}
-
-          {/* 每日色彩知识 */}
-          {(() => {
-            const knowledge = getTodayColorKnowledge();
-            return (
-              <div className="daily-color-knowledge-card" onClick={() => setPage('encyclopedia')} role="button" tabIndex={0}
-                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setPage('encyclopedia'); } }}>
-                <span className="daily-color-knowledge-emoji">{knowledge.emoji}</span>
-                <div className="daily-color-knowledge-content">
-                  <span className="daily-color-knowledge-label">🎨 每日色彩知识</span>
-                  <span className="daily-color-knowledge-title">{knowledge.name}</span>
-                  <span className="daily-color-knowledge-text">{knowledge.text}</span>
-                </div>
-                <span className="daily-color-knowledge-arrow">→</span>
-              </div>
-            );
-          })()}
-
-          {/* 每日色彩问答入口卡片 */}
-          {(() => {
-            const quiz = getTodayColorQuiz();
-            const history = getDailyQuizHistory();
-            const today = new Date();
-            const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-            const answeredToday = history.some(h => h.dayIndex === quiz.dayIndex && h.date === todayStr);
-            const correctCount = history.filter(h => h.correct).length;
-            const quizStreak = getQuizStreak();
-            // 连续答题里程碑提示
-            const nextMilestone = quizStreak < 3 ? 3 : quizStreak < 7 ? 7 : quizStreak < 14 ? 14 : quizStreak < 30 ? 30 : quizStreak < 50 ? 50 : null;
-            const milestoneEmoji = quizStreak >= 30 ? '🏆' : quizStreak >= 14 ? '💎' : quizStreak >= 7 ? '🔥' : quizStreak >= 3 ? '⭐' : '';
-            return (
-              <div className={`daily-quiz-entry-card ${!answeredToday ? 'quiz-unanswered' : ''}`} onClick={() => setPage('encyclopedia')} role="button" tabIndex={0}
-                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setPage('encyclopedia'); } }}>
-                <span className="daily-quiz-entry-icon">{answeredToday ? '✅' : '📝'}</span>
-                <div className="daily-quiz-entry-content">
-                  <span className="daily-quiz-entry-label">📚 每日色彩问答 {quizStreak > 0 && <span className="quiz-streak-badge">{milestoneEmoji} 连续{quizStreak}天</span>}</span>
-                  <span className="daily-quiz-entry-title">{answeredToday ? '今日已答题' : quiz.question}</span>
-                  <span className="daily-quiz-entry-sub">{answeredToday ? `累计正确 ${correctCount}/${history.length} 题${nextMilestone ? ` · 再答${nextMilestone - quizStreak}天解锁新徽章` : ''}` : '点击进入答题,每天一题涨知识!'}</span>
-                </div>
-                <span className="daily-quiz-entry-arrow">→</span>
-              </div>
-            );
-          })()}
+          {/* 每日内容区块：贴士+色彩知识+问答入口（提取为独立组件） */}
+          <DailyContentSection onNavigateToEncyclopedia={() => setPage('encyclopedia')} />
 
           {/* 每日挑战醒目入口 - 未完成时展示 */}
           {!dailyCompletedToday && (
