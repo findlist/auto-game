@@ -13,6 +13,16 @@ const ChangelogModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         <h2>色彩排序更新日志</h2>
         <div className="changelog-content">
           <div className="changelog-item">
+            <h3>🎉 v1.47.0</h3>
+            <ul>
+              <li>⚡ GamePageComponent改为懒加载，首屏JS从303KB降至263KB(-39.7KB)，远低于300KB上限</li>
+              <li>🔧 提取首页签到+提示道具+快速重玩+每日目标+游戏模式+周挑战+周末奖励区块为独立HomeTopSection组件</li>
+              <li>🔧 提取首页弹窗集合(自动存档恢复+新手引导+成就通知+连击庆祝+PWA安装+玩法弹窗+回放查看+更新日志)为独立HomeDialogs组件</li>
+              <li>🔧 提取首页header+footer+浮动导航为独立HomeChrome组件，App.tsx从1541行减至1221行(-320行)</li>
+              <li>📝 SEO更新+版本号同步</li>
+            </ul>
+          </div>
+          <div className="changelog-item">
             <h3>🎉 v1.46.0</h3>
             <ul>
               <li>📦 拆分每日贴士库(30条)到独立dailyTipsData.ts和色彩知识库(10条)到colorKnowledgeData.ts，三个数据文件独立维护</li>
