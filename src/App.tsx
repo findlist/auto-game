@@ -29,7 +29,8 @@ import { GameSettings } from './game/settings';
 import { canInstallPWA, isPWAInstallDismissed, dismissPWAInstall } from './game/pwaInstall';
 import { loadRecent, saveRecent, RecentPlay, loadProgress, saveProgress, Progress, loadBestScores, saveBestScore, hasSeenTutorial, markTutorialSeen, loadStars, saveStars, loadAutosave, saveAutosave, clearAutosave, loadTimedHighScore, saveTimedHighScore, AutosaveData } from './game/homeStorage';
 import { getDailyGoals, updateGoalProgress, claimGoalReward, getDailyGoalsProgress } from './game/dailyGoals';
-import { GamePageComponent } from './components/GamePageComponent';
+// GamePageComponent 改为懒加载，仅在进入游戏页时加载，大幅降低首屏 bundle 体积
+const GamePageComponent = lazy(() => import('./components/GamePageComponent').then(m => ({ default: m.GamePageComponent })));
 import { HomeStatsBar } from './components/HomeStatsBar';
 import { QuickNavSection } from './components/QuickNavSection';
 import { LevelSelectSection } from './components/LevelSelectSection';
@@ -1154,6 +1155,7 @@ export default function App() {
   }
   if (page === 'game') {
     return (
+      <Suspense fallback={<PageLoading />}>
       <GamePageComponent
         currentLevel={currentLevel}
         endlessScore={endlessScore}
@@ -1194,6 +1196,7 @@ export default function App() {
         setShowReplayVideoModal={setShowReplayVideoModal}
         setReplayVideoUrl={setReplayVideoUrl}
       />
+      </Suspense>
     );
   }
 
