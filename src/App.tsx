@@ -33,6 +33,7 @@ import { getDailyGoals, updateGoalProgress, claimGoalReward, getDailyGoalsProgre
 import { DailyGoalsCard } from './components/DailyGoalsCard';
 import { TodaySummaryCard } from './components/TodaySummaryCard';
 import { GamePageComponent } from './components/GamePageComponent';
+import { HomeStatsBar } from './components/HomeStatsBar';
 import { getComboStreak, incrementComboStreak, resetComboStreak, checkComboCelebration, addTotalComboCount, getTotalComboCount, ComboCelebration } from './game/comboStreak';
 // 懒加载非首屏页面组件,减小首屏 bundle 大小
 const AboutPage = lazy(() => import('./pages/AboutPage').then(m => ({ default: m.AboutPage })));
@@ -1290,32 +1291,11 @@ export default function App() {
             );
           })()}
 
-          <div className="home-stats">
-            <div className="stat-item">
-              <span className="stat-value">{progress.completedLevels.length}</span>
-              <span className="stat-label">已过关卡</span>
-            </div>
-            <div className="stat-item">
-              <span className="stat-value">{Object.values(levelStars).reduce((a, b) => a + b, 0)}</span>
-              <span className="stat-label">总星数</span>
-            </div>
-            <div className="stat-item">
-              <span className={`stat-value${StatsTracker.get().currentStreak > 0 ? ' stat-value-streak-hot' : ''}`}>🔥{StatsTracker.get().currentStreak}</span>
-              <span className="stat-label">连胜</span>
-            </div>
-            <div className="stat-item">
-              <span className="stat-value">{endlessHighScore}</span>
-              <span className="stat-label">无尽记录</span>
-            </div>
-            <div className="stat-item">
-              <span className="stat-value">{StatsTracker.formatTime(StatsTracker.get().totalPlayTime)}</span>
-              <span className="stat-label">游戏时长</span>
-            </div>
-            <div className="stat-item">
-              <span className="stat-value">{StatsTracker.get().totalWins > 0 ? (StatsTracker.get().totalStars / StatsTracker.get().totalWins).toFixed(1) : '0'}</span>
-              <span className="stat-label">平均星级</span>
-            </div>
-          </div>
+          <HomeStatsBar
+            completedCount={progress.completedLevels.length}
+            totalStars={Object.values(levelStars).reduce((a, b) => a + b, 0)}
+            endlessHighScore={endlessHighScore}
+          />
 
           {/* 通关进度条 */}
           <div className="collapsible-section">
