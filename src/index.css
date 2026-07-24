@@ -1369,6 +1369,18 @@ body {
   background: rgba(233, 30, 99, 0.1);
 }
 
+/* 第9关颜色分组提示：艘色主题，呼应专注与瞄准 */
+.beginner-encouragement.level9-tip .encouragement-text {
+  color: #00838F;
+  background: rgba(0, 131, 143, 0.1);
+}
+
+/* 第10关综合策略提示：金色主题，呼应阶段性毕业与成就感 */
+.beginner-encouragement.level10-tip .encouragement-text {
+  color: #F57F17;
+  background: rgba(245, 127, 23, 0.1);
+}
+
 /* 暗色主题适配 */
 .dark-theme .beginner-encouragement.level2-tip .encouragement-text {
   color: #64B5F6;
@@ -1397,6 +1409,14 @@ body {
 .dark-theme .beginner-encouragement.level8-tip .encouragement-text {
   color: #F06292;
   background: rgba(233, 30, 99, 0.15);
+}
+.dark-theme .beginner-encouragement.level9-tip .encouragement-text {
+  color: #4DB6AC;
+  background: rgba(0, 131, 143, 0.15);
+}
+.dark-theme .beginner-encouragement.level10-tip .encouragement-text {
+  color: #FFB74D;
+  background: rgba(245, 127, 23, 0.15);
 }
 
 .tubes-grid {

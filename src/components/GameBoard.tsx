@@ -64,6 +64,8 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
   const [showLevel6Tip, setShowLevel6Tip] = useState(false); // 第6关试管管理提示
   const [showLevel7Tip, setShowLevel7Tip] = useState(false); // 第7关逆向思维提示
   const [showLevel8Tip, setShowLevel8Tip] = useState(false); // 第8关空间利用提示
+  const [showLevel9Tip, setShowLevel9Tip] = useState(false); // 第9关颜色分组提示
+  const [showLevel10Tip, setShowLevel10Tip] = useState(false); // 第10关综合策略提示
   const [elapsedTime, setElapsedTime] = useState(0); // 已用时间（秒）
   const gameStartTime = useRef<number>(Date.now()); // 游戏开始时间戳
   const shareImageRef = useRef<HTMLAnchorElement | null>(null);
@@ -161,6 +163,24 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
       const t = setTimeout(() => setShowLevel8Tip(false), 4000);
       return () => clearTimeout(t);
     } else setShowLevel8Tip(false);
+  }, [level]);
+
+  // 第9关颜色分组提示：颜色种类增多，引导玩家按颜色分组思考
+  useEffect(() => {
+    if (level === 9) {
+      setShowLevel9Tip(true);
+      const t = setTimeout(() => setShowLevel9Tip(false), 4000);
+      return () => clearTimeout(t);
+    } else setShowLevel9Tip(false);
+  }, [level]);
+
+  // 第10关综合策略提示：作为前10关的阶段性总结，引导玩家综合运用已学技巧
+  useEffect(() => {
+    if (level === 10) {
+      setShowLevel10Tip(true);
+      const t = setTimeout(() => setShowLevel10Tip(false), 4000);
+      return () => clearTimeout(t);
+    } else setShowLevel10Tip(false);
   }, [level]);
 
   // 限时模式倒计时（暂停时冻结）
@@ -677,6 +697,22 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
         <div className="beginner-encouragement level8-tip" aria-hidden="true">
           <span className="encouragement-emoji">🏗️</span>
           <span className="encouragement-text">试管多了空间更大，优先清空一根试管留作缓冲</span>
+        </div>
+      )}
+
+      {/* 第9关颜色分组提示：颜色种类增多后引导玩家按颜色分组解题 */}
+      {showLevel9Tip && (
+        <div className="beginner-encouragement level9-tip" aria-hidden="true">
+          <span className="encouragement-emoji">🎯</span>
+          <span className="encouragement-text">颜色变多了！先选定一种颜色专注归位，逐个击破</span>
+        </div>
+      )}
+
+      {/* 第10关综合策略提示：前10关阶段性总结，引导玩家综合运用已学技巧 */}
+      {showLevel10Tip && (
+        <div className="beginner-encouragement level10-tip" aria-hidden="true">
+          <span className="encouragement-emoji">🏅</span>
+          <span className="encouragement-text">前10关毕业冲刺！综合运用空管缓冲、逆向倒推、分组归位</span>
         </div>
       )}
 
