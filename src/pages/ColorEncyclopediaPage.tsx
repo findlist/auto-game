@@ -1620,6 +1620,7 @@ export const ColorEncyclopediaPage: React.FC<ColorEncyclopediaPageProps> = ({ on
     { label: '🧠 记忆配对', id: 'section-pair' },
     { label: '⚡ 反应力', id: 'section-reaction' },
     { label: '🎨 颜色混合', id: 'section-mixer' },
+    { label: '✨ 色彩搭配', id: 'section-pairing' },
     { label: '🎮 实用技巧', id: 'section-tips' },
   ];
 
@@ -1926,6 +1927,51 @@ export const ColorEncyclopediaPage: React.FC<ColorEncyclopediaPageProps> = ({ on
               if (onMixerUse) onMixerUse(useCount);
               if (useCount === 1 && onGamePlayed) onGamePlayed('mixer');
             }} />
+
+            <h3 id="section-pairing">✨ 色彩搭配推荐</h3>
+            {/* 色彩搭配推荐：展示常见配色方案，帮助玩家理解色彩搭配原理 */}
+            <div className="color-pairing-section">
+              <p className="pairing-intro">掌握色彩搭配原则，提升美学感觉。以下方案在游戏和日常生活中都很实用！</p>
+              {(() => {
+                // 色彩搭配方案库：覆盖互补色、相邻色、三角色、对比色等经典搭配
+                const pairings = [
+                  { name: '互补色搭配', desc: '色相环上正对的两种颜色，对比强烈、视觉冲击力强', colors: ['#E53935', '#43A047'], tags: ['红绿', '高对比'] },
+                  { name: '蓝橙互补', desc: '冷暖对立的经典搭配，既有活力又有平衡感', colors: ['#1E88E5', '#FB8C00'], tags: ['蓝橙', '冷暖'] },
+                  { name: '黄紫互补', desc: '明亮与深沉的碰撞，华丽且富有层次', colors: ['#FDD835', '#8E24AA'], tags: ['黄紫', '华丽'] },
+                  { name: '相邻色搭配', desc: '色相环上相邻的颜色，和谐统一、舒适自然', colors: ['#1E88E5', '#00ACC1', '#26A69A'], tags: ['蓝青绿', '和谐'] },
+                  { name: '暖色调组合', desc: '红橙黄系列，传达温暖、活力与热情', colors: ['#E53935', '#FB8C00', '#FDD835'], tags: ['红橙黄', '温暖'] },
+                  { name: '冷色调组合', desc: '蓝绿紫系列，传达平静、专业与信任', colors: ['#1E88E5', '#26A69A', '#8E24AA'], tags: ['蓝绿紫', '平静'] },
+                  { name: '三角色搭配', desc: '色相环上等距的三种颜色，活泼且平衡', colors: ['#E53935', '#FDD835', '#1E88E5'], tags: ['红黄蓝', '活泼'] },
+                  { name: '单色调层次', desc: '同一色相的不同明度，简洁高级', colors: ['#E3F2FD', '#90CAF9', '#1E88E5', '#0D47A1'], tags: ['蓝色层次', '高级'] },
+                  { name: '大自然配色', desc: '从自然中提取的配色灵感，舒适和谐', colors: ['#558B2F', '#FBC02D', '#6D4C41'], tags: ['森林', '自然'] },
+                  { name: '莫兰迪色系', desc: '低饱和度的高级灰调，优雅内敛', colors: ['#A1887F', '#90A4AE', '#CE93D8', '#FFF59D'], tags: ['高级灰', '优雅'] },
+                ];
+                return (
+                  <div className="pairing-grid">
+                    {pairings.map((p, idx) => (
+                      <div key={idx} className="pairing-card">
+                        <div className="pairing-colors">
+                          {p.colors.map((c, ci) => (
+                            <div key={ci} className="pairing-color-block" style={{ background: c, flex: 1 }}>
+                              <span className="pairing-color-hex">{c}</span>
+                            </div>
+                          ))}
+                        </div>
+                        <div className="pairing-info">
+                          <h4 className="pairing-name">{p.name}</h4>
+                          <p className="pairing-desc">{p.desc}</p>
+                          <div className="pairing-tags">
+                            {p.tags.map((t, ti) => (
+                              <span key={ti} className="pairing-tag">{t}</span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                );
+              })()}
+            </div>
 
             <h3 id="section-tips">🎮 色彩排序游戏中的实用技巧</h3>
             <ul>

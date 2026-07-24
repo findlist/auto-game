@@ -11703,3 +11703,91 @@ mark.search-highlight {
 
 
 
+
+/* ============ 色彩搭配推荐区域样式 ============ */
+.color-pairing-section {
+  margin: 20px 0;
+  padding: 0;
+}
+.pairing-intro {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+.pairing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+.pairing-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+  background: #fff;
+}
+.pairing-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+.pairing-colors {
+  display: flex;
+  height: 60px;
+}
+.pairing-color-block {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 4px;
+}
+.pairing-color-hex {
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  font-family: monospace;
+}
+.pairing-info {
+  padding: 12px 14px;
+}
+.pairing-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0 0 6px 0;
+  color: #333;
+}
+.pairing-desc {
+  font-size: 0.8rem;
+  color: #666;
+  line-height: 1.5;
+  margin: 0 0 8px 0;
+}
+.pairing-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.pairing-tag {
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: #f0f0f0;
+  color: #555;
+}
+.dark-theme .pairing-card {
+  background: #1e1e1e;
+  border-color: #333;
+}
+.dark-theme .pairing-name {
+  color: #e0e0e0;
+}
+.dark-theme .pairing-desc {
+  color: #aaa;
+}
+.dark-theme .pairing-tag {
+  background: #333;
+  color: #ccc;
+}
+.dark-theme .pairing-intro {
+  color: #aaa;
+}
