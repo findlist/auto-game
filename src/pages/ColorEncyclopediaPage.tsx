@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { SoundEngine } from '../game/soundEngine';
-import { getTodayColorQuiz, saveDailyQuizResult, getDailyQuizHistory, getQuizStreak, getQuizDifficultyStats, getQuizWrongAnswers, saveQuizUserAnswer, savePerceptionWrongAnswer, getPerceptionWrongAnswers, clearPerceptionWrongAnswers, saveReactionWrongAnswer, getReactionWrongAnswers, clearReactionWrongAnswers, savePairLowScore, getPairLowScores, clearPairLowScores } from '../game/announcements';
+import { getTodayColorQuiz, saveDailyQuizResult, getDailyQuizHistory, getQuizStreak, getQuizDifficultyStats, getQuizWrongAnswers, saveQuizUserAnswer } from '../game/announcements';
+import { savePerceptionWrongAnswer, getPerceptionWrongAnswers, clearPerceptionWrongAnswers, saveReactionWrongAnswer, getReactionWrongAnswers, clearReactionWrongAnswers, savePairLowScore, getPairLowScores, clearPairLowScores } from '../game/wrongAnswers';
 import { ParticleEffect } from '../components/ParticleEffect';
 
 interface ColorEncyclopediaPageProps {
