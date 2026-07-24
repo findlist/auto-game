@@ -26,7 +26,7 @@ import { STORAGE_KEYS } from './game/storageKeys';
 import { recordPlayedMode, getPlayedModes } from './game/playedModes';
 import { claimWeekendBonus, getWeekendBonusInfo } from './game/weekendBonus';
 import { GameSettings } from './game/settings';
-import { canInstallPWA, triggerPWAInstall, isPWAInstallDismissed, dismissPWAInstall } from './game/pwaInstall';
+import { canInstallPWA, isPWAInstallDismissed, dismissPWAInstall } from './game/pwaInstall';
 import { loadRecent, saveRecent, RecentPlay, loadProgress, saveProgress, Progress, loadBestScores, saveBestScore, hasSeenTutorial, markTutorialSeen, loadStars, saveStars, loadAutosave, saveAutosave, clearAutosave, loadTimedHighScore, saveTimedHighScore, AutosaveData } from './game/homeStorage';
 import { getDailyGoals, updateGoalProgress, claimGoalReward, getDailyGoalsProgress } from './game/dailyGoals';
 import { GamePageComponent } from './components/GamePageComponent';
@@ -35,6 +35,7 @@ import { QuickNavSection } from './components/QuickNavSection';
 import { LevelSelectSection } from './components/LevelSelectSection';
 import { DailyContentSection } from './components/DailyContentSection';
 import { HomeTopSection } from './components/HomeTopSection';
+import { HomeDialogs } from './components/HomeDialogs';
 import { SmartRecommendSection } from './components/SmartRecommendSection';
 import { HomeFooterSection } from './components/HomeFooterSection';
 import { getComboStreak, incrementComboStreak, resetComboStreak, checkComboCelebration, addTotalComboCount, getTotalComboCount, ComboCelebration } from './game/comboStreak';
@@ -45,10 +46,6 @@ const StatsPage = lazy(() => import('./pages/StatsPage').then(m => ({ default: m
 const PrivacyPage = lazy(() => import('./pages/PrivacyPage').then(m => ({ default: m.PrivacyPage })));
 const SettingsPage = lazy(() => import('./pages/SettingsPage').then(m => ({ default: m.SettingsPage })));
 const LevelEditorPage = lazy(() => import('./pages/LevelEditorPage').then(m => ({ default: m.LevelEditorPage })));
-// 懒加载更新日志组件,降低首屏 bundle 体积
-const ChangelogModal = lazy(() => import('./components/ChangelogModal'));
-// 首页弹窗（签到奖励、公告、配方查看）懒加载，降低首屏 bundle 体积
-const HomeModals = lazy(() => import('./components/HomeModals'));
 const CustomLevelPlayer = lazy(() => import('./pages/LevelEditorPage').then(m => ({ default: m.CustomLevelPlayer })));
 const ColorEncyclopediaPage = lazy(() => import('./pages/ColorEncyclopediaPage').then(m => ({ default: m.ColorEncyclopediaPage })));
 
@@ -1074,238 +1071,83 @@ export default function App() {
           <button className="fab-nav-btn" onClick={() => { setPage('settings'); SoundEngine.click(); }} aria-label="设置" title="设置">⚙️</button>
         </div>
 
-        {/* 自动存档恢复对话框 */}
-        {showResumeDialog && autosaveData && (
-          <div className="tutorial-overlay" onClick={() => setShowResumeDialog(false)}>
-            <div className="tutorial-card" onClick={(e) => e.stopPropagation()}>
-              <div className="tutorial-emoji">💾</div>
-              <h2>发现未完成的游戏</h2>
-              <p className="modal-body-text">
-                {autosaveData.mode === 'endless'
-                  ? `无尽模式第 ${(autosaveData.endlessScore ?? 0) + 1} 关已走 ${autosaveData.moves} 步`
-                  : autosaveData.mode === 'timed'
-                  ? `限时挑战已走 ${autosaveData.moves} 步`
-                  : autosaveData.mode === 'daily'
-                  ? `每日挑战已走 ${autosaveData.moves} 步`
-                  : autosaveData.mode === 'weekly'
-                  ? `周挑战已走 ${autosaveData.moves} 步`
-                  : `第 ${autosaveData.level} 关已走 ${autosaveData.moves} 步`}
-              </p>
-              <div className="modal-actions">
-                <button className="btn btn-primary btn-large" onClick={() => {
-                  if (autosaveData.mode === 'endless') {
-                    setIsEndlessMode(true);
-                    setEndlessScore(autosaveData.endlessScore ?? 0);
-                    setCurrentLevel(-2);
-                  } else if (autosaveData.mode === 'timed') {
-                    setIsTimedMode(true);
-                    setTimedScore(autosaveData.timedScore ?? 0);
-                    setCurrentLevel(-3);
-                  } else if (autosaveData.mode === 'daily') {
-                    setIsDailyMode(true);
-                    setCurrentLevel(-1);
-                  } else if (autosaveData.mode === 'weekly') {
-                    setIsWeeklyMode(true);
-                    setCurrentLevel(-4);
-                  } else {
-                    setCurrentLevel(autosaveData.level);
-                  }
-                  setPage('game');
-                  setShowResumeDialog(false);
-                  SoundEngine.resume();
-                }}>▶ 继续游戏</button>
-                <button className="btn btn-secondary" onClick={() => {
-                  setShowResumeDialog(false);
-                  clearAutosave();
-                }}>放弃存档</button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* 忽略 */}
-        {showTutorial && (
-          <div className="tutorial-overlay" onClick={handleTutorialClose}>
-            <div className="tutorial-card" onClick={(e) => e.stopPropagation()}>
-              <div className="tutorial-emoji">🎨</div>
-              <h2>欢迎来到色彩排序!</h2>
-              <div className="tutorial-steps">
-                <div className="tutorial-step">
-                  <span className="step-icon">1️⃣</span>
-                  <span>点击一个有颜色的试管选中它</span>
-                </div>
-                <div className="tutorial-step">
-                  <span className="step-icon">2️⃣</span>
-                  <span>再点击一个试管,颜色会倒过去</span>
-                </div>
-                <div className="tutorial-step">
-                  <span className="step-icon">3️⃣</span>
-                  <span>只能倒入空管或顶部颜色相同的试管</span>
-                </div>
-                <div className="tutorial-step">
-                  <span className="step-icon">4️⃣</span>
-                  <span>把每种颜色归到一个试管就赢了!</span>
-                </div>
-              </div>
-              <button className="btn btn-primary btn-large" onClick={handleTutorialClose}>
-                知道了,开始玩!
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* 分享成功提示 */}
-        {showShareToast && (
-          <div className="share-toast">📋 战绩已复制到剪贴板!</div>
-        )}
-
-        {/* 成就解锁通知 — 根据稀有度显示不同边框颜色和标签 */}
-        {newAchievements.length > 0 && (() => {
-          const ach = newAchievements[0];
-          const rarityLabels: Record<string, { label: string; color: string }> = {
-            common: { label: '', color: '#4CAF50' },
-            rare: { label: '⭐ 稀有', color: '#2196F3' },
-            epic: { label: '⭐⭐ 史诗', color: '#9C27B0' },
-            legendary: { label: '⭐⭐⭐ 传说', color: '#FF9800' },
-          };
-          const rarity = rarityLabels[ach.rarity || 'common'] || rarityLabels.common;
-          return (
-            <div className="achievement-notification" onClick={dismissAchievement}>
-              <div className="achievement-notif-card" style={{ borderColor: rarity.color }}>
-                <div className="achievement-notif-icon">{ach.icon}</div>
-                <div className="achievement-notif-text">
-                  <div className="achievement-notif-title">🏆 成就解锁!</div>
-                  <div className="achievement-notif-name">{ach.name}</div>
-                  <div className="achievement-notif-desc">{ach.description}</div>
-                  {rarity.label && <div className="achievement-notif-rarity" style={{ color: rarity.color }}>{rarity.label}</div>}
-                </div>
-              </div>
-            </div>
-          );
-        })()}
-
-        {/* 连击里程碑庆祝弹窗 */}
-        {comboCelebration && (
-          <div className="combo-celebration-overlay" onClick={() => setComboCelebration(null)}>
-            <div className="combo-celebration-card" style={{ borderColor: comboCelebration.color }}>
-              <div className="combo-celebration-emoji" style={{ animation: 'comboPop 0.6s ease-out' }}>{comboCelebration.emoji}</div>
-              <div className="combo-celebration-title" style={{ color: comboCelebration.color }}>{comboCelebration.title}</div>
-              <div className="combo-celebration-desc">{comboCelebration.desc}</div>
-              <button className="btn btn-primary" onClick={() => setComboCelebration(null)}>继续</button>
-            </div>
-          </div>
-        )}
-
-        {/* PWA 安装提示弹窗 */}
-        {showPWAInstall && (
-          <div className="pwa-install-banner">
-            <div className="pwa-install-content">
-              <span className="pwa-install-icon">📱</span>
-              <div className="pwa-install-text">
-                <div className="pwa-install-title">安装到桌面</div>
-                <div className="pwa-install-desc">离线也能玩,更流畅</div>
-              </div>
-              <button className="pwa-install-btn" onClick={async () => {
-                const ok = await triggerPWAInstall();
-                setShowPWAInstall(false);
-                if (!ok) dismissPWAInstall();
-              }}>安装</button>
-              <button className="pwa-install-close" onClick={() => {
-                setShowPWAInstall(false);
-                dismissPWAInstall();
-              }}>✕</button>
-            </div>
-          </div>
-        )}
-
-        {/* 首页玩法弹窗 */}
-        {showHelpModal && (
-          <div className="help-modal-overlay" onClick={() => setShowHelpModal(false)}>
-            <div className="help-modal-card" onClick={(e) => e.stopPropagation()}>
-              <h2>📖 玩法说明</h2>
-              <div className="help-modal-step">
-                <span className="step-icon">1️⃣</span>
-                <span>点击一个有颜色的试管选中它</span>
-              </div>
-              <div className="help-modal-step">
-                <span className="step-icon">2️⃣</span>
-                <span>再点击一个试管,颜色会倒过去</span>
-              </div>
-              <div className="help-modal-step">
-                <span className="step-icon">3️⃣</span>
-                <span>只能倒入空管或顶部颜色相同的试管</span>
-              </div>
-              <div className="help-modal-step">
-                <span className="step-icon">4️⃣</span>
-                <span>把每种颜色归到一个试管就赢了!</span>
-              </div>
-              <div className="help-modal-step">
-                <span className="step-icon">⭐</span>
-                <span>关卡越后星级越高,追求三星通关!</span>
-              </div>
-              <button className="btn btn-primary help-modal-close" onClick={() => setShowHelpModal(false)}>
-                知道了
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* 首页弹窗集合（签到奖励、公告、配方查看）— 懒加载以降低首屏 bundle */}
-        {(showCheckinReward || (showAnnouncements && announcements.length > 0) || showSavedRecipes) && (
-          <Suspense fallback={null}>
-            <HomeModals
-              checkinReward={showCheckinReward}
-              checkinStreak={checkinStreak}
-              announcements={announcements}
-              savedRecipes={savedRecipes}
-              showCheckinReward={!!showCheckinReward}
-              showAnnouncements={showAnnouncements}
-              showSavedRecipes={showSavedRecipes}
-              onCheckinRewardClose={() => setShowCheckinReward(null)}
-              onAnnouncementDismiss={handleDismissAnnouncement}
-              onAnnouncementClose={() => setShowAnnouncements(false)}
-              onSavedRecipesClose={() => setShowSavedRecipes(false)}
-              onGoToMixer={() => setPage('encyclopedia')}
-            />
-          </Suspense>
-        )}
-
-        {/* 更新日志弹窗 - 懒加载以降低首屏 bundle */}
-        {showChangelog && (
-          <Suspense fallback={<div className="tutorial-overlay"><div className="tutorial-card"><p style={{padding:'40px',textAlign:'center'}}>加载中...</p></div></div>}>
-            <ChangelogModal onClose={() => setShowChangelog(false)} />
-          </Suspense>
-        )}
-
-        {/* 回放查看弹窗(从分享链接打开) */}
-        {showViewReplay && viewReplayData && (
-          <div className="tutorial-overlay" onClick={() => { setShowViewReplay(false); setViewReplayData(null); window.location.hash = ''; }}>
-            <div className="tutorial-card" onClick={(e) => e.stopPropagation()}>
-              <div className="tutorial-emoji">🎥</div>
-              <h2>查看回放</h2>
-              <p className="replay-info-text">
-                {viewReplayData.level === -1 ? "每日挑战" : viewReplayData.level === -2 ? "无尽模式" : viewReplayData.level === -3 ? "限时模式" : `第 ${viewReplayData.level} 关`}
-                {' 步数 '}{viewReplayData.stepsUsed} 步 · {'⭐'.repeat(viewReplayData.starRating)}
-              </p>
-              <p className="replay-actions-hint">点击下方按钮在游戏中查看完整回放</p>
-              <div className="replay-view-actions">
-                <button className="btn btn-primary" onClick={() => {
-                  // 跳转到对应关卡,自动加载回放
-                  if (viewReplayData.level > 0) {
-                    handleSelectLevel(viewReplayData.level);
-                  }
-                  setShowViewReplay(false);
-                  setViewReplayData(null);
-                  window.location.hash = '';
-                }}>🎯 前往关卡</button>
-                <button className="btn btn-secondary" onClick={() => { setShowViewReplay(false); setViewReplayData(null); window.location.hash = ''; }}>关闭</button>
-              </div>
-              <p className="replay-detail-moves">
-                操作序列:{viewReplayData.moves.map(m => `${m.from + 1}→${m.to + 1}`).join(', ')}
-              </p>
-            </div>
-          </div>
-        )}
+        <HomeDialogs
+          showResumeDialog={showResumeDialog}
+          autosaveData={autosaveData}
+          onResume={() => {
+            if (autosaveData) {
+              if (autosaveData.mode === 'endless') {
+                setIsEndlessMode(true);
+                setEndlessScore(autosaveData.endlessScore ?? 0);
+                setCurrentLevel(-2);
+              } else if (autosaveData.mode === 'timed') {
+                setIsTimedMode(true);
+                setTimedScore(autosaveData.timedScore ?? 0);
+                setCurrentLevel(-3);
+              } else if (autosaveData.mode === 'daily') {
+                setIsDailyMode(true);
+                setCurrentLevel(-1);
+              } else if (autosaveData.mode === 'weekly') {
+                setIsWeeklyMode(true);
+                setCurrentLevel(-4);
+              } else {
+                setCurrentLevel(autosaveData.level);
+              }
+              setPage('game');
+              setShowResumeDialog(false);
+              SoundEngine.resume();
+            }
+          }}
+          onDiscardAutosave={() => {
+            setShowResumeDialog(false);
+            clearAutosave();
+          }}
+          onCloseResume={() => setShowResumeDialog(false)}
+          showTutorial={showTutorial}
+          onTutorialClose={handleTutorialClose}
+          showShareToast={showShareToast}
+          newAchievements={newAchievements}
+          onDismissAchievement={dismissAchievement}
+          comboCelebration={comboCelebration}
+          onCloseComboCelebration={() => setComboCelebration(null)}
+          showPWAInstall={showPWAInstall}
+          onClosePWAInstall={() => {
+            setShowPWAInstall(false);
+            dismissPWAInstall();
+          }}
+          showHelpModal={showHelpModal}
+          onCloseHelp={() => setShowHelpModal(false)}
+          showCheckinReward={showCheckinReward}
+          checkinStreak={checkinStreak}
+          announcements={announcements}
+          showAnnouncements={showAnnouncements}
+          showSavedRecipes={showSavedRecipes}
+          savedRecipes={savedRecipes}
+          onCheckinRewardClose={() => setShowCheckinReward(null)}
+          onAnnouncementDismiss={handleDismissAnnouncement}
+          onAnnouncementClose={() => setShowAnnouncements(false)}
+          onSavedRecipesClose={() => setShowSavedRecipes(false)}
+          onGoToMixer={() => setPage('encyclopedia')}
+          showChangelog={showChangelog}
+          onCloseChangelog={() => setShowChangelog(false)}
+          showViewReplay={showViewReplay}
+          viewReplayData={viewReplayData}
+          onGoToReplayLevel={() => {
+            if (viewReplayData) {
+              if (viewReplayData.level > 0) {
+                handleSelectLevel(viewReplayData.level);
+              }
+              setShowViewReplay(false);
+              setViewReplayData(null);
+              window.location.hash = '';
+            }
+          }}
+          onCloseViewReplay={() => {
+            setShowViewReplay(false);
+            setViewReplayData(null);
+            window.location.hash = '';
+          }}
+        />
 
       </div>
     );
