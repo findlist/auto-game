@@ -13,6 +13,16 @@ const ChangelogModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         <h2>色彩排序更新日志</h2>
         <div className="changelog-content">
           <div className="changelog-item">
+            <h3>🎉 v1.44.0</h3>
+            <ul>
+              <li>💡 新手引导扩展至第9-10关：颜色分组提示(艘色主题)和综合策略提示(金色主题)，完善前10关渐进式引导体系</li>
+              <li>📦 错题存储功能拆分为独立模块，减小首屏加载模块体积</li>
+              <li>🔧 提取首页统计卡片为独立HomeStatsBar组件，使用React.memo优化重渲染性能</li>
+              <li>🔧 提取首页快捷功能导航区为独立QuickNavSection组件，使用React.memo优化重渲染</li>
+              <li>📝 SEO更新+版本号同步</li>
+            </ul>
+          </div>
+          <div className="changelog-item">
             <h3>🎉 v1.43.0</h3>
             <ul>
               <li>💡 新手引导扩展至第6-8关：试管管理(绿色)、逆向思维(狭色)、空间利用(粉色)提示，完善前8关引导体系</li>
