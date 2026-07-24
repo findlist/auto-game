@@ -1381,6 +1381,18 @@ body {
   background: rgba(245, 127, 23, 0.1);
 }
 
+/* 第11关耐心规划提示：紫色主题，呼应深度思考与谋略感 */
+.beginner-encouragement.level11-tip .encouragement-text {
+  color: #6A1B9A;
+  background: rgba(106, 27, 154, 0.1);
+}
+
+/* 第12关注册模式提示：青色主题，呼应规律发现与启发感 */
+.beginner-encouragement.level12-tip .encouragement-text {
+  color: #00695C;
+  background: rgba(0, 105, 92, 0.1);
+}
+
 /* 暗色主题适配 */
 .dark-theme .beginner-encouragement.level2-tip .encouragement-text {
   color: #64B5F6;
@@ -1417,6 +1429,14 @@ body {
 .dark-theme .beginner-encouragement.level10-tip .encouragement-text {
   color: #FFB74D;
   background: rgba(245, 127, 23, 0.15);
+}
+.dark-theme .beginner-encouragement.level11-tip .encouragement-text {
+  color: #BA68C8;
+  background: rgba(106, 27, 154, 0.15);
+}
+.dark-theme .beginner-encouragement.level12-tip .encouragement-text {
+  color: #4DB6AC;
+  background: rgba(0, 105, 92, 0.15);
 }
 
 .tubes-grid {

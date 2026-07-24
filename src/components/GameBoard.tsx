@@ -66,6 +66,8 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
   const [showLevel8Tip, setShowLevel8Tip] = useState(false); // 第8关空间利用提示
   const [showLevel9Tip, setShowLevel9Tip] = useState(false); // 第9关颜色分组提示
   const [showLevel10Tip, setShowLevel10Tip] = useState(false); // 第10关综合策略提示
+  const [showLevel11Tip, setShowLevel11Tip] = useState(false); // 第11关耐心规划提示
+  const [showLevel12Tip, setShowLevel12Tip] = useState(false); // 第12关注册模式提示
   const [elapsedTime, setElapsedTime] = useState(0); // 已用时间（秒）
   const gameStartTime = useRef<number>(Date.now()); // 游戏开始时间戳
   const shareImageRef = useRef<HTMLAnchorElement | null>(null);
@@ -181,6 +183,24 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
       const t = setTimeout(() => setShowLevel10Tip(false), 4000);
       return () => clearTimeout(t);
     } else setShowLevel10Tip(false);
+  }, [level]);
+
+  // 第11关耐心规划提示：关卡难度提升，引导玩家放慢节奏做好规划
+  useEffect(() => {
+    if (level === 11) {
+      setShowLevel11Tip(true);
+      const t = setTimeout(() => setShowLevel11Tip(false), 4000);
+      return () => clearTimeout(t);
+    } else setShowLevel11Tip(false);
+  }, [level]);
+
+  // 第12关注册模式提示：引导玩家注意颜色注册规律，避免无效移动
+  useEffect(() => {
+    if (level === 12) {
+      setShowLevel12Tip(true);
+      const t = setTimeout(() => setShowLevel12Tip(false), 4000);
+      return () => clearTimeout(t);
+    } else setShowLevel12Tip(false);
   }, [level]);
 
   // 限时模式倒计时（暂停时冻结）
@@ -713,6 +733,22 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
         <div className="beginner-encouragement level10-tip" aria-hidden="true">
           <span className="encouragement-emoji">🏅</span>
           <span className="encouragement-text">前10关毕业冲刺！综合运用空管缓冲、逆向倒推、分组归位</span>
+        </div>
+      )}
+
+      {/* 第11关耐心规划提示：难度提升后引导玩家放慢节奏做好规划 */}
+      {showLevel11Tip && (
+        <div className="beginner-encouragement level11-tip" aria-hidden="true">
+          <span className="encouragement-emoji">🧩</span>
+          <span className="encouragement-text">难度升级了！先观察全局再动手，谋定而后动</span>
+        </div>
+      )}
+
+      {/* 第12关注册模式提示：引导玩家发现颜色注册规律 */}
+      {showLevel12Tip && (
+        <div className="beginner-encouragement level12-tip" aria-hidden="true">
+          <span className="encouragement-emoji">💡</span>
+          <span className="encouragement-text">试着把同色液体想象成注册拼图，先归位边角再填充中间</span>
         </div>
       )}
 
