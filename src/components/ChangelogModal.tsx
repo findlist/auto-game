@@ -13,6 +13,16 @@ const ChangelogModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         <h2>色彩排序更新日志</h2>
         <div className="changelog-content">
           <div className="changelog-item">
+            <h3>🎉 v1.43.0</h3>
+            <ul>
+              <li>💡 新手引导扩展至第6-8关：试管管理(绿色)、逆向思维(狭色)、空间利用(粉色)提示，完善前8关引导体系</li>
+              <li>🔍 关卡选择按钮新增悬停详情预览tooltip，显示难度等级、最优步数和历史星级</li>
+              <li>📊 成就页面新增稀有度分布SVG环形饼图，可视化各稀有度成就数量占比和解锁进度</li>
+              <li>📦 新增反应力测试错题存储和配对游戏低分记录功能，优化异步接口</li>
+              <li>🎨 暗色主题适配新增关卡tooltip和饼图样式</li>
+            </ul>
+          </div>
+          <div className="changelog-item">
             <h3>🎉 v1.42.0</h3>
             <ul>
               <li>💡 新手引导完善，第4关多色提示（橙色主题）和第5关规划提示（青色主题），形成前5关渐进式引导体系</li>
