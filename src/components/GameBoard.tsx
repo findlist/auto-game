@@ -61,6 +61,9 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
   const [showLevel3Tip, setShowLevel3Tip] = useState(false); // 第3关策略提示
   const [showLevel4Tip, setShowLevel4Tip] = useState(false); // 第4关多色提示
   const [showLevel5Tip, setShowLevel5Tip] = useState(false); // 第5关规划提示
+  const [showLevel6Tip, setShowLevel6Tip] = useState(false); // 第6关试管管理提示
+  const [showLevel7Tip, setShowLevel7Tip] = useState(false); // 第7关逆向思维提示
+  const [showLevel8Tip, setShowLevel8Tip] = useState(false); // 第8关空间利用提示
   const [elapsedTime, setElapsedTime] = useState(0); // 已用时间（秒）
   const gameStartTime = useRef<number>(Date.now()); // 游戏开始时间戳
   const shareImageRef = useRef<HTMLAnchorElement | null>(null);
@@ -131,6 +134,33 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
       const t = setTimeout(() => setShowLevel5Tip(false), 4000);
       return () => clearTimeout(t);
     } else setShowLevel5Tip(false);
+  }, [level]);
+
+  // 第6关试管管理提示：引导玩家合理利用空试管作为中转空间
+  useEffect(() => {
+    if (level === 6) {
+      setShowLevel6Tip(true);
+      const t = setTimeout(() => setShowLevel6Tip(false), 4000);
+      return () => clearTimeout(t);
+    } else setShowLevel6Tip(false);
+  }, [level]);
+
+  // 第7关逆向思维提示：引导玩家从终点倒推，培养逆向思考能力
+  useEffect(() => {
+    if (level === 7) {
+      setShowLevel7Tip(true);
+      const t = setTimeout(() => setShowLevel7Tip(false), 4000);
+      return () => clearTimeout(t);
+    } else setShowLevel7Tip(false);
+  }, [level]);
+
+  // 第8关空间利用提示：试管增多后引导玩家注意空间分配
+  useEffect(() => {
+    if (level === 8) {
+      setShowLevel8Tip(true);
+      const t = setTimeout(() => setShowLevel8Tip(false), 4000);
+      return () => clearTimeout(t);
+    } else setShowLevel8Tip(false);
   }, [level]);
 
   // 限时模式倒计时（暂停时冻结）
@@ -623,6 +653,30 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
         <div className="beginner-encouragement level5-tip" aria-hidden="true">
           <span className="encouragement-emoji">🤔</span>
           <span className="encouragement-text">倒水前先想好顺序，避免堵住出口</span>
+        </div>
+      )}
+
+      {/* 第6关试管管理提示：引导玩家利用空试管作为临时中转站 */}
+      {showLevel6Tip && (
+        <div className="beginner-encouragement level6-tip" aria-hidden="true">
+          <span className="encouragement-emoji">📦</span>
+          <span className="encouragement-text">空试管是中转站，先把混合色倒出来整理</span>
+        </div>
+      )}
+
+      {/* 第7关逆向思维提示：引导玩家从目标状态倒推解题思路 */}
+      {showLevel7Tip && (
+        <div className="beginner-encouragement level7-tip" aria-hidden="true">
+          <span className="encouragement-emoji">🔄</span>
+          <span className="encouragement-text">试着从最后一步倒推，想想哪根试管最后填满</span>
+        </div>
+      )}
+
+      {/* 第8关空间利用提示：试管增多后引导玩家注意空间分配策略 */}
+      {showLevel8Tip && (
+        <div className="beginner-encouragement level8-tip" aria-hidden="true">
+          <span className="encouragement-emoji">🏗️</span>
+          <span className="encouragement-text">试管多了空间更大，优先清空一根试管留作缓冲</span>
         </div>
       )}
 

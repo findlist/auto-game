@@ -1282,6 +1282,24 @@ body {
   background: rgba(0, 188, 212, 0.1);
 }
 
+/* 第6关试管管理提示：绿色主题，呼应空间管理 */
+.beginner-encouragement.level6-tip .encouragement-text {
+  color: #4CAF50;
+  background: rgba(76, 175, 80, 0.1);
+}
+
+/* 第7关逆向思维提示：狭色主题，呼应逆向思考 */
+.beginner-encouragement.level7-tip .encouragement-text {
+  color: #795548;
+  background: rgba(121, 85, 72, 0.1);
+}
+
+/* 第8关空间利用提示：粉色主题，呼应空间分配 */
+.beginner-encouragement.level8-tip .encouragement-text {
+  color: #E91E63;
+  background: rgba(233, 30, 99, 0.1);
+}
+
 /* 暗色主题适配 */
 .dark-theme .beginner-encouragement.level2-tip .encouragement-text {
   color: #64B5F6;
@@ -1298,6 +1316,18 @@ body {
 .dark-theme .beginner-encouragement.level5-tip .encouragement-text {
   color: #4DD0E1;
   background: rgba(0, 188, 212, 0.15);
+}
+.dark-theme .beginner-encouragement.level6-tip .encouragement-text {
+  color: #81C784;
+  background: rgba(76, 175, 80, 0.15);
+}
+.dark-theme .beginner-encouragement.level7-tip .encouragement-text {
+  color: #BCAAA4;
+  background: rgba(121, 85, 72, 0.15);
+}
+.dark-theme .beginner-encouragement.level8-tip .encouragement-text {
+  color: #F06292;
+  background: rgba(233, 30, 99, 0.15);
 }
 
 .tubes-grid {
