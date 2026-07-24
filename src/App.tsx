@@ -25,7 +25,6 @@ const replayVideoModule = () => import('./game/replayVideo');
 import { STORAGE_KEYS } from './game/storageKeys';
 import { recordPlayedMode, getPlayedModes } from './game/playedModes';
 import { claimWeekendBonus, getWeekendBonusInfo } from './game/weekendBonus';
-import { GameSettings } from './game/settings';
 import { canInstallPWA, isPWAInstallDismissed, dismissPWAInstall } from './game/pwaInstall';
 import { loadRecent, saveRecent, RecentPlay, loadProgress, saveProgress, Progress, loadBestScores, saveBestScore, hasSeenTutorial, markTutorialSeen, loadStars, saveStars, loadAutosave, saveAutosave, clearAutosave, loadTimedHighScore, saveTimedHighScore, AutosaveData } from './game/homeStorage';
 import { getDailyGoals, updateGoalProgress, claimGoalReward, getDailyGoalsProgress } from './game/dailyGoals';
@@ -37,6 +36,7 @@ import { LevelSelectSection } from './components/LevelSelectSection';
 import { DailyContentSection } from './components/DailyContentSection';
 import { HomeTopSection } from './components/HomeTopSection';
 import { HomeDialogs } from './components/HomeDialogs';
+import { HomeChrome } from './components/HomeChrome';
 import { SmartRecommendSection } from './components/SmartRecommendSection';
 import { HomeFooterSection } from './components/HomeFooterSection';
 import { getComboStreak, incrementComboStreak, resetComboStreak, checkComboCelebration, addTotalComboCount, getTotalComboCount, ComboCelebration } from './game/comboStreak';
@@ -930,38 +930,89 @@ export default function App() {
   // 渲染首页
   if (page === 'home') {
     return (
-      <div className="app">
-        <a href="#main-content" className="sr-only">跳转到主要内容</a>
-        <header className="home-header">
-          <div className="header-controls">
-            <button className="sound-toggle-btn" onClick={() => {
-              const newSound = GameSettings.toggleSound();
-              if (newSound) SoundEngine.click();
-              // 关闭音效时同时停止背景音乐
-              if (!newSound) SoundEngine.stopBGM();
-            }} aria-label={GameSettings.getSound() ? '关闭音效' : '开启音效'} title={GameSettings.getSound() ? '关闭音效' : '开启音效'}>
-              {GameSettings.getSound() ? '🔊' : '🔇'}
-            </button>
-            {/* BGM快捷切换 - 独立于音效开关，方便玩家随时切换背景音乐 */}
-            <button className="sound-toggle-btn bgm-toggle-btn" onClick={() => {
-              const newBgm = GameSettings.toggleBGM();
-              if (newBgm) {
-                SoundEngine.resume();
-                SoundEngine.startBGM();
+      <HomeChrome
+        onNavigate={(p) => setPage(p as any)}
+        onShowHelp={() => setShowHelpModal(true)}
+        dialogs={
+          <HomeDialogs
+          showResumeDialog={showResumeDialog}
+          autosaveData={autosaveData}
+          onResume={() => {
+            if (autosaveData) {
+              if (autosaveData.mode === 'endless') {
+                setIsEndlessMode(true);
+                setEndlessScore(autosaveData.endlessScore ?? 0);
+                setCurrentLevel(-2);
+              } else if (autosaveData.mode === 'timed') {
+                setIsTimedMode(true);
+                setTimedScore(autosaveData.timedScore ?? 0);
+                setCurrentLevel(-3);
+              } else if (autosaveData.mode === 'daily') {
+                setIsDailyMode(true);
+                setCurrentLevel(-1);
+              } else if (autosaveData.mode === 'weekly') {
+                setIsWeeklyMode(true);
+                setCurrentLevel(-4);
               } else {
-                SoundEngine.stopBGM();
+                setCurrentLevel(autosaveData.level);
               }
-            }} aria-label={GameSettings.getBGM() ? '关闭背景音乐' : '开启背景音乐'} title={GameSettings.getBGM() ? '关闭背景音乐' : '开启背景音乐'}>
-              {GameSettings.getBGM() ? '🎵' : '🎵̸'}
-            </button>
-          </div>
-          <div className="logo">🎨</div>
-          <h1 className="title">色彩排序</h1>
-          <p className="subtitle">经典好玩的颜色游戏</p>
-          <p className="tagline">动动手指排列颜色吧!</p>
-        </header>
-
-        <main className="home-main" id="main-content">
+              setPage('game');
+              setShowResumeDialog(false);
+              SoundEngine.resume();
+            }
+          }}
+          onDiscardAutosave={() => {
+            setShowResumeDialog(false);
+            clearAutosave();
+          }}
+          onCloseResume={() => setShowResumeDialog(false)}
+          showTutorial={showTutorial}
+          onTutorialClose={handleTutorialClose}
+          showShareToast={showShareToast}
+          newAchievements={newAchievements}
+          onDismissAchievement={dismissAchievement}
+          comboCelebration={comboCelebration}
+          onCloseComboCelebration={() => setComboCelebration(null)}
+          showPWAInstall={showPWAInstall}
+          onClosePWAInstall={() => {
+            setShowPWAInstall(false);
+            dismissPWAInstall();
+          }}
+          showHelpModal={showHelpModal}
+          onCloseHelp={() => setShowHelpModal(false)}
+          showCheckinReward={showCheckinReward}
+          checkinStreak={checkinStreak}
+          announcements={announcements}
+          showAnnouncements={showAnnouncements}
+          showSavedRecipes={showSavedRecipes}
+          savedRecipes={savedRecipes}
+          onCheckinRewardClose={() => setShowCheckinReward(null)}
+          onAnnouncementDismiss={handleDismissAnnouncement}
+          onAnnouncementClose={() => setShowAnnouncements(false)}
+          onSavedRecipesClose={() => setShowSavedRecipes(false)}
+          onGoToMixer={() => setPage('encyclopedia')}
+          showChangelog={showChangelog}
+          onCloseChangelog={() => setShowChangelog(false)}
+          showViewReplay={showViewReplay}
+          viewReplayData={viewReplayData}
+          onGoToReplayLevel={() => {
+            if (viewReplayData) {
+              if (viewReplayData.level > 0) {
+                handleSelectLevel(viewReplayData.level);
+              }
+              setShowViewReplay(false);
+              setViewReplayData(null);
+              window.location.hash = '';
+            }
+          }}
+          onCloseViewReplay={() => {
+            setShowViewReplay(false);
+            setViewReplayData(null);
+            window.location.hash = '';
+          }}
+        />
+        }
+      >
           <HomeTopSection
             checkinDone={checkinDone}
             checkinStreak={checkinStreak}
@@ -1045,112 +1096,7 @@ export default function App() {
             onDailyChallenge={handleDailyChallenge}
             onShowHelp={() => setShowHelpModal(true)}
           />
-        </main>
-
-        <footer className="home-footer">
-          <button className="footer-link" onClick={() => setPage('about')}>关于</button>
-          <span className="footer-divider">|</span>
-          <button className="footer-link" onClick={() => setShowHelpModal(true)}>📖 玩法</button>
-          <span className="footer-divider">|</span>
-          <button className="footer-link" onClick={() => setPage('achievements')}>🏆 成就</button>
-          <span className="footer-divider">|</span>
-          <button className="footer-link" onClick={() => setPage('stats')}>📊 统计</button>
-          <span className="footer-divider">|</span>
-          <button className="footer-link" onClick={() => setPage('editor')}>🔧 编辑器</button>
-          <span className="footer-divider">|</span>
-          <button className="footer-link" onClick={() => setPage('settings')}>⚙️ 设置</button>
-          <span className="footer-divider">|</span>
-          <button className="footer-link" onClick={() => setPage('encyclopedia')}>🎨 色彩百科</button>
-          <span className="footer-divider">|</span>
-          <button className="footer-link" onClick={() => setPage('privacy')}>隐私政策</button>
-        </footer>
-
-        {/* 浮动快捷导航按钮 */}
-        <div className="fab-nav">
-          <button className="fab-nav-btn" onClick={() => { setPage('achievements'); SoundEngine.click(); }} aria-label="成就" title="成就">🏆</button>
-          <button className="fab-nav-btn" onClick={() => { setPage('stats'); SoundEngine.click(); }} aria-label="统计" title="统计">📊</button>
-          <button className="fab-nav-btn" onClick={() => { setPage('settings'); SoundEngine.click(); }} aria-label="设置" title="设置">⚙️</button>
-        </div>
-
-        <HomeDialogs
-          showResumeDialog={showResumeDialog}
-          autosaveData={autosaveData}
-          onResume={() => {
-            if (autosaveData) {
-              if (autosaveData.mode === 'endless') {
-                setIsEndlessMode(true);
-                setEndlessScore(autosaveData.endlessScore ?? 0);
-                setCurrentLevel(-2);
-              } else if (autosaveData.mode === 'timed') {
-                setIsTimedMode(true);
-                setTimedScore(autosaveData.timedScore ?? 0);
-                setCurrentLevel(-3);
-              } else if (autosaveData.mode === 'daily') {
-                setIsDailyMode(true);
-                setCurrentLevel(-1);
-              } else if (autosaveData.mode === 'weekly') {
-                setIsWeeklyMode(true);
-                setCurrentLevel(-4);
-              } else {
-                setCurrentLevel(autosaveData.level);
-              }
-              setPage('game');
-              setShowResumeDialog(false);
-              SoundEngine.resume();
-            }
-          }}
-          onDiscardAutosave={() => {
-            setShowResumeDialog(false);
-            clearAutosave();
-          }}
-          onCloseResume={() => setShowResumeDialog(false)}
-          showTutorial={showTutorial}
-          onTutorialClose={handleTutorialClose}
-          showShareToast={showShareToast}
-          newAchievements={newAchievements}
-          onDismissAchievement={dismissAchievement}
-          comboCelebration={comboCelebration}
-          onCloseComboCelebration={() => setComboCelebration(null)}
-          showPWAInstall={showPWAInstall}
-          onClosePWAInstall={() => {
-            setShowPWAInstall(false);
-            dismissPWAInstall();
-          }}
-          showHelpModal={showHelpModal}
-          onCloseHelp={() => setShowHelpModal(false)}
-          showCheckinReward={showCheckinReward}
-          checkinStreak={checkinStreak}
-          announcements={announcements}
-          showAnnouncements={showAnnouncements}
-          showSavedRecipes={showSavedRecipes}
-          savedRecipes={savedRecipes}
-          onCheckinRewardClose={() => setShowCheckinReward(null)}
-          onAnnouncementDismiss={handleDismissAnnouncement}
-          onAnnouncementClose={() => setShowAnnouncements(false)}
-          onSavedRecipesClose={() => setShowSavedRecipes(false)}
-          onGoToMixer={() => setPage('encyclopedia')}
-          showChangelog={showChangelog}
-          onCloseChangelog={() => setShowChangelog(false)}
-          showViewReplay={showViewReplay}
-          viewReplayData={viewReplayData}
-          onGoToReplayLevel={() => {
-            if (viewReplayData) {
-              if (viewReplayData.level > 0) {
-                handleSelectLevel(viewReplayData.level);
-              }
-              setShowViewReplay(false);
-              setViewReplayData(null);
-              window.location.hash = '';
-            }
-          }}
-          onCloseViewReplay={() => {
-            setShowViewReplay(false);
-            setViewReplayData(null);
-            window.location.hash = '';
-          }}
-        />
-
-      </div>
+      </HomeChrome>
     );
   }
   if (page === 'game') {
