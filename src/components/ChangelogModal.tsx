@@ -13,6 +13,16 @@ const ChangelogModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         <h2>色彩排序更新日志</h2>
         <div className="changelog-content">
           <div className="changelog-item">
+            <h3>🎉 v1.46.0</h3>
+            <ul>
+              <li>📦 拆分每日贴士库(30条)到独立dailyTipsData.ts和色彩知识库(10条)到colorKnowledgeData.ts，三个数据文件独立维护</li>
+              <li>🔧 提取首页每日贴士+色彩知识+问答入口区块为独立DailyContentSection组件，使用React.memo优化重渲染</li>
+              <li>🔧 提取首页每日挑战+推荐关卡+智能推荐游玩+智能关卡区块为独立SmartRecommendSection组件</li>
+              <li>🔧 提取首页自定关卡+广告+捐赠+FAQ+配方+成就区块为独立HomeFooterSection组件，App.tsx从1775行减至1541行</li>
+              <li>📝 SEO更新+版本号同步</li>
+            </ul>
+          </div>
+          <div className="changelog-item">
             <h3>🎉 v1.45.0</h3>
             <ul>
               <li>📦 拆分色彩问答库(50题)到独立colorQuizData.ts数据文件，便于题目维护和扩展</li>
