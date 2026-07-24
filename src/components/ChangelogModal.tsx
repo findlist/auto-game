@@ -13,6 +13,16 @@ const ChangelogModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         <h2>色彩排序更新日志</h2>
         <div className="changelog-content">
           <div className="changelog-item">
+            <h3>🎉 v1.45.0</h3>
+            <ul>
+              <li>📦 拆分色彩问答库(50题)到独立colorQuizData.ts数据文件，便于题目维护和扩展</li>
+              <li>🔧 提取首页通关进度条和关卡选择区域为独立LevelSelectSection组件，使用React.memo优化重渲染</li>
+              <li>💡 新手引导扩展至第11-12关：耐心规划提示(紫色主题)和注册模式提示(青色主题)</li>
+              <li>✨ 色彩百科新增色彩搭配推荐功能，展示10种经典配色方案(互补色/相邻色/三角色/暖冷色调等)</li>
+              <li>📝 SEO更新+版本号同步</li>
+            </ul>
+          </div>
+          <div className="changelog-item">
             <h3>🎉 v1.44.0</h3>
             <ul>
               <li>💡 新手引导扩展至第9-10关：颜色分组提示(艘色主题)和综合策略提示(金色主题)，完善前10关渐进式引导体系</li>
