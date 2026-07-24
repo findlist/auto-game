@@ -131,6 +131,70 @@ export const AchievementsPage: React.FC<AchievementsPageProps> = ({ onBack }) =>
           })}
         </div>
 
+        {/* 稀有度分布饼图：用 SVG 可视化各稀有度成就占比 */}
+        {(() => {
+          // 计算各稀有度总数及解锁数
+          const rarityPieData = (['legendary', 'epic', 'rare', 'common'] as AchievementRarity[])
+            .map(r => {
+              const rs = rarityStats.find(s => s.id === r);
+              return { rarity: r, unlocked: rs?.unlocked || 0, total: rs?.total || 0, color: RARITY_CONFIG[r].color, label: RARITY_CONFIG[r].label };
+            })
+            .filter(d => d.total > 0);
+          if (rarityPieData.length === 0) return null;
+          const grandTotal = rarityPieData.reduce((s, d) => s + d.total, 0);
+          const grandUnlocked = rarityPieData.reduce((s, d) => s + d.unlocked, 0);
+          // SVG 饼图参数
+          const radius = 60;
+          const cx = 70, cy = 70;
+          const strokeWidth = 20;
+          const circumference = 2 * Math.PI * radius;
+          // 各稀有度弧段
+          let cumulativePct = 0;
+          const segments = rarityPieData.map(d => {
+            const pct = d.total / grandTotal;
+            const startAngle = cumulativePct;
+            cumulativePct += pct;
+            const dashLength = pct * circumference;
+            return { ...d, dashLength, dashOffset: -startAngle * circumference, pct };
+          });
+          return (
+            <div className="ach-rarity-pie">
+              <div className="ach-rarity-pie-title">稀有度分布</div>
+              <div className="ach-rarity-pie-content">
+                <svg className="ach-rarity-pie-svg" viewBox="0 0 140 140" width="140" height="140">
+                  {/* 背景圆环 */}
+                  <circle cx={cx} cy={cy} r={radius} fill="none" stroke="#f0f0f0" strokeWidth={strokeWidth} />
+                  {/* 各稀有度弧段 */}
+                  {segments.map(seg => (
+                    <circle
+                      key={seg.rarity}
+                      cx={cx} cy={cy} r={radius}
+                      fill="none"
+                      stroke={seg.color}
+                      strokeWidth={strokeWidth}
+                      strokeDasharray={`${seg.dashLength} ${circumference - seg.dashLength}`}
+                      strokeDashoffset={seg.dashOffset}
+                      transform={`rotate(-90 ${cx} ${cy})`}
+                    />
+                  ))}
+                  {/* 中心文字 */}
+                  <text x={cx} y={cy - 4} textAnchor="middle" className="ach-pie-center-num">{grandUnlocked}/{grandTotal}</text>
+                  <text x={cx} y={cy + 12} textAnchor="middle" className="ach-pie-center-label">已解锁</text>
+                </svg>
+                <div className="ach-rarity-pie-legend">
+                  {rarityPieData.map(d => (
+                    <div key={d.rarity} className="ach-pie-legend-item">
+                      <span className="ach-pie-legend-dot" style={{ background: d.color }} />
+                      <span className="ach-pie-legend-label">{d.label}</span>
+                      <span className="ach-pie-legend-count">{d.unlocked}/{d.total}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          );
+        })()}
+
         {/* 最近解锁与即将达成提示卡片 */}
         <div className="achievement-hint-cards">
           {/* 最近解锁的成就 */}
