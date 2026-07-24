@@ -44,7 +44,7 @@ interface GamePageComponentProps {
   replayThumbnail: string;
   generatingVideo: boolean;
   currentTubesRef: React.MutableRefObject<Tube[] | null>;
-  onWin: (winMoves: number, minSteps: number, stars: number, playTimeSec: number) => void;
+  onWin: (winMoves: number, minSteps: number, stars: number, playTimeSec: number) => void | Promise<void>;
   onMove: (m: number) => void;
   onReset: () => void;
   clearHint: () => void;

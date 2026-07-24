@@ -14,7 +14,7 @@ interface LevelEditorPageProps {
   onPlay: (level: CustomLevel) => void;
   onDelete: (id: string) => void;
   onSave: (level: CustomLevel) => void;
-  onImport: (code: string) => boolean;
+  onImport: (code: string) => Promise<boolean> | boolean;
 }
 
 export function LevelEditorPage({ onBack, customLevels, onPlay, onDelete, onSave, onImport }: LevelEditorPageProps) {
@@ -120,12 +120,12 @@ export function LevelEditorPage({ onBack, customLevels, onPlay, onDelete, onSave
     }
   };
 
-  const handleImport = () => {
+  const handleImport = async () => {
     if (!importCode.trim()) {
       setImportMsg('请输入关卡码');
       return;
     }
-    const success = onImport(importCode.trim());
+    const success = await onImport(importCode.trim());
     if (success) {
       setImportMsg('✅ 关卡导入成功！');
       setImportCode('');
