@@ -1473,16 +1473,37 @@ export default function App() {
                   else if (lvl > 6) diffClass = 'diff-normal';
                   // 91-100 大师
                   if (lvl > 90) diffClass = 'diff-master';
+                  const isCompleted = progress.completedLevels.includes(lvl);
+                  const diffNames: Record<string, string> = {
+                    'diff-easy': '入门', 'diff-normal': '普通', 'diff-medium': '中等',
+                    'diff-hard': '困难', 'diff-expert': '专家', 'diff-master': '大师'
+                  };
+                  const diffName = diffNames[diffClass] || '普通';
                   return (
                     <button
                       key={lvl}
-                      className={`level-btn ${diffClass} ${progress.completedLevels.includes(lvl) ? 'completed' : ''} ${lvl === progress.currentLevel ? 'current' : ''}`}
+                      className={`level-btn ${diffClass} ${isCompleted ? 'completed' : ''} ${lvl === progress.currentLevel ? 'current' : ''}`}
                       onClick={() => handleSelectLevel(lvl)}
-                      aria-label={`第${lvl}关${progress.completedLevels.includes(lvl) ? `,已完成,最佳${best || '?'}步,${stars}星!` : ''}`}
-                      title={progress.completedLevels.includes(lvl) ? `第${lvl}关 | 最佳: ${best || '?'}步 | ${'⭐'.repeat(stars) || '未评级'}` : `第${lvl}关`}
+                      aria-label={`第${lvl}关${isCompleted ? `,已完成,最佳${best || '?'}步,${stars}星!` : ''}`}
+                      title={isCompleted ? `第${lvl}关 | 最佳: ${best || '?'}步 | ${'⭐'.repeat(stars) || '未评级'}` : `第${lvl}关`}
                     >
                       <span className="level-diff-dot" data-diff={diffClass} />
-                      {progress.completedLevels.includes(lvl) ? `${'⭐'.repeat(Math.min(stars, 3)) || '✓'}` : ''} {lvl}
+                      {isCompleted ? `${'⭐'.repeat(Math.min(stars, 3)) || '✓'}` : ''} {lvl}
+                      {/* 关卡详情提示：悬停/长按显示最优步数、历史最佳、难度等级 */}
+                      <span className="level-tooltip">
+                        <span className="level-tooltip-title">第 {lvl} 关 · {diffName}</span>
+                        {isCompleted ? (
+                          <span className="level-tooltip-detail">
+                            <span className="level-tooltip-row">最佳: <strong>{best || '?'}步</strong></span>
+                            <span className="level-tooltip-row">星级: {'⭐'.repeat(stars) || '未评级'}</span>
+                          </span>
+                        ) : (
+                          <span className="level-tooltip-detail">
+                            <span className="level-tooltip-row">状态: 未挑战</span>
+                            <span className="level-tooltip-hint">点击开始!</span>
+                          </span>
+                        )}
+                      </span>
                     </button>
                   );
                 })}
