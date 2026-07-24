@@ -37,6 +37,7 @@ import { QuickNavSection } from './components/QuickNavSection';
 import { LevelSelectSection } from './components/LevelSelectSection';
 import { DailyContentSection } from './components/DailyContentSection';
 import { SmartRecommendSection } from './components/SmartRecommendSection';
+import { HomeFooterSection } from './components/HomeFooterSection';
 import { getComboStreak, incrementComboStreak, resetComboStreak, checkComboCelebration, addTotalComboCount, getTotalComboCount, ComboCelebration } from './game/comboStreak';
 // 懒加载非首屏页面组件,减小首屏 bundle 大小
 const AboutPage = lazy(() => import('./pages/AboutPage').then(m => ({ default: m.AboutPage })));
@@ -45,9 +46,8 @@ const StatsPage = lazy(() => import('./pages/StatsPage').then(m => ({ default: m
 const PrivacyPage = lazy(() => import('./pages/PrivacyPage').then(m => ({ default: m.PrivacyPage })));
 const SettingsPage = lazy(() => import('./pages/SettingsPage').then(m => ({ default: m.SettingsPage })));
 const LevelEditorPage = lazy(() => import('./pages/LevelEditorPage').then(m => ({ default: m.LevelEditorPage })));
-// 懒加载更新日志和FAQ组件,降低首屏 bundle 体积
+// 懒加载更新日志组件,降低首屏 bundle 体积
 const ChangelogModal = lazy(() => import('./components/ChangelogModal'));
-const FaqList = lazy(() => import('./components/FaqList'));
 // 首页弹窗（签到奖励、公告、配方查看）懒加载，降低首屏 bundle 体积
 const HomeModals = lazy(() => import('./components/HomeModals'));
 const CustomLevelPlayer = lazy(() => import('./pages/LevelEditorPage').then(m => ({ default: m.CustomLevelPlayer })));
@@ -163,7 +163,6 @@ export default function App() {
   // 首页可折叠区域状态
   const [progressCollapsed, setProgressCollapsed] = useState(false);
   const [levelSelectCollapsed, setLevelSelectCollapsed] = useState(false);
-  const [faqCollapsed, setFaqCollapsed] = useState(true);
   const [difficultyFilter, setDifficultyFilter] = useState<string>('all'); // 关卡难度筛选
 
   // 内部提示功能:获取当前游戏状态
@@ -1166,107 +1165,14 @@ export default function App() {
             setLevelSelectCollapsed={setLevelSelectCollapsed}
           />
 
-          {/* 自定关卡快速入口 */}
-          {customLevels.length > 0 && (
-            <div className="custom-levels-section">
-              <h3 className="custom-levels-title">💻 我的关卡</h3>
-              <div className="custom-levels-list">
-                {customLevels.slice(0, 3).map(lv => (
-                  <div key={lv.id} className="custom-level-card" onClick={() => handlePlayCustomLevel(lv)}>
-                    <span className="custom-level-icon">🎮</span>
-                    <div className="custom-level-info">
-                      <span className="custom-level-name">{lv.name}</span>
-                      <span className="custom-level-meta">{lv.difficulty} · {lv.tubes.length}管 · {lv.completed ? '✅ 已通关' : '未通关'}</span>
-                    </div>
-                    <span className="custom-level-arrow">→</span>
-                  </div>
-                ))}
-              </div>
-              <button className="btn btn-secondary btn-small" onClick={() => setPage('editor')}>查看全部 →</button>
-            </div>
-          )}
-
-          {/* 广告位预留 - 首页底部 */}
-          <div className="ad-slot ad-home">
-            <span className="ad-label">广告位</span>
-          </div>
-
-          {/* 忽略 */}
-          <div className="donate-section">
-            <p>喜欢这个游戏?</p>
-            <a href="#" className="donate-link" onClick={(e) => e.preventDefault()}>
-              👍 支持开发者
-            </a>
-          </div>
-
-          {/* 常见问题 */}
-          <div className="collapsible-section">
-            <div className="collapse-header" onClick={() => setFaqCollapsed(!faqCollapsed)} role="button" tabIndex={0} aria-expanded={!faqCollapsed} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setFaqCollapsed(!faqCollapsed); } }}>
-              <h3>❓ 常见问题</h3>
-              <span className={`collapse-toggle ${faqCollapsed ? 'collapsed' : ''}`}>▼</span>
-            </div>
-            <div className={`collapse-content ${faqCollapsed ? 'collapsed' : ''}`}>
-              <Suspense fallback={<div style={{padding:'20px',textAlign:'center',color:'#999'}}>加载中...</div>}>
-                <FaqList />
-              </Suspense>
-            </div>
-          </div>
-
-          {/* 已保存混合配方快速查看入口 - 方便用户从首页直接查看配色收藏 */}
-          {(() => {
-            let recipeCount = 0;
-            try { recipeCount = JSON.parse(localStorage.getItem('color_mixer_recipes') || '[]').length; } catch (e) { /* 忽略 */ }
-            return recipeCount > 0 ? (
-              <div className="saved-recipes-entry" onClick={openSavedRecipes} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openSavedRecipes(); } }}>
-                <span className="saved-recipes-icon">📋</span>
-                <div className="saved-recipes-info">
-                  <span className="saved-recipes-title">我的混合配方</span>
-                  <span className="saved-recipes-count">已保存 {recipeCount} 个配色配方</span>
-                </div>
-                <span className="saved-recipes-arrow">→</span>
-              </div>
-            ) : null;
-          })()}
-
-          {/* 今日成就快捷入口 — 展示成就进度与最近解锁，提升成就发现率 */}
-          {(() => {
-            const allAchievements = AchievementManager.getAll();
-            const unlockedCount = allAchievements.filter(a => a.unlocked).length;
-            const totalCount = allAchievements.length;
-            const pct = totalCount > 0 ? Math.round(unlockedCount / totalCount * 100) : 0;
-            // 找最近解锁的成就
-            const unlockedSorted = allAchievements
-              .filter(a => a.unlocked && a.unlockedAt)
-              .sort((a, b) => (b.unlockedAt || 0) - (a.unlockedAt || 0));
-            const recent = unlockedSorted[0];
-            // 找下一个未解锁成就
-            const nextTarget = allAchievements.find(a => !a.unlocked);
-            return (
-              <div className="today-achievement-card" onClick={() => setPage('achievements')} role="button" tabIndex={0}
-                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setPage('achievements'); } }}>
-                <div className="today-ach-header">
-                  <span className="today-ach-icon">🏆</span>
-                  <div className="today-ach-info">
-                    <span className="today-ach-label">今日成就</span>
-                    <span className="today-ach-progress">{unlockedCount}/{totalCount} 已解锁 · {pct}%</span>
-                  </div>
-                </div>
-                <div className="today-ach-bar">
-                  <div className="today-ach-bar-fill" style={{ width: `${pct}%` }} />
-                </div>
-                <div className="today-ach-detail">
-                  {recent ? (
-                    <span className="today-ach-recent">最近解锁: {recent.icon} {recent.name}</span>
-                  ) : (
-                    <span className="today-ach-recent">开始游戏解锁你的第一个成就!</span>
-                  )}
-                  {nextTarget && (
-                    <span className="today-ach-next">下一个目标: {nextTarget.icon} {nextTarget.name}</span>
-                  )}
-                </div>
-              </div>
-            );
-          })()}
+          {/* 首页底部内容区块：自定关卡+广告+捐赠+FAQ+配方+成就（提取为独立组件） */}
+          <HomeFooterSection
+            customLevels={customLevels}
+            onPlayCustomLevel={handlePlayCustomLevel}
+            onNavigateToEditor={() => setPage('editor')}
+            onNavigateToAchievements={() => setPage('achievements')}
+            onOpenSavedRecipes={openSavedRecipes}
+          />
 
           {/* 快捷功能导航区 - 提升功能发现率与 SEO 内链 */}
           <QuickNavSection
