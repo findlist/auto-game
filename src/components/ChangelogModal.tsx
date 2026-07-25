@@ -13,6 +13,16 @@ const ChangelogModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         <h2>色彩排序更新日志</h2>
         <div className="changelog-content">
           <div className="changelog-item">
+            <h3>🎉 v1.49.0</h3>
+            <ul>
+              <li>🔧 提取回放系统为独立ReplayPanel组件，从GameBoard移除replayStep/replayTubes/replayStepRef/replayTimerRef四个状态和约90行回放弹窗JSX</li>
+              <li>🔧 提取帮助弹窗为独立HelpModal组件，从GameBoard移除约110行静态帮助弹窗JSX，含SVG图解和快捷键说明</li>
+              <li>🔧 提取分享图片弹窗为独立ShareImageModal组件，从GameBoard移除shareImageRef和dataURLToBlob导入</li>
+              <li>📝 SEO keywords追加7个新关键词，featureList追加6项功能描述（回放/战绩图/暂停/新手引导/连击/自适应难度）</li>
+              <li>🔧 GameBoard从1022行减至约750行，组件拆分持续推进</li>
+            </ul>
+          </div>
+          <div className="changelog-item">
             <h3>🎉 v1.48.0</h3>
             <ul>
               <li>🔧 GameBoard关卡提示从11个重复useState+useEffect重构为配置驱动单一useEffect，消除191行重复代码</li>
