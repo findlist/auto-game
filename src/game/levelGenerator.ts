@@ -58,15 +58,23 @@ function shuffle<T>(arr: T[]): T[] {
   return result;
 }
 
-// 生成关卡
-export function generateLevel(level: number): Level {
-  const config = getLevelConfig(level);
-  const { tubes: tubeCount, colors: colorCount, capacity, difficulty: diff } = config;
+/**
+ * 公共关卡生成核心：颜色选择→颜色层池→洗牌→分配试管→空管填充→可解性验证
+ * 被 generateLevel / generateEndlessLevel / generateTimedLevel 三者复用，消除重复代码
+ * @param config 关卡配置（试管数/颜色数/容量/难度）
+ * @param extraEmptyTubes 额外空试管数（限时模式+1降低难度）
+ * @returns 已验证可解性的试管数组
+ */
+function generateSolvableTubes(
+  config: { tubes: number; colors: number; capacity: number },
+  extraEmptyTubes: number = 0
+): Tube[] {
+  const { tubes: tubeCount, colors: colorCount, capacity } = config;
+  const filledTubeCount = colorCount;
+  const emptyTubeCount = tubeCount - filledTubeCount + extraEmptyTubes;
 
-  // 选择颜色
+  // 选择颜色并创建颜色层池：每种颜色填满一个试管
   const selectedColors = shuffle(COLOR_KEYS).slice(0, colorCount);
-
-  // 创建颜色层池：每种颜色填满一个试管
   const colorPool: ColorLayer[] = [];
   for (const color of selectedColors) {
     for (let i = 0; i < capacity; i++) {
@@ -74,59 +82,57 @@ export function generateLevel(level: number): Level {
     }
   }
 
-  // 洗牌
-  const shuffledPool = shuffle(colorPool);
+  // 首次生成：洗牌→分配→填充空管→打乱顺序
+  const tubes = generateTubesFromPool(colorPool, filledTubeCount, emptyTubeCount, capacity);
 
-  // 分配到试管
+  // 可解性验证：最多重试5次，不可解则保留初始结果作为兜底
+  let solvableTubes = tubes;
+  if (!isSolvable(solvableTubes)) {
+    for (let retry = 0; retry < 5; retry++) {
+      const retryTubes = generateTubesFromPool(shuffle(colorPool), filledTubeCount, emptyTubeCount, capacity);
+      if (isSolvable(retryTubes)) {
+        solvableTubes = retryTubes;
+        break;
+      }
+    }
+  }
+
+  return solvableTubes;
+}
+
+/**
+ * 从颜色层池生成试管数组：分配填充试管+空试管+打乱顺序
+ */
+function generateTubesFromPool(
+  pool: ColorLayer[],
+  filledTubeCount: number,
+  emptyTubeCount: number,
+  capacity: number
+): Tube[] {
   const tubes: Tube[] = [];
   let poolIndex = 0;
-  const filledTubeCount = colorCount;
-
   for (let i = 0; i < filledTubeCount; i++) {
     const layers: ColorLayer[] = [];
     for (let j = 0; j < capacity; j++) {
-      layers.push(shuffledPool[poolIndex++]);
+      layers.push(pool[poolIndex++]);
     }
     tubes.push({ id: i, layers, capacity });
   }
-
-  // 添加空试管（至少2个空管用于解谜）
-  const emptyTubeCount = tubeCount - filledTubeCount;
   for (let i = 0; i < emptyTubeCount; i++) {
     tubes.push({ id: filledTubeCount + i, layers: [], capacity });
   }
+  // 打乱试管顺序并重新编号
+  const shuffled = shuffle(tubes);
+  shuffled.forEach((t, i) => { t.id = i; });
+  return shuffled;
+}
 
-  // 再次打乱试管顺序
-  const finalTubes = shuffle(tubes);
-  finalTubes.forEach((t, i) => { t.id = i; });
+// 生成关卡
+export function generateLevel(level: number): Level {
+  const config = getLevelConfig(level);
+  const { colors: colorCount, capacity, difficulty: diff } = config;
 
-  // 验证可解性，最多重试 5 次
-  // 修复：原代码兜底用最后一次（可能不可解），现改为仅接受可解结果，不可解则保留初始 finalTubes
-  let solvableTubes = finalTubes;
-  if (!isSolvable(solvableTubes)) {
-    for (let retry = 0; retry < 5; retry++) {
-      const retryPool = shuffle(colorPool);
-      let idx = 0;
-      const retryTubes: Tube[] = [];
-      for (let i = 0; i < filledTubeCount; i++) {
-        const layers: ColorLayer[] = [];
-        for (let j = 0; j < capacity; j++) {
-          layers.push(retryPool[idx++]);
-        }
-        retryTubes.push({ id: i, layers, capacity });
-      }
-      for (let i = 0; i < emptyTubeCount; i++) {
-        retryTubes.push({ id: filledTubeCount + i, layers: [], capacity });
-      }
-      const shuffledRetry = shuffle(retryTubes);
-      shuffledRetry.forEach((t, i) => { t.id = i; });
-      if (isSolvable(shuffledRetry)) {
-        solvableTubes = shuffledRetry;
-        break;
-      }
-      // 不覆盖 solvableTubes，保留初始 finalTubes 作为兜底
-    }
-  }
+  const solvableTubes = generateSolvableTubes(config);
 
   // 计算理论最少步数（仅对简单关卡计算，避免复杂关卡超时）
   let minSteps = -1;
@@ -153,71 +159,9 @@ export function generateEndlessLevel(score: number): Level {
   // 分数越高难度越大，从第 3 关难度开始
   const fakeLevel = Math.min(3 + score * 2, 60);
   const config = getLevelConfig(fakeLevel);
-  const { tubes: tubeCount, colors: colorCount, capacity, difficulty } = config;
+  const { capacity, difficulty } = config;
 
-  // 选择颜色
-  const selectedColors = shuffle(COLOR_KEYS).slice(0, colorCount);
-
-  // 创建颜色层池
-  const colorPool: ColorLayer[] = [];
-  for (const color of selectedColors) {
-    for (let i = 0; i < capacity; i++) {
-      colorPool.push({ color });
-    }
-  }
-
-  // 洗牌
-  const shuffledPool = shuffle(colorPool);
-
-  // 分配到试管
-  const tubes: Tube[] = [];
-  let poolIndex = 0;
-  const filledTubeCount = colorCount;
-
-  for (let i = 0; i < filledTubeCount; i++) {
-    const layers: ColorLayer[] = [];
-    for (let j = 0; j < capacity; j++) {
-      layers.push(shuffledPool[poolIndex++]);
-    }
-    tubes.push({ id: i, layers, capacity });
-  }
-
-  // 添加空试管
-  const emptyTubeCount = tubeCount - filledTubeCount;
-  for (let i = 0; i < emptyTubeCount; i++) {
-    tubes.push({ id: filledTubeCount + i, layers: [], capacity });
-  }
-
-  // 打乱试管顺序
-  const finalTubes = shuffle(tubes);
-  finalTubes.forEach((t, i) => { t.id = i; });
-
-  // 验证可解性
-  // 修复：不可解时保留初始 finalTubes，不用可能不可解的最后一次覆盖
-  let solvableTubes = finalTubes;
-  if (!isSolvable(solvableTubes)) {
-    for (let retry = 0; retry < 5; retry++) {
-      const retryPool = shuffle(colorPool);
-      let idx = 0;
-      const retryTubes: Tube[] = [];
-      for (let i = 0; i < filledTubeCount; i++) {
-        const layers: ColorLayer[] = [];
-        for (let j = 0; j < capacity; j++) {
-          layers.push(retryPool[idx++]);
-        }
-        retryTubes.push({ id: i, layers, capacity });
-      }
-      for (let i = 0; i < emptyTubeCount; i++) {
-        retryTubes.push({ id: filledTubeCount + i, layers: [], capacity });
-      }
-      const shuffledRetry = shuffle(retryTubes);
-      shuffledRetry.forEach((t, i) => { t.id = i; });
-      if (isSolvable(shuffledRetry)) {
-        solvableTubes = shuffledRetry;
-        break;
-      }
-    }
-  }
+  const solvableTubes = generateSolvableTubes(config);
 
   // 无尽模式不计算最少步数（难度高，计算耗时）
   return {
@@ -235,71 +179,10 @@ export function generateTimedLevel(score: number): Level {
   // 根据已通关数微调难度，但保持在快速可解范围
   const fakeLevel = Math.min(3 + Math.floor(score / 3), 15);
   const config = getLevelConfig(fakeLevel);
-  const { tubes: tubeCount, colors: colorCount, capacity, difficulty } = config;
+  const { capacity, difficulty } = config;
 
-  // 选择颜色
-  const selectedColors = shuffle(COLOR_KEYS).slice(0, colorCount);
-
-  // 创建颜色层池
-  const colorPool: ColorLayer[] = [];
-  for (const color of selectedColors) {
-    for (let i = 0; i < capacity; i++) {
-      colorPool.push({ color });
-    }
-  }
-
-  // 洗牌
-  const shuffledPool = shuffle(colorPool);
-
-  // 分配到试管
-  const tubes: Tube[] = [];
-  let poolIndex = 0;
-  const filledTubeCount = colorCount;
-
-  for (let i = 0; i < filledTubeCount; i++) {
-    const layers: ColorLayer[] = [];
-    for (let j = 0; j < capacity; j++) {
-      layers.push(shuffledPool[poolIndex++]);
-    }
-    tubes.push({ id: i, layers, capacity });
-  }
-
-  // 添加空试管（限时模式多一个空管，降低难度）
-  const emptyTubeCount = tubeCount - filledTubeCount + 1;
-  for (let i = 0; i < emptyTubeCount; i++) {
-    tubes.push({ id: filledTubeCount + i, layers: [], capacity });
-  }
-
-  // 打乱试管顺序
-  const finalTubes = shuffle(tubes);
-  finalTubes.forEach((t, i) => { t.id = i; });
-
-  // 验证可解性
-  // 修复：不可解时保留初始 finalTubes，不用可能不可解的最后一次覆盖
-  let solvableTubes = finalTubes;
-  if (!isSolvable(solvableTubes)) {
-    for (let retry = 0; retry < 5; retry++) {
-      const retryPool = shuffle(colorPool);
-      let idx = 0;
-      const retryTubes: Tube[] = [];
-      for (let i = 0; i < filledTubeCount; i++) {
-        const layers: ColorLayer[] = [];
-        for (let j = 0; j < capacity; j++) {
-          layers.push(retryPool[idx++]);
-        }
-        retryTubes.push({ id: i, layers, capacity });
-      }
-      for (let i = 0; i < emptyTubeCount; i++) {
-        retryTubes.push({ id: filledTubeCount + i, layers: [], capacity });
-      }
-      const shuffledRetry = shuffle(retryTubes);
-      shuffledRetry.forEach((t, i) => { t.id = i; });
-      if (isSolvable(shuffledRetry)) {
-        solvableTubes = shuffledRetry;
-        break;
-      }
-    }
-  }
+  // 限时模式多一个空管，降低难度
+  const solvableTubes = generateSolvableTubes(config, 1);
 
   // 限时模式不计算最少步数
   return {
