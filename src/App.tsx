@@ -16,7 +16,7 @@ const replayShareModule = () => import('./game/replayShare');
 // adaptiveDifficulty 和 dailyRecommend 已移入 SmartRecommendSection 组件
 // weeklyChallenge 数据函数从轻量数据模块静态导入（不含关卡生成依赖）
 import { getWeeklyInfo, getWeeklyRecord, getWeeklyStreak, saveWeeklyRecord } from './game/weeklyChallengeData';
-import { getUnreadAnnouncements, markAnnouncementRead, Announcement, getDailyQuizHistory, getQuizStreak } from './game/announcements';
+import { getUnreadAnnouncements, markAnnouncementRead, Announcement } from './game/announcements';
 import type { CustomLevel } from './game/levelEditor';
 // levelEditor 函数改为动态导入，降低首屏 bundle 体积（仅在用户操作自定关卡时加载）
 const levelEditorModule = () => import('./game/levelEditor');
@@ -40,6 +40,7 @@ import { HomeChrome } from './components/HomeChrome';
 import { SmartRecommendSection } from './components/SmartRecommendSection';
 import { HomeFooterSection } from './components/HomeFooterSection';
 import { getComboStreak, incrementComboStreak, resetComboStreak, checkComboCelebration, addTotalComboCount, getTotalComboCount, ComboCelebration } from './game/comboStreak';
+import { useEncyclopediaAchievements } from './game/useEncyclopediaAchievements';
 // 懒加载非首屏页面组件,减小首屏 bundle 大小
 const AboutPage = lazy(() => import('./pages/AboutPage').then(m => ({ default: m.AboutPage })));
 const AchievementsPage = lazy(() => import('./pages/AchievementsPage').then(m => ({ default: m.AchievementsPage })));
@@ -299,6 +300,9 @@ export default function App() {
   const [newAchievements, setNewAchievements] = useState<Achievement[]>([]);
   const [usedHintThisLevel, setUsedHintThisLevel] = useState(false);
   const [recoveredFromDeadlock, setRecoveredFromDeadlock] = useState(false);
+
+  // 色彩百科页成就回调 hook — 集中管理百科页成就检查逻辑，避免内联代码
+  const encyclopediaHooks = useEncyclopediaAchievements(setNewAchievements);
 
   // 成就解锁音效 — 监听 newAchievements 变化，根据稀有度播放差异化音效
   useEffect(() => {
@@ -1230,77 +1234,8 @@ export default function App() {
     return <Suspense fallback={<PageLoading />}><PrivacyPage onBack={() => setPage('home')} /></Suspense>;
   }
 
-  // 色彩百科页
+  // 色彩百科页 — 使用 useEncyclopediaAchievements hook 统一管理成就回调
   if (page === 'encyclopedia') {
-    // 色彩学家成就检查已移至 useEffect(避免 render 阶段 setState)
-    return <Suspense fallback={<PageLoading />}><ColorEncyclopediaPage onBack={() => setPage('home')} onTestComplete={(score: number) => {
-      const testAchievements = AchievementManager.checkColorPerceptionAchievements(score);
-      if (testAchievements.length > 0) {
-        setNewAchievements(prev => [...prev, ...testAchievements]);
-      }
-    }} onMixerUse={(useCount: number) => {
-      const mixerAchievements = AchievementManager.checkColorMixerAchievements(useCount);
-      if (mixerAchievements.length > 0) {
-        setNewAchievements(prev => [...prev, ...mixerAchievements]);
-      }
-    }} onSequenceComplete={(level: number) => {
-      const seqAchievements = AchievementManager.checkSequenceMemoryAchievements(level);
-      if (seqAchievements.length > 0) {
-        setNewAchievements(prev => [...prev, ...seqAchievements]);
-      }
-    }} onPairMatchComplete={(moves: number) => {
-      // 配对完成时检查成就(统一检查所有难度)
-      const pairAchievements = AchievementManager.checkPairMatchAchievements('hard', moves);
-      if (pairAchievements.length > 0) {
-        setNewAchievements(prev => [...prev, ...pairAchievements]);
-      }
-    }} onReactionComplete={(score: number) => {
-      const reactionAchievements = AchievementManager.checkReactionTestAchievements(score, 8);
-      if (reactionAchievements.length > 0) {
-        setNewAchievements(prev => [...prev, ...reactionAchievements]);
-      }
-    }} onQuizComplete={(totalCompleted: number) => {
-      // 传入连续答题天数,用于检查连续答题里程碑成就
-      const quizAchievements = AchievementManager.checkDailyQuizAchievements(totalCompleted, getQuizStreak());
-      if (quizAchievements.length > 0) {
-        setNewAchievements(prev => [...prev, ...quizAchievements]);
-      }
-      // 检查答题高手成就
-      const history = getDailyQuizHistory();
-      const correctCount = history.filter(h => h.correct).length;
-      const expertAchievements = AchievementManager.checkQuizExpertAchievement(correctCount);
-      if (expertAchievements.length > 0) {
-        setNewAchievements(prev => [...prev, ...expertAchievements]);
-      }
-    }} onSearch={() => {
-      const searchAchievements = AchievementManager.checkKnowledgeExplorerAchievement();
-      if (searchAchievements.length > 0) {
-        setNewAchievements(prev => [...prev, ...searchAchievements]);
-      }
-    }} onQuizShare={() => {
-      const shareAchievements = AchievementManager.checkQuizSharerAchievement();
-      if (shareAchievements.length > 0) {
-        setNewAchievements(prev => [...prev, ...shareAchievements]);
-      }
-    }} onColorView={(viewedCount: number) => {
-      const explorerAchievements = AchievementManager.checkEncyclopediaExplorerAchievement(viewedCount);
-      if (explorerAchievements.length > 0) {
-        setNewAchievements(prev => [...prev, ...explorerAchievements]);
-      }
-    }} onGamePlayed={(gameId: string) => {
-      // 记录已玩的游戏,检查全能玩家成就
-      try {
-        const data = localStorage.getItem('encyclopedia_played_games');
-        const played: string[] = data ? JSON.parse(data) : [];
-        if (!played.includes(gameId)) {
-          played.push(gameId);
-          localStorage.setItem('encyclopedia_played_games', JSON.stringify(played));
-        }
-        const allGamesAchievements = AchievementManager.checkAllEncyclopediaGamesAchievement(played);
-        if (allGamesAchievements.length > 0) {
-          setNewAchievements(prev => [...prev, ...allGamesAchievements]);
-        }
-      } catch (e) { /* 忽略 */ }
-    }} /></Suspense>;
+    return <Suspense fallback={<PageLoading />}><ColorEncyclopediaPage onBack={() => setPage('home')} onTestComplete={encyclopediaHooks.onTestComplete} onMixerUse={encyclopediaHooks.onMixerUse} onSequenceComplete={encyclopediaHooks.onSequenceComplete} onPairMatchComplete={encyclopediaHooks.onPairMatchComplete} onReactionComplete={encyclopediaHooks.onReactionComplete} onQuizComplete={encyclopediaHooks.onQuizComplete} onSearch={encyclopediaHooks.onSearch} onQuizShare={encyclopediaHooks.onQuizShare} onColorView={encyclopediaHooks.onColorView} onGamePlayed={encyclopediaHooks.onGamePlayed} /></Suspense>;
   }
 }
