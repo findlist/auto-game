@@ -57,17 +57,25 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
   const [pouringTo, setPouringTo] = useState<number | null>(null); // 倾倒动画目标试管
   const [movesPulse, setMovesPulse] = useState(false); // 步数变化脉冲
   const [showFirstPourTip, setShowFirstPourTip] = useState(false); // 新手首次倒水成功鼓励提示
-  const [showLevel2Tip, setShowLevel2Tip] = useState(false); // 第2关操作提示
-  const [showLevel3Tip, setShowLevel3Tip] = useState(false); // 第3关策略提示
-  const [showLevel4Tip, setShowLevel4Tip] = useState(false); // 第4关多色提示
-  const [showLevel5Tip, setShowLevel5Tip] = useState(false); // 第5关规划提示
-  const [showLevel6Tip, setShowLevel6Tip] = useState(false); // 第6关试管管理提示
-  const [showLevel7Tip, setShowLevel7Tip] = useState(false); // 第7关逆向思维提示
-  const [showLevel8Tip, setShowLevel8Tip] = useState(false); // 第8关空间利用提示
-  const [showLevel9Tip, setShowLevel9Tip] = useState(false); // 第9关颜色分组提示
-  const [showLevel10Tip, setShowLevel10Tip] = useState(false); // 第10关综合策略提示
-  const [showLevel11Tip, setShowLevel11Tip] = useState(false); // 第11关耐心规划提示
-  const [showLevel12Tip, setShowLevel12Tip] = useState(false); // 第12关注册模式提示
+  // 关卡提示配置：集中管理第2-12关的新手引导提示，避免11个重复的useState+useEffect
+  // 每条配置：关卡号 → { emoji, text, className, duration(毫秒) }
+  const LEVEL_TIPS: Record<number, { emoji: string; text: string; className: string; duration: number }> = {
+    2:  { emoji: '💡', text: '点击试管选择，再点目标试管倒水', className: 'level2-tip', duration: 3500 },
+    3:  { emoji: '🎯', text: '优先把一种颜色全部倒进一根试管', className: 'level3-tip', duration: 4000 },
+    4:  { emoji: '🌈', text: '颜色变多了！先从最上面的颜色开始整理', className: 'level4-tip', duration: 4000 },
+    5:  { emoji: '🤔', text: '倒水前先想好顺序，避免堵住出口', className: 'level5-tip', duration: 4000 },
+    6:  { emoji: '📦', text: '空试管是中转站，先把混合色倒出来整理', className: 'level6-tip', duration: 4000 },
+    7:  { emoji: '🔄', text: '试着从最后一步倒推，想想哪根试管最后填满', className: 'level7-tip', duration: 4000 },
+    8:  { emoji: '🏗️', text: '试管多了空间更大，优先清空一根试管留作缓冲', className: 'level8-tip', duration: 4000 },
+    9:  { emoji: '🎯', text: '颜色变多了！先选定一种颜色专注归位，逐个击破', className: 'level9-tip', duration: 4000 },
+    10: { emoji: '🏅', text: '前10关毕业冲刺！综合运用空管缓冲、逆向倒推、分组归位', className: 'level10-tip', duration: 4000 },
+    11: { emoji: '🧩', text: '难度升级了！先观察全局再动手，谋定而后动', className: 'level11-tip', duration: 4000 },
+    12: { emoji: '💡', text: '试着把同色液体想象成注册拼图，先归位边角再填充中间', className: 'level12-tip', duration: 4000 },
+    13: { emoji: '⚡', text: '高效移动是关键！尽量让每次倒水都减少混乱度', className: 'level13-tip', duration: 4500 },
+    14: { emoji: '🔧', text: '尝试先固定一种颜色作为锚点，围绕它展开排序', className: 'level14-tip', duration: 4500 },
+    15: { emoji: '🧠', text: '高难度关卡！分步拆解：先理清3-4色的局部，再扩展到全局', className: 'level15-tip', duration: 5000 },
+  };
+  const [activeLevelTip, setActiveLevelTip] = useState<number | null>(null);
   const [elapsedTime, setElapsedTime] = useState(0); // 已用时间（秒）
   const gameStartTime = useRef<number>(Date.now()); // 游戏开始时间戳
   const shareImageRef = useRef<HTMLAnchorElement | null>(null);
@@ -104,103 +112,16 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
     }
   }, [level, moves, showFirstPourTip]);
 
-  // 第2关简短提示：进入时显示操作提醒，帮助新手巩固操作方式
+  // 统一处理第2-15关的关卡提示显示与自动消失，消除11+个重复useEffect
   useEffect(() => {
-    if (level === 2) {
-      setShowLevel2Tip(true);
-      const t = setTimeout(() => setShowLevel2Tip(false), 3500);
+    const tipConfig = LEVEL_TIPS[level];
+    if (tipConfig) {
+      setActiveLevelTip(level);
+      const t = setTimeout(() => setActiveLevelTip(null), tipConfig.duration);
       return () => clearTimeout(t);
-    } else setShowLevel2Tip(false);
-  }, [level]);
-
-  // 第3关策略提示：引导玩家理解优先填满一种颜色的策略
-  useEffect(() => {
-    if (level === 3) {
-      setShowLevel3Tip(true);
-      const t = setTimeout(() => setShowLevel3Tip(false), 4000);
-      return () => clearTimeout(t);
-    } else setShowLevel3Tip(false);
-  }, [level]);
-
-  // 第4关多色提示：从2色升级到3色，引导玩家适应多色排序
-  useEffect(() => {
-    if (level === 4) {
-      setShowLevel4Tip(true);
-      const t = setTimeout(() => setShowLevel4Tip(false), 4000);
-      return () => clearTimeout(t);
-    } else setShowLevel4Tip(false);
-  }, [level]);
-
-  // 第5关规划提示：引导玩家在倒水前思考顺序，培养规划意识
-  useEffect(() => {
-    if (level === 5) {
-      setShowLevel5Tip(true);
-      const t = setTimeout(() => setShowLevel5Tip(false), 4000);
-      return () => clearTimeout(t);
-    } else setShowLevel5Tip(false);
-  }, [level]);
-
-  // 第6关试管管理提示：引导玩家合理利用空试管作为中转空间
-  useEffect(() => {
-    if (level === 6) {
-      setShowLevel6Tip(true);
-      const t = setTimeout(() => setShowLevel6Tip(false), 4000);
-      return () => clearTimeout(t);
-    } else setShowLevel6Tip(false);
-  }, [level]);
-
-  // 第7关逆向思维提示：引导玩家从终点倒推，培养逆向思考能力
-  useEffect(() => {
-    if (level === 7) {
-      setShowLevel7Tip(true);
-      const t = setTimeout(() => setShowLevel7Tip(false), 4000);
-      return () => clearTimeout(t);
-    } else setShowLevel7Tip(false);
-  }, [level]);
-
-  // 第8关空间利用提示：试管增多后引导玩家注意空间分配
-  useEffect(() => {
-    if (level === 8) {
-      setShowLevel8Tip(true);
-      const t = setTimeout(() => setShowLevel8Tip(false), 4000);
-      return () => clearTimeout(t);
-    } else setShowLevel8Tip(false);
-  }, [level]);
-
-  // 第9关颜色分组提示：颜色种类增多，引导玩家按颜色分组思考
-  useEffect(() => {
-    if (level === 9) {
-      setShowLevel9Tip(true);
-      const t = setTimeout(() => setShowLevel9Tip(false), 4000);
-      return () => clearTimeout(t);
-    } else setShowLevel9Tip(false);
-  }, [level]);
-
-  // 第10关综合策略提示：作为前10关的阶段性总结，引导玩家综合运用已学技巧
-  useEffect(() => {
-    if (level === 10) {
-      setShowLevel10Tip(true);
-      const t = setTimeout(() => setShowLevel10Tip(false), 4000);
-      return () => clearTimeout(t);
-    } else setShowLevel10Tip(false);
-  }, [level]);
-
-  // 第11关耐心规划提示：关卡难度提升，引导玩家放慢节奏做好规划
-  useEffect(() => {
-    if (level === 11) {
-      setShowLevel11Tip(true);
-      const t = setTimeout(() => setShowLevel11Tip(false), 4000);
-      return () => clearTimeout(t);
-    } else setShowLevel11Tip(false);
-  }, [level]);
-
-  // 第12关注册模式提示：引导玩家注意颜色注册规律，避免无效移动
-  useEffect(() => {
-    if (level === 12) {
-      setShowLevel12Tip(true);
-      const t = setTimeout(() => setShowLevel12Tip(false), 4000);
-      return () => clearTimeout(t);
-    } else setShowLevel12Tip(false);
+    } else {
+      setActiveLevelTip(null);
+    }
   }, [level]);
 
   // 限时模式倒计时（暂停时冻结）
@@ -664,91 +585,11 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
         </div>
       )}
 
-      {/* 第2关简短提示：帮助新手巩固操作方式，比第1关更简洁 */}
-      {showLevel2Tip && (
-        <div className="beginner-encouragement level2-tip" aria-hidden="true">
-          <span className="encouragement-emoji">💡</span>
-          <span className="encouragement-text">点击试管选择，再点目标试管倒水</span>
-        </div>
-      )}
-
-      {/* 第3关策略提示：引导玩家优先填满一种颜色，降低思考难度 */}
-      {showLevel3Tip && (
-        <div className="beginner-encouragement level3-tip" aria-hidden="true">
-          <span className="encouragement-emoji">🎯</span>
-          <span className="encouragement-text">优先把一种颜色全部倒进一根试管</span>
-        </div>
-      )}
-
-      {/* 第4关多色提示：3色5试管阶段，引导玩家适应多色排序 */}
-      {showLevel4Tip && (
-        <div className="beginner-encouragement level4-tip" aria-hidden="true">
-          <span className="encouragement-emoji">🌈</span>
-          <span className="encouragement-text">颜色变多了！先从最上面的颜色开始整理</span>
-        </div>
-      )}
-
-      {/* 第5关规划提示：引导玩家在动手前思考倒水顺序 */}
-      {showLevel5Tip && (
-        <div className="beginner-encouragement level5-tip" aria-hidden="true">
-          <span className="encouragement-emoji">🤔</span>
-          <span className="encouragement-text">倒水前先想好顺序，避免堵住出口</span>
-        </div>
-      )}
-
-      {/* 第6关试管管理提示：引导玩家利用空试管作为临时中转站 */}
-      {showLevel6Tip && (
-        <div className="beginner-encouragement level6-tip" aria-hidden="true">
-          <span className="encouragement-emoji">📦</span>
-          <span className="encouragement-text">空试管是中转站，先把混合色倒出来整理</span>
-        </div>
-      )}
-
-      {/* 第7关逆向思维提示：引导玩家从目标状态倒推解题思路 */}
-      {showLevel7Tip && (
-        <div className="beginner-encouragement level7-tip" aria-hidden="true">
-          <span className="encouragement-emoji">🔄</span>
-          <span className="encouragement-text">试着从最后一步倒推，想想哪根试管最后填满</span>
-        </div>
-      )}
-
-      {/* 第8关空间利用提示：试管增多后引导玩家注意空间分配策略 */}
-      {showLevel8Tip && (
-        <div className="beginner-encouragement level8-tip" aria-hidden="true">
-          <span className="encouragement-emoji">🏗️</span>
-          <span className="encouragement-text">试管多了空间更大，优先清空一根试管留作缓冲</span>
-        </div>
-      )}
-
-      {/* 第9关颜色分组提示：颜色种类增多后引导玩家按颜色分组解题 */}
-      {showLevel9Tip && (
-        <div className="beginner-encouragement level9-tip" aria-hidden="true">
-          <span className="encouragement-emoji">🎯</span>
-          <span className="encouragement-text">颜色变多了！先选定一种颜色专注归位，逐个击破</span>
-        </div>
-      )}
-
-      {/* 第10关综合策略提示：前10关阶段性总结，引导玩家综合运用已学技巧 */}
-      {showLevel10Tip && (
-        <div className="beginner-encouragement level10-tip" aria-hidden="true">
-          <span className="encouragement-emoji">🏅</span>
-          <span className="encouragement-text">前10关毕业冲刺！综合运用空管缓冲、逆向倒推、分组归位</span>
-        </div>
-      )}
-
-      {/* 第11关耐心规划提示：难度提升后引导玩家放慢节奏做好规划 */}
-      {showLevel11Tip && (
-        <div className="beginner-encouragement level11-tip" aria-hidden="true">
-          <span className="encouragement-emoji">🧩</span>
-          <span className="encouragement-text">难度升级了！先观察全局再动手，谋定而后动</span>
-        </div>
-      )}
-
-      {/* 第12关注册模式提示：引导玩家发现颜色注册规律 */}
-      {showLevel12Tip && (
-        <div className="beginner-encouragement level12-tip" aria-hidden="true">
-          <span className="encouragement-emoji">💡</span>
-          <span className="encouragement-text">试着把同色液体想象成注册拼图，先归位边角再填充中间</span>
+      {/* 第2-15关渐进式提示：配置驱动渲染，根据 activeLevelTip 显示对应关卡提示 */}
+      {activeLevelTip !== null && LEVEL_TIPS[activeLevelTip] && (
+        <div className={`beginner-encouragement ${LEVEL_TIPS[activeLevelTip].className}`} aria-hidden="true">
+          <span className="encouragement-emoji">{LEVEL_TIPS[activeLevelTip].emoji}</span>
+          <span className="encouragement-text">{LEVEL_TIPS[activeLevelTip].text}</span>
         </div>
       )}
 
