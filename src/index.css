@@ -1393,6 +1393,24 @@ body {
   background: rgba(0, 105, 92, 0.1);
 }
 
+/* 第13关高效移动提示：琥珀色主题，呼应效率与速度感 */
+.beginner-encouragement.level13-tip .encouragement-text {
+  color: #E65100;
+  background: rgba(230, 81, 0, 0.1);
+}
+
+/* 第14关锚点策略提示：靛蓝色主题，呼应锚定与稳重感 */
+.beginner-encouragement.level14-tip .encouragement-text {
+  color: #283593;
+  background: rgba(40, 53, 147, 0.1);
+}
+
+/* 第15关分步拆解提示：深粉色主题，呼应高阶挑战与突破感 */
+.beginner-encouragement.level15-tip .encouragement-text {
+  color: #AD1457;
+  background: rgba(173, 20, 87, 0.1);
+}
+
 /* 暗色主题适配 */
 .dark-theme .beginner-encouragement.level2-tip .encouragement-text {
   color: #64B5F6;
@@ -1437,6 +1455,18 @@ body {
 .dark-theme .beginner-encouragement.level12-tip .encouragement-text {
   color: #4DB6AC;
   background: rgba(0, 105, 92, 0.15);
+}
+.dark-theme .beginner-encouragement.level13-tip .encouragement-text {
+  color: #FF8A65;
+  background: rgba(230, 81, 0, 0.15);
+}
+.dark-theme .beginner-encouragement.level14-tip .encouragement-text {
+  color: #7986CB;
+  background: rgba(40, 53, 147, 0.15);
+}
+.dark-theme .beginner-encouragement.level15-tip .encouragement-text {
+  color: #F06292;
+  background: rgba(173, 20, 87, 0.15);
 }
 
 .tubes-grid {
