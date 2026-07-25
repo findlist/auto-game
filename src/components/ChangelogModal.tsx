@@ -13,6 +13,16 @@ const ChangelogModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         <h2>色彩排序更新日志</h2>
         <div className="changelog-content">
           <div className="changelog-item">
+            <h3>🎉 v1.48.0</h3>
+            <ul>
+              <li>🔧 GameBoard关卡提示从11个重复useState+useEffect重构为配置驱动单一useEffect，消除191行重复代码</li>
+              <li>💡 新增第13-15关新手引导提示：高效移动(琥珀色)、锚点策略(靛蓝色)、分步拆解(深粉色)，完善前15关渐进式引导体系</li>
+              <li>🔧 提取generateSolvableTubes+generateTubesFromPool公共函数消除三处关卡生成重复代码，levelGenerator从321行减至约180行</li>
+              <li>🔧 提取BGM_SEGMENTS旋律数据到独立bgmData.ts模块，soundEngine.ts从297行减至约220行</li>
+              <li>📝 SEO更新+版本号同步</li>
+            </ul>
+          </div>
+          <div className="changelog-item">
             <h3>🎉 v1.47.0</h3>
             <ul>
               <li>⚡ GamePageComponent改为懒加载，首屏JS从303KB降至263KB(-39.7KB)，远低于300KB上限</li>
