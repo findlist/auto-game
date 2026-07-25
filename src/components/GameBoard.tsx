@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
-import { Tube, Level, COLORS } from '../game/types';
+import { Tube, Level } from '../game/types';
 import { generateLevel, canPour, pour, checkWin, checkDeadlock, cloneTubes, generateEndlessLevel, generateTimedLevel } from '../game/levelGenerator';
 import { generateDailyChallenge } from '../game/dailyChallenge';
 import { generateWeeklyChallenge } from '../game/weeklyChallenge';
@@ -8,6 +8,7 @@ import { TubeView } from './TubeView';
 import { ParticleEffect } from './ParticleEffect';
 import { GameSettings } from '../game/settings';
 import { generateShareImage, dataURLToBlob } from '../game/shareImage';
+import { ReplayPanel } from './ReplayPanel';
 import { StatsTracker } from '../game/statsTracker';
 import { getAdaptiveDifficultyModifier } from '../game/adaptiveDifficulty';
 
@@ -80,14 +81,9 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
   const gameStartTime = useRef<number>(Date.now()); // 游戏开始时间戳
   const shareImageRef = useRef<HTMLAnchorElement | null>(null);
 
-  // 回放系统：记录操作序列
+  // 回放系统：记录操作序列（回放 UI 已拆分为独立 ReplayPanel 组件）
   const [moveHistory, setMoveHistory] = useState<Array<{ from: number; to: number }>>([]);
   const [showReplay, setShowReplay] = useState(false);
-  const [replayStep, setReplayStep] = useState(0);
-  const [replayTubes, setReplayTubes] = useState<Tube[]>([]);
-  const replayTimerRef = useRef<number | null>(null);
-  // 回放当前步数 ref：用于自动播放循环驱动，避免依赖 setState updater 的同步性
-  const replayStepRef = useRef(0);
   // 连击系统
   const comboCountRef = useRef(0);
   const lastPourTimeRef = useRef(0);
@@ -396,11 +392,6 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
     setStarRating(0);
     setShowReplay(false);
     setShowShareImage(false);
-    // 清理回放定时器，避免卸载后仍触发 setState
-    if (replayTimerRef.current) {
-      clearTimeout(replayTimerRef.current);
-      replayTimerRef.current = null;
-    }
     gameStartTime.current = Date.now(); // 重置计时器
     SoundEngine.reset();
     onReset();
@@ -492,15 +483,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
     }
   }, [isDeadlock]);
 
-  // 修复 P1：组件卸载时清理回放定时器，避免在已卸载组件上触发 setState
-  useEffect(() => {
-    return () => {
-      if (replayTimerRef.current) {
-        clearTimeout(replayTimerRef.current);
-        replayTimerRef.current = null;
-      }
-    };
-  }, []);
+  // 回放定时器清理已移至 ReplayPanel 组件内部
 
   // 暂停/恢复处理：暂停时记录当前已用时间，恢复时调整起始时间戳
   const handleTogglePause = useCallback(() => {
@@ -656,13 +639,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
               <p className="prev-best-badge">📊 最佳记录: {bestScore} 步</p>
             )}
             <div className="win-actions">
-              <button className="btn btn-primary" onClick={() => {
-                // 初始化回放：从初始状态开始
-                replayStepRef.current = 0;
-                setReplayTubes(cloneTubes(levelData.tubes));
-                setReplayStep(0);
-                setShowReplay(true);
-              }}>🎬 查看回放</button>
+              <button className="btn btn-primary" onClick={() => setShowReplay(true)}>🎬 查看回放</button>
               {onReplayShare && (
                 <button className="btn btn-primary" onClick={() => {
                   onReplayShare(moveHistory, level, starRating, moves);
@@ -760,99 +737,13 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
         </div>
       )}
 
-      {/* 回放弹窗 */}
+      {/* 回放弹窗：已拆分为独立 ReplayPanel 组件 */}
       {showReplay && (
-        <div className="replay-overlay" onClick={() => { setShowReplay(false); if (replayTimerRef.current) { clearTimeout(replayTimerRef.current); replayTimerRef.current = null; } }}>
-          <div className="replay-card" onClick={(e) => e.stopPropagation()}>
-            <div className="replay-header">
-              <h3>🎬 操作回放</h3>
-              <span className="replay-progress">第 {replayStep} / {moveHistory.length} 步</span>
-            </div>
-            <div className="replay-tubes" role="group" aria-label="回放试管列表">
-              {(replayStep === 0 ? levelData.tubes : replayTubes).map((tube, i) => {
-                const lastMove = replayStep > 0 ? moveHistory[replayStep - 1] : null;
-                const isFrom = lastMove && (lastMove.from === i);
-                const isTo = lastMove && (lastMove.to === i);
-                return (
-                  <div key={i} className={`tube-container replay-tube ${isFrom ? 'replay-from' : ''} ${isTo ? 'replay-to' : ''}`}>
-                    <div className="tube">
-                      <div className="tube-inner">
-                        {tube.layers.map((layer, j) => {
-                          const layerHeight = 100 / tube.capacity;
-                          return (
-                            <div
-                              key={j}
-                              className="color-layer"
-                              style={{
-                                height: `${layerHeight}%`,
-                                backgroundColor: COLORS[layer.color] || layer.color,
-                                bottom: `${j * layerHeight}%`,
-                              }}
-                            />
-                          );
-                        })}
-                      </div>
-                      <div className="tube-mouth" />
-                    </div>
-                    <div className="tube-index">{i + 1}</div>
-                  </div>
-                );
-              })}
-            </div>
-            <div className="replay-controls">
-              <button className="btn btn-secondary" onClick={() => {
-                // 回到开头
-                if (replayTimerRef.current) { clearTimeout(replayTimerRef.current); replayTimerRef.current = null; }
-                replayStepRef.current = 0;
-                setReplayStep(0);
-                setReplayTubes(cloneTubes(levelData.tubes));
-              }}>⏮ 重新开始</button>
-              <button className="btn btn-primary" onClick={() => {
-                if (replayTimerRef.current) { clearTimeout(replayTimerRef.current); replayTimerRef.current = null; }
-                // 单步：用 ref 读取当前步数，避免闭包陷阱
-                const step = replayStepRef.current;
-                if (step >= moveHistory.length) return;
-                const move = moveHistory[step];
-                const currentTubes = step === 0 ? cloneTubes(levelData.tubes) : cloneTubes(replayTubes);
-                const { from, to } = pour(currentTubes[move.from], currentTubes[move.to]);
-                currentTubes[move.from] = from;
-                currentTubes[move.to] = to;
-                setReplayTubes(currentTubes);
-                replayStepRef.current = step + 1;
-                setReplayStep(step + 1);
-                SoundEngine.pour();
-              }}>▶ 单步</button>
-              <button className="btn btn-primary" onClick={() => {
-                // 自动播放
-                if (replayTimerRef.current) { clearTimeout(replayTimerRef.current); replayTimerRef.current = null; return; }
-                // 修复：原代码把 SoundEngine.pour() 和 setTimeout 放在 setReplayStep 的 updater 里，
-                // React StrictMode 下 updater 会被调用两次，导致音效播放两次、定时器调度两个
-                // 现用 replayStepRef 驱动循环，副作用完全在 updater 外部
-                const stepNext = () => {
-                  const step = replayStepRef.current;
-                  if (step >= moveHistory.length) {
-                    if (replayTimerRef.current) { clearTimeout(replayTimerRef.current); replayTimerRef.current = null; }
-                    return;
-                  }
-                  const move = moveHistory[step];
-                  setReplayTubes(prevTubes => {
-                    const currentTubes = step === 0 ? cloneTubes(levelData.tubes) : cloneTubes(prevTubes);
-                    const { from, to } = pour(currentTubes[move.from], currentTubes[move.to]);
-                    currentTubes[move.from] = from;
-                    currentTubes[move.to] = to;
-                    return currentTubes;
-                  });
-                  replayStepRef.current = step + 1;
-                  setReplayStep(step + 1); // 仅用于 UI 显示步数
-                  SoundEngine.pour();
-                  replayTimerRef.current = setTimeout(stepNext, 500) as unknown as number;
-                };
-                stepNext();
-              }}>{replayTimerRef.current ? '⏸ 暂停' : '⏩ 自动播放'}</button>
-              <button className="btn btn-secondary" onClick={() => { setShowReplay(false); if (replayTimerRef.current) { clearTimeout(replayTimerRef.current); replayTimerRef.current = null; } }}>关闭</button>
-            </div>
-          </div>
-        </div>
+        <ReplayPanel
+          moveHistory={moveHistory}
+          initialTubes={levelData.tubes}
+          onClose={() => setShowReplay(false)}
+        />
       )}
 
       {isDeadlock && !isWon && (
