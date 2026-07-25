@@ -7,6 +7,7 @@ import { StatsTracker } from '../game/statsTracker';
 import { resetHintItems } from '../game/hintItems';
 import { getTodayString } from '../game/dailyChallenge';
 import { getAllDailyTips } from '../game/announcements';
+import { RESETTABLE_KEYS, BACKUP_KEYS } from '../game/storageKeys';
 
 interface SettingsPageProps {
   onBack: () => void;
@@ -52,15 +53,10 @@ export function SettingsPage({ onBack }: SettingsPageProps) {
 
   const handleResetProgress = () => {
     if (confirm('确认要重置所有游戏数据吗？此操作不可撤销')) {
-      localStorage.removeItem('color-sort-progress');
-      localStorage.removeItem('color-sort-best-scores');
-      localStorage.removeItem('color-sort-tutorial-seen');
-      localStorage.removeItem('color-sort-achievements');
-      localStorage.removeItem('color-sort-daily');
-      localStorage.removeItem('color-sort-timed-highscore');
-      localStorage.removeItem('color-sort-stars');
-      localStorage.removeItem('color-sort-stats');
-      localStorage.removeItem('color-sort-checkin');
+      // 使用统一的 RESETTABLE_KEYS 列表，确保所有数据都被清理
+      RESETTABLE_KEYS.forEach(key => {
+        try { localStorage.removeItem(key); } catch (e) { /* 忽略 */ }
+      });
       resetHintItems();
       DailyCheckin.reset();
       StatsTracker.reset();
@@ -69,15 +65,9 @@ export function SettingsPage({ onBack }: SettingsPageProps) {
   };
 
   const handleExportData = () => {
-    const keys = [
-      'color-sort-progress', 'color-sort-best-scores', 'color-sort-tutorial-seen',
-      'color-sort-achievements', 'color-sort-daily', 'color-sort-timed-highscore',
-      'color-sort-stars', 'color-sort-stats', 'color-sort-endless',
-      'color-sort-settings', 'color-sort-checkin',
-      'color-sort-hint-items', 'color-sort-hint-daily-bonus',
-    ];
+    // 使用统一的 BACKUP_KEYS 列表，确保所有数据都被备份
     const data: Record<string, string> = {};
-    keys.forEach(k => {
+    BACKUP_KEYS.forEach(k => {
       const v = localStorage.getItem(k);
       if (v !== null) data[k] = v;
     });
