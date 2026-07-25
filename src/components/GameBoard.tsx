@@ -7,9 +7,10 @@ import { SoundEngine } from '../game/soundEngine';
 import { TubeView } from './TubeView';
 import { ParticleEffect } from './ParticleEffect';
 import { GameSettings } from '../game/settings';
-import { generateShareImage, dataURLToBlob } from '../game/shareImage';
+import { generateShareImage } from '../game/shareImage';
 import { ReplayPanel } from './ReplayPanel';
 import { HelpModal } from './HelpModal';
+import { ShareImageModal } from './ShareImageModal';
 import { StatsTracker } from '../game/statsTracker';
 import { getAdaptiveDifficultyModifier } from '../game/adaptiveDifficulty';
 
@@ -80,7 +81,6 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
   const [activeLevelTip, setActiveLevelTip] = useState<number | null>(null);
   const [elapsedTime, setElapsedTime] = useState(0); // 已用时间（秒）
   const gameStartTime = useRef<number>(Date.now()); // 游戏开始时间戳
-  const shareImageRef = useRef<HTMLAnchorElement | null>(null);
 
   // 回放系统：记录操作序列（回放 UI 已拆分为独立 ReplayPanel 组件）
   const [moveHistory, setMoveHistory] = useState<Array<{ from: number; to: number }>>([]);
@@ -704,38 +704,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
       )}
 
       {showShareImage && (
-        <div className="share-image-overlay" onClick={() => setShowShareImage(false)}>
-          <div className="share-image-card" onClick={(e) => e.stopPropagation()}>
-            <h3>战绩图已生成</h3>
-            <img src={shareImageUrl} alt="战绩图" className="share-image-preview" />
-            <div className="share-image-actions">
-              <a
-                ref={shareImageRef}
-                href={shareImageUrl}
-                download="color-sort-score.png"
-                className="btn btn-primary"
-              >💾 保存图片</a>
-              <button className="btn btn-secondary" onClick={async () => {
-                const blob = dataURLToBlob(shareImageUrl);
-                if (blob && navigator.share) {
-                  try {
-                    const file = new File([blob], 'color-sort-score.png', { type: 'image/png' });
-                    await navigator.share({ files: [file], title: '色彩排序战绩', text: '看看我在色彩排序的成绩！' });
-                  } catch (e) { /* 用户取消 */ }
-                } else {
-                  // 降级：复制图片到剪贴板
-                  try {
-                    await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob! })]);
-                    alert('图片已复制到剪贴板！');
-                  } catch (e2) {
-                    alert('请长按图片保存，或点击"保存图片"下载。');
-                  }
-                }
-              }}>📤 直接分享</button>
-              <button className="btn btn-secondary" onClick={() => setShowShareImage(false)}>关闭</button>
-            </div>
-          </div>
-        </div>
+        <ShareImageModal imageUrl={shareImageUrl} onClose={() => setShowShareImage(false)} />
       )}
 
       {/* 回放弹窗：已拆分为独立 ReplayPanel 组件 */}
