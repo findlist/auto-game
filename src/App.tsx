@@ -240,22 +240,36 @@ export default function App() {
     return () => clearInterval(interval);
   }, [showPWAInstall]);
 
+  // 成就系统状态 — 提前定义以供 useEffect 和回调使用
+  const [newAchievements, setNewAchievements] = useState<Achievement[]>([]);
+  const [usedHintThisLevel, setUsedHintThisLevel] = useState(false);
+  const [recoveredFromDeadlock, setRecoveredFromDeadlock] = useState(false);
+
+  // 通用成就检查辅助函数 — 统一"检查→追加到 newAchievements"模式，消除重复代码
+  const checkAchievements = useCallback((achievements: Achievement[]) => {
+    if (achievements.length > 0) {
+      setNewAchievements(prev => [...prev, ...achievements]);
+    }
+  }, []);
+
+  // 检查累计游玩天数成就 — 在各游戏模式启动时统一调用
+  const checkPlayDaysAchievements = useCallback(() => {
+    checkAchievements(AchievementManager.checkPlayDaysAchievements());
+  }, [checkAchievements]);
+
+  // 色彩百科页成就回调 hook — 集中管理百科页成就检查逻辑，避免内联代码
+  const encyclopediaHooks = useEncyclopediaAchievements(setNewAchievements);
+
   // 修复 P1:原代码在 render 阶段调用 setNewAchievements,违反 React 纯渲染原则
   // 可能导致 "Cannot update a component while rendering" 警告甚至无限重渲染
   // 改为在 useEffect 中根据 page 变化触发成就检查
   useEffect(() => {
     if (page === 'stats') {
-      const statsAchievements = AchievementManager.checkStatsViewerAchievements();
-      if (statsAchievements.length > 0) {
-        setNewAchievements(prev => [...prev, ...statsAchievements]);
-      }
+      checkAchievements(AchievementManager.checkStatsViewerAchievements());
     } else if (page === 'encyclopedia') {
-      const encyclopediaAchievements = AchievementManager.checkEncyclopediaAchievements(progress.completedLevels.includes(100));
-      if (encyclopediaAchievements.length > 0) {
-        setNewAchievements(prev => [...prev, ...encyclopediaAchievements]);
-      }
+      checkAchievements(AchievementManager.checkEncyclopediaAchievements(progress.completedLevels.includes(100)));
     }
-  }, [page, progress.completedLevels]);
+  }, [page, progress.completedLevels, checkAchievements]);
 
   // 自动保存当前游戏状态
   const autoSaveGame = useCallback((level: number, mode: string, moves: number, isWon: boolean, extra?: Record<string, number>) => {
@@ -295,14 +309,6 @@ export default function App() {
   const [endlessScore, setEndlessScore] = useState(0);
   const [endlessHighScore, setEndlessHighScore] = useState(getEndlessHighScore());
   const [dailyCompletedToday, setDailyCompletedToday] = useState(hasCompletedDailyToday());
-
-  // 成就系统
-  const [newAchievements, setNewAchievements] = useState<Achievement[]>([]);
-  const [usedHintThisLevel, setUsedHintThisLevel] = useState(false);
-  const [recoveredFromDeadlock, setRecoveredFromDeadlock] = useState(false);
-
-  // 色彩百科页成就回调 hook — 集中管理百科页成就检查逻辑，避免内联代码
-  const encyclopediaHooks = useEncyclopediaAchievements(setNewAchievements);
 
   // 成就解锁音效 — 监听 newAchievements 变化，根据稀有度播放差异化音效
   useEffect(() => {
@@ -404,9 +410,7 @@ export default function App() {
     if (recoveredFromDeadlock) {
       newlyUnlocked.push(...AchievementManager.checkPersistentAchievement(true));
     }
-    if (newlyUnlocked.length > 0) {
-      setNewAchievements(prev => [...prev, ...newlyUnlocked]);
-    }
+    checkAchievements(newlyUnlocked);
 
     // 记录统计:检查是否使用撒销/提示等辅助通关判定
     StatsTracker.recordWin(currentLevel, winMoves, stars, isDailyMode, isEndlessMode, isTimedMode, playTimeSec, usedHintThisLevel || recoveredFromDeadlock, usedHintThisLevel);
@@ -433,21 +437,12 @@ export default function App() {
         setTimeout(() => setComboCelebration(null), 3000);
       }
       // 检查连击里程碑成就
-      const comboAchievements = AchievementManager.checkComboAchievements(newCombo);
-      if (comboAchievements.length > 0) {
-        setNewAchievements(prev => [...prev, ...comboAchievements]);
-      }
+      checkAchievements(AchievementManager.checkComboAchievements(newCombo));
       // 检查累计连击成就
-      const totalComboAchievements = AchievementManager.checkTotalComboAchievements(getTotalComboCount());
-      if (totalComboAchievements.length > 0) {
-        setNewAchievements(prev => [...prev, ...totalComboAchievements]);
-      }
+      checkAchievements(AchievementManager.checkTotalComboAchievements(getTotalComboCount()));
       // 检查每日目标成就
       const goalProgress = getDailyGoalsProgress();
-      const goalAchievements = AchievementManager.checkDailyGoalAchievements(goalProgress.completed, goalProgress.total);
-      if (goalAchievements.length > 0) {
-        setNewAchievements(prev => [...prev, ...goalAchievements]);
-      }
+      checkAchievements(AchievementManager.checkDailyGoalAchievements(goalProgress.completed, goalProgress.total));
     }
     if (isDailyMode) {
       updateGoalProgress('daily_challenge');
@@ -457,47 +452,26 @@ export default function App() {
     // 修复:原条件未排除 isWeeklyMode,周挑战通关会误触发普通连胜/里程碑/探索者/色彩成就
     if (!isDailyMode && !isEndlessMode && !isTimedMode && !isWeeklyMode) {
       const currentStreak = StatsTracker.get().currentStreak;
-      const streakAchievements = AchievementManager.checkStreakAchievements(currentStreak);
-      if (streakAchievements.length > 0) {
-        setNewAchievements(prev => [...prev, ...streakAchievements]);
-      }
+      checkAchievements(AchievementManager.checkStreakAchievements(currentStreak));
       // 连通过关表成就
-      const milestoneAchievements = AchievementManager.checkMilestoneAchievements(currentLevel);
-      if (milestoneAchievements.length > 0) {
-        setNewAchievements(prev => [...prev, ...milestoneAchievements]);
-      }
+      checkAchievements(AchievementManager.checkMilestoneAchievements(currentLevel));
       // 关卡探索者成就
-      const explorerAchievements = AchievementManager.checkExplorerAchievements(newCompleted.length);
-      if (explorerAchievements.length > 0) {
-        setNewAchievements(prev => [...prev, ...explorerAchievements]);
-      }
+      checkAchievements(AchievementManager.checkExplorerAchievements(newCompleted.length));
       // 色彩收藏家成就(根据关卡配置推断颜色数)
       const colorCount = currentLevel <= 3 ? 2 : currentLevel <= 6 ? 3 : currentLevel <= 12 ? 4 : currentLevel <= 20 ? 5 : currentLevel <= 30 ? 6 : currentLevel <= 50 ? 7 : currentLevel <= 70 ? 8 : currentLevel <= 90 ? 9 : 10;
-      const colorAchievements = AchievementManager.checkColorMasterAchievements(colorCount);
-      if (colorAchievements.length > 0) {
-        setNewAchievements(prev => [...prev, ...colorAchievements]);
-      }
+      checkAchievements(AchievementManager.checkColorMasterAchievements(colorCount));
     }
 
     // 检查步数表成就
     const updatedStats = StatsTracker.get();
-    const moveAchievements = AchievementManager.checkTotalMovesAchievements(updatedStats.totalMoves);
-    if (moveAchievements.length > 0) {
-      setNewAchievements(prev => [...prev, ...moveAchievements]);
-    }
+    checkAchievements(AchievementManager.checkTotalMovesAchievements(updatedStats.totalMoves));
     // 检查速度成就(仅普通模式、步数 > 0 且用时 > 0)
     // 修复:原条件未排除 isWeeklyMode,周挑战会误触发速度成就
     if (!isDailyMode && !isEndlessMode && !isTimedMode && !isWeeklyMode && playTimeSec > 0) {
-      const speedAchievements = AchievementManager.checkSpeedAchievements(playTimeSec);
-      if (speedAchievements.length > 0) {
-        setNewAchievements(prev => [...prev, ...speedAchievements]);
-      }
+      checkAchievements(AchievementManager.checkSpeedAchievements(playTimeSec));
     }
     // 检查满星成就
-    const perfectAchievements = AchievementManager.checkPerfectStarAchievements(updatedStats.perfectLevels);
-    if (perfectAchievements.length > 0) {
-      setNewAchievements(prev => [...prev, ...perfectAchievements]);
-    }
+    checkAchievements(AchievementManager.checkPerfectStarAchievements(updatedStats.perfectLevels));
 
     // 胜利时清除自动存档
     clearAutosave();
@@ -515,10 +489,7 @@ export default function App() {
         playTimeSec,
         timestamp: Date.now(),
       });
-      const dailyAchievements = AchievementManager.checkDailyAchievements();
-      if (dailyAchievements.length > 0) {
-        setNewAchievements(prev => [...prev, ...dailyAchievements]);
-      }
+      checkAchievements(AchievementManager.checkDailyAchievements());
     }
     // 周挑战完成处理
     if (isWeeklyMode) {
@@ -528,25 +499,16 @@ export default function App() {
       // 更新首页周挑战展示信息
       const wInfo = getWeeklyInfo();
       setWeeklyDisplay({ week: wInfo.week, recordMoves: winMoves, recordStars: stars, streak: weeklyStreak.currentStreak });
-      const weeklyAchievements = AchievementManager.checkWeeklyAchievements(weeklyStreak.currentStreak);
-      if (weeklyAchievements.length > 0) {
-        setNewAchievements(prev => [...prev, ...weeklyAchievements]);
-      }
+      checkAchievements(AchievementManager.checkWeeklyAchievements(weeklyStreak.currentStreak));
     }
     // 全能玩家成就检查:体验所有5种模式
-    const allRoundAchievements = AchievementManager.checkAllRoundAchievements(getPlayedModes());
-    if (allRoundAchievements.length > 0) {
-      setNewAchievements(prev => [...prev, ...allRoundAchievements]);
-    }
+    checkAchievements(AchievementManager.checkAllRoundAchievements(getPlayedModes()));
     // 无尽模式完成处理
     if (isEndlessMode) {
       const newScore = endlessScore + 1;
       saveEndlessScore(newScore);
       setEndlessHighScore(getEndlessHighScore());
-      const endlessAchievements = AchievementManager.checkEndlessAchievements(newScore);
-      if (endlessAchievements.length > 0) {
-        setNewAchievements(prev => [...prev, ...endlessAchievements]);
-      }
+      checkAchievements(AchievementManager.checkEndlessAchievements(newScore));
       // 无尽模式里程碑奖励：每过5关奖励1个提示道具，增强留存动力
       if (newScore > 0 && newScore % 5 === 0) {
         const bonus = addHintItems(1);
@@ -566,10 +528,7 @@ export default function App() {
       if (newScore > timedHighScore) {
         setTimedHighScore(newScore);
       }
-      const timedAchievements = AchievementManager.checkTimedAchievements(newScore);
-      if (timedAchievements.length > 0) {
-        setNewAchievements(prev => [...prev, ...timedAchievements]);
-      }
+      checkAchievements(AchievementManager.checkTimedAchievements(newScore));
       // 限时模式里程碑奖励：每过5关奖励1个提示道具，与无尽模式保持一致的留存激励
       if (newScore > 0 && newScore % 5 === 0) {
         const bonus = addHintItems(1);
@@ -606,10 +565,7 @@ export default function App() {
     setRecentPlay({ level: progress.currentLevel, mode: 'normal', timestamp: Date.now() });
     recordPlayedMode('normal');
     // 检查累计游玩天数成就 — 每次开始游戏时记录当日游玩
-    const playDaysAchievements = AchievementManager.checkPlayDaysAchievements();
-    if (playDaysAchievements.length > 0) {
-      setNewAchievements(prev => [...prev, ...playDaysAchievements]);
-    }
+    checkPlayDaysAchievements();
     if (!hasSeenTutorial()) {
       setShowTutorial(true);
     }
@@ -680,10 +636,7 @@ export default function App() {
     setRecoveredFromDeadlock(false);
     recordPlayedMode('daily');
     // 检查累计游玩天数成就
-    const playDaysAchievements = AchievementManager.checkPlayDaysAchievements();
-    if (playDaysAchievements.length > 0) {
-      setNewAchievements(prev => [...prev, ...playDaysAchievements]);
-    }
+    checkPlayDaysAchievements();
   };
 
   const handleEndlessMode = () => {
@@ -698,10 +651,7 @@ export default function App() {
     setRecoveredFromDeadlock(false);
     recordPlayedMode('endless');
     // 检查累计游玩天数成就
-    const playDaysAchievements = AchievementManager.checkPlayDaysAchievements();
-    if (playDaysAchievements.length > 0) {
-      setNewAchievements(prev => [...prev, ...playDaysAchievements]);
-    }
+    checkPlayDaysAchievements();
   };
 
   const handleTimedMode = () => {
@@ -716,10 +666,7 @@ export default function App() {
     setRecoveredFromDeadlock(false);
     recordPlayedMode('timed');
     // 检查累计游玩天数成就
-    const playDaysAchievements = AchievementManager.checkPlayDaysAchievements();
-    if (playDaysAchievements.length > 0) {
-      setNewAchievements(prev => [...prev, ...playDaysAchievements]);
-    }
+    checkPlayDaysAchievements();
   };
 
   const handleDeadlockRecover = useCallback(() => {
@@ -924,10 +871,7 @@ export default function App() {
         setShowCheckinReward(result.rewardUnlocked);
       }
       // 检查签到成就
-      const checkinAchievements = AchievementManager.checkCheckinAchievements(result.newStreak, result.totalDays);
-      if (checkinAchievements.length > 0) {
-        setNewAchievements(prev => [...prev, ...checkinAchievements]);
-      }
+      checkAchievements(AchievementManager.checkCheckinAchievements(result.newStreak, result.totalDays));
     }
   };
 
