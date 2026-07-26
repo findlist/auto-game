@@ -13,6 +13,16 @@ const ChangelogModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         <h2>色彩排序更新日志</h2>
         <div className="changelog-content">
           <div className="changelog-item">
+            <h3>🎉 v1.50.0</h3>
+            <ul>
+              <li>🔧 提取胜利/时间到遮罩为独立WinOverlay组件，包含胜利结算、星级评价、步数效率可视化、战绩图生成等功能</li>
+              <li>🔧 提取死局/暂停遮罩为独立GameOverlays组件，GameBoard进一步精简约180行</li>
+              <li>🔧 提取关卡提示配置到独立levelTips.ts模块，GameBoard从731行减至约610行</li>
+              <li>💡 新增第16-20关高阶策略提示：多色并行(青绿)、逆向思维(深紫)、追求三星(金色)、快速决策(亮红)、高难度挑战(深靛蓝)</li>
+              <li>🎨 新增第16-20关提示样式及暗色主题适配，完善前20关渐进式引导视觉体系</li>
+            </ul>
+          </div>
+          <div className="changelog-item">
             <h3>🎉 v1.49.0</h3>
             <ul>
               <li>🔧 提取回放系统为独立ReplayPanel组件，从GameBoard移除replayStep/replayTubes/replayStepRef/replayTimerRef四个状态和约90行回放弹窗JSX</li>
