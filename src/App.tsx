@@ -1,7 +1,8 @@
 import { useState, useCallback, useRef, useEffect, lazy, Suspense } from 'react';
 // GameBoard 已移入 GamePageComponent
 import { canPour } from './game/levelGenerator';
-import { SoundEngine } from './game/soundEngine';
+// SoundEngine 懒加载代理（App.tsx 中仅少量音效调用，改为懒加载降低首屏 bundle）
+import { SoundEngineLazy as SoundEngine } from './game/soundEngineLazy';
 import { Tube } from './game/types';
 import { AchievementManager, Achievement, EncyclopediaAchievementChecks } from './game/achievements';
 import { getTodayString, saveDailyRecord } from './game/dailyChallenge';

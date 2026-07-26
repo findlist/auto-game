@@ -1,5 +1,6 @@
 import { useState, useCallback, memo } from 'react';
-import { SoundEngine } from '../game/soundEngine';
+// SoundEngine 懒加载代理（首屏组件仅需 click，改为懒加载降低首屏 bundle）
+import { SoundEngineLazy as SoundEngine } from '../game/soundEngineLazy';
 import { getAllDailyTips, getTodayTip, getTodayColorKnowledge, getTodayColorQuiz, getDailyQuizHistory, getQuizStreak } from '../game/announcements';
 
 interface DailyContentSectionProps {

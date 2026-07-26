@@ -3,7 +3,8 @@
 // 设计原因：这些状态紧密关联（签到奖励提示道具、目标完成也发提示道具），统一管理避免状态分散
 
 import { useState, useCallback } from 'react';
-import { SoundEngine } from './soundEngine';
+// SoundEngine 懒加载代理（首屏 hook 仅需 click/win/resume，改为懒加载降低首屏 bundle）
+import { SoundEngineLazy as SoundEngine } from './soundEngineLazy';
 import { DailyCheckin } from './dailyCheckin';
 import { getHintItems, useHintItem, addHintItems, claimDailyHintBonus } from './hintItems';
 import { getDailyGoals, claimGoalReward } from './dailyGoals';

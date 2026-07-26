@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { claimWeekendBonus, getWeekendBonusInfo } from './weekendBonus';
-import { SoundEngine } from './soundEngine';
+// SoundEngine 懒加载代理（首屏 hook 仅需 click/win/resume，改为懒加载降低首屏 bundle）
+import { SoundEngineLazy as SoundEngine } from './soundEngineLazy';
 
 // 周末奖励管理 hook
 // 从 App.tsx 提取：周末奖励状态与领取逻辑

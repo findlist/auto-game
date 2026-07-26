@@ -1,5 +1,6 @@
 import { GameSettings } from '../game/settings';
-import { SoundEngine } from '../game/soundEngine';
+// SoundEngine 懒加载代理（首屏组件仅需 click/stopBGM/startBGM/resume，改为懒加载降低首屏 bundle）
+import { SoundEngineLazy as SoundEngine } from '../game/soundEngineLazy';
 import type { ReactNode } from 'react';
 
 // 首页骨架组件：header（音效/BGM切换 + logo）+ footer（底部导航链接）+ 浮动快捷导航

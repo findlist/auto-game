@@ -1,7 +1,8 @@
 import { useState, useCallback } from 'react';
 import { CustomLevel } from './levelEditor';
 import { STORAGE_KEYS } from './storageKeys';
-import { SoundEngine } from './soundEngine';
+// SoundEngine 懒加载代理（首屏 hook 仅需 click/win/resume，改为懒加载降低首屏 bundle）
+import { SoundEngineLazy as SoundEngine } from './soundEngineLazy';
 
 // levelEditor 模块改为动态导入，降低首屏 bundle 体积（仅在用户操作自定关卡时加载）
 const levelEditorModule = () => import('./levelEditor');

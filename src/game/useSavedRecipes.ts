@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
-import { SoundEngine } from './soundEngine';
+// SoundEngine 懒加载代理（首屏 hook 仅需 click/win/resume，改为懒加载降低首屏 bundle）
+import { SoundEngineLazy as SoundEngine } from './soundEngineLazy';
 
 // 色彩混合配方管理 hook
 // 从 App.tsx 提取：配方的加载、查看弹窗状态管理

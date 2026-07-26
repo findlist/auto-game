@@ -1,7 +1,8 @@
 import { DailyCheckin } from '../game/dailyCheckin';
 import { MAX_HINT_ITEMS } from '../game/hintItems';
 import { getTodayLeaderboard } from '../game/dailyLeaderboard';
-import { SoundEngine } from '../game/soundEngine';
+// SoundEngine 懒加载代理（首屏组件仅需 click，改为懒加载降低首屏 bundle）
+import { SoundEngineLazy as SoundEngine } from '../game/soundEngineLazy';
 import type { Progress, RecentPlay } from '../game/homeStorage';
 import { DailyGoalsCard } from './DailyGoalsCard';
 import { TodaySummaryCard } from './TodaySummaryCard';

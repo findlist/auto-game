@@ -3,7 +3,8 @@
 // 设计原因：App.tsx 中模式相关状态分散在多处，集中管理可降低复杂度、提升可维护性
 
 import { useState, useCallback } from 'react';
-import { SoundEngine } from './soundEngine';
+// SoundEngine 懒加载代理（首屏 hook 仅需 click/win/resume，改为懒加载降低首屏 bundle）
+import { SoundEngineLazy as SoundEngine } from './soundEngineLazy';
 import { saveEndlessScore, getEndlessHighScore } from './levelGenerator';
 import { saveTimedHighScore, loadTimedHighScore } from './homeStorage';
 import { recordPlayedMode } from './playedModes';
