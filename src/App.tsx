@@ -3,7 +3,7 @@ import { useState, useCallback, useRef, useEffect, lazy, Suspense } from 'react'
 import { canPour } from './game/levelGenerator';
 import { SoundEngine } from './game/soundEngine';
 import { Tube } from './game/types';
-import { AchievementManager, Achievement } from './game/achievements';
+import { AchievementManager, Achievement, EncyclopediaAchievementChecks } from './game/achievements';
 import { getTodayString, saveDailyRecord } from './game/dailyChallenge';
 import { addDailyLeaderboardEntry } from './game/dailyLeaderboard';
 import { StatsTracker } from './game/statsTracker';
@@ -237,7 +237,7 @@ export default function App() {
     if (page === 'stats') {
       checkAchievements(AchievementManager.checkStatsViewerAchievements());
     } else if (page === 'encyclopedia') {
-      checkAchievements(AchievementManager.checkEncyclopediaAchievements(progress.completedLevels.includes(100)));
+      checkAchievements(EncyclopediaAchievementChecks.checkEncyclopediaAchievements(progress.completedLevels.includes(100)));
     }
   }, [page, progress.completedLevels, checkAchievements]);
 
