@@ -7,10 +7,11 @@ import { SoundEngine } from '../game/soundEngine';
 import { TubeView } from './TubeView';
 import { ParticleEffect } from './ParticleEffect';
 import { GameSettings } from '../game/settings';
-import { generateShareImage } from '../game/shareImage';
 import { ReplayPanel } from './ReplayPanel';
 import { HelpModal } from './HelpModal';
 import { ShareImageModal } from './ShareImageModal';
+import { WinOverlay } from './WinOverlay';
+import { GameOverlays } from './GameOverlays';
 import { StatsTracker } from '../game/statsTracker';
 import { getAdaptiveDifficultyModifier } from '../game/adaptiveDifficulty';
 
@@ -373,8 +374,9 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
     }
   }, [history, isWon, hadDeadlock, onDeadlockRecover]);
 
-  // 重置当前关卡
+  // 重置当前关卡（暂停时禁止）
   const handleReset = useCallback(() => {
+    if (isPaused) return;
     SoundEngine.resume();
     setTubes(cloneTubes(levelData.tubes));
     setSelectedTube(null);
@@ -397,7 +399,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
     SoundEngine.reset();
     onReset();
     StatsTracker.breakStreak(); // 重置关卡中断连胜
-  }, [levelData, onReset, timedDuration]);
+  }, [levelData, onReset, timedDuration, isPaused]);
 
   // stable 版本的 handleUndo / handleReset
   // 修复：键盘事件和 onLongPress 若直接捕获 handleUndo/handleReset，
@@ -595,113 +597,26 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
         ))}
       </div>
 
-      {isWon && (
-        <div className="win-overlay">
-          <div className={`win-card ${starRating === 3 ? 'three-stars-celebration' : ''}`}>
-            <div className="win-emoji">🎉</div>
-            <h2>{level === -3 ? `通过第 ${timedScore + 1} 关！` : level === -2 ? `通过第 ${endlessScore + 1} 关！` : '恭喜过关！'}</h2>
-            <div className="star-rating">
-              {[1, 2, 3].map(s => (
-                <span key={s} className={`star ${s <= starRating ? 'star-filled star-pop' : 'star-empty'}`} style={{ animationDelay: `${0.5 + s * 0.2}s` }}>⭐</span>
-              ))}
-            </div>
-            <p>用时 {moves} 步完成{(levelData.minSteps ?? -1) > 0 && ` · 最优 ${levelData.minSteps} 步`}</p>
-            {/* 步数效率可视化 */}
-            {(levelData.minSteps ?? -1) > 0 && (() => {
-              const min = levelData.minSteps ?? 1;
-              const ratio = Math.min(moves / min, 2.5);
-              const pct = Math.min((ratio / 2.5) * 100, 100);
-              const isPerfect = ratio <= 1.0;
-              const isGood = ratio <= 1.5;
-              const barColor = isPerfect ? '#4ECDC4' : isGood ? '#667eea' : '#FF9800';
-              const labelText = isPerfect ? '✨ 完美通关！' : isGood ? '👍 表现良好' : '💪 还有提升空间';
-              return (
-                <div className="win-efficiency-bar">
-                  <div className="win-efficiency-label">{labelText}</div>
-                  <div className="win-efficiency-track">
-                    <div className="win-efficiency-fill" style={{ width: `${pct}%`, background: barColor }} />
-                    <div className="win-efficiency-marker" style={{ left: `${(1 / 2.5) * 100}%` }} title={`最优: ${min}步`} />
-                  </div>
-                  <div className="win-efficiency-scale">
-                    <span>0</span>
-                    <span>最优 {min}</span>
-                    <span>{Math.round(min * 2.5)}</span>
-                  </div>
-                </div>
-              );
-            })()}
-            {bestScore > 0 && moves < bestScore && (
-              <p className="new-record-badge">🎉 新纪录！上次最佳 {bestScore} 步</p>
-            )}
-            {bestScore > 0 && moves === bestScore && (
-              <p className="new-record-badge">🎯 平了最佳记录！</p>
-            )}
-            {bestScore > 0 && moves > bestScore && (
-              <p className="prev-best-badge">📊 最佳记录: {bestScore} 步</p>
-            )}
-            <div className="win-actions">
-              <button className="btn btn-primary" onClick={() => setShowReplay(true)}>🎬 查看回放</button>
-              {onReplayShare && (
-                <button className="btn btn-primary" onClick={() => {
-                  onReplayShare(moveHistory, level, starRating, moves);
-                }}>🔗 分享回放</button>
-              )}
-              {onExportVideo && (
-                <button className="btn btn-primary" onClick={() => {
-                  onExportVideo(moveHistory, { tubes: levelData.tubes, tubeCapacity: levelData.tubeCapacity }, level, starRating, moves);
-                }}>🎥 导出视频</button>
-              )}
-              <button className="btn btn-primary" onClick={() => {
-                const url = generateShareImage({
-                  level,
-                  moves: moves,
-                  minSteps: levelData.minSteps ?? -1,
-                  stars: starRating,
-                  difficulty: levelData.difficulty,
-                  mode: level === -1 ? 'daily' : level === -2 ? 'endless' : level === -3 ? 'timed' : 'normal',
-                  endlessScore: endlessScore,
-                  timedScore: timedScore,
-                });
-                setShareImageUrl(url);
-                setShowShareImage(true);
-              }}>🖼️ 生成战绩图</button>
-              <button className="btn btn-primary" onClick={() => onShare(moves, level)}>📤 分享战绩</button>
-              {level > 0 && (
-                <button className="btn btn-secondary" onClick={handleReset}>🔄 再来一局</button>
-              )}
-              <button className="btn btn-primary" onClick={onNextLevel}>{level === -3 ? '➡️ 继续挑战' : level === -2 ? '➡️ 继续挑战' : '➡️ 下一关'}</button>
-              <button className="btn btn-secondary" onClick={onGoHome}>🏠 返回首页</button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {isTimeUp && !isWon && (
-        <div className="win-overlay">
-          <div className="win-card">
-            <div className="win-emoji">⏰</div>
-            <h2>时间到！</h2>
-            <p>限时模式通过了 {timedScore} 关</p>
-            <div className="win-actions">
-              <button className="btn btn-primary" onClick={() => {
-                const url = generateShareImage({
-                  level,
-                  moves: timedScore,
-                  minSteps: -1,
-                  stars: 0,
-                  difficulty: '限时模式',
-                  mode: 'timed',
-                  timedScore: timedScore,
-                });
-                setShareImageUrl(url);
-                setShowShareImage(true);
-              }}>🖼️ 生成战绩图</button>
-              <button className="btn btn-primary" onClick={() => onShare(timedScore, level)}>📤 分享战绩</button>
-              <button className="btn btn-secondary" onClick={onGoHome}>🏠 返回首页</button>
-            </div>
-          </div>
-        </div>
-      )}
+      <WinOverlay
+        isWon={isWon}
+        isTimeUp={isTimeUp}
+        level={level}
+        moves={moves}
+        starRating={starRating}
+        bestScore={bestScore}
+        timedScore={timedScore}
+        endlessScore={endlessScore}
+        levelData={levelData}
+        moveHistory={moveHistory}
+        onShowReplay={() => setShowReplay(true)}
+        onReplayShare={onReplayShare}
+        onExportVideo={onExportVideo}
+        onShare={onShare}
+        onReset={handleReset}
+        onNextLevel={onNextLevel}
+        onGoHome={onGoHome}
+        onShowShareImage={(url) => { setShareImageUrl(url); setShowShareImage(true); }}
+      />
 
       {showShareImage && (
         <ShareImageModal imageUrl={shareImageUrl} onClose={() => setShowShareImage(false)} />
@@ -716,19 +631,19 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
         />
       )}
 
-      {isDeadlock && !isWon && (
-        <div className="deadlock-overlay">
-          <div className="deadlock-card">
-            <div className="deadlock-emoji">🤔</div>
-            <h2>没有可行操作了</h2>
-            <p>试试撤销或重新开始</p>
-            <div className="win-actions">
-              <button className="btn btn-primary" onClick={() => { if (hadDeadlock && onDeadlockRecover) onDeadlockRecover(); handleUndo(); }} disabled={history.length === 0}>↩️ 撤销上一步</button>
-              <button className="btn btn-secondary" onClick={handleReset}>🔄 重新开始</button>
-            </div>
-          </div>
-        </div>
-      )}
+      <GameOverlays
+        isDeadlock={isDeadlock}
+        isWon={isWon}
+        isPaused={isPaused}
+        isTimeUp={isTimeUp}
+        historyLength={history.length}
+        hadDeadlock={hadDeadlock}
+        onUndo={handleUndo}
+        onReset={handleReset}
+        onDeadlockRecover={onDeadlockRecover}
+        onTogglePause={stableHandleTogglePause}
+        onGoHome={onGoHome}
+      />
 
       <div className="game-controls">
         <button className="btn btn-undo" onClick={handleUndo} disabled={history.length === 0 || isWon || isPaused} aria-label="撤销上一步">
@@ -752,20 +667,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
         <span className="hint-mobile">点击试管选中 → 再点目标试管倒色 · 长按试管撤销 · 💡提示需消耗道具</span>
       </div>
 
-      {/* 暂停遵罩 */}
-      {isPaused && !isWon && !isTimeUp && (
-        <div className="pause-overlay" onClick={stableHandleTogglePause}>
-          <div className="pause-card" onClick={(e) => e.stopPropagation()}>
-            <div className="pause-emoji">⏸️</div>
-            <h2>游戏已暂停</h2>
-            <p>计时已停止，放松一下吧~</p>
-            <div className="win-actions">
-              <button className="btn btn-primary" onClick={stableHandleTogglePause}>▶️ 继续游戏</button>
-              <button className="btn btn-secondary" onClick={onGoHome}>🏠 返回首页</button>
-            </div>
-          </div>
-        </div>
-      )}
+
 
       {/* 游戏内帮助弹窗 */}
       {showHelpModal && (
