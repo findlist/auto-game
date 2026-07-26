@@ -1,8 +1,7 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { Tube, Level } from '../game/types';
-import { generateLevel, canPour, pour, checkWin, checkDeadlock, cloneTubes, generateEndlessLevel, generateTimedLevel } from '../game/levelGenerator';
-import { generateDailyChallenge } from '../game/dailyChallenge';
-import { generateWeeklyChallenge } from '../game/weeklyChallenge';
+import { canPour, pour, checkWin, checkDeadlock, cloneTubes } from '../game/levelGenerator';
+import { generateLevelForMode } from '../game/levelFactory';
 import { SoundEngine } from '../game/soundEngine';
 import { TubeView } from './TubeView';
 import { ParticleEffect } from './ParticleEffect';
@@ -14,7 +13,6 @@ import { WinOverlay } from './WinOverlay';
 import { GameOverlays } from './GameOverlays';
 import { LEVEL_TIPS } from '../game/levelTips';
 import { StatsTracker } from '../game/statsTracker';
-import { getAdaptiveDifficultyModifier } from '../game/adaptiveDifficulty';
 
 interface GameBoardProps {
   level: number;
@@ -44,7 +42,7 @@ interface GameBoardProps {
 
 export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, timedScore = 0, timedDuration = 120, bestScore = 0, onWin, onMove, onReset, hintPair, clearHint, onNextLevel, onPrevLevel, onGoHome, onShare, onReplayShare, onExportVideo, onTimeUp, tubesRef, onDeadlockRecover, onHint, hintItems = 0, colorBlindMode = false, colorLabels = false }) => {
   const [levelData, setLevelData] = useState<Level>(() =>
-    level === -1 ? generateDailyChallenge() : level === -2 ? generateEndlessLevel(endlessScore) : level === -3 ? generateTimedLevel(timedScore) : level === -4 ? generateWeeklyChallenge() : generateLevel(level)
+    generateLevelForMode(level, endlessScore, timedScore)
   );
   const [tubes, setTubes] = useState<Tube[]>(levelData.tubes);
   const [selectedTube, setSelectedTube] = useState<number | null>(null);
@@ -124,38 +122,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
 
   // 关卡变化时重置
   useEffect(() => {
-    const newLevel = level === -1 ? generateDailyChallenge() : level === -2 ? generateEndlessLevel(endlessScore) : level === -3 ? generateTimedLevel(timedScore) : level === -4 ? generateWeeklyChallenge() : generateLevel(level);
-    
-    // 自适应难度修正：仅对普通关卡（level > 0）生效
-    if (level > 0) {
-      const modifier = getAdaptiveDifficultyModifier(level);
-      if (modifier.extraEmptyTubes !== 0) {
-        const adjustedTubes = [...newLevel.tubes];
-        if (modifier.extraEmptyTubes > 0) {
-          // 增加空试管（降低难度）
-          for (let i = 0; i < modifier.extraEmptyTubes; i++) {
-            adjustedTubes.push({ id: adjustedTubes.length, layers: [], capacity: newLevel.tubeCapacity });
-          }
-        } else if (modifier.extraEmptyTubes < 0) {
-          // 减少空试管（增加难度），但至少保留1个空试管
-          const emptyIndices = adjustedTubes
-            .map((t, i) => ({ idx: i, empty: t.layers.length === 0 }))
-            .filter(x => x.empty);
-          const removeCount = Math.min(-modifier.extraEmptyTubes, emptyIndices.length - 1);
-          for (let i = 0; i < removeCount; i++) {
-            const lastEmpty = adjustedTubes
-              .map((t, idx) => ({ idx, empty: t.layers.length === 0 }))
-              .filter(x => x.empty)
-              .pop();
-            if (lastEmpty) {
-              adjustedTubes.splice(lastEmpty.idx, 1);
-            }
-          }
-        }
-        adjustedTubes.forEach((t, i) => { t.id = i; });
-        newLevel.tubes = adjustedTubes;
-      }
-    }
+    const newLevel = generateLevelForMode(level, endlessScore, timedScore);
     
     setLevelData(newLevel);
     setTubes(newLevel.tubes);
