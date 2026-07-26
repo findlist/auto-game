@@ -8,22 +8,23 @@ import { getTodayString, saveDailyRecord } from './game/dailyChallenge';
 import { addDailyLeaderboardEntry } from './game/dailyLeaderboard';
 import { StatsTracker } from './game/statsTracker';
 import { getHintItems } from './game/hintItems';
-import type { ReplayData } from './game/replayShare';
 // 游戏模式管理 hook（从 App.tsx 提取模式状态与切换逻辑）
 import { useGameModes } from './game/useGameModes';
 // 每日签到与目标 hook（从 App.tsx 提取签到、目标、连击逻辑）
 import { useDailyCheckin } from './game/useDailyCheckin';
 // 回放视频导出 hook（从 App.tsx 提取视频生成逻辑）
 import { useReplayVideo } from './game/useReplayVideo';
-// replayShare 函数改为动态导入，降低首屏 bundle 体积
-const replayShareModule = () => import('./game/replayShare');
+// replayShare 函数改为动态导入，降低首屏 bundle 体积（已在 useReplayShare hook 内部管理）
 // weeklyChallenge 数据函数从轻量数据模块静态导入（不含关卡生成依赖）
 import { getWeeklyStreak } from './game/weeklyChallengeData';
-import { getUnreadAnnouncements, markAnnouncementRead, Announcement } from './game/announcements';
 import type { CustomLevel } from './game/levelEditor';
-// levelEditor 函数改为动态导入，降低首屏 bundle 体积（仅在用户操作自定关卡时加载）
-const levelEditorModule = () => import('./game/levelEditor');
 import { STORAGE_KEYS } from './game/storageKeys';
+// 自定关卡管理 hook（从 App.tsx 提取自定关卡的增删改查逻辑）
+import { useCustomLevels } from './game/useCustomLevels';
+// 公告系统 hook（从 App.tsx 提取公告状态管理与已读标记）
+import { useAnnouncements } from './game/useAnnouncements';
+// 回放分享与查看 hook（从 App.tsx 提取回放链接生成、战绩分享、URL 回放解析）
+import { useReplayShare } from './game/useReplayShare';
 import { getPlayedModes } from './game/playedModes';
 import { claimWeekendBonus, getWeekendBonusInfo } from './game/weekendBonus';
 import { canInstallPWA, isPWAInstallDismissed, dismissPWAInstall } from './game/pwaInstall';
@@ -75,7 +76,12 @@ export default function App() {
   const [bestScores, setBestScores] = useState<Record<number, number>>(loadBestScores);
   const [currentMoves, setMoves] = useState(0);
   const [showTutorial, setShowTutorial] = useState(!hasSeenTutorial());
-  const [showShareToast, setShowShareToast] = useState(false);
+  const [showShareToast, setShowShareToastInternal] = useState(false);
+  // showShareToast 的回调版本，供 hook 内部使用（避免 hook 依赖 setState）
+  const triggerShareToast = useCallback(() => {
+    setShowShareToastInternal(true);
+    setTimeout(() => setShowShareToastInternal(false), 2000);
+  }, []);
   const [levelStars, setLevelStars] = useState<Record<number, number>>(loadStars);
   const [pageLevel, setPageLevel] = useState(0); // 关卡选择当前页
   const [recentPlay, setRecentPlay] = useState<RecentPlay | null>(loadRecent);
@@ -133,23 +139,18 @@ export default function App() {
     setShowSavedRecipes(true);
     SoundEngine.click();
   }, [loadSavedRecipes]);
-  // 回放查看状态(从 URL 哈希打开)
-  const [viewReplayData, setViewReplayData] = useState<ReplayData | null>(null);
-  const [showViewReplay, setShowViewReplay] = useState(false);
+  // 公告系统 — 通过 useAnnouncements hook 统一管理
+  const {
+    announcements, showAnnouncements,
+    handleDismissAnnouncement, handleCloseAnnouncements,
+  } = useAnnouncements();
 
-  // 公告系统状态
-  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
-  const [showAnnouncements, setShowAnnouncements] = useState(false);
-
-  // 自定关卡状态
-  const [customLevels, setCustomLevels] = useState<CustomLevel[]>(() => {
-    // 懒初始化：避免首屏直接加载 levelEditor 模块
-    try {
-      const raw = localStorage.getItem(STORAGE_KEYS.CUSTOM_LEVELS);
-      return raw ? JSON.parse(raw) : [];
-    } catch { return []; }
-  });
-  const [playingCustomLevel, setPlayingCustomLevel] = useState<CustomLevel | null>(null);
+  // 自定关卡管理 — 通过 useCustomLevels hook 统一管理
+  const {
+    customLevels, playingCustomLevel, setPlayingCustomLevel,
+    handlePlayCustomLevel, handleDeleteCustomLevel, handleSaveCustomLevel,
+    handleImportLevel, handleCustomLevelWin,
+  } = useCustomLevels();
 
   // 回放视频导出 — 通过 useReplayVideo hook 管理
   const {
@@ -187,24 +188,8 @@ export default function App() {
       }
     } catch (e) { /* 忽略 */ }
 
-    // 检查 URL 是否携带回放数据（动态导入避免首屏加载 replayShare 模块）
-    replayShareModule().then(({ parseReplayFromUrl }) => {
-      const replayData = parseReplayFromUrl();
-      if (replayData) {
-        setViewReplayData(replayData);
-        setShowViewReplay(true);
-      }
-    });
-
     // 加载周挑战展示信息（通过 hook 提供的方法）
     initWeeklyDisplay();
-
-    // 加载未读公告
-    const unread = getUnreadAnnouncements();
-    if (unread.length > 0) {
-      setAnnouncements(unread);
-      setShowAnnouncements(true);
-    }
   }, []);
 
   // 延迟检测 PWA 可安装性,页面加载3秒后
@@ -263,6 +248,12 @@ export default function App() {
     initWeeklyDisplay, updateWeeklyAfterCompletion,
     updateEndlessScore, updateTimedScore,
   } = useGameModes(progress.currentLevel, checkPlayDaysAchievements);
+
+  // 回放分享与查看 — 通过 useReplayShare hook 统一管理（依赖 endlessScore/timedScore，需在 useGameModes 之后调用）
+  const {
+    viewReplayData, showViewReplay, setShowViewReplay, setViewReplayData,
+    handleReplayShare, handleShare, handleCloseViewReplay,
+  } = useReplayShare(triggerShareToast, endlessScore, timedScore, TIMED_DURATION);
 
   // 成就解锁音效 — 监听 newAchievements 变化，根据稀有度播放差异化音效
   useEffect(() => {
@@ -599,109 +590,16 @@ export default function App() {
     setNewAchievements(prev => prev.slice(1));
   }, []);
 
-  const handleShare = useCallback(async (moves: number, level: number) => {
-    const text = level === -1
-      ? `🎉《色彩排序》每日挑战只用${moves}步完成,来挑战这个关卡吧!👏`
-      : level === -2
-      ? `🎉《色彩排序》无尽模式连过${endlessScore + 1}关,来挑战吧!🔥🔥`
-      : level === -3
-      ? `🎉《色彩排序》限时模式${TIMED_DURATION}秒连过${timedScore + 1}关,来挑战吧!🔥🔥`
-      : level === -4
-      ? `🎉《色彩排序》本周周挑战只用${moves}步完成,来挑战吧!🏆`
-      : `🎉《色彩排序》第${level}关只用${moves}步完成,来挑战吧!👏`
-    try {
-      if (navigator.share) {
-        await navigator.share({ title: '色彩排序', text });
-      } else {
-        await navigator.clipboard.writeText(text);
-        setShowShareToast(true);
-        setTimeout(() => setShowShareToast(false), 2000);
-      }
-    } catch (e) {
-      // 用户取消或分享失败,尝试备用方案
-      try {
-        await navigator.clipboard.writeText(text);
-        setShowShareToast(true);
-        setTimeout(() => setShowShareToast(false), 2000);
-      } catch (e2) { /* 忽略 */ }
-    }
-  }, [endlessScore, timedScore]);
-
-  // 回放分享:生成回放链接和导出视频的处理
-  const handleReplayShare = useCallback(async (moveHistory: Array<{ from: number; to: number }>, level: number, stars: number, stepsUsed: number) => {
-    const { generateReplayUrl, formatReplayShareText } = await replayShareModule();
-    const replayData: ReplayData = { level, moves: moveHistory, starRating: stars, stepsUsed };
-    // 修复 P0:encodeReplay 在 from/to 越界(>=36)时会抛错,需捕获降级,避免 UI 崩溃
-    let url = '';
-    let text = '';
-    try {
-      url = generateReplayUrl(replayData);
-      text = formatReplayShareText(replayData) + `\n${url}`;
-    } catch (e) {
-      // 编码失败(步骤索引越界),仅使用文案分享
-      text = formatReplayShareText(replayData);
-    }
-    try {
-      if (navigator.share) {
-        await navigator.share({ title: '色彩排序回放', text, url });
-      } else {
-        await navigator.clipboard.writeText(text);
-        setShowShareToast(true);
-        setTimeout(() => setShowShareToast(false), 3000);
-      }
-    } catch (e) {
-      try {
-        await navigator.clipboard.writeText(text);
-        setShowShareToast(true);
-        setTimeout(() => setShowShareToast(false), 3000);
-      } catch (e2) { /* 忽略 */ }
-    }
-  }, []);
+  // handleShare 和 handleReplayShare 已移入 useReplayShare hook
 
   // 回放视频导出（通过 useReplayVideo hook 提供）
   const handleExportReplayVideo = handleExportReplayVideoHook;
 
-  // 关闭公告
-  const handleDismissAnnouncement = useCallback((id: string) => {
-    markAnnouncementRead(id);
-    setAnnouncements(prev => prev.filter(a => a.id !== id));
-    if (announcements.length <= 1) {
-      setShowAnnouncements(false);
-    }
-  }, [announcements.length]);
-
-  // 播放自定关卡
-  const handlePlayCustomLevel = useCallback((level: CustomLevel) => {
-    setPlayingCustomLevel(level);
+  // 播放自定关卡：hook 管理状态，App 管理页面跳转
+  const onPlayCustomLevel = useCallback((level: CustomLevel) => {
+    handlePlayCustomLevel(level);
     setPage('editor-play');
-    SoundEngine.resume();
-  }, []);
-
-  // 删除自定关卡
-  const handleDeleteCustomLevel = useCallback(async (id: string) => {
-    const { deleteCustomLevel, getCustomLevels } = await levelEditorModule();
-    deleteCustomLevel(id);
-    setCustomLevels(getCustomLevels());
-  }, []);
-
-  // 保存自定关卡
-  const handleSaveCustomLevel = useCallback(async (level: CustomLevel) => {
-    const { saveCustomLevel, getCustomLevels } = await levelEditorModule();
-    saveCustomLevel(level);
-    setCustomLevels(getCustomLevels());
-  }, []);
-
-  // 导入关卡码
-  const handleImportLevel = useCallback(async (code: string) => {
-    const { importLevelCode, saveCustomLevel, getCustomLevels } = await levelEditorModule();
-    const level = importLevelCode(code);
-    if (level) {
-      saveCustomLevel(level);
-      setCustomLevels(getCustomLevels());
-      return true;
-    }
-    return false;
-  }, []);
+  }, [handlePlayCustomLevel]);
 
   const handleTutorialClose = () => {
     setShowTutorial(false);
@@ -752,7 +650,7 @@ export default function App() {
           savedRecipes={savedRecipes}
           onCheckinRewardClose={() => setShowCheckinReward(null)}
           onAnnouncementDismiss={handleDismissAnnouncement}
-          onAnnouncementClose={() => setShowAnnouncements(false)}
+          onAnnouncementClose={handleCloseAnnouncements}
           onSavedRecipesClose={() => setShowSavedRecipes(false)}
           onGoToMixer={() => setPage('encyclopedia')}
           showChangelog={showChangelog}
@@ -769,11 +667,7 @@ export default function App() {
               window.location.hash = '';
             }
           }}
-          onCloseViewReplay={() => {
-            setShowViewReplay(false);
-            setViewReplayData(null);
-            window.location.hash = '';
-          }}
+          onCloseViewReplay={handleCloseViewReplay}
         />
         }
       >
@@ -848,7 +742,7 @@ export default function App() {
           {/* 首页底部内容区块：自定关卡+广告+捐赠+FAQ+配方+成就（提取为独立组件） */}
           <HomeFooterSection
             customLevels={customLevels}
-            onPlayCustomLevel={handlePlayCustomLevel}
+            onPlayCustomLevel={onPlayCustomLevel}
             onNavigateToEditor={() => setPage('editor')}
             onNavigateToAchievements={() => setPage('achievements')}
             onOpenSavedRecipes={openSavedRecipes}
@@ -936,7 +830,7 @@ export default function App() {
     return <Suspense fallback={<PageLoading />}><LevelEditorPage
       onBack={() => setPage('home')}
       customLevels={customLevels}
-      onPlay={handlePlayCustomLevel}
+      onPlay={onPlayCustomLevel}
       onDelete={handleDeleteCustomLevel}
       onSave={handleSaveCustomLevel}
       onImport={handleImportLevel}
@@ -957,12 +851,8 @@ export default function App() {
           <CustomLevelPlayer
             level={playingCustomLevel}
             onWin={async (moves: number) => {
-              // 更新自定关卡的通关状态
-              const { saveCustomLevel, getCustomLevels } = await levelEditorModule();
-              const updated = { ...playingCustomLevel, completed: true, bestMoves: playingCustomLevel.bestMoves ? Math.min(playingCustomLevel.bestMoves, moves) : moves };
-              saveCustomLevel(updated);
-              setCustomLevels(getCustomLevels());
-              setPlayingCustomLevel(updated);
+              // 更新自定关卡的通关状态（通过 useCustomLevels hook 管理）
+              await handleCustomLevelWin(playingCustomLevel, moves);
             }}
             onShare={(code: string) => {
               // 剥离端口,避免经反向代理时泄漏内部端口
@@ -973,8 +863,7 @@ export default function App() {
                 navigator.share({ title: '色彩排序自定关卡', text });
               } else {
                 navigator.clipboard.writeText(text).then(() => {
-                  setShowShareToast(true);
-                  setTimeout(() => setShowShareToast(false), 2000);
+                  triggerShareToast();
                 });
               }
             }}
