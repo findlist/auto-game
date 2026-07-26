@@ -27,8 +27,9 @@ import { useAnnouncements } from './game/useAnnouncements';
 import { useReplayShare } from './game/useReplayShare';
 // 色彩混合配方管理 hook（从 App.tsx 提取配方加载与查看弹窗逻辑）
 import { useSavedRecipes } from './game/useSavedRecipes';
+// 周末奖励管理 hook（从 App.tsx 提取周末奖励状态与领取逻辑）
+import { useWeekendBonus } from './game/useWeekendBonus';
 import { getPlayedModes } from './game/playedModes';
-import { claimWeekendBonus, getWeekendBonusInfo } from './game/weekendBonus';
 import { canInstallPWA, isPWAInstallDismissed, dismissPWAInstall } from './game/pwaInstall';
 import { loadRecent, saveRecent, RecentPlay, loadProgress, saveProgress, Progress, loadBestScores, saveBestScore, hasSeenTutorial, markTutorialSeen, loadStars, saveStars, loadAutosave, saveAutosave, clearAutosave, AutosaveData } from './game/homeStorage';
 import { updateGoalProgress, getDailyGoalsProgress } from './game/dailyGoals';
@@ -252,17 +253,11 @@ export default function App() {
     }
   }, [newAchievements]);
 
-  // 周末奖励状态
-  const [weekendBonusInfo, setWeekendBonusInfo] = useState(getWeekendBonusInfo());
-
-  // 领取周末奖励
-  const handleClaimWeekendBonus = useCallback(() => {
-    const result = claimWeekendBonus();
-    if (result !== null) {
-      SoundEngine.win();
-      setWeekendBonusInfo(getWeekendBonusInfo());
-    }
-  }, []);
+  // 周末奖励 — 通过 useWeekendBonus hook 统一管理
+  const {
+    weekendBonusInfo,
+    handleClaimWeekendBonus,
+  } = useWeekendBonus();
 
   // 提示功能:从当前游戏状态找到一对可操作试管
   const handleHint = useCallback(() => {
