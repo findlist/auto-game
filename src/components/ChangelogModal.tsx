@@ -13,6 +13,16 @@ const ChangelogModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         <h2>色彩排序更新日志</h2>
         <div className="changelog-content">
           <div className="changelog-item">
+            <h3>🎉 v1.52.0</h3>
+            <ul>
+              <li>🔧 提取App.tsx自定关卡逻辑为useCustomLevels hook，管理关卡增删改查与导入</li>
+              <li>🔧 提取App.tsx公告系统逻辑为useAnnouncements hook，统一管理未读公告加载与已读标记</li>
+              <li>🔧 提取App.tsx回放分享与战绩分享逻辑为useReplayShare hook，App.tsx从921行降至817行(-11.3%)</li>
+              <li>🔧 提取关卡生成与自适应难度逻辑为levelFactory模块，GameBoard.tsx从616行降至583行</li>
+              <li>📦 新增3个自定义hook+1个工厂模块，模块总数从108增至109</li>
+            </ul>
+          </div>
+          <div className="changelog-item">
             <h3>🎉 v1.51.0</h3>
             <ul>
               <li>🔧 提取App.tsx游戏模式逻辑为useGameModes hook，集中管理普通/每日/无尽/限时/周挑战五种模式状态与切换</li>
