@@ -158,58 +158,35 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
     return () => cancelAnimationFrame(rafId);
   }, [isWon, isTimeUp, isPaused, level]);
 
-  const handleTubeClick = useCallback((index: number) => {
-    if (isWon || isPaused) {
-      return;
-    }
-    SoundEngine.resume();
+  // 处理试管选中/取消选中/切换选中（从 handleTubeClick 拆分）
+  // 设计原因：选中逻辑与倾倒逻辑职责分离，降低单函数复杂度
+  const handleSelect = useCallback((index: number) => {
+    // 空试管不可选中
+    if (tubes[index].layers.length === 0) return;
+    setSelectedTube(index);
+    SoundEngine.select();
+  }, [tubes]);
 
-    if (selectedTube === null) {
-      // 选中试管
-      if (tubes[index].layers.length === 0) return;
-      setSelectedTube(index);
-      SoundEngine.select();
-      return;
-    }
-
-    if (selectedTube === index) {
-      // 取消选中
-      setSelectedTube(null);
-      SoundEngine.click();
-      return;
-    }
-
-    // 尝试倾倒
-    const fromTube = tubes[selectedTube];
-    const toTube = tubes[index];
-    const canPourResult = canPour(fromTube, toTube);
-
-    if (!canPourResult) {
-      // 不能倒，切换选中
-      SoundEngine.error();
-      if (tubes[index].layers.length > 0) {
-        setSelectedTube(index);
-        SoundEngine.select();
-      } else {
-        setSelectedTube(null);
-      }
-      return;
-    }
+  // 执行倾倒操作：倾倒动画、连击检测、接近完成检测、胜利检查（从 handleTubeClick 拆分）
+  // 设计原因：倾倒逻辑约70行，包含动画、音效、连击、胜利等独立职责，单独提取提高可读性
+  const executePour = useCallback((fromIndex: number, toIndex: number) => {
+    const fromTube = tubes[fromIndex];
+    const toTube = tubes[toIndex];
 
     // 执行倾倒
     const { from: newFrom, to: newTo } = pour(fromTube, toTube);
     // 回滚优化：cloneTubes 深拷贝所有试管，确保 React.memo 检测到引用变化
     const newTubes = cloneTubes(tubes);
-    newTubes[selectedTube] = newFrom;
-    newTubes[index] = newTo;
+    newTubes[fromIndex] = newFrom;
+    newTubes[toIndex] = newTo;
 
     // 保存历史
     setHistory(prev => [...prev, cloneTubes(tubes)]);
-    setMoveHistory(prev => [...prev, { from: selectedTube, to: index }]);
+    setMoveHistory(prev => [...prev, { from: fromIndex, to: toIndex }]);
     setTubes(newTubes);
     setMoves(prev => prev + 1);
     setSelectedTube(null);
-    setPouringTo(index);
+    setPouringTo(toIndex);
     setTimeout(() => setPouringTo(null), 300);
     setMovesPulse(true);
     setTimeout(() => setMovesPulse(false), 300);
@@ -243,9 +220,8 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
     newTubes.forEach(t => {
       if (t.layers.length === 0) return;
       const topColor = t.layers[t.layers.length - 1].color;
-      // 检查是否已满且单色
       const allSame = t.layers.every(l => l.color === topColor);
-      if (allSame && t.layers.length === t.capacity) return; // 已完成
+      if (allSame && t.layers.length === t.capacity) return;
       colorGroups.set(topColor, (colorGroups.get(topColor) || 0) + 1);
     });
     const remainingGroups = colorGroups.size;
@@ -274,29 +250,62 @@ export const GameBoard: React.FC<GameBoardProps> = ({ level, endlessScore = 0, t
       const playTimeSec = Math.round((Date.now() - gameStartTime.current) / 1000);
       // 计算星级评价
       const min = levelData.minSteps ?? -1;
-      let stars = 1; // 通关默认1星
+      let stars = 1;
       if (min > 0) {
         const ratio = (moves + 1) / min;
-        if (ratio <= 1.0) stars = 3; // 达到或超过最优
-        else if (ratio <= 1.5) stars = 2; // 1.5倍以内2星
-        else stars = 1; // 超过1.5倍1星
+        if (ratio <= 1.0) stars = 3;
+        else if (ratio <= 1.5) stars = 2;
+        else stars = 1;
       } else {
-        // 无最优步数参考时，根据步数粗略评级
         const expectedMoves = levelData.tubes.length * 2;
         if ((moves + 1) <= expectedMoves) stars = 3;
         else if ((moves + 1) <= expectedMoves * 1.5) stars = 2;
         else stars = 1;
       }
       setStarRating(stars);
-      // 播放星星音效
       for (let i = 0; i < stars; i++) {
         setTimeout(() => SoundEngine.star(), 600 + i * 200);
       }
-      // 3秒后移除粒子
       setTimeout(() => setShowParticles(false), 3000);
       setTimeout(() => onWin(moves + 1, levelData.minSteps ?? -1, stars, playTimeSec), 500);
     }
-  }, [selectedTube, tubes, isWon, moves, onWin, onMove, levelData]);
+  }, [tubes, moves, onWin, onMove, levelData]);
+
+  // 试管点击入口：判断是选中还是倾倒，分发给对应函数（从原 handleTubeClick 简化）
+  const handleTubeClick = useCallback((index: number) => {
+    if (isWon || isPaused) return;
+    SoundEngine.resume();
+
+    // 无选中试管时：尝试选中
+    if (selectedTube === null) {
+      handleSelect(index);
+      return;
+    }
+
+    // 点击同一试管：取消选中
+    if (selectedTube === index) {
+      setSelectedTube(null);
+      SoundEngine.click();
+      return;
+    }
+
+    // 尝试倾倒
+    const fromTube = tubes[selectedTube];
+    const toTube = tubes[index];
+    if (!canPour(fromTube, toTube)) {
+      // 不能倒，切换选中
+      SoundEngine.error();
+      if (tubes[index].layers.length > 0) {
+        handleSelect(index);
+      } else {
+        setSelectedTube(null);
+      }
+      return;
+    }
+
+    // 执行倾倒
+    executePour(selectedTube, index);
+  }, [selectedTube, tubes, isWon, isPaused, handleSelect, executePour]);
 
   // 使用 ref 保存 handleTubeClick 的最新引用
   // 解决：React.memo 未比较 onClick，导致 TubeView 持有旧闭包
