@@ -25,6 +25,8 @@ import { useCustomLevels } from './game/useCustomLevels';
 import { useAnnouncements } from './game/useAnnouncements';
 // 回放分享与查看 hook（从 App.tsx 提取回放链接生成、战绩分享、URL 回放解析）
 import { useReplayShare } from './game/useReplayShare';
+// 色彩混合配方管理 hook（从 App.tsx 提取配方加载与查看弹窗逻辑）
+import { useSavedRecipes } from './game/useSavedRecipes';
 import { getPlayedModes } from './game/playedModes';
 import { claimWeekendBonus, getWeekendBonusInfo } from './game/weekendBonus';
 import { canInstallPWA, isPWAInstallDismissed, dismissPWAInstall } from './game/pwaInstall';
@@ -119,26 +121,13 @@ export default function App() {
   // handleCheckin 别名（避免与可能的局部变量冲突）
   const handleCheckin = doCheckin;
 
-  // 更新日志、公告状态
+  // 更新日志状态
   const [showChangelog, setShowChangelog] = useState(false);
-  // 已保存的色彩混合配方快速查看
-  const [showSavedRecipes, setShowSavedRecipes] = useState(false);
-  const [savedRecipes, setSavedRecipes] = useState<Array<{colors: string[]; result: string; rgb: string; date: string}>>([]);
-
-  // 加载已保存的混合配方
-  const loadSavedRecipes = useCallback(() => {
-    try {
-      const list = JSON.parse(localStorage.getItem('color_mixer_recipes') || '[]');
-      setSavedRecipes(list);
-    } catch (e) { setSavedRecipes([]); }
-  }, []);
-
-  // 打开配方查看弹窗
-  const openSavedRecipes = useCallback(() => {
-    loadSavedRecipes();
-    setShowSavedRecipes(true);
-    SoundEngine.click();
-  }, [loadSavedRecipes]);
+  // 色彩混合配方管理 — 通过 useSavedRecipes hook 统一管理
+  const {
+    savedRecipes, showSavedRecipes,
+    openSavedRecipes, closeSavedRecipes,
+  } = useSavedRecipes();
   // 公告系统 — 通过 useAnnouncements hook 统一管理
   const {
     announcements, showAnnouncements,
@@ -651,7 +640,7 @@ export default function App() {
           onCheckinRewardClose={() => setShowCheckinReward(null)}
           onAnnouncementDismiss={handleDismissAnnouncement}
           onAnnouncementClose={handleCloseAnnouncements}
-          onSavedRecipesClose={() => setShowSavedRecipes(false)}
+          onSavedRecipesClose={closeSavedRecipes}
           onGoToMixer={() => setPage('encyclopedia')}
           showChangelog={showChangelog}
           onCloseChangelog={() => setShowChangelog(false)}
