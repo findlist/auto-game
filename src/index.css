@@ -1411,6 +1411,36 @@ body {
   background: rgba(173, 20, 87, 0.1);
 }
 
+/* 第16关多色并行提示：青绿色主题，呼应多线程并行的冷静感 */
+.beginner-encouragement.level16-tip .encouragement-text {
+  color: #00695C;
+  background: rgba(0, 105, 92, 0.1);
+}
+
+/* 第17关逆向思维提示：深紫色主题，呼应反向思考的深度感 */
+.beginner-encouragement.level17-tip .encouragement-text {
+  color: #4527A0;
+  background: rgba(69, 39, 160, 0.1);
+}
+
+/* 第18关追求三星提示：金色主题，呼应完美与荣耀感 */
+.beginner-encouragement.level18-tip .encouragement-text {
+  color: #F57F17;
+  background: rgba(245, 127, 23, 0.1);
+}
+
+/* 第19关快速决策提示：亮红色主题，呼应速度与激情 */
+.beginner-encouragement.level19-tip .encouragement-text {
+  color: #C62828;
+  background: rgba(198, 40, 40, 0.1);
+}
+
+/* 第20关高难度挑战提示：深靛蓝色主题，呼应终极挑战的庄重感 */
+.beginner-encouragement.level20-tip .encouragement-text {
+  color: #1A237E;
+  background: rgba(26, 35, 126, 0.1);
+}
+
 /* 暗色主题适配 */
 .dark-theme .beginner-encouragement.level2-tip .encouragement-text {
   color: #64B5F6;
@@ -1467,6 +1497,26 @@ body {
 .dark-theme .beginner-encouragement.level15-tip .encouragement-text {
   color: #F06292;
   background: rgba(173, 20, 87, 0.15);
+}
+.dark-theme .beginner-encouragement.level16-tip .encouragement-text {
+  color: #4DB6AC;
+  background: rgba(0, 105, 92, 0.15);
+}
+.dark-theme .beginner-encouragement.level17-tip .encouragement-text {
+  color: #9575CD;
+  background: rgba(69, 39, 160, 0.15);
+}
+.dark-theme .beginner-encouragement.level18-tip .encouragement-text {
+  color: #FFB74D;
+  background: rgba(245, 127, 23, 0.15);
+}
+.dark-theme .beginner-encouragement.level19-tip .encouragement-text {
+  color: #EF5350;
+  background: rgba(198, 40, 40, 0.15);
+}
+.dark-theme .beginner-encouragement.level20-tip .encouragement-text {
+  color: #7986CB;
+  background: rgba(26, 35, 126, 0.15);
 }
 
 .tubes-grid {
