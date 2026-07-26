@@ -178,7 +178,7 @@ export default function App() {
 
     // 新版本更新,显示更新日志
     const CHANGELOG_KEY = STORAGE_KEYS.CHANGELOG_VERSION;
-    const currentVersion = '1.50.0';
+    const currentVersion = '1.51.0';
     try {
       const lastVersion = localStorage.getItem(CHANGELOG_KEY);
       if (lastVersion !== currentVersion) {

@@ -13,6 +13,16 @@ const ChangelogModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         <h2>色彩排序更新日志</h2>
         <div className="changelog-content">
           <div className="changelog-item">
+            <h3>🎉 v1.51.0</h3>
+            <ul>
+              <li>🔧 提取App.tsx游戏模式逻辑为useGameModes hook，集中管理普通/每日/无尽/限时/周挑战五种模式状态与切换</li>
+              <li>🔧 提取App.tsx签到与每日目标逻辑为useDailyCheckin hook，统一管理签到、目标、连击系统</li>
+              <li>🔧 提取App.tsx回放视频导出逻辑为useReplayVideo hook，App.tsx从1097行降至921行(-16%)</li>
+              <li>🔧 拆分achievements.ts为三个模块：achievementState(状态管理)+achievementEncyclopediaChecks(百科成就)+核心管理器，从524行降至374行(-28.6%)</li>
+              <li>📦 新增3个自定义hook模块+2个成就子模块，模块总数从100增至105</li>
+            </ul>
+          </div>
+          <div className="changelog-item">
             <h3>🎉 v1.50.0</h3>
             <ul>
               <li>🔧 提取胜利/时间到遮罩为独立WinOverlay组件，包含胜利结算、星级评价、步数效率可视化、战绩图生成等功能</li>
