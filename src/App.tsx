@@ -4,30 +4,31 @@ import { canPour } from './game/levelGenerator';
 import { SoundEngine } from './game/soundEngine';
 import { Tube } from './game/types';
 import { AchievementManager, Achievement } from './game/achievements';
-import { hasCompletedDailyToday, getTodayString, saveDailyRecord } from './game/dailyChallenge';
+import { getTodayString, saveDailyRecord } from './game/dailyChallenge';
 import { addDailyLeaderboardEntry } from './game/dailyLeaderboard';
-import { getEndlessHighScore, saveEndlessScore } from './game/levelGenerator';
 import { StatsTracker } from './game/statsTracker';
-import { DailyCheckin } from './game/dailyCheckin';
-import { getHintItems, useHintItem, addHintItems, claimDailyHintBonus } from './game/hintItems';
+import { getHintItems } from './game/hintItems';
 import type { ReplayData } from './game/replayShare';
+// 游戏模式管理 hook（从 App.tsx 提取模式状态与切换逻辑）
+import { useGameModes } from './game/useGameModes';
+// 每日签到与目标 hook（从 App.tsx 提取签到、目标、连击逻辑）
+import { useDailyCheckin } from './game/useDailyCheckin';
+// 回放视频导出 hook（从 App.tsx 提取视频生成逻辑）
+import { useReplayVideo } from './game/useReplayVideo';
 // replayShare 函数改为动态导入，降低首屏 bundle 体积
 const replayShareModule = () => import('./game/replayShare');
-// adaptiveDifficulty 和 dailyRecommend 已移入 SmartRecommendSection 组件
 // weeklyChallenge 数据函数从轻量数据模块静态导入（不含关卡生成依赖）
-import { getWeeklyInfo, getWeeklyRecord, getWeeklyStreak, saveWeeklyRecord } from './game/weeklyChallengeData';
+import { getWeeklyStreak } from './game/weeklyChallengeData';
 import { getUnreadAnnouncements, markAnnouncementRead, Announcement } from './game/announcements';
 import type { CustomLevel } from './game/levelEditor';
 // levelEditor 函数改为动态导入，降低首屏 bundle 体积（仅在用户操作自定关卡时加载）
 const levelEditorModule = () => import('./game/levelEditor');
-// replayVideo 改为动态导入，降低首屏 bundle 体积（仅在用户导出回放视频时加载）
-const replayVideoModule = () => import('./game/replayVideo');
 import { STORAGE_KEYS } from './game/storageKeys';
-import { recordPlayedMode, getPlayedModes } from './game/playedModes';
+import { getPlayedModes } from './game/playedModes';
 import { claimWeekendBonus, getWeekendBonusInfo } from './game/weekendBonus';
 import { canInstallPWA, isPWAInstallDismissed, dismissPWAInstall } from './game/pwaInstall';
-import { loadRecent, saveRecent, RecentPlay, loadProgress, saveProgress, Progress, loadBestScores, saveBestScore, hasSeenTutorial, markTutorialSeen, loadStars, saveStars, loadAutosave, saveAutosave, clearAutosave, loadTimedHighScore, saveTimedHighScore, AutosaveData } from './game/homeStorage';
-import { getDailyGoals, updateGoalProgress, claimGoalReward, getDailyGoalsProgress } from './game/dailyGoals';
+import { loadRecent, saveRecent, RecentPlay, loadProgress, saveProgress, Progress, loadBestScores, saveBestScore, hasSeenTutorial, markTutorialSeen, loadStars, saveStars, loadAutosave, saveAutosave, clearAutosave, AutosaveData } from './game/homeStorage';
+import { updateGoalProgress, getDailyGoalsProgress } from './game/dailyGoals';
 // GamePageComponent 改为懒加载，仅在进入游戏页时加载，大幅降低首屏 bundle 体积
 const GamePageComponent = lazy(() => import('./components/GamePageComponent').then(m => ({ default: m.GamePageComponent })));
 import { HomeStatsBar } from './components/HomeStatsBar';
@@ -39,7 +40,7 @@ import { HomeDialogs } from './components/HomeDialogs';
 import { HomeChrome } from './components/HomeChrome';
 import { SmartRecommendSection } from './components/SmartRecommendSection';
 import { HomeFooterSection } from './components/HomeFooterSection';
-import { getComboStreak, incrementComboStreak, resetComboStreak, checkComboCelebration, addTotalComboCount, getTotalComboCount, ComboCelebration } from './game/comboStreak';
+// comboStreak 相关逻辑已移入 useDailyCheckin hook
 import { useEncyclopediaAchievements } from './game/useEncyclopediaAchievements';
 // 懒加载非首屏页面组件,减小首屏 bundle 大小
 const AboutPage = lazy(() => import('./pages/AboutPage').then(m => ({ default: m.AboutPage })));
@@ -84,35 +85,33 @@ export default function App() {
   const [showHelpModal, setShowHelpModal] = useState(false);
   const [levelSearchInput, setLevelSearchInput] = useState('');
 
-  // 每日签到状态
-  const [checkinDone, setCheckinDone] = useState(DailyCheckin.hasCheckedToday());
-  const [checkinStreak, setCheckinStreak] = useState(DailyCheckin.getCurrentStreak());
-  const [checkinTotal, setCheckinTotal] = useState(DailyCheckin.getTotalDays());
-  const [showCheckinReward, setShowCheckinReward] = useState<string | null>(null);
-  const [hintItems, setHintItemsState] = useState(getHintItems());
+  // 成就系统状态 — 提前定义以供 useDailyCheckin hook 使用
+  const [newAchievements, setNewAchievements] = useState<Achievement[]>([]);
+  const [usedHintThisLevel, setUsedHintThisLevel] = useState(false);
+  const [recoveredFromDeadlock, setRecoveredFromDeadlock] = useState(false);
 
-  // 每日目标状态
-  const [dailyGoals, setDailyGoals] = useState(getDailyGoals());
-  const [goalClaimToast, setGoalClaimToast] = useState<string | null>(null);
-
-  // 连击计数器状态
-  const [comboStreak, setComboStreak] = useState(getComboStreak());
-  // 连击里程碑庆祝弹窗
-  const [comboCelebration, setComboCelebration] = useState<ComboCelebration | null>(null);
-
-  // 领取每日目标奖励
-  const handleClaimGoal = useCallback((type: string) => {
-    const reward = claimGoalReward(type as any);
-    if (reward > 0) {
-      addHintItems(reward);
-      setHintItemsState(getHintItems());
-      setDailyGoals(getDailyGoals());
-      SoundEngine.win();
-      const goal = dailyGoals.find(g => g.type === type);
-      setGoalClaimToast(`领取 ${goal?.icon} ${goal?.description} 奖励 +${reward} 提示道具`);
-      setTimeout(() => setGoalClaimToast(null), 3000);
+  // 通用成就检查辅助函数 — 统一"检查→追加到 newAchievements"模式，消除重复代码
+  const checkAchievements = useCallback((achievements: Achievement[]) => {
+    if (achievements.length > 0) {
+      setNewAchievements(prev => [...prev, ...achievements]);
     }
-  }, [dailyGoals]);
+  }, []);
+
+  // 检查累计游玩天数成就 — 在各游戏模式启动时统一调用
+  const checkPlayDaysAchievements = useCallback(() => {
+    checkAchievements(AchievementManager.checkPlayDaysAchievements());
+  }, [checkAchievements]);
+
+  // 每日签到与目标、连击系统 — 通过 useDailyCheckin hook 统一管理
+  const {
+    checkinDone, checkinStreak, checkinTotal, showCheckinReward,
+    hintItems, dailyGoals, goalClaimToast, comboStreak, comboCelebration,
+    setShowCheckinReward, setGoalClaimToast, setComboCelebration,
+    handleClaimGoal, handleCheckin: doCheckin, claimDailyBonus, consumeHint, addHints,
+    onNormalWin, resetCombo,
+  } = useDailyCheckin(checkAchievements);
+  // handleCheckin 别名（避免与可能的局部变量冲突）
+  const handleCheckin = doCheckin;
 
   // 更新日志、公告状态
   const [showChangelog, setShowChangelog] = useState(false);
@@ -152,11 +151,12 @@ export default function App() {
   });
   const [playingCustomLevel, setPlayingCustomLevel] = useState<CustomLevel | null>(null);
 
-  // 回放视频导出状态
-  const [showReplayVideoModal, setShowReplayVideoModal] = useState(false);
-  const [replayVideoUrl, setReplayVideoUrl] = useState('');
-  const [replayThumbnail, setReplayThumbnail] = useState('');
-  const [generatingVideo, setGeneratingVideo] = useState(false);
+  // 回放视频导出 — 通过 useReplayVideo hook 管理
+  const {
+    showReplayVideoModal, replayVideoUrl, replayThumbnail, generatingVideo,
+    setShowReplayVideoModal, setReplayVideoUrl,
+    handleExportReplayVideo: handleExportReplayVideoHook,
+  } = useReplayVideo();
 
   // 首页可折叠区域状态
   const [progressCollapsed, setProgressCollapsed] = useState(false);
@@ -169,10 +169,7 @@ export default function App() {
   // 初始化时检查是否有自动存档
   useEffect(() => {
     // 每次首次登录领取1个提示道具
-    const bonus = claimDailyHintBonus();
-    if (bonus.claimed) {
-      setHintItemsState(bonus.total);
-    }
+    claimDailyBonus();
     const saved = loadAutosave();
     if (saved && saved.level && saved.moves > 0 && !saved.isWon) {
       setAutosaveData(saved);
@@ -199,18 +196,8 @@ export default function App() {
       }
     });
 
-    // 加载周挑战展示信息（静态导入，轻量数据模块）
-    {
-      const info = getWeeklyInfo();
-      const record = getWeeklyRecord();
-      const streak = getWeeklyStreak();
-      setWeeklyDisplay({
-        week: info.week,
-        recordMoves: record?.moves,
-        recordStars: record?.stars,
-        streak: streak.currentStreak,
-      });
-    }
+    // 加载周挑战展示信息（通过 hook 提供的方法）
+    initWeeklyDisplay();
 
     // 加载未读公告
     const unread = getUnreadAnnouncements();
@@ -240,23 +227,6 @@ export default function App() {
     return () => clearInterval(interval);
   }, [showPWAInstall]);
 
-  // 成就系统状态 — 提前定义以供 useEffect 和回调使用
-  const [newAchievements, setNewAchievements] = useState<Achievement[]>([]);
-  const [usedHintThisLevel, setUsedHintThisLevel] = useState(false);
-  const [recoveredFromDeadlock, setRecoveredFromDeadlock] = useState(false);
-
-  // 通用成就检查辅助函数 — 统一"检查→追加到 newAchievements"模式，消除重复代码
-  const checkAchievements = useCallback((achievements: Achievement[]) => {
-    if (achievements.length > 0) {
-      setNewAchievements(prev => [...prev, ...achievements]);
-    }
-  }, []);
-
-  // 检查累计游玩天数成就 — 在各游戏模式启动时统一调用
-  const checkPlayDaysAchievements = useCallback(() => {
-    checkAchievements(AchievementManager.checkPlayDaysAchievements());
-  }, [checkAchievements]);
-
   // 色彩百科页成就回调 hook — 集中管理百科页成就检查逻辑，避免内联代码
   const encyclopediaHooks = useEncyclopediaAchievements(setNewAchievements);
 
@@ -280,35 +250,19 @@ export default function App() {
     }
   }, []);
 
-  // 每日挑战状态
-  const [isDailyMode, setIsDailyMode] = useState(false);
-  const [isEndlessMode, setIsEndlessMode] = useState(false);
-  const [isTimedMode, setIsTimedMode] = useState(false);
-  const [isWeeklyMode, setIsWeeklyMode] = useState(false);
-  const [weeklyCompleted, setWeeklyCompleted] = useState<boolean>(() => {
-    // 懒初始化：直接读 localStorage 避免首屏加载 weeklyChallenge 模块
-    try {
-      const raw = localStorage.getItem('color-sort-weekly-record');
-      if (!raw) return false;
-      const record = JSON.parse(raw);
-      // 计算 ISO 周数
-      const now = new Date();
-      const d = new Date(now);
-      d.setHours(0, 0, 0, 0);
-      d.setDate(d.getDate() + 4 - (d.getDay() || 7));
-      const yearStart = new Date(d.getFullYear(), 0, 1);
-      const weekNo = Math.ceil((((d.getTime() - yearStart.getTime()) / 86400000) + 1) / 7);
-      const currentSeed = `weekly-${d.getFullYear()}-W${weekNo}`;
-      return record.seed === currentSeed;
-    } catch { return false; }
-  });
-  // 周挑战展示信息（异步加载，避免首屏加载 weeklyChallenge 模块）
-  const [weeklyDisplay, setWeeklyDisplay] = useState<{ week: number; recordMoves?: number; recordStars?: number; streak: number } | null>(null);
-  const [timedScore, setTimedScore] = useState(0);
-  const [timedHighScore, setTimedHighScore] = useState(() => loadTimedHighScore());
-  const [endlessScore, setEndlessScore] = useState(0);
-  const [endlessHighScore, setEndlessHighScore] = useState(getEndlessHighScore());
-  const [dailyCompletedToday, setDailyCompletedToday] = useState(hasCompletedDailyToday());
+  // 游戏模式状态 — 通过 useGameModes hook 统一管理
+  const {
+    isDailyMode, isEndlessMode, isTimedMode, isWeeklyMode,
+    endlessScore, endlessHighScore,
+    timedScore, timedHighScore, dailyCompletedToday,
+    weeklyCompleted, weeklyDisplay,
+    setEndlessScore, setTimedScore,
+    setDailyCompletedToday,
+    startDailyMode, startEndlessMode, startTimedMode,
+    startWeeklyMode, resetAllModes, restoreFromAutosave,
+    initWeeklyDisplay, updateWeeklyAfterCompletion,
+    updateEndlessScore, updateTimedScore,
+  } = useGameModes(progress.currentLevel, checkPlayDaysAchievements);
 
   // 成就解锁音效 — 监听 newAchievements 变化，根据稀有度播放差异化音效
   useEffect(() => {
@@ -338,13 +292,11 @@ export default function App() {
       SoundEngine.error();
       return;
     }
-    const success = useHintItem();
+    const success = consumeHint();
     if (!success) {
       SoundEngine.error();
       return;
     }
-    setHintItemsState(getHintItems());
-    SoundEngine.resume();
     setUsedHintThisLevel(true);
     StatsTracker.recordHint();
     const tubes = currentTubesRef.current;
@@ -423,23 +375,12 @@ export default function App() {
       if (!usedHintThisLevel) {
         updateGoalProgress('no_hint_clear');
       }
-      // 连续通关连击+1
-      const newCombo = incrementComboStreak();
-      setComboStreak(newCombo);
-      // 累计连击总数（用于成就判定）
-      addTotalComboCount();
-      // 检查是否触发连击里程碑庆祝弹窗
-      const celebration = checkComboCelebration();
-      if (celebration) {
-        setComboCelebration(celebration);
-        SoundEngine.win();
-        // 3秒后自动关闭
-        setTimeout(() => setComboCelebration(null), 3000);
-      }
+      // 连续通关连击+1（通过 useDailyCheckin hook 统一管理）
+      const { newCombo, totalCombo } = onNormalWin();
       // 检查连击里程碑成就
       checkAchievements(AchievementManager.checkComboAchievements(newCombo));
       // 检查累计连击成就
-      checkAchievements(AchievementManager.checkTotalComboAchievements(getTotalComboCount()));
+      checkAchievements(AchievementManager.checkTotalComboAchievements(totalCombo));
       // 检查每日目标成就
       const goalProgress = getDailyGoalsProgress();
       checkAchievements(AchievementManager.checkDailyGoalAchievements(goalProgress.completed, goalProgress.total));
@@ -493,12 +434,8 @@ export default function App() {
     }
     // 周挑战完成处理
     if (isWeeklyMode) {
-      saveWeeklyRecord(winMoves, playTimeSec, stars);
-      setWeeklyCompleted(true);
+      updateWeeklyAfterCompletion(winMoves, playTimeSec, stars);
       const weeklyStreak = getWeeklyStreak();
-      // 更新首页周挑战展示信息
-      const wInfo = getWeeklyInfo();
-      setWeeklyDisplay({ week: wInfo.week, recordMoves: winMoves, recordStars: stars, streak: weeklyStreak.currentStreak });
       checkAchievements(AchievementManager.checkWeeklyAchievements(weeklyStreak.currentStreak));
     }
     // 全能玩家成就检查:体验所有5种模式
@@ -506,13 +443,11 @@ export default function App() {
     // 无尽模式完成处理
     if (isEndlessMode) {
       const newScore = endlessScore + 1;
-      saveEndlessScore(newScore);
-      setEndlessHighScore(getEndlessHighScore());
+      updateEndlessScore(newScore);
       checkAchievements(AchievementManager.checkEndlessAchievements(newScore));
       // 无尽模式里程碑奖励：每过5关奖励1个提示道具，增强留存动力
       if (newScore > 0 && newScore % 5 === 0) {
-        const bonus = addHintItems(1);
-        setHintItemsState(bonus);
+        addHints(1);
         // 显示里程碑奖励提示
         setGoalClaimToast(`🎉 无尽模式 ${newScore} 关里程碑！奖励 +1 提示道具`);
         setTimeout(() => setGoalClaimToast(null), 3000);
@@ -524,15 +459,13 @@ export default function App() {
       // 修复:原代码在此 setTimedScore(newScore),timedScore 是 GameBoard 的 prop 且在其 useEffect 依赖中,
       // timedScore 变化触发 GameBoard 重新生成关卡(setIsWon(false)),胜利弹窗 500ms 后消失
       // 现仅更新最高分,timedScore 累加交给用户点击"下一关"时的 handleNextLevelAction
-      saveTimedHighScore(newScore);
       if (newScore > timedHighScore) {
-        setTimedHighScore(newScore);
+        updateTimedScore(newScore);
       }
       checkAchievements(AchievementManager.checkTimedAchievements(newScore));
       // 限时模式里程碑奖励：每过5关奖励1个提示道具，与无尽模式保持一致的留存激励
       if (newScore > 0 && newScore % 5 === 0) {
-        const bonus = addHintItems(1);
-        setHintItemsState(bonus);
+        addHints(1);
         setGoalClaimToast(`🎉 限时模式 ${newScore} 关里程碑！奖励 +1 提示道具`);
         setTimeout(() => setGoalClaimToast(null), 3000);
       }
@@ -552,7 +485,6 @@ export default function App() {
   const handleSelectLevel = (level: number) => {
     setCurrentLevel(level);
     setPage('game');
-    SoundEngine.resume();
     saveRecent({ level, mode: 'normal', timestamp: Date.now() });
     setRecentPlay({ level, mode: 'normal', timestamp: Date.now() });
   };
@@ -560,12 +492,8 @@ export default function App() {
   const handleStartGame = () => {
     setCurrentLevel(progress.currentLevel);
     setPage('game');
-    SoundEngine.resume();
     saveRecent({ level: progress.currentLevel, mode: 'normal', timestamp: Date.now() });
     setRecentPlay({ level: progress.currentLevel, mode: 'normal', timestamp: Date.now() });
-    recordPlayedMode('normal');
-    // 检查累计游玩天数成就 — 每次开始游戏时记录当日游玩
-    checkPlayDaysAchievements();
     if (!hasSeenTutorial()) {
       setShowTutorial(true);
     }
@@ -590,18 +518,14 @@ export default function App() {
   const handleGoHome = () => {
     setPage('home');
     setHintPair(null);
-    setIsDailyMode(false);
-    setIsEndlessMode(false);
-    setIsTimedMode(false);
-    setIsWeeklyMode(false);
+    resetAllModes();
     setUsedHintThisLevel(false);
     setRecoveredFromDeadlock(false);
     // 清除自动存档
     clearAutosave();
     // 返回首页时重置连击（非通关返回不算连续）
     if (currentMoves > 0 && !isDailyMode && !isEndlessMode && !isTimedMode && !isWeeklyMode) {
-      resetComboStreak();
-      setComboStreak(0);
+      resetCombo();
     }
   };
 
@@ -615,58 +539,30 @@ export default function App() {
   };
 
   const handleWeeklyChallenge = () => {
-    setIsWeeklyMode(true);
-    setIsDailyMode(false);
-    setIsEndlessMode(false);
-    setIsTimedMode(false);
-    setCurrentLevel(-4); // -4 表示周挑战
+    startWeeklyMode(setCurrentLevel);
     setPage('game');
-    SoundEngine.resume();
     setUsedHintThisLevel(false);
     setRecoveredFromDeadlock(false);
-    recordPlayedMode('weekly');
   };
   const handleDailyChallenge = () => {
-    setIsDailyMode(true);
-    setIsEndlessMode(false);
-    setCurrentLevel(-1); // -1 表示每日挑战
+    startDailyMode(setCurrentLevel);
     setPage('game');
-    SoundEngine.resume();
     setUsedHintThisLevel(false);
     setRecoveredFromDeadlock(false);
-    recordPlayedMode('daily');
-    // 检查累计游玩天数成就
-    checkPlayDaysAchievements();
   };
 
   const handleEndlessMode = () => {
-    setIsEndlessMode(true);
-    setIsDailyMode(false);
-    setIsTimedMode(false);
-    setEndlessScore(0);
-    setCurrentLevel(-2); // -2 表示无尽模式
+    startEndlessMode(setCurrentLevel);
     setPage('game');
-    SoundEngine.resume();
     setUsedHintThisLevel(false);
     setRecoveredFromDeadlock(false);
-    recordPlayedMode('endless');
-    // 检查累计游玩天数成就
-    checkPlayDaysAchievements();
   };
 
   const handleTimedMode = () => {
-    setIsTimedMode(true);
-    setIsEndlessMode(false);
-    setIsDailyMode(false);
-    setTimedScore(0);
-    setCurrentLevel(-3); // -3 表示限时模式
+    startTimedMode(setCurrentLevel);
     setPage('game');
-    SoundEngine.resume();
     setUsedHintThisLevel(false);
     setRecoveredFromDeadlock(false);
-    recordPlayedMode('timed');
-    // 检查累计游玩天数成就
-    checkPlayDaysAchievements();
   };
 
   const handleDeadlockRecover = useCallback(() => {
@@ -762,49 +658,8 @@ export default function App() {
     }
   }, []);
 
-  // 回放视频导出
-  const handleExportReplayVideo = useCallback(async (moveHistory: Array<{ from: number; to: number }>, levelData: { tubes: Tube[]; tubeCapacity: number }, level: number, stars: number, stepsUsed: number) => {
-    setGeneratingVideo(true);
-    setShowReplayVideoModal(true);
-    try {
-      // 动态导入回放视频模块，避免首屏加载此大模块
-      const { generateReplayVideo, generateReplayThumbnail } = await replayVideoModule();
-      // 先生成缩略图
-      const thumb = generateReplayThumbnail({
-        tubes: levelData.tubes,
-
-        moves: moveHistory,
-        level,
-        stars,
-        stepsUsed,
-      });
-      setReplayThumbnail(thumb);
-
-      // 生成视频
-      const url = await generateReplayVideo({
-        tubes: levelData.tubes,
-
-        moves: moveHistory,
-        level,
-        stars,
-        stepsUsed,
-      });
-      setReplayVideoUrl(url);
-    } catch (e) {
-      // 视频失败时使用缩略图
-      const { generateReplayThumbnail } = await replayVideoModule();
-      const thumb = generateReplayThumbnail({
-        tubes: levelData.tubes,
-
-        moves: moveHistory,
-        level,
-        stars,
-        stepsUsed,
-      });
-      setReplayThumbnail(thumb);
-    }
-    setGeneratingVideo(false);
-  }, []);
+  // 回放视频导出（通过 useReplayVideo hook 提供）
+  const handleExportReplayVideo = handleExportReplayVideoHook;
 
   // 关闭公告
   const handleDismissAnnouncement = useCallback((id: string) => {
@@ -853,28 +708,6 @@ export default function App() {
     markTutorialSeen();
   };
 
-  // 每日签到
-  const handleCheckin = () => {
-    SoundEngine.resume();
-    const result = DailyCheckin.checkin();
-    if (result.success) {
-      setCheckinDone(true);
-      setCheckinStreak(result.newStreak);
-      setCheckinTotal(result.totalDays);
-      SoundEngine.win();
-      // 签到奖励中含提示道具时实际发放效果
-      if (result.rewardUnlocked && result.rewardUnlocked.includes('提示道具')) {
-        const newTotal = addHintItems(1);
-        setHintItemsState(newTotal);
-      }
-      if (result.rewardUnlocked) {
-        setShowCheckinReward(result.rewardUnlocked);
-      }
-      // 检查签到成就
-      checkAchievements(AchievementManager.checkCheckinAchievements(result.newStreak, result.totalDays));
-    }
-  };
-
   // 渲染首页
   if (page === 'home') {
     return (
@@ -887,26 +720,9 @@ export default function App() {
           autosaveData={autosaveData}
           onResume={() => {
             if (autosaveData) {
-              if (autosaveData.mode === 'endless') {
-                setIsEndlessMode(true);
-                setEndlessScore(autosaveData.endlessScore ?? 0);
-                setCurrentLevel(-2);
-              } else if (autosaveData.mode === 'timed') {
-                setIsTimedMode(true);
-                setTimedScore(autosaveData.timedScore ?? 0);
-                setCurrentLevel(-3);
-              } else if (autosaveData.mode === 'daily') {
-                setIsDailyMode(true);
-                setCurrentLevel(-1);
-              } else if (autosaveData.mode === 'weekly') {
-                setIsWeeklyMode(true);
-                setCurrentLevel(-4);
-              } else {
-                setCurrentLevel(autosaveData.level);
-              }
+              restoreFromAutosave(autosaveData, setCurrentLevel);
               setPage('game');
               setShowResumeDialog(false);
-              SoundEngine.resume();
             }
           }}
           onDiscardAutosave={() => {
