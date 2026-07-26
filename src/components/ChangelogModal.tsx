@@ -13,6 +13,16 @@ const ChangelogModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         <h2>色彩排序更新日志</h2>
         <div className="changelog-content">
           <div className="changelog-item">
+            <h3>🎉 v1.53.0</h3>
+            <ul>
+              <li>🔧 提取App.tsx配方管理逻辑为useSavedRecipes hook，管理色彩混合配方加载与查看</li>
+              <li>🔧 提取App.tsx周末奖励逻辑为useWeekendBonus hook，App.tsx从817行降至772行(-5.5%)</li>
+              <li>🔧 拆分GameBoard.tsx handleTubeClick为handleSelect+executePour两个独立函数，职责更清晰</li>
+              <li>⚡ SoundEngine改为懒加载，首屏index chunk从125.87KB降至122.32KB(-3.55KB)，音效引擎首次交互后按需加载</li>
+              <li>📦 新增2个自定义hook+1个懒加载代理模块，模块总数从111增至112</li>
+            </ul>
+          </div>
+          <div className="changelog-item">
             <h3>🎉 v1.52.0</h3>
             <ul>
               <li>🔧 提取App.tsx自定关卡逻辑为useCustomLevels hook，管理关卡增删改查与导入</li>
