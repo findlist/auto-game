@@ -147,10 +147,36 @@ export default function App() {
     handleExportReplayVideo: handleExportReplayVideoHook,
   } = useReplayVideo();
 
-  // 首页可折叠区域状态
-  const [progressCollapsed, setProgressCollapsed] = useState(false);
-  const [levelSelectCollapsed, setLevelSelectCollapsed] = useState(false);
-  const [difficultyFilter, setDifficultyFilter] = useState<string>('all'); // 关卡难度筛选
+  // 首页可折叠区域状态 — 从 localStorage 恢复用户折叠偏好，避免每次刷新都展开
+  const [progressCollapsed, setProgressCollapsed] = useState(() => {
+    try {
+      const prefs = JSON.parse(localStorage.getItem(STORAGE_KEYS.UI_PREFS) || '{}');
+      return prefs.progressCollapsed ?? false;
+    } catch { return false; }
+  });
+  const [levelSelectCollapsed, setLevelSelectCollapsed] = useState(() => {
+    try {
+      const prefs = JSON.parse(localStorage.getItem(STORAGE_KEYS.UI_PREFS) || '{}');
+      return prefs.levelSelectCollapsed ?? false;
+    } catch { return false; }
+  });
+  const [difficultyFilter, setDifficultyFilter] = useState<string>(() => {
+    try {
+      const prefs = JSON.parse(localStorage.getItem(STORAGE_KEYS.UI_PREFS) || '{}');
+      return prefs.difficultyFilter ?? 'all';
+    } catch { return 'all'; }
+  });
+
+  // 折叠状态与筛选偏好变化时持久化到 localStorage
+  useEffect(() => {
+    try {
+      const prefs = JSON.parse(localStorage.getItem(STORAGE_KEYS.UI_PREFS) || '{}');
+      prefs.progressCollapsed = progressCollapsed;
+      prefs.levelSelectCollapsed = levelSelectCollapsed;
+      prefs.difficultyFilter = difficultyFilter;
+      localStorage.setItem(STORAGE_KEYS.UI_PREFS, JSON.stringify(prefs));
+    } catch { /* 忽略 localStorage 异常 */ }
+  }, [progressCollapsed, levelSelectCollapsed, difficultyFilter]);
 
   // 提示功能 — 通过 useHint hook 统一管理提示道具检查、消耗、查找可操作试管
   // currentTubesRef 由 GameBoard 与 useHint 共享，用于读取当前试管状态
