@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { triggerPWAInstall, isPWAInstallDismissed } from '../game/pwaInstall';
+import { triggerPWAInstall, dismissPWAInstall } from '../game/pwaInstall';
 import type { AutosaveData } from '../game/homeStorage';
 import type { Achievement } from '../game/achievements';
 import type { ComboCelebration } from '../game/comboStreak';
@@ -208,7 +208,7 @@ export function HomeDialogs({
             <button className="pwa-install-btn" onClick={async () => {
               const ok = await triggerPWAInstall();
               onClosePWAInstall();
-              if (!ok) isPWAInstallDismissed(); // 关闭后标记已忽略
+              if (!ok) dismissPWAInstall(); // 用户拒绝安装，标记已忽略不再弹出
             }}>安装</button>
             <button className="pwa-install-close" onClick={onClosePWAInstall}>✕</button>
           </div>
