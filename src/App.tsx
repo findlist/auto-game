@@ -337,32 +337,18 @@ export default function App() {
     resetAllModes, resetCombo, currentMoves,
   });
 
-  const handleWeeklyChallenge = () => {
-    startWeeklyMode(setCurrentLevel);
+  // 统一模式启动函数 — 4种模式启动逻辑结构一致，合并消除重复代码
+  const startGameMode = useCallback((startFn: (setCurrentLevel: React.Dispatch<React.SetStateAction<number>>) => void) => {
+    startFn(setCurrentLevel);
     setPage('game');
     setUsedHintThisLevel(false);
     setRecoveredFromDeadlock(false);
-  };
-  const handleDailyChallenge = () => {
-    startDailyMode(setCurrentLevel);
-    setPage('game');
-    setUsedHintThisLevel(false);
-    setRecoveredFromDeadlock(false);
-  };
+  }, []);
 
-  const handleEndlessMode = () => {
-    startEndlessMode(setCurrentLevel);
-    setPage('game');
-    setUsedHintThisLevel(false);
-    setRecoveredFromDeadlock(false);
-  };
-
-  const handleTimedMode = () => {
-    startTimedMode(setCurrentLevel);
-    setPage('game');
-    setUsedHintThisLevel(false);
-    setRecoveredFromDeadlock(false);
-  };
+  const handleWeeklyChallenge = useCallback(() => startGameMode(startWeeklyMode), [startGameMode, startWeeklyMode]);
+  const handleDailyChallenge = useCallback(() => startGameMode(startDailyMode), [startGameMode, startDailyMode]);
+  const handleEndlessMode = useCallback(() => startGameMode(startEndlessMode), [startGameMode, startEndlessMode]);
+  const handleTimedMode = useCallback(() => startGameMode(startTimedMode), [startGameMode, startTimedMode]);
 
   const handleDeadlockRecover = useCallback(() => {
     setRecoveredFromDeadlock(true);
