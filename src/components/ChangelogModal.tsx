@@ -13,6 +13,16 @@ const ChangelogModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         <h2>色彩排序更新日志</h2>
         <div className="changelog-content">
           <div className="changelog-item">
+            <h3>🎉 v1.55.0</h3>
+            <ul>
+              <li>🔧 提取App.tsx导航逻辑为useGameNavigation hook，统一管理返回首页/下一关/上一关等导航</li>
+              <li>🔧 提取4个模式启动函数为统一startGameMode高阶函数，消除重复代码</li>
+              <li>🔧 提取autoSaveGame逻辑为useAutosave hook，存档逻辑独立管理</li>
+              <li>⚡ 精简SEO keywords从200+个降至43个核心关键词，HTML减小1.1KB，避免搜索引擎关键词堆砌降权</li>
+              <li>📦 App.tsx从664行降至约590行，模块总数从114增至116</li>
+            </ul>
+          </div>
+          <div className="changelog-item">
             <h3>🎉 v1.54.0</h3>
             <ul>
               <li>🔧 App.tsx内联handleWin替换为useGameWin hook调用，移除130行内联胜利处理代码，清理6个未使用导入</li>
