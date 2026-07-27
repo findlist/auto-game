@@ -13,6 +13,16 @@ const ChangelogModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         <h2>色彩排序更新日志</h2>
         <div className="changelog-content">
           <div className="changelog-item">
+            <h3>🎉 v1.56.0</h3>
+            <ul>
+              <li>⚡ 精简JSON-LD featureList从100+条降至32条核心功能，移除开发实现细节和关卡提示文案，HTML从39.41KB降至36.27KB(-3.14KB)</li>
+              <li>🐛 修复robots.txt中文乱码问题(GBK编码)，更新sitemap.xml lastmod至2026-07-28</li>
+              <li>🔧 提取handleSelectLevel/handleStartGame为useLevelSelect hook，统一管理关卡选择和继续游戏逻辑</li>
+              <li>🔧 提取handleDeadlockRecover/dismissAchievement为useGameCallbacks hook，统一管理游戏回调</li>
+              <li>📦 模块总数从116增至118，首屏JS 265.89KB（gzip 87.33KB）✅ 小于300KB</li>
+            </ul>
+          </div>
+          <div className="changelog-item">
             <h3>🎉 v1.55.0</h3>
             <ul>
               <li>🔧 提取App.tsx导航逻辑为useGameNavigation hook，统一管理返回首页/下一关/上一关等导航</li>
