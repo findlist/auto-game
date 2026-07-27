@@ -143,7 +143,7 @@ export default function App() {
   // 自定关卡管理 — 通过 useCustomLevels hook 统一管理
   const {
     customLevels, playingCustomLevel, setPlayingCustomLevel,
-    handlePlayCustomLevel, handleDeleteCustomLevel, handleSaveCustomLevel,
+    onPlayCustomLevel, handleDeleteCustomLevel, handleSaveCustomLevel,
     handleImportLevel, handleCustomLevelWin,
   } = useCustomLevels();
 
@@ -349,12 +349,6 @@ export default function App() {
   // 回放视频导出（通过 useReplayVideo hook 提供）
   const handleExportReplayVideo = handleExportReplayVideoHook;
 
-  // 播放自定关卡：hook 管理状态，App 管理页面跳转
-  const onPlayCustomLevel = useCallback((level: CustomLevel) => {
-    handlePlayCustomLevel(level);
-    setPage('editor-play');
-  }, [handlePlayCustomLevel]);
-
   // 渲染首页
   if (page === 'home') {
     return (
@@ -492,7 +486,7 @@ export default function App() {
           {/* 首页底部内容区块：自定关卡+广告+捐赠+FAQ+配方+成就（提取为独立组件） */}
           <HomeFooterSection
             customLevels={customLevels}
-            onPlayCustomLevel={onPlayCustomLevel}
+            onPlayCustomLevel={(level: CustomLevel) => onPlayCustomLevel(level, (p: string) => setPage(p as Page))}
             onNavigateToEditor={() => setPage('editor')}
             onNavigateToAchievements={() => setPage('achievements')}
             onOpenSavedRecipes={openSavedRecipes}
@@ -580,7 +574,7 @@ export default function App() {
     return <Suspense fallback={<PageLoading />}><LevelEditorPage
       onBack={() => setPage('home')}
       customLevels={customLevels}
-      onPlay={onPlayCustomLevel}
+      onPlay={(level: CustomLevel) => onPlayCustomLevel(level, (p: string) => setPage(p as Page))}
       onDelete={handleDeleteCustomLevel}
       onSave={handleSaveCustomLevel}
       onImport={handleImportLevel}

@@ -23,7 +23,15 @@ export function useCustomLevels() {
   // 当前播放的自定关卡
   const [playingCustomLevel, setPlayingCustomLevel] = useState<CustomLevel | null>(null);
 
-  // 播放自定关卡：设置当前播放关卡并跳转页面
+  // 播放自定关卡：设置当前播放关卡并跳转到游玩页面
+  // setPage 回调由 App.tsx 提供，hook 不直接依赖路由状态
+  const onPlayCustomLevel = useCallback((level: CustomLevel, setPage: (page: string) => void) => {
+    setPlayingCustomLevel(level);
+    SoundEngine.resume();
+    setPage('editor-play');
+  }, []);
+
+  // 播放自定关卡（仅设置状态，不跳转页面）
   const handlePlayCustomLevel = useCallback((level: CustomLevel) => {
     setPlayingCustomLevel(level);
     SoundEngine.resume();
@@ -74,6 +82,7 @@ export function useCustomLevels() {
     playingCustomLevel,
     setPlayingCustomLevel,
     handlePlayCustomLevel,
+    onPlayCustomLevel,
     handleDeleteCustomLevel,
     handleSaveCustomLevel,
     handleImportLevel,
