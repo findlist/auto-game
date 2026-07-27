@@ -32,8 +32,10 @@ import { useGameWin } from './game/useGameWin';
 import { useGameNavigation } from './game/useGameNavigation';
 // 自动存档 hook — 从 App.tsx 提取存档保存与清除逻辑
 import { useAutosave } from './game/useAutosave';
+// 关卡选择与游戏启动 hook — 从 App.tsx 提取选择关卡和继续游戏逻辑
+import { useLevelSelect } from './game/useLevelSelect';
 import { canInstallPWA, isPWAInstallDismissed, dismissPWAInstall } from './game/pwaInstall';
-import { loadRecent, saveRecent, RecentPlay, loadProgress, Progress, loadBestScores, hasSeenTutorial, markTutorialSeen, loadStars, loadAutosave, clearAutosave, AutosaveData } from './game/homeStorage';
+import { loadRecent, RecentPlay, loadProgress, Progress, loadBestScores, hasSeenTutorial, markTutorialSeen, loadStars, loadAutosave, clearAutosave, AutosaveData } from './game/homeStorage';
 // GamePageComponent 改为懒加载，仅在进入游戏页时加载，大幅降低首屏 bundle 体积
 const GamePageComponent = lazy(() => import('./components/GamePageComponent').then(m => ({ default: m.GamePageComponent })));
 import { HomeStatsBar } from './components/HomeStatsBar';
@@ -302,22 +304,11 @@ export default function App() {
   );
   // 注释: playTimeSec 不依赖步数变化,由回调参数获取
 
-  const handleSelectLevel = (level: number) => {
-    setCurrentLevel(level);
-    setPage('game');
-    saveRecent({ level, mode: 'normal', timestamp: Date.now() });
-    setRecentPlay({ level, mode: 'normal', timestamp: Date.now() });
-  };
-
-  const handleStartGame = () => {
-    setCurrentLevel(progress.currentLevel);
-    setPage('game');
-    saveRecent({ level: progress.currentLevel, mode: 'normal', timestamp: Date.now() });
-    setRecentPlay({ level: progress.currentLevel, mode: 'normal', timestamp: Date.now() });
-    if (!hasSeenTutorial()) {
-      setShowTutorial(true);
-    }
-  };
+  // 关卡选择与游戏启动 — 通过 useLevelSelect hook 统一管理
+  const { handleSelectLevel, handleStartGame } = useLevelSelect(
+    setCurrentLevel, (p: string) => setPage(p as Page), setRecentPlay,
+    () => progress.currentLevel, setShowTutorial
+  );
 
   // 导航逻辑 — 通过 useGameNavigation hook 统一管理
   // 包含：返回首页、确认返回、下一关、上一关、模式感知的下一关动作
