@@ -1,14 +1,16 @@
 import { useCallback } from 'react';
 import { Achievement } from './achievements';
+import { markTutorialSeen } from './homeStorage';
 
 /**
  * 游戏回调函数 hook
- * 从 App.tsx 提取：死锁恢复和成就弹窗关闭两个简单的回调函数
+ * 从 App.tsx 提取：死锁恢复、成就弹窗关闭、新手引导关闭三个简单回调
  * 虽然逻辑简单，但统一管理便于后续扩展
  */
 export function useGameCallbacks(
   setRecoveredFromDeadlock: (value: boolean) => void,
-  setNewAchievements: React.Dispatch<React.SetStateAction<Achievement[]>>
+  setNewAchievements: React.Dispatch<React.SetStateAction<Achievement[]>>,
+  setShowTutorial: (value: boolean) => void
 ) {
   // 死锁恢复：标记当前已从死锁状态恢复，GameBoard 据此显示恢复动画
   const handleDeadlockRecover = useCallback(() => {
@@ -20,5 +22,11 @@ export function useGameCallbacks(
     setNewAchievements(prev => prev.slice(1));
   }, [setNewAchievements]);
 
-  return { handleDeadlockRecover, dismissAchievement };
+  // 关闭新手引导：隐藏弹窗并标记已看过，避免重复展示
+  const handleTutorialClose = useCallback(() => {
+    setShowTutorial(false);
+    markTutorialSeen();
+  }, [setShowTutorial]);
+
+  return { handleDeadlockRecover, dismissAchievement, handleTutorialClose };
 }

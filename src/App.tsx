@@ -37,7 +37,7 @@ import { useLevelSelect } from './game/useLevelSelect';
 // 游戏回调 hook — 从 App.tsx 提取死锁恢复和成就弹窗关闭逻辑
 import { useGameCallbacks } from './game/useGameCallbacks';
 import { canInstallPWA, isPWAInstallDismissed, dismissPWAInstall } from './game/pwaInstall';
-import { loadRecent, RecentPlay, loadProgress, Progress, loadBestScores, hasSeenTutorial, markTutorialSeen, loadStars, loadAutosave, clearAutosave, AutosaveData } from './game/homeStorage';
+import { loadRecent, RecentPlay, loadProgress, Progress, loadBestScores, hasSeenTutorial, loadStars, loadAutosave, clearAutosave, AutosaveData } from './game/homeStorage';
 // GamePageComponent 改为懒加载，仅在进入游戏页时加载，大幅降低首屏 bundle 体积
 const GamePageComponent = lazy(() => import('./components/GamePageComponent').then(m => ({ default: m.GamePageComponent })));
 import { HomeStatsBar } from './components/HomeStatsBar';
@@ -339,9 +339,9 @@ export default function App() {
   const handleEndlessMode = useCallback(() => startGameMode(startEndlessMode), [startGameMode, startEndlessMode]);
   const handleTimedMode = useCallback(() => startGameMode(startTimedMode), [startGameMode, startTimedMode]);
 
-  // 死锁恢复 + 成就弹窗关闭 — 通过 useGameCallbacks hook 统一管理
-  const { handleDeadlockRecover, dismissAchievement } = useGameCallbacks(
-    setRecoveredFromDeadlock, setNewAchievements
+  // 死锁恢复 + 成就弹窗关闭 + 新手引导关闭 — 通过 useGameCallbacks hook 统一管理
+  const { handleDeadlockRecover, dismissAchievement, handleTutorialClose } = useGameCallbacks(
+    setRecoveredFromDeadlock, setNewAchievements, setShowTutorial
   );
 
   // handleShare 和 handleReplayShare 已移入 useReplayShare hook
@@ -354,11 +354,6 @@ export default function App() {
     handlePlayCustomLevel(level);
     setPage('editor-play');
   }, [handlePlayCustomLevel]);
-
-  const handleTutorialClose = () => {
-    setShowTutorial(false);
-    markTutorialSeen();
-  };
 
   // 渲染首页
   if (page === 'home') {
