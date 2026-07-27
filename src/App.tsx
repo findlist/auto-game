@@ -1,6 +1,4 @@
 import { useState, useCallback, useRef, useEffect, lazy, Suspense } from 'react';
-// GameBoard 已移入 GamePageComponent
-import { canPour } from './game/levelGenerator';
 // SoundEngine 懒加载代理（App.tsx 中仅少量音效调用，改为懒加载降低首屏 bundle）
 import { SoundEngineLazy as SoundEngine } from './game/soundEngineLazy';
 import { Tube } from './game/types';
@@ -8,7 +6,8 @@ import { AchievementManager, Achievement, EncyclopediaAchievementChecks } from '
 import { getTodayString, saveDailyRecord } from './game/dailyChallenge';
 import { addDailyLeaderboardEntry } from './game/dailyLeaderboard';
 import { StatsTracker } from './game/statsTracker';
-import { getHintItems } from './game/hintItems';
+// 提示道具相关导入已移入 useHint hook
+// getHintItems 不再在 App.tsx 直接使用
 // 游戏模式管理 hook（从 App.tsx 提取模式状态与切换逻辑）
 import { useGameModes } from './game/useGameModes';
 // 每日签到与目标 hook（从 App.tsx 提取签到、目标、连击逻辑）
@@ -28,6 +27,8 @@ import { useAnnouncements } from './game/useAnnouncements';
 import { useReplayShare } from './game/useReplayShare';
 // 色彩混合配方管理 hook（从 App.tsx 提取配方加载与查看弹窗逻辑）
 import { useSavedRecipes } from './game/useSavedRecipes';
+// 提示功能 hook（从 App.tsx 提取提示道具检查、消耗、查找可操作试管逻辑）
+import { useHint } from './game/useHint';
 // 周末奖励管理 hook（从 App.tsx 提取周末奖励状态与领取逻辑）
 import { useWeekendBonus } from './game/useWeekendBonus';
 import { getPlayedModes } from './game/playedModes';
@@ -76,7 +77,6 @@ export default function App() {
   const [page, setPage] = useState<Page>('home');
   const [progress, setProgress] = useState<Progress>(loadProgress);
   const [currentLevel, setCurrentLevel] = useState(progress.currentLevel);
-  const [hintPair, setHintPair] = useState<[number, number] | null>(null);
   const [bestScores, setBestScores] = useState<Record<number, number>>(loadBestScores);
   const [currentMoves, setMoves] = useState(0);
   const [showTutorial, setShowTutorial] = useState(!hasSeenTutorial());
@@ -155,8 +155,14 @@ export default function App() {
   const [levelSelectCollapsed, setLevelSelectCollapsed] = useState(false);
   const [difficultyFilter, setDifficultyFilter] = useState<string>('all'); // 关卡难度筛选
 
-  // 内部提示功能:获取当前游戏状态
+  // 提示功能 — 通过 useHint hook 统一管理提示道具检查、消耗、查找可操作试管
+  // currentTubesRef 由 GameBoard 与 useHint 共享，用于读取当前试管状态
   const currentTubesRef = useRef<Tube[] | null>(null);
+
+  // 提示功能 hook（依赖 consumeHint 与 setUsedHintThisLevel，需在其定义之后调用）
+  const { hintPair, setHintPair, clearHint, handleHint } = useHint(
+    currentTubesRef, consumeHint, setUsedHintThisLevel
+  );
 
   // 初始化时检查是否有自动存档
   useEffect(() => {
@@ -260,52 +266,7 @@ export default function App() {
     handleClaimWeekendBonus,
   } = useWeekendBonus();
 
-  // 提示功能:从当前游戏状态找到一对可操作试管
-  const handleHint = useCallback(() => {
-    // 检查提示道具数量
-    const currentItems = getHintItems();
-    if (currentItems <= 0) {
-      SoundEngine.error();
-      return;
-    }
-    const success = consumeHint();
-    if (!success) {
-      SoundEngine.error();
-      return;
-    }
-    setUsedHintThisLevel(true);
-    StatsTracker.recordHint();
-    const tubes = currentTubesRef.current;
-    if (!tubes) return;
-
-    // 优先找同色合并的管子
-    for (let i = 0; i < tubes.length; i++) {
-      if (tubes[i].layers.length === 0) continue;
-      const fromTop = tubes[i].layers[tubes[i].layers.length - 1].color;
-      for (let j = 0; j < tubes.length; j++) {
-        if (i === j) continue;
-        if (tubes[j].layers.length >= tubes[j].capacity) continue;
-        if (tubes[j].layers.length > 0) {
-          const toTop = tubes[j].layers[tubes[j].layers.length - 1].color;
-          if (fromTop === toTop && canPour(tubes[i], tubes[j])) {
-            setHintPair([i, j]);
-            return;
-          }
-        }
-      }
-    }
-    // 再找可以空管
-    for (let i = 0; i < tubes.length; i++) {
-      if (tubes[i].layers.length === 0) continue;
-      for (let j = 0; j < tubes.length; j++) {
-        if (i === j) continue;
-        if (tubes[j].layers.length === 0 && canPour(tubes[i], tubes[j])) {
-          setHintPair([i, j]);
-          return;
-        }
-      }
-    }
-  }, []);
+  // handleHint 已移入 useHint hook
 
   const handleWin = useCallback(async (winMoves: number, minSteps: number, stars: number, playTimeSec: number) => {
    try {
@@ -769,7 +730,7 @@ export default function App() {
         onWin={handleWin}
         onMove={(m: number) => setMoves(m)}
         onReset={() => setMoves(0)}
-        clearHint={() => setHintPair(null)}
+        clearHint={clearHint}
         onNextLevel={handleNextLevelAction}
         onPrevLevel={handlePrevLevel}
         onGoHome={handleGoHome}
