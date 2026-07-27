@@ -13,7 +13,6 @@ import {
   saveProgress, Progress, saveBestScore, loadBestScores,
   saveStars, loadStars, clearAutosave,
 } from './homeStorage';
-import { SoundEngineLazy as SoundEngine } from './soundEngineLazy';
 
 // 模式状态与回调的类型定义
 interface ModeState {
