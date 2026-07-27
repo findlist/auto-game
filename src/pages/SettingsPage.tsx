@@ -274,7 +274,7 @@ export function SettingsPage({ onBack }: SettingsPageProps) {
             <div className="setting-icon">ℹ️</div>
             <div>
               <div className="setting-name">版本信息</div>
-              <div className="setting-desc">色彩排序 v1.56.0 | 2026</div>
+              <div className="setting-desc">色彩排序 v1.57.0 | 2026</div>
             </div>
           </div>
         </div>

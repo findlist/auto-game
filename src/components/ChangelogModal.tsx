@@ -13,6 +13,16 @@ const ChangelogModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         <h2>色彩排序更新日志</h2>
         <div className="changelog-content">
           <div className="changelog-item">
+            <h3>🎉 v1.57.0</h3>
+            <ul>
+              <li>⚡ 移除重复的VideoGame JSON-LD结构化数据(WebApplication已覆盖)，HTML从36.27KB降至35.09KB(-1.18KB)</li>
+              <li>⚡ 精简FAQPage从78条降至20条核心FAQ，移除58条细碎重复问答，HTML从35.09KB降至16.27KB(-18.82KB,-54%)</li>
+              <li>🔧 提取handleTutorialClose到useGameCallbacks hook，统一管理新手引导关闭逻辑</li>
+              <li>🔧 提取onPlayCustomLevel页面跳转逻辑到useCustomLevels hook，统一管理自定关卡播放与路由</li>
+              <li>📦 HTML从36.27KB降至16.27KB(-55%)，首屏JS 266.02KB（gzip 87.35KB）✅ 小于300KB</li>
+            </ul>
+          </div>
+          <div className="changelog-item">
             <h3>🎉 v1.56.0</h3>
             <ul>
               <li>⚡ 精简JSON-LD featureList从100+条降至32条核心功能，移除开发实现细节和关卡提示文案，HTML从39.41KB降至36.27KB(-3.14KB)</li>
