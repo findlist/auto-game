@@ -34,6 +34,8 @@ import { useGameNavigation } from './game/useGameNavigation';
 import { useAutosave } from './game/useAutosave';
 // 关卡选择与游戏启动 hook — 从 App.tsx 提取选择关卡和继续游戏逻辑
 import { useLevelSelect } from './game/useLevelSelect';
+// 游戏回调 hook — 从 App.tsx 提取死锁恢复和成就弹窗关闭逻辑
+import { useGameCallbacks } from './game/useGameCallbacks';
 import { canInstallPWA, isPWAInstallDismissed, dismissPWAInstall } from './game/pwaInstall';
 import { loadRecent, RecentPlay, loadProgress, Progress, loadBestScores, hasSeenTutorial, markTutorialSeen, loadStars, loadAutosave, clearAutosave, AutosaveData } from './game/homeStorage';
 // GamePageComponent 改为懒加载，仅在进入游戏页时加载，大幅降低首屏 bundle 体积
@@ -337,15 +339,10 @@ export default function App() {
   const handleEndlessMode = useCallback(() => startGameMode(startEndlessMode), [startGameMode, startEndlessMode]);
   const handleTimedMode = useCallback(() => startGameMode(startTimedMode), [startGameMode, startTimedMode]);
 
-  const handleDeadlockRecover = useCallback(() => {
-    setRecoveredFromDeadlock(true);
-  }, []);
-
-  // handleNextLevelAction 已移入 useGameNavigation hook
-
-  const dismissAchievement = useCallback(() => {
-    setNewAchievements(prev => prev.slice(1));
-  }, []);
+  // 死锁恢复 + 成就弹窗关闭 — 通过 useGameCallbacks hook 统一管理
+  const { handleDeadlockRecover, dismissAchievement } = useGameCallbacks(
+    setRecoveredFromDeadlock, setNewAchievements
+  );
 
   // handleShare 和 handleReplayShare 已移入 useReplayShare hook
 
