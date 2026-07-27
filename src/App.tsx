@@ -3,7 +3,6 @@ import { useState, useCallback, useRef, useEffect, lazy, Suspense } from 'react'
 import { SoundEngineLazy as SoundEngine } from './game/soundEngineLazy';
 import { Tube } from './game/types';
 import { AchievementManager, Achievement, EncyclopediaAchievementChecks } from './game/achievements';
-import { StatsTracker } from './game/statsTracker';
 // 提示道具相关导入已移入 useHint hook
 // getHintItems 不再在 App.tsx 直接使用
 // 游戏模式管理 hook（从 App.tsx 提取模式状态与切换逻辑）
@@ -29,6 +28,8 @@ import { useHint } from './game/useHint';
 import { useWeekendBonus } from './game/useWeekendBonus';
 // 通关胜利处理 hook（从 App.tsx 提取：通关进度更新、星级保存、成就检查、统计记录、各模式完成处理）
 import { useGameWin } from './game/useGameWin';
+// 游戏导航 hook — 从 App.tsx 提取返回首页、下一关、上一关等导航逻辑
+import { useGameNavigation } from './game/useGameNavigation';
 import { canInstallPWA, isPWAInstallDismissed, dismissPWAInstall } from './game/pwaInstall';
 import { loadRecent, saveRecent, RecentPlay, loadProgress, Progress, loadBestScores, hasSeenTutorial, markTutorialSeen, loadStars, loadAutosave, saveAutosave, clearAutosave, AutosaveData } from './game/homeStorage';
 // GamePageComponent 改为懒加载，仅在进入游戏页时加载，大幅降低首屏 bundle 体积
@@ -322,44 +323,19 @@ export default function App() {
     }
   };
 
-  const handleNextLevel = () => {
-    setCurrentLevel(l => l + 1);
-    setHintPair(null);
-    setUsedHintThisLevel(false);
-    setRecoveredFromDeadlock(false);
-  };
-
-  // 返回上一关(仅普通模式可减小关卡1)
-  const handlePrevLevel = useCallback(() => {
-    if (isDailyMode || isEndlessMode || isTimedMode || isWeeklyMode) return;
-    setCurrentLevel(l => Math.max(1, l - 1));
-    setHintPair(null);
-    setUsedHintThisLevel(false);
-    setRecoveredFromDeadlock(false);
-  }, [isDailyMode, isEndlessMode, isTimedMode, isWeeklyMode]);
-
-  const handleGoHome = () => {
-    setPage('home');
-    setHintPair(null);
-    resetAllModes();
-    setUsedHintThisLevel(false);
-    setRecoveredFromDeadlock(false);
-    // 清除自动存档
-    clearAutosave();
-    // 返回首页时重置连击（非通关返回不算连续）
-    if (currentMoves > 0 && !isDailyMode && !isEndlessMode && !isTimedMode && !isWeeklyMode) {
-      resetCombo();
-    }
-  };
-
-  // 确认的返回首页:防止误退出
-  const handleGoHomeWithConfirm = () => {
-    if (currentMoves > 0 && !isDailyMode && !isEndlessMode && !isTimedMode && !isWeeklyMode) {
-      if (!confirm('当前关卡进度将丢失,确认返回首页?')) return;
-      StatsTracker.breakStreak();
-    }
-    handleGoHome();
-  };
+  // 导航逻辑 — 通过 useGameNavigation hook 统一管理
+  // 包含：返回首页、确认返回、下一关、上一关、模式感知的下一关动作
+  const {
+    handleGoHome,
+    handleGoHomeWithConfirm,
+    handlePrevLevel,
+    handleNextLevelAction,
+  } = useGameNavigation({
+    isDailyMode, isEndlessMode, isTimedMode, isWeeklyMode,
+    setPage, setHintPair, setUsedHintThisLevel, setRecoveredFromDeadlock,
+    setCurrentLevel, setEndlessScore, setTimedScore,
+    resetAllModes, resetCombo, currentMoves,
+  });
 
   const handleWeeklyChallenge = () => {
     startWeeklyMode(setCurrentLevel);
@@ -392,31 +368,7 @@ export default function App() {
     setRecoveredFromDeadlock(true);
   }, []);
 
-  // 下一关:每日/周挑战返回首页,无尽模式累加关,限时模式过下一关,普通模式过下一关
-  const handleNextLevelAction = useCallback(() => {
-    if (isDailyMode || isWeeklyMode) {
-      // 每日挑战和周挑战为单局模式,通关后返回首页
-      // 修复:原代码缺少 isWeeklyMode 分支,周挑战通关后会走 else 调用 handleNextLevel,
-      // 导致 currentLevel 从 -4 递增为 -3(限时模式标识),引发状态混乱
-      handleGoHome();
-    } else if (isEndlessMode) {
-      // 无尽模式关数+1,生成下一关,难度递增
-      // 依赖 endlessScore 变化触发 GameBoard 的 useEffect 重置(无需改 level)
-      // 注意:原代码 setCurrentLevel(l => l - 1) 会把 -2 递减成 -3,误触发限时模式逻辑
-      setEndlessScore(s => s + 1);
-      setHintPair(null);
-      setUsedHintThisLevel(false);
-      setRecoveredFromDeadlock(false);
-    } else if (isTimedMode) {
-      // 限时模式过下一关,依赖 timedScore 变化触发重置
-      setTimedScore(s => s + 1);
-      setHintPair(null);
-      setUsedHintThisLevel(false);
-      setRecoveredFromDeadlock(false);
-    } else {
-      handleNextLevel();
-    }
-  }, [isDailyMode, isEndlessMode, isTimedMode, isWeeklyMode]);
+  // handleNextLevelAction 已移入 useGameNavigation hook
 
   const dismissAchievement = useCallback(() => {
     setNewAchievements(prev => prev.slice(1));
