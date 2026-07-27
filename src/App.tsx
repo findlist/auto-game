@@ -30,8 +30,10 @@ import { useWeekendBonus } from './game/useWeekendBonus';
 import { useGameWin } from './game/useGameWin';
 // 游戏导航 hook — 从 App.tsx 提取返回首页、下一关、上一关等导航逻辑
 import { useGameNavigation } from './game/useGameNavigation';
+// 自动存档 hook — 从 App.tsx 提取存档保存与清除逻辑
+import { useAutosave } from './game/useAutosave';
 import { canInstallPWA, isPWAInstallDismissed, dismissPWAInstall } from './game/pwaInstall';
-import { loadRecent, saveRecent, RecentPlay, loadProgress, Progress, loadBestScores, hasSeenTutorial, markTutorialSeen, loadStars, loadAutosave, saveAutosave, clearAutosave, AutosaveData } from './game/homeStorage';
+import { loadRecent, saveRecent, RecentPlay, loadProgress, Progress, loadBestScores, hasSeenTutorial, markTutorialSeen, loadStars, loadAutosave, clearAutosave, AutosaveData } from './game/homeStorage';
 // GamePageComponent 改为懒加载，仅在进入游戏页时加载，大幅降低首屏 bundle 体积
 const GamePageComponent = lazy(() => import('./components/GamePageComponent').then(m => ({ default: m.GamePageComponent })));
 import { HomeStatsBar } from './components/HomeStatsBar';
@@ -247,14 +249,8 @@ export default function App() {
     }
   }, [page, progress.completedLevels, checkAchievements]);
 
-  // 自动保存当前游戏状态
-  const autoSaveGame = useCallback((level: number, mode: string, moves: number, isWon: boolean, extra?: Record<string, number>) => {
-    if (moves > 0 && !isWon) {
-      saveAutosave({ level, mode, moves, isWon: false, ...extra } as AutosaveData);
-    } else {
-      clearAutosave();
-    }
-  }, []);
+  // 自动保存 — 通过 useAutosave hook 统一管理
+  const { autoSaveGame } = useAutosave();
 
   // 游戏模式状态 — 通过 useGameModes hook 统一管理
   const {
