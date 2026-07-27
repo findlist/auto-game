@@ -82,15 +82,17 @@ function generateSolvableTubes(
     }
   }
 
-  // 首次生成：洗牌→分配→填充空管→打乱顺序
-  const tubes = generateTubesFromPool(colorPool, filledTubeCount, emptyTubeCount, capacity);
+  // 首次生成：洗牌颜色层池→分配试管→填充空管→打乱试管顺序
+  // 修复：colorPool 必须先洗牌，否则每种颜色连续填入同一试管，生成的是已通关状态
+  const tubes = generateTubesFromPool(shuffle(colorPool), filledTubeCount, emptyTubeCount, capacity);
 
-  // 可解性验证：最多重试5次，不可解则保留初始结果作为兜底
+  // 可解性验证：最多重试5次，不可解或恰好已通关则重试
+  // checkWin 防护：洗牌后极小概率仍生成已通关状态，需排除
   let solvableTubes = tubes;
-  if (!isSolvable(solvableTubes)) {
+  if (!isSolvable(solvableTubes) || checkWin(solvableTubes)) {
     for (let retry = 0; retry < 5; retry++) {
       const retryTubes = generateTubesFromPool(shuffle(colorPool), filledTubeCount, emptyTubeCount, capacity);
-      if (isSolvable(retryTubes)) {
+      if (isSolvable(retryTubes) && !checkWin(retryTubes)) {
         solvableTubes = retryTubes;
         break;
       }

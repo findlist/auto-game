@@ -71,7 +71,7 @@
 - 💾 **本地存档** — `localStorage` 自动保存 / 恢复进度（最高分 / 设置 / 最近游玩）
 - 🛰️ **PWA 离线** — manifest + Service Worker 缓存优先离线策略 + 安装引导
 - 🔍 **SEO 友好** — JSON-LD 结构化数据 + OG / Twitter + robots / sitemap + 中文长尾关键词
-- ⚡ **极致性能** — react-vendor 分包 / TubeView React.memo / 稳定 60FPS / 首屏 JS ~296KB（主包 155KB + react-vendor 141KB，< 300KB 红线，接近上限需谨慎）/ 首屏 < 3s
+- ⚡ **极致性能** — react-vendor 分包 / TubeView React.memo / 稳定 60FPS / 首屏 JS ~265KB（主包 124KB + react-vendor 141KB，< 300KB 红线，GamePageComponent 懒加载后余量约 35KB）/ 首屏 < 3s
 
 ---
 
@@ -91,11 +91,11 @@
 
 | 文件 | 大小 |
 | --- | --- |
-| `index.html` | ~31 KB（gzip ~12 KB） |
-| `assets/index-*.js`（主包） | ~155 KB |
+| `index.html` | ~40 KB（gzip ~13 KB） |
+| `assets/index-*.js`（主包） | ~124 KB |
 | `assets/react-vendor-*.js` | ~141 KB |
-| 首屏 JS 合计 | ~296 KB【< 300KB 红线 ✅，接近上限】 |
-| `assets/index-*.css` | ~200 KB（gzip ~35 KB） |
+| 首屏 JS 合计 | ~265 KB【< 300KB 红线 ✅，GamePageComponent 懒加载后余量约 35KB】 |
+| `assets/index-*.css` | ~207 KB（gzip ~37 KB） |
 | `manifest.json` / `sw.js` / `*.png` / `*.svg` | PWA + 图标 + OG 图 |
 
 ---
@@ -212,7 +212,7 @@ auto-game/
 ├── index.html                         # SEO/社交/PWA 完备的入口 HTML
 ├── vite.config.ts
 ├── tsconfig.json
-└── package.json                       # v1.41.0
+└── package.json                       # v1.51.0
 ```
 
 ---
@@ -236,6 +236,8 @@ auto-game/
 | v1.32 → v1.35.5 | **累计天数成就、混合配方收藏、色彩能力档案、错题本、配对自定义难度、首屏懒加载优化（281KB）、问答热力图、BGM 快捷开关、统计活跃热力图、搜索高亮** |
 | v1.36 → v1.39 | **暂停功能（空格/P）、快速重玩、每日目标系统、连击计数器、连击里程碑庆祝、+9 成就（共 73）、无尽/限时模式每 5 关里程碑奖励、新手倒水鼓励提示、GamePageComponent 提取** |
 | v1.40 → v1.41 | **成就稀有度分级（普通/稀有/史诗/传说）+ 差异化音效、每日目标完成动画、第 2-3 关分关策略提示、稀有度筛选与统计面板、周挑战模块拆分优化、SEO 持续扩展** |
+| v1.42 → v1.47 | **HomeTopSection/HomeDialogs/HomeChrome 组件拆分、GamePageComponent 懒加载（首屏 296KB→263KB）、BGM 数据独立、回放/帮助/分享图片弹窗组件化、SEO 持续扩展** |
+| v1.48 → v1.51 | **第 13-20 关分关策略提示、关卡提示配置独立模块、WinOverlay/GameOverlays 组件拆分、ReplayPanel/HelpModal/ShareImageModal 组件化、useGameModes/useDailyCheckin/useReplayVideo 三个 hook 提取、achievements 三模块拆分、GameBoard 精简至约 750 行、App.tsx 降至约 921 行** |
 
 路线图详见 [docs/development-plan.md](./docs/development-plan.md)，当前处于阶段二（数据驱动精细化迭代），阶段三（流量变现升级）按规范推进。
 
@@ -244,7 +246,7 @@ auto-game/
 ## 文档
 
 - [部署指南](./docs/deployment-guide.md) — Vercel / Cloudflare Pages / Netlify 三平台部署，含上线后 checklist
-- [开发计划](./docs/development-plan.md) — v1.0 → v1.41 完整版本记录 + 阶段二/三路线图
+- [开发计划](./docs/development-plan.md) — v1.0 → v1.51 完整版本记录 + 阶段二/三路线图
 - [自动迭代规范](./auto-game-spec.md) — TRAE AI Agent 自建 H5 游戏网站定时任务规范 v1.2
 - [站点配置模板](./docs/site-config.md) — 上线后回写，驱动 Agent 阶段切换
 
@@ -269,10 +271,10 @@ auto-game/
 - 项目根路径：e:\work\auto-game（固定目录，纯前端 H5 休闲小游戏网站，无后端依赖）
 - 进度记忆路径：e:\work\auto-game\memory\，读取最近日期目录的 topics.md，写入当天日期目录的 topics.md
 - 单次调度总时长上限：2 小时
-- 当前基线进度：v1.41 已上线 https://game.niuzi.asia，处于阶段二（数据驱动精细化迭代），所有已完成功能不得重复开发
+- 当前基线进度：v1.51.0 已上线 https://game.niuzi.asia，处于阶段二（数据驱动精细化迭代），所有已完成功能不得重复开发。本周（2026-07-24 ~ 2026-07-27）持续推进组件拆分与 hook 提取：HomeTopSection/HomeDialogs/HomeChrome/ReplayPanel/HelpModal/ShareImageModal/WinOverlay/GameOverlays 组件化、GamePageComponent 懒加载（首屏 296KB→265KB）、useGameModes/useDailyCheckin/useReplayVideo 三个 hook 提取、achievements 三模块拆分、第 13-20 关分关策略提示、levelTips 配置独立模块、BGM 数据独立。App.tsx 从 2074 行降至约 921 行，GameBoard 从 1022 行降至约 750 行
 - 全局优先级强制排序：线上稳定性 > 玩法完整性 > 性能稳定性 > 适配与体验 > 留存优化 > 流量增长 > 变现优化
 - 阶段判定依据：e:\work\auto-game\docs\site-config.md（已回写线上 URL，当前 DAU=0，尚未接入统计/广告/捐赠）
-- 首屏体积警示：JS bundle 296KB 已逼近 300KB 红线，新增功能必须考虑代码分割、懒加载或精简现有体积
+- 首屏体积警示：JS bundle 265KB（GamePageComponent 懒加载后），< 300KB 红线，余量约 35KB，新增功能必须考虑代码分割、懒加载或精简现有体积
 - 变现分级规则：阶段一/二仅预留广告位与分享能力，不接入实际内购；内购功能仅限阶段三，且必须获得用户明确授权后方可开发
 
 二、核心要素

@@ -47,6 +47,7 @@ interface HomeDialogsProps {
   onCheckinRewardClose: () => void;
   onAnnouncementDismiss: (id: string) => void;
   onAnnouncementClose: () => void;
+  onAnnouncementSkipAll: () => void;
   onSavedRecipesClose: () => void;
   onGoToMixer: () => void;
   // 更新日志
@@ -85,6 +86,7 @@ export function HomeDialogs({
   onCheckinRewardClose,
   onAnnouncementDismiss,
   onAnnouncementClose,
+  onAnnouncementSkipAll,
   onSavedRecipesClose,
   onGoToMixer,
   showChangelog,
@@ -259,6 +261,7 @@ export function HomeDialogs({
             onCheckinRewardClose={onCheckinRewardClose}
             onAnnouncementDismiss={onAnnouncementDismiss}
             onAnnouncementClose={onAnnouncementClose}
+            onAnnouncementSkipAll={onAnnouncementSkipAll}
             onSavedRecipesClose={onSavedRecipesClose}
             onGoToMixer={onGoToMixer}
           />

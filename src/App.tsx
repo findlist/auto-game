@@ -134,6 +134,7 @@ export default function App() {
   const {
     announcements, showAnnouncements,
     handleDismissAnnouncement, handleCloseAnnouncements,
+    handleSkipAllAnnouncements,
   } = useAnnouncements();
 
   // 自定关卡管理 — 通过 useCustomLevels hook 统一管理
@@ -597,6 +598,7 @@ export default function App() {
           onCheckinRewardClose={() => setShowCheckinReward(null)}
           onAnnouncementDismiss={handleDismissAnnouncement}
           onAnnouncementClose={handleCloseAnnouncements}
+          onAnnouncementSkipAll={handleSkipAllAnnouncements}
           onSavedRecipesClose={closeSavedRecipes}
           onGoToMixer={() => setPage('encyclopedia')}
           showChangelog={showChangelog}

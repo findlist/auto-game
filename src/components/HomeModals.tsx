@@ -32,24 +32,30 @@ const AnnouncementModal: React.FC<{
   announcements: Announcement[];
   onDismiss: (id: string) => void;
   onClose: () => void;
-}> = ({ announcements, onDismiss, onClose }) => {
+  onSkipAll: () => void;
+}> = ({ announcements, onDismiss, onClose, onSkipAll }) => {
   if (announcements.length === 0) return null;
+  const current = announcements[0];
+  const total = announcements.length;
+  const isLast = total === 1;
   return (
     <div className="tutorial-overlay" onClick={onClose}>
       <div className="tutorial-card" onClick={(e) => e.stopPropagation()}>
-        <div className="tutorial-emoji">{announcements[0].icon}</div>
-        <h2>{announcements[0].title}</h2>
+        <div className="tutorial-emoji">{current.icon}</div>
+        <h2>{current.title}</h2>
         <p className="modal-body-text-announcement">
-          {announcements[0].content}
+          {current.content}
         </p>
         <div className="modal-actions-sm">
-          <button className="btn btn-primary btn-large" onClick={() => onDismiss(announcements[0].id)}>
-          知道了
+          {/* 主按钮：最后一条显示"知道了"，否则显示"下一条 N/M"明确告知进度 */}
+          <button className="btn btn-primary btn-large" onClick={() => onDismiss(current.id)}>
+            {isLast ? '知道了' : `下一条 (1/${total})`}
           </button>
-          {announcements.length > 1 && (
-            <p className="modal-hint-text-sm">
-              还有 {announcements.length - 1} 条公告
-            </p>
+          {/* 多条公告时提供"全部跳过"按钮，避免用户被逐条轮播卡住无法进入游戏 */}
+          {!isLast && (
+            <button className="btn btn-secondary" onClick={onSkipAll}>
+              全部跳过 ({total})
+            </button>
           )}
         </div>
       </div>
@@ -122,12 +128,13 @@ const HomeModals: React.FC<{
   onCheckinRewardClose: () => void;
   onAnnouncementDismiss: (id: string) => void;
   onAnnouncementClose: () => void;
+  onAnnouncementSkipAll: () => void;
   onSavedRecipesClose: () => void;
   onGoToMixer: () => void;
 }> = ({
   checkinReward, checkinStreak, announcements, savedRecipes,
   showCheckinReward, showAnnouncements, showSavedRecipes,
-  onCheckinRewardClose, onAnnouncementDismiss, onAnnouncementClose,
+  onCheckinRewardClose, onAnnouncementDismiss, onAnnouncementClose, onAnnouncementSkipAll,
   onSavedRecipesClose, onGoToMixer,
 }) => {
   return (
@@ -144,6 +151,7 @@ const HomeModals: React.FC<{
           announcements={announcements}
           onDismiss={onAnnouncementDismiss}
           onClose={onAnnouncementClose}
+          onSkipAll={onAnnouncementSkipAll}
         />
       )}
       {showSavedRecipes && (

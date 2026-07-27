@@ -30,8 +30,19 @@ export function useAnnouncements() {
     });
   }, []);
 
-  // 关闭整个公告弹窗
+  // 关闭整个公告弹窗（不标记已读）
   const handleCloseAnnouncements = useCallback(() => {
+    setShowAnnouncements(false);
+  }, []);
+
+  // 一键跳过所有未读公告：全部标记为已读并关闭弹窗
+  // 设计原因：原 UI 仅"知道了"按钮逐条关闭，用户以为点击无反应（实际在切换下一条）
+  const handleSkipAllAnnouncements = useCallback(() => {
+    setAnnouncements(prev => {
+      // 标记当前所有未读公告为已读，避免下次进入再逐条弹出
+      prev.forEach(a => markAnnouncementRead(a.id));
+      return [];
+    });
     setShowAnnouncements(false);
   }, []);
 
@@ -40,5 +51,6 @@ export function useAnnouncements() {
     showAnnouncements,
     handleDismissAnnouncement,
     handleCloseAnnouncements,
+    handleSkipAllAnnouncements,
   };
 }

@@ -12339,3 +12339,382 @@ body.dark-theme {
 
 /* ============ 第九批样式优化结束 ============ */
 
+/* ============================================================ */
+/* ============ 2026-07-27 样式优化增强（第十批） ============ */
+/* ============================================================ */
+/* 设计依据：基于第九批报告"后续建议"清单实施，结合 frontend-design 技能审查结论 */
+/* 核心目标：补齐键盘焦点反馈、稀有成就氛围、移动端细节、桌面端中等屏适配 */
+/* 全部为追加样式，不修改已有规则，未改动任何 TSX 组件逻辑 */
+
+/* --- 1. 试管键盘焦点光环增强（桌面端 :focus-visible 附加主题色呼吸） --- */
+@media (hover: hover) and (pointer: fine) {
+  .tube-container:focus-visible .tube {
+    /* 在原有 outline 之外叠加 box-shadow 呼吸光环，让数字键选管有视觉反馈 */
+    animation: tube-focus-breathe 1.8s ease-in-out infinite;
+  }
+}
+@keyframes tube-focus-breathe {
+  0%, 100% {
+    box-shadow:
+      0 0 0 3px color-mix(in srgb, var(--primary) 50%, transparent),
+      0 0 14px color-mix(in srgb, var(--primary) 28%, transparent),
+      inset 2px 0 4px rgba(255, 255, 255, 0.25),
+      inset -2px 0 4px var(--tube-shadow-inner),
+      inset 0 -3px 6px var(--tube-bottom-reflection);
+  }
+  50% {
+    box-shadow:
+      0 0 0 3px color-mix(in srgb, var(--primary) 70%, transparent),
+      0 0 26px color-mix(in srgb, var(--primary) 50%, transparent),
+      inset 2px 0 4px rgba(255, 255, 255, 0.3),
+      inset -2px 0 4px var(--tube-shadow-inner),
+      inset 0 -3px 6px var(--tube-bottom-reflection);
+  }
+}
+
+/* --- 2. 空试管柔和内阴影暗示（让空试管有"等待被填"的视觉提示） --- */
+.tube-inner:empty::after {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border-radius: 0 0 14px 14px;
+  background:
+    radial-gradient(ellipse at center, rgba(255, 255, 255, 0.06) 0%, transparent 60%),
+    repeating-linear-gradient(135deg, transparent 0, transparent 6px, rgba(255, 255, 255, 0.03) 6px, rgba(255, 255, 255, 0.03) 7px);
+  pointer-events: none;
+  opacity: 0.7;
+}
+.dark-theme .tube-inner:empty::after {
+  background:
+    radial-gradient(ellipse at center, rgba(255, 255, 255, 0.05) 0%, transparent 60%),
+    repeating-linear-gradient(135deg, transparent 0, transparent 6px, rgba(255, 255, 255, 0.045) 6px, rgba(255, 255, 255, 0.045) 7px);
+  opacity: 0.55;
+}
+
+/* --- 3. 传说成就粒子背景（伪元素静态粒子点 + 缓慢漂浮） --- */
+.achievement-card.unlocked[data-rarity="legendary"]::before,
+.achievement-card.unlocked.rarity-legendary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 12% 22%, rgba(255, 215, 0, 0.55) 0.6px, transparent 1.4px),
+    radial-gradient(circle at 78% 18%, rgba(255, 200, 80, 0.45) 0.5px, transparent 1.1px),
+    radial-gradient(circle at 30% 78%, rgba(255, 180, 60, 0.5) 0.5px, transparent 1.1px),
+    radial-gradient(circle at 88% 65%, rgba(255, 235, 130, 0.45) 0.4px, transparent 0.9px),
+    radial-gradient(circle at 55% 35%, rgba(255, 215, 0, 0.35) 0.4px, transparent 0.9px),
+    radial-gradient(circle at 65% 88%, rgba(255, 200, 80, 0.4) 0.4px, transparent 0.9px);
+  pointer-events: none;
+  border-radius: inherit;
+  z-index: 0;
+  animation: legendary-particles-drift 6s ease-in-out infinite;
+}
+@keyframes legendary-particles-drift {
+  0%, 100% { transform: translateY(0); opacity: 0.6; }
+  50% { transform: translateY(-2px); opacity: 1; }
+}
+.achievement-card.unlocked[data-rarity="legendary"] > *,
+.achievement-card.unlocked.rarity-legendary > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* --- 4. 进度条满进度金色光效（用 [style*=] 选择器识别 100% 状态） --- */
+.achievement-overall-fill[style*="width: 100%"],
+.ach-cat-progress-fill[style*="width: 100%"],
+.level-overview-fill[style*="width: 100%"],
+.progress-bar-fill[style*="width: 100%"],
+.today-ach-bar-fill[style*="width: 100%"],
+.diff-progress-fill[style*="width: 100%"] {
+  background: linear-gradient(90deg, #ffd700 0%, #ffb347 50%, #ffd700 100%);
+  box-shadow: 0 0 12px rgba(255, 200, 0, 0.55);
+}
+
+/* --- 5. 模式按钮主题色阴影（用 CSS 变量统一双色调阴影） --- */
+:root {
+  --btn-shadow-color: 102, 126, 234;
+  --btn-shadow-color-2: 118, 75, 162;
+}
+.mode-grid-btn {
+  box-shadow:
+    0 4px 0 rgba(var(--btn-shadow-color), 0.35),
+    0 6px 16px rgba(var(--btn-shadow-color-2), 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+.mode-grid-btn:hover {
+  box-shadow:
+    0 6px 0 rgba(var(--btn-shadow-color), 0.4),
+    0 10px 22px rgba(var(--btn-shadow-color-2), 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+.mode-grid-btn:active {
+  box-shadow:
+    0 1px 0 rgba(var(--btn-shadow-color), 0.3),
+    0 2px 8px rgba(var(--btn-shadow-color-2), 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* --- 6. 签到已完成 ✓ 角标（伪元素附加圆形勾选徽章） --- */
+.checkin-card {
+  position: relative;
+}
+.checkin-card.checkin-done::after {
+  content: '✓';
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #4ECDC4, #667eea);
+  color: #fff;
+  border-radius: 50%;
+  font-size: 13px;
+  font-weight: 800;
+  box-shadow: 0 2px 8px rgba(78, 205, 196, 0.4);
+  pointer-events: none;
+  animation: checkin-pop-10th 0.4s cubic-bezier(0.34, 1.6, 0.64, 1);
+}
+@keyframes checkin-pop-10th {
+  0% { transform: scale(0); }
+  60% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* --- 7. 帮助步骤序号徽章（counter-reset 自动编号） --- */
+.help-visual-steps {
+  counter-reset: help-step;
+}
+.help-visual-step {
+  counter-increment: help-step;
+  position: relative;
+  margin-top: 14px;
+}
+.help-visual-step:first-child {
+  margin-top: 6px;
+}
+.help-visual-step::before {
+  content: counter(help-step);
+  position: absolute;
+  top: -8px;
+  right: 10px;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: #fff;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 800;
+  box-shadow: 0 2px 6px rgba(102, 126, 234, 0.4);
+  z-index: 2;
+}
+
+/* --- 8. 死局提示卡片二次晃动（强化警告感） --- */
+.deadlock-warning-tip {
+  animation: deadlock-warning-pulse 0.6s ease, deadlock-shake-10th 0.5s ease-in-out 0.6s;
+}
+@keyframes deadlock-shake-10th {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-2px); }
+  40% { transform: translateX(2px); }
+  60% { transform: translateX(-1px); }
+  80% { transform: translateX(1px); }
+}
+
+/* --- 9. 关卡按钮完成态星光闪烁（::before，避免与已有 ::after shimmer 冲突） --- */
+.level-btn.completed::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  width: 4px;
+  height: 4px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow:
+    0 0 6px #fff,
+    7px 2px 0 -1px rgba(255, 255, 255, 0.7),
+    -3px 6px 0 -1px rgba(255, 255, 255, 0.5);
+  animation: completed-star-twinkle 2.4s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+@keyframes completed-star-twinkle {
+  0%, 100% { opacity: 0.4; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+
+/* --- 10. 限时模式倒计时进度环装饰（conic-gradient 旋转，强化紧迫感） --- */
+.timer-badge.timer-danger {
+  position: relative;
+}
+.timer-badge.timer-danger::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 18px;
+  background: conic-gradient(
+    from 0deg,
+    rgba(255, 82, 82, 0.55) 0deg,
+    transparent 60deg,
+    transparent 360deg
+  );
+  animation: timer-ring-rotate 1s linear infinite;
+  z-index: -1;
+  pointer-events: none;
+}
+@keyframes timer-ring-rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* --- 11. 步数效率徽章悬停强化（按等级差异化光晕） --- */
+.efficiency-badge {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: default;
+  display: inline-block;
+}
+.efficiency-badge:hover {
+  transform: translateY(-1px) scale(1.06);
+}
+.efficiency-badge.eff-perfect:hover {
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.55);
+}
+.efficiency-badge.eff-good:hover {
+  box-shadow: 0 0 10px rgba(102, 187, 106, 0.45);
+}
+.efficiency-badge.eff-warn:hover {
+  box-shadow: 0 0 10px rgba(255, 152, 0, 0.45);
+}
+.efficiency-badge.eff-bad:hover {
+  box-shadow: 0 0 10px rgba(255, 82, 82, 0.45);
+}
+
+/* --- 12. 胜利卡片粒子飘落（::after 多色粒子径向渐变 + 下落动画） --- */
+.win-card {
+  position: relative;
+  overflow: hidden;
+}
+.win-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 15% 20%, rgba(255, 215, 0, 0.5) 1px, transparent 2px),
+    radial-gradient(circle at 85% 15%, rgba(255, 192, 203, 0.45) 1px, transparent 2px),
+    radial-gradient(circle at 70% 80%, rgba(78, 205, 196, 0.45) 1px, transparent 2px),
+    radial-gradient(circle at 25% 75%, rgba(149, 225, 211, 0.45) 1px, transparent 2px),
+    radial-gradient(circle at 50% 50%, rgba(255, 230, 109, 0.4) 1px, transparent 2px);
+  pointer-events: none;
+  animation: win-particles-fall 3s ease-out 0.4s;
+  opacity: 0;
+}
+@keyframes win-particles-fall {
+  0% { opacity: 0; transform: translateY(-10px); }
+  30% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(8px); }
+}
+
+/* --- 13. 试管选中态轻微浮动（叠加在 selected-glow 之上增强存在感） --- */
+.tube-container.selected .tube {
+  animation: selected-glow 1.5s ease-in-out infinite, selected-float-10th 2s ease-in-out infinite;
+}
+@keyframes selected-float-10th {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+
+/* --- 14. 暗色主题试管玻璃感增强（更深 backdrop-filter + 半透明白底） --- */
+.dark-theme .tube {
+  backdrop-filter: blur(6px) brightness(1.05);
+  -webkit-backdrop-filter: blur(6px) brightness(1.05);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+.dark-theme .tube-mouth {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* --- 15. 移动端 360px 极小屏适配（在 380px 基础上进一步精简） --- */
+@media (max-width: 360px) {
+  .game-title { font-size: 16px; }
+  .game-info { gap: 6px; }
+  .level-badge, .difficulty-badge, .moves-badge, .optimal-badge, .timer-badge {
+    font-size: 11px;
+    padding: 3px 7px;
+  }
+  .efficiency-badge {
+    font-size: 10px;
+    padding: 2px 6px;
+  }
+  .game-controls .btn {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+  .keyboard-hint .hint-mobile { font-size: 11px; }
+  .win-card { padding: 16px 14px; }
+  .win-card h2 { font-size: 22px; }
+}
+
+/* --- 16. 平板端 769-1024 中等屏适配（介于手机与桌面之间） --- */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .home-main { max-width: 580px; }
+  .game-main { max-width: 580px; }
+  .game-board { max-width: 580px; }
+  .tube { width: 46px; height: 145px; }
+  .tubes-grid { gap: 14px; padding: 18px 10px; }
+}
+
+/* --- 17. 减少动画偏好适配（第十批新增项目） --- */
+@media (prefers-reduced-motion: reduce) {
+  .tube-container:focus-visible .tube,
+  .tube-inner:empty::after,
+  .achievement-card.unlocked[data-rarity="legendary"]::before,
+  .achievement-card.unlocked.rarity-legendary::before,
+  .deadlock-warning-tip,
+  .level-btn.completed::before,
+  .timer-badge.timer-danger::before,
+  .timer-badge.timer-danger,
+  .win-card::after,
+  .tube-container.selected .tube,
+  .checkin-card.checkin-done::after,
+  .efficiency-badge,
+  .efficiency-badge:hover {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* --- 18. 高对比度模式适配（第十批新增项目） --- */
+@media (prefers-contrast: high) {
+  .tube-container:focus-visible .tube {
+    outline: 3px solid #000;
+    outline-offset: 3px;
+  }
+  .timer-badge.timer-danger::before {
+    background: conic-gradient(from 0deg, #000 0deg, transparent 60deg, transparent 360deg);
+  }
+  .checkin-card.checkin-done::after {
+    border: 2px solid #000;
+    background: #000;
+    color: #fff;
+  }
+  .help-visual-step::before {
+    border: 2px solid #000;
+  }
+  .level-btn.completed::before {
+    background: #000;
+  }
+  .efficiency-badge {
+    border: 1.5px solid #000;
+  }
+}
+
+/* ============ 第十批样式优化结束 ============ */
+

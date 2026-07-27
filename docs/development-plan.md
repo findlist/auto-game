@@ -163,7 +163,7 @@
 ### 触发条件
 docs/site-config.md 存在且包含线上 URL（已满足）
 
-### 已完成（v1.13.0 → v1.41.0，上线后启发式优化 + 体验打磨 + SEO增强 + 留存机制建设）
+### 已完成（v1.13.0 → v1.51.0，上线后启发式优化 + 体验打磨 + SEO增强 + 留存机制建设 + 组件架构重构）
 - [x] v1.13.0：成就页大改版（分类筛选/进度条/解锁日期）、游戏内智能上下文提示、连胜指示器、品牌 OG 图片
 - [x] v1.14.0：死局预警系统、步数效率可视化条、继续上次卡片增强（显示模式）、难度小圆点指示器、SEO 结构化数据扩充
 - [x] v1.15.0：重置进度清理修复（统一存储键名）、帮助弹窗 SVG 图示、星星弹出动画、再来一局按钮、最佳步数徽章
@@ -193,23 +193,32 @@ docs/site-config.md 存在且包含线上 URL（已满足）
 - [x] v1.39.0：限时模式每 5 关里程碑奖励、首次倒水成功鼓励提示、FAQ 补充、SEO 扩展
 - [x] v1.40.0：成就系统稀有度分级（普通/稀有/史诗/传说）+ 差异化音效、每日目标完成动画（打钩弹跳/进度条充能/彩虹/粒子飘落）、第 2 关操作提示（蓝色主题）、成就页稀有度标签与边框光效、SEO 扩展
 - [x] v1.41.0：周挑战模块拆分优化（消除动态导入警告，首屏 bundle 减少 0.57KB）、成就页稀有度筛选、稀有度统计面板、第 3 关策略提示（紫色主题）、CSS 乱码修复、SEO 扩展
+- [x] v1.42.0：第 4-6 关分关策略提示（暖橙/翠绿/玫红主题）、SEO 扩展
+- [x] v1.43.0：第 7-9 关分关策略提示（深紫/金黄/青蓝主题）、SEO 扩展
+- [x] v1.44.0：第 10-12 关分关策略提示（橙红/蓝绿/紫红主题）、关卡生成公共函数提取、SEO 扩展
+- [x] v1.45.0：BGM_SEGMENTS 旋律数据独立为 bgmData.ts 模块、soundEngine.ts 从 297 行减至约 220 行、SEO 扩展
+- [x] v1.46.0：第 13-15 关分关策略提示（青绿/深紫/金主题）、levelTips.ts 配置独立模块、GameBoard 精简 20 行、SEO 扩展
+- [x] v1.47.0：HomeTopSection/HomeDialogs/HomeChrome 三个首页组件拆分（App.tsx 减少 320 行）、GamePageComponent 懒加载（首屏 296KB→263KB）、ReplayPanel/HelpModal/ShareImageModal 组件化、SEO 扩展
+- [x] v1.48.0：第 16-18 关分关策略提示（亮红/深靛蓝/玫红主题）、levelTips 模块扩展、SEO 扩展
+- [x] v1.49.0：WinOverlay/GameOverlays 组件拆分（GameBoard 精简 180 行）、ReplayPanel/HelpModal/ShareImageModal 组件化、SEO keywords + featureList 扩展
+- [x] v1.50.0：第 19-20 关分关策略提示、levelTips 模块扩展、样式适配、GameBoard 精简至约 750 行
+- [x] v1.51.0：useGameModes/useDailyCheckin/useReplayVideo 三个自定义 hook 提取（App.tsx 从 1097 行降至 921 行）、achievements.ts 拆分为 achievementState + achievementEncyclopediaChecks + 核心管理器三模块（524 行降至 374 行）、SEO 扩展
 - [x] 每日挑战模式（阶段一已完成，原阶段二计划项已交付）
 - [x] 成就系统（73 个成就 + 4 档稀有度，阶段一已完成并持续扩充，原阶段二计划项已交付）
 
 ### 计划（待执行，按优先级排序）
-1. **P0 — 首屏体积优化（紧急）**：JS bundle 已达 296KB，逼近 300KB 红线，需提取更多组件到懒加载分块（如首页 HomeComponent 约 800 行）、精简 App.tsx（仍约 2074 行）、考虑 ColorEncyclopediaPage（49.30KB）进一步拆分
-2. **P1 — package.json 版本号一致性修复**：package.json 仍为 1.15.0，App.tsx/sw.js 已至 v1.41.0，需对齐至 v1.41.0（bug-check B21 仍未解决）
-3. **P1 — 工作区清理**：scripts/ 下 19 个已删除 .cjs 脚本未提交，根目录有大量未跟踪 .md/.cjs/.py 临时文件，需 git add 单独文件后提交清理（bug-check 2026-07-20 第 4 项）
-4. **P1 — DailyGoalsCard setTimeout 清理**：两个 setTimeout（1.2s 和 2s）组件卸载时未清理（bug-check 2026-07-20 第 2 项）
-5. **P1 — localStorage 键名统一管理**：color_mixer_recipes 和 encyclopedia_played_games 硬编码，需收入 storageKeys.ts（bug-check 2026-07-20 第 3 项）
-6. **P1 — 暗色主题下新增游戏组件样式持续验证**：序列记忆/配对/辨识测试在暗色主题下的对比度与可读性（style-opt 反复提及）
-7. **P2 — CSS 体积优化**：CSS 已达 200KB（gzip 35KB），含约 384 行 GBK 编码乱码注释，需批量清理
-8. **P2 — App.tsx 进一步拆分**：约 2074 行，可继续提取首页渲染部分为 HomeComponent 组件
-9. 接入统计分析工具（Umami/Plausible，需用户配合配置）
-10. 根据统计数据优化难度曲线与星级评价阈值
-11. 优化社交分享传播机制（战绩图片/回放链接/每日一题分享）
-12. 优化新手引导：第 4-5 关可考虑添加极简提示
-13. 考虑添加成就稀有度分布饼图等进阶展示
+1. **P1 — package.json 版本号一致性修复**：package.json 仍为 1.15.0，App.tsx/sw.js 已至 v1.51.0，需对齐至 v1.51.0（bug-check B21 仍未解决）
+2. **P1 — 工作区清理**：scripts/ 下 19 个已删除 .cjs 脚本未提交，根目录有大量未跟踪 .md/.cjs/.py 临时文件，需 git add 单独文件后提交清理（bug-check 2026-07-20 第 4 项）
+3. **P1 — DailyGoalsCard setTimeout 清理**：两个 setTimeout（1.2s 和 2s）组件卸载时未清理（bug-check 2026-07-20 第 2 项）
+4. **P1 — localStorage 键名统一管理**：color_mixer_recipes 和 encyclopedia_played_games 硬编码，需收入 storageKeys.ts（bug-check 2026-07-20 第 3 项）
+5. **P1 — 暗色主题下新增游戏组件样式持续验证**：序列记忆/配对/辨识测试在暗色主题下的对比度与可读性（style-opt 反复提及）
+6. **P2 — CSS 体积优化**：CSS 已达 207KB（gzip 37KB），需评估是否可精简
+7. **P2 — App.tsx 进一步拆分**：约 921 行，可继续提取页面路由与回调函数
+8. 接入统计分析工具（Umami/Plausible，需用户配合配置）
+9. 根据统计数据优化难度曲线与星级评价阈值
+10. 优化社交分享传播机制（战绩图片/回放链接/每日一题分享）
+11. 优化新手引导：第 21 关以后可考虑添加极简提示
+12. 考虑添加成就稀有度分布饼图等进阶展示
 
 ## 阶段三：扩大变现（DAU > 50）
 
