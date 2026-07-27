@@ -13,6 +13,16 @@ const ChangelogModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         <h2>色彩排序更新日志</h2>
         <div className="changelog-content">
           <div className="changelog-item">
+            <h3>🎉 v1.54.0</h3>
+            <ul>
+              <li>🔧 App.tsx内联handleWin替换为useGameWin hook调用，移除130行内联胜利处理代码，清理6个未使用导入</li>
+              <li>💾 首页折叠状态和难度筛选偏好持久化到localStorage，刷新后保持用户UI偏好</li>
+              <li>⚡ 添加touch-action:manipulation和overscroll-behavior:none优化移动端触控体验</li>
+              <li>🔧 修复useGameWin.ts中未使用的SoundEngine导入导致TS6133编译错误</li>
+              <li>📦 App.tsx从768行降至667行(-13.2%)，模块总数从113增至114</li>
+            </ul>
+          </div>
+          <div className="changelog-item">
             <h3>🎉 v1.53.0</h3>
             <ul>
               <li>🔧 提取App.tsx配方管理逻辑为useSavedRecipes hook，管理色彩混合配方加载与查看</li>
