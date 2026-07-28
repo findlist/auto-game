@@ -242,7 +242,11 @@ export function LevelEditorPage({ onBack, customLevels, onPlay, onDelete, onSave
                   <div key={i} className="tube-container editor-tube">
                     <div
                       className="tube"
+                      role="button"
+                      tabIndex={0}
+                      aria-label={`试管 ${i + 1}，点击添加/移除颜色层`}
                       onClick={() => handleTubeClick(i)}
+                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleTubeClick(i); } }}
                       onContextMenu={(e) => { e.preventDefault(); handleClearTube(i); }}
                       title="点击添加/移除颜色层，右键清空"
                     >
@@ -482,7 +486,7 @@ export function CustomLevelPlayer({ level, onWin, onShare, onGoHome }: CustomLev
             <div className="deadlock-emoji">😮</div>
             <h2>没有可行操作了</h2>
             <div className="win-actions">
-              <button className="btn btn-primary" onClick={handleUndo} disabled={history.length === 0}>⏪ 撒销</button>
+              <button className="btn btn-primary" onClick={handleUndo} disabled={history.length === 0}>⏪ 撤销</button>
               <button className="btn btn-secondary" onClick={handleReset}>🔄 重置</button>
             </div>
           </div>
@@ -490,7 +494,7 @@ export function CustomLevelPlayer({ level, onWin, onShare, onGoHome }: CustomLev
       )}
 
       <div className="game-controls">
-        <button className="btn btn-undo" onClick={handleUndo} disabled={history.length === 0 || isWon}>⏪ 撒销</button>
+        <button className="btn btn-undo" onClick={handleUndo} disabled={history.length === 0 || isWon}>⏪ 撤销</button>
         <button className="btn btn-reset" onClick={handleReset}>🔄 重置</button>
         <button className="btn btn-secondary" onClick={() => onShare(exportLevelCode(level))}>📤 分享</button>
       </div>

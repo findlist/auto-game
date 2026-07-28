@@ -13,6 +13,14 @@ interface SettingsPageProps {
   onBack: () => void;
 }
 
+// 键盘可访问性辅助：让 div[role=button] 响应 Enter/Space，与原生 button 行为一致
+const handleEnterPress = (handler: () => void) => (e: React.KeyboardEvent) => {
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    handler();
+  }
+};
+
 export function SettingsPage({ onBack }: SettingsPageProps) {
   const [settings, setSettings] = useState(GameSettings.get());
 
@@ -115,7 +123,7 @@ export function SettingsPage({ onBack }: SettingsPageProps) {
       </header>
       <main className="info-page">
         <div className="settings-card">
-          <div className="setting-item" onClick={toggleSound}>
+          <div className="setting-item" role="button" tabIndex={0} aria-pressed={settings.sound} onClick={toggleSound} onKeyDown={handleEnterPress(toggleSound)}>
             <div className="setting-info">
               <div className="setting-icon">🔊</div>
               <div>
@@ -128,7 +136,7 @@ export function SettingsPage({ onBack }: SettingsPageProps) {
             </div>
           </div>
 
-          <div className="setting-item" onClick={toggleVibration}>
+          <div className="setting-item" role="button" tabIndex={0} aria-pressed={settings.vibration} onClick={toggleVibration} onKeyDown={handleEnterPress(toggleVibration)}>
             <div className="setting-info">
               <div className="setting-icon">📳</div>
               <div>
@@ -141,7 +149,7 @@ export function SettingsPage({ onBack }: SettingsPageProps) {
             </div>
           </div>
 
-          <div className="setting-item" onClick={toggleBGM}>
+          <div className="setting-item" role="button" tabIndex={0} aria-pressed={settings.bgm} onClick={toggleBGM} onKeyDown={handleEnterPress(toggleBGM)}>
             <div className="setting-info">
               <div className="setting-icon">🎵</div>
               <div>
@@ -211,7 +219,7 @@ export function SettingsPage({ onBack }: SettingsPageProps) {
         </div>
 
         <div className="settings-card">
-          <div className="setting-item setting-danger" onClick={handleResetProgress}>
+          <div className="setting-item setting-danger" role="button" tabIndex={0} onClick={handleResetProgress} onKeyDown={handleEnterPress(handleResetProgress)}>
             <div className="setting-info">
               <div className="setting-icon">⚠️</div>
               <div>
