@@ -135,7 +135,8 @@ function SmartRecommendSectionComponent({
         const recommend = getAdaptiveRecommendation(completedLevels, levelStars, currentLevel);
         if (!recommend) return null;
         return (
-          <div className="recommend-card" onClick={() => onSelectLevel(recommend.level)}>
+          <div className="recommend-card" onClick={() => onSelectLevel(recommend.level)} role="button" tabIndex={0}
+            onKeyDown={handleEnterPress(() => onSelectLevel(recommend.level))}>
             <span className="recommend-icon">{recommend.icon}</span>
             <div className="recommend-info">
               <span className="recommend-label">推荐关卡</span>
