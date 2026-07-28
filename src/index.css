@@ -12722,3 +12722,358 @@ body.dark-theme {
 
 /* ============ 第十批样式优化结束 ============ */
 
+/* ============ 第十一批样式优化开始（2026-07-28） ============ */
+/* 设计目标：完成第十批"后续建议"中的 CSS-only 项目，并补强细节交互反馈。
+   全部为追加样式，不修改已有规则，不改动任何 TSX 组件逻辑。 */
+
+/* --- 1. 史诗成就粒子背景（完成第十批建议 #4） --- */
+/* 紫色粒子点缓慢漂浮，参考传说实现的 ::before 方案，避免与已有 ::after 冲突 */
+.achievement-card.unlocked[data-rarity="epic"]::before,
+.achievement-card.unlocked.rarity-epic::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* 5 个紫色 radial-gradient 静态粒子点，分布在不同位置与透明度 */
+  background:
+    radial-gradient(circle 2px at 18% 28%, rgba(186, 104, 200, 0.7) 100%, transparent),
+    radial-gradient(circle 1.5px at 78% 22%, rgba(156, 39, 176, 0.6) 100%, transparent),
+    radial-gradient(circle 2.5px at 62% 78%, rgba(186, 104, 200, 0.5) 100%, transparent),
+    radial-gradient(circle 1.5px at 32% 72%, rgba(206, 147, 216, 0.6) 100%, transparent),
+    radial-gradient(circle 2px at 88% 58%, rgba(156, 39, 176, 0.45) 100%, transparent);
+  background-repeat: no-repeat;
+  animation: epic-particles-drift 7s ease-in-out infinite;
+  border-radius: inherit;
+  z-index: 0;
+}
+.achievement-card.unlocked.rarity-epic > * {
+  position: relative;
+  z-index: 1;
+}
+@keyframes epic-particles-drift {
+  0%, 100% { transform: translateY(0); opacity: 0.65; }
+  50% { transform: translateY(-2px); opacity: 1; }
+}
+
+/* --- 2. 稀有度筛选标签悬停光晕（完成第十批建议 #5） --- */
+/* 按稀有度颜色显示光晕，增强筛选时的视觉反馈 */
+.ach-rarity-btn {
+  position: relative;
+  transition: all 0.2s ease, box-shadow 0.25s ease;
+}
+.ach-rarity-btn:hover {
+  transform: translateY(-1px);
+}
+.ach-rarity-btn[data-rarity="common"]:hover,
+.ach-rarity-btn:hover {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.35), 0 2px 8px rgba(255, 255, 255, 0.15);
+}
+.ach-rarity-btn[data-rarity="rare"]:hover {
+  box-shadow: 0 0 0 1px rgba(33, 150, 243, 0.5), 0 2px 10px rgba(33, 150, 243, 0.3);
+}
+.ach-rarity-btn[data-rarity="epic"]:hover {
+  box-shadow: 0 0 0 1px rgba(156, 39, 176, 0.55), 0 2px 10px rgba(156, 39, 176, 0.35);
+}
+.ach-rarity-btn[data-rarity="legendary"]:hover {
+  box-shadow: 0 0 0 1px rgba(255, 215, 0, 0.6), 0 2px 12px rgba(255, 215, 0, 0.4);
+}
+
+/* --- 3. 签到日历今日格子呼吸光环（完成第十批建议 #7） --- */
+/* 当前仅有静态橙色 outline，叠加呼吸动画让"今日"更醒目 */
+.calendar-day-today {
+  animation: calendar-today-breathe 2s ease-in-out infinite;
+}
+@keyframes calendar-today-breathe {
+  0%, 100% {
+    outline: 2px solid #ff9800;
+    outline-offset: -2px;
+    box-shadow: 0 0 0 0 rgba(255, 152, 0, 0);
+  }
+  50% {
+    outline: 2px solid #ffb74d;
+    outline-offset: -2px;
+    box-shadow: 0 0 0 4px rgba(255, 152, 0, 0.18);
+  }
+}
+/* 今日且已签到的格子：金边 + 呼吸 */
+.calendar-day-today.calendar-day-checked {
+  animation: calendar-today-checked-breathe 2.4s ease-in-out infinite;
+}
+@keyframes calendar-today-checked-breathe {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+  50% { box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.45); }
+}
+
+/* --- 4. 关卡编辑器颜色色板选中脉冲 --- */
+/* 当前选中态仅有静态边框，叠加缓慢脉冲让选中色板更易识别 */
+.color-swatch.color-selected {
+  animation: color-swatch-pulse 1.8s ease-in-out infinite;
+}
+@keyframes color-swatch-pulse {
+  0%, 100% { box-shadow: 0 0 0 3px var(--primary), inset 0 2px 3px rgba(255, 255, 255, 0.4); }
+  50% { box-shadow: 0 0 0 5px color-mix(in srgb, var(--primary) 50%, transparent), 0 0 12px color-mix(in srgb, var(--primary) 45%, transparent), inset 0 2px 3px rgba(255, 255, 255, 0.4); }
+}
+
+/* --- 5. 关卡编辑器试管悬停预览（完成第十批建议 #9 的 CSS 部分） --- */
+/* 鼠标悬停编辑器试管时显示轻微预览高光，提示可交互 */
+.editor-tube {
+  transition: transform 0.2s ease;
+  border-radius: 8px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .editor-tube:hover {
+    transform: translateY(-2px);
+  }
+  .editor-tube:hover .tube {
+    box-shadow:
+      inset 2px 0 4px rgba(255, 255, 255, 0.25),
+      inset -2px 0 4px var(--tube-shadow-inner),
+      inset 0 -3px 6px var(--tube-bottom-reflection),
+      0 0 0 2px color-mix(in srgb, var(--primary) 35%, transparent);
+  }
+}
+
+/* --- 6. 成就卡片悬停光泽扫过 --- */
+/* 已解锁成就悬停时一道斜向光泽扫过，增强"已获得"的仪式感 */
+.achievement-card.unlocked {
+  position: relative;
+  overflow: hidden;
+}
+.achievement-card.unlocked::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(115deg, transparent 0%, rgba(255, 255, 255, 0.35) 50%, transparent 100%);
+  transform: skewX(-18deg);
+  pointer-events: none;
+  transition: left 0.7s ease;
+  z-index: 2;
+}
+@media (hover: hover) and (pointer: fine) {
+  .achievement-card.unlocked:hover::after {
+    left: 130%;
+  }
+}
+/* 注意：传说成就已用 ::before 作粒子背景，此处 ::after 与之不冲突 */
+
+/* --- 7. 游戏面板环境呼吸光 --- */
+/* 极轻微的主题色外发光呼吸，让游戏区域"活着"，不打扰操作 */
+.game-board {
+  animation: game-board-ambient 4.5s ease-in-out infinite;
+}
+@keyframes game-board-ambient {
+  0%, 100% { box-shadow: var(--shadow-lg); }
+  50% { box-shadow: var(--shadow-lg), 0 0 0 1px color-mix(in srgb, var(--primary) 8%, transparent); }
+}
+
+/* --- 8. 试管归位液体表面涟漪（增强已有 tube-settle） --- */
+/* 通关时试管归位动画结束后，顶部液面产生一圈涟漪扩散 */
+.tube-settled .tube-inner > .color-layer:last-child::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.6);
+  transform: translate(-50%, -50%) scale(0);
+  animation: liquid-ripple 0.6s ease-out;
+  pointer-events: none;
+  z-index: 2;
+}
+@keyframes liquid-ripple {
+  0% { transform: translate(-50%, -50%) scale(0); opacity: 0.8; }
+  100% { transform: translate(-50%, -50%) scale(8); opacity: 0; }
+}
+
+/* --- 9. 信息页 h3 左边框悬停生长 --- */
+/* 当前 h3 仅有静态左边框，悬停时边框变粗并提亮，增强可读层次 */
+.info-page h3 {
+  transition: border-left-width 0.25s ease, border-left-color 0.25s ease, padding-left 0.25s ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .info-page h3:hover {
+    border-left-width: 5px;
+    border-left-color: rgba(255, 255, 255, 0.7);
+    padding-left: 12px;
+  }
+}
+
+/* --- 10. 统计卡片悬停光晕增强 --- */
+/* 已有 hover 上浮，叠加主题色光晕让数据卡片更有"活力" */
+.stat-card {
+  position: relative;
+}
+.stat-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--primary) 0%, transparent);
+  transition: box-shadow 0.3s ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .stat-card:hover::after {
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary) 25%, transparent), 0 0 16px color-mix(in srgb, var(--primary) 18%, transparent);
+  }
+}
+
+/* --- 11. 设置卡片分组分隔渐变 --- */
+/* 设置项之间增加细分隔线，提升信息密度高时的可读性 */
+.setting-item + .setting-item,
+.setting-item + .setting-item-static,
+.setting-item-static + .setting-item,
+.setting-item-static + .setting-item-static {
+  /* border 不支持渐变色，这里用 inset box-shadow 模拟细分隔线 */
+  box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.04);
+}
+.dark-theme .setting-item + .setting-item,
+.dark-theme .setting-item-static + .setting-item,
+.dark-theme .setting-item + .setting-item-static,
+.dark-theme .setting-item-static + .setting-item-static {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* --- 12. 页面加载表情旋转动画 --- */
+/* 当前加载表情静态显示，叠加缓慢旋转 + 缩放呼吸，降低等待焦虑 */
+.page-loading-emoji {
+  animation: loading-emoji-spin 1.6s ease-in-out infinite;
+  display: inline-block;
+}
+@keyframes loading-emoji-spin {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.12) rotate(180deg); }
+}
+
+/* --- 13. 锁定成就锁图标叠加 --- */
+/* 未解锁成就目前仅 opacity 0.6，叠加右上角锁图标让"未获得"状态更明确 */
+.achievement-card.locked {
+  position: relative;
+}
+.achievement-card.locked::after {
+  content: '🔒';
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  font-size: 13px;
+  opacity: 0.55;
+  pointer-events: none;
+  filter: grayscale(0.3);
+}
+/* 已存在 ::after 用于光泽扫过的 unlocked 卡片不在此列，互不冲突 */
+
+/* --- 14. 移动端横屏适配 --- */
+/* 横屏时高度受限，压缩顶部 padding 与试管尺寸，避免溢出 */
+@media (max-width: 900px) and (orientation: landscape) {
+  .game-board {
+    padding: 10px 14px;
+  }
+  .game-info {
+    margin-bottom: 8px;
+    gap: 6px;
+  }
+  .tubes-grid {
+    padding: 8px 4px;
+    gap: 10px;
+  }
+  .tube {
+    height: 110px;
+  }
+  .game-controls {
+    margin-top: 8px;
+    gap: 6px;
+  }
+  .keyboard-hint {
+    margin-top: 4px;
+  }
+  .home-header {
+    padding: 16px 16px 8px;
+  }
+}
+
+/* --- 15. 新手引导箭头增强弹跳 --- */
+/* 当前 beginner-hint-arrow 动画较弱，增强弹跳幅度让引导更醒目 */
+.beginner-hint-arrow {
+  animation: beginner-arrow-bounce-11 1.2s ease-in-out infinite;
+  display: inline-block;
+}
+@keyframes beginner-arrow-bounce-11 {
+  0%, 100% { transform: translateY(0) scale(1); }
+  40% { transform: translateY(-6px) scale(1.08); }
+  60% { transform: translateY(-3px) scale(1.04); }
+}
+
+/* --- 16. 开关旋钮开启态脉冲 --- */
+/* 开启态在已有滑动基础上叠加轻微脉冲，提示"已启用" */
+.toggle-switch.on .toggle-knob {
+  animation: toggle-on-pulse 2.4s ease-in-out infinite;
+}
+@keyframes toggle-on-pulse {
+  0%, 100% { box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25), 0 0 0 2px rgba(255, 255, 255, 0.3); }
+  50% { box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25), 0 0 0 4px color-mix(in srgb, var(--primary) 25%, transparent); }
+}
+
+/* --- 17. 暗色主题信息页文本对比度增强 --- */
+/* 暗色主题下 info-page 文本偏暗，提亮以保证可读性 */
+.dark-theme .info-page,
+.dark-theme .info-page p,
+.dark-theme .info-page li {
+  color: rgba(255, 255, 255, 0.88);
+}
+.dark-theme .info-page h3 {
+  border-left-color: rgba(255, 255, 255, 0.55);
+}
+
+/* --- 18. 减少动画偏好适配（第十一批） --- */
+@media (prefers-reduced-motion: reduce) {
+  .achievement-card.unlocked.rarity-epic::before,
+  .calendar-day-today,
+  .calendar-day-today.calendar-day-checked,
+  .color-swatch.color-selected,
+  .game-board,
+  .page-loading-emoji,
+  .beginner-hint-arrow,
+  .toggle-switch.on .toggle-knob,
+  .tube-settled .tube-inner > .color-layer:last-child::before {
+    animation: none !important;
+  }
+  .achievement-card.unlocked::after,
+  .info-page h3:hover,
+  .stat-card:hover::after,
+  .editor-tube:hover {
+    transition: none !important;
+  }
+}
+
+/* --- 19. 高对比度模式适配（第十一批） --- */
+@media (prefers-contrast: high) {
+  .achievement-card.unlocked.rarity-epic::before {
+    display: none;
+  }
+  .achievement-card.locked::after {
+    filter: none;
+    opacity: 1;
+    color: #000;
+  }
+  .calendar-day-today {
+    outline: 3px solid #000 !important;
+    animation: none !important;
+  }
+  .ach-rarity-btn[data-rarity="rare"]:hover,
+  .ach-rarity-btn[data-rarity="epic"]:hover,
+  .ach-rarity-btn[data-rarity="legendary"]:hover {
+    box-shadow: 0 0 0 2px #000;
+  }
+  .color-swatch.color-selected {
+    box-shadow: 0 0 0 3px #000 !important;
+    animation: none !important;
+  }
+}
+
+/* ============ 第十一批样式优化结束 ============ */
+
