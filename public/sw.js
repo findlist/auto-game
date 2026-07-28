@@ -1,6 +1,7 @@
 // 色彩排序 Service Worker - 离线缓存
-// 修复：缓存版本与 package.json 版本保持一致
-const CACHE_VERSION = 'color-sort-v1.57.0';
+// CACHE_VERSION 由 vite 构建时自动注入 package.json 的 version 字段
+// 手动修改此处无效，构建后会被 inject-sw-version 插件覆盖
+const CACHE_VERSION = 'color-sort-v__VERSION__';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
