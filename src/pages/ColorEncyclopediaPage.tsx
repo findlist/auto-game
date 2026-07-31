@@ -18,6 +18,14 @@ interface ColorEncyclopediaPageProps {
   onGamePlayed?: (gameId: string) => void;
 }
 
+// 键盘可访问性 helper：与 SettingsPage/AchievementsPage 一致，让可点击 div 支持 Enter/Space 触发
+const handleEnterPress = (handler: () => void) => (e: React.KeyboardEvent) => {
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    handler();
+  }
+};
+
 // 每日色彩问答组件
 const DailyColorQuiz: React.FC<{ onComplete?: (totalCompleted: number) => void; onShare?: () => void }> = ({ onComplete, onShare }) => {
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
@@ -1676,14 +1684,21 @@ export const ColorEncyclopediaPage: React.FC<ColorEncyclopediaPageProps> = ({ on
               const seasonal = getSeasonalTopic();
               if (!seasonal) return null;
               return (
-                <div className="seasonal-topic-banner" onClick={() => {
+                <div className="seasonal-topic-banner" role="button" tabIndex={0} onClick={() => {
                   const firstColor = COLOR_KNOWLEDGE.find(c => c.name === seasonal.colors[0]);
                   if (firstColor) {
                     setExpandedColor(firstColor.name);
                     recordColorView(firstColor.name);
                     scrollToSection('section-colors');
                   }
-                }}>
+                }} onKeyDown={handleEnterPress(() => {
+                  const firstColor = COLOR_KNOWLEDGE.find(c => c.name === seasonal.colors[0]);
+                  if (firstColor) {
+                    setExpandedColor(firstColor.name);
+                    recordColorView(firstColor.name);
+                    scrollToSection('section-colors');
+                  }
+                })}>
                   <div className="seasonal-topic-badge">📅 当季推荐</div>
                   <div className="seasonal-topic-icon">{seasonal.icon}</div>
                   <div className="seasonal-topic-info">
@@ -1712,14 +1727,21 @@ export const ColorEncyclopediaPage: React.FC<ColorEncyclopediaPageProps> = ({ on
             </div>
             <div className="color-topics-grid">
               {COLOR_TOPICS.filter(t => topicFilter === '全部' || t.category === topicFilter).map((topic, idx) => (
-                <div key={idx} className="color-topic-card" onClick={() => {
+                <div key={idx} className="color-topic-card" role="button" tabIndex={0} onClick={() => {
                   const firstColor = COLOR_KNOWLEDGE.find(c => c.name === topic.colors[0]);
                   if (firstColor) {
                     setExpandedColor(firstColor.name);
                     recordColorView(firstColor.name);
                     scrollToSection('section-colors');
                   }
-                }}>
+                }} onKeyDown={handleEnterPress(() => {
+                  const firstColor = COLOR_KNOWLEDGE.find(c => c.name === topic.colors[0]);
+                  if (firstColor) {
+                    setExpandedColor(firstColor.name);
+                    recordColorView(firstColor.name);
+                    scrollToSection('section-colors');
+                  }
+                })}>
                   <div className="color-topic-icon">{topic.icon}</div>
                   <h4 className="color-topic-title">{topic.title}</h4>
                   <p className="color-topic-desc">{topic.description}</p>
