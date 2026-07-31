@@ -26,6 +26,14 @@ const CATEGORIES = [
   { id: 'encyclopedia', name: '百科游戏', icon: '🎨', match: (id: string) => id.startsWith('quiz_') || id.startsWith('color_perception_') || id.startsWith('sequence_memory_') || id.startsWith('pair_') || id.startsWith('reaction_') || id.startsWith('color_mixer_') || id.startsWith('encyclopedia_') || id.startsWith('knowledge_') || id === 'all_encyclopedia_games' },
 ];
 
+// 键盘可访问性 helper：与 SettingsPage/HomeFooterSection 一致，让可点击 div 支持 Enter/Space 触发
+const handleEnterPress = (handler: () => void) => (e: React.KeyboardEvent) => {
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    handler();
+  }
+};
+
 export const AchievementsPage: React.FC<AchievementsPageProps> = ({ onBack }) => {
   const achievements = AchievementManager.getAll();
   const unlockedCount = achievements.filter(a => a.unlocked).length;
@@ -199,7 +207,7 @@ export const AchievementsPage: React.FC<AchievementsPageProps> = ({ onBack }) =>
         <div className="achievement-hint-cards">
           {/* 最近解锁的成就 */}
           {timelineAchievements.length > 0 && (
-            <div className="ach-hint-card ach-hint-recent" onClick={() => setViewMode('timeline')}>
+            <div className="ach-hint-card ach-hint-recent" role="button" tabIndex={0} onClick={() => setViewMode('timeline')} onKeyDown={handleEnterPress(() => setViewMode('timeline'))}>
               <span className="ach-hint-icon">{timelineAchievements[0].icon}</span>
               <div className="ach-hint-info">
                 <span className="ach-hint-label">最近解锁</span>
