@@ -1,7 +1,7 @@
 {
   "name": "color-sort-puzzle",
   "private": true,
-  "version": "1.15.0",
+  "version": "1.57.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
