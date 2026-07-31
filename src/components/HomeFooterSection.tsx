@@ -56,7 +56,7 @@ function HomeFooterSectionComponent({
           <h3 className="custom-levels-title">💻 我的关卡</h3>
           <div className="custom-levels-list">
             {customLevels.slice(0, 3).map(lv => (
-              <div key={lv.id} className="custom-level-card" onClick={() => onPlayCustomLevel(lv)}>
+              <div key={lv.id} className="custom-level-card" role="button" tabIndex={0} onClick={() => onPlayCustomLevel(lv)} onKeyDown={handleEnterPress(() => onPlayCustomLevel(lv))}>
                 <span className="custom-level-icon">🎮</span>
                 <div className="custom-level-info">
                   <span className="custom-level-name">{lv.name}</span>

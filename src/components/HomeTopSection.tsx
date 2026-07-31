@@ -123,11 +123,19 @@ function HomeTopSectionInner({
 
       {/* 快速重玩上一关 */}
       {recentPlay && progress.completedLevels.length > 0 && (
-        <div className="recent-play-card" onClick={() => {
+        <div className="recent-play-card" role="button" tabIndex={0} onClick={() => {
           if (recentPlay.mode === 'daily') onDailyChallenge();
           else if (recentPlay.mode === 'endless') onEndlessMode();
           else if (recentPlay.mode === 'timed') onTimedMode();
           else onSelectLevel(recentPlay.level);
+        }} onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            if (recentPlay.mode === 'daily') onDailyChallenge();
+            else if (recentPlay.mode === 'endless') onEndlessMode();
+            else if (recentPlay.mode === 'timed') onTimedMode();
+            else onSelectLevel(recentPlay.level);
+          }
         }}>
           <span className="recent-icon">▶️</span>
           <span className="recent-text">
